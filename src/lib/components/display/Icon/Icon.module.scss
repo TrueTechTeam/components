@@ -1,0 +1,24 @@
+@use '../../../styles/mixins/component' as *;
+
+.icon {
+  --icon-size: 24px;
+  --icon-color: currentcolor;
+  --icon-fill: none;
+  --icon-stroke: currentcolor;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--icon-size, 24px);
+  height: var(--icon-size, 24px);
+  flex-shrink: 0;
+
+  svg {
+    width: 100%;
+    height: 100%;
+    color: var(--icon-color, currentColor);
+    fill: var(--icon-fill, none);
+    stroke: var(--icon-stroke, currentColor);
+  }
+}
+

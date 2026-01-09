@@ -1,0 +1,84 @@
+@use '../../../styles/mixins/component' as *;
+@use '../../../styles/mixins/spacing' as *;
+
+.menuItem {
+  --menu-item-padding-x: var(--spacing-md);
+  --menu-item-padding-y: var(--spacing-sm);
+  --menu-item-bg-hover: var(--theme-interactive-hover);
+  --menu-item-bg-active: var(--theme-interactive-active);
+  --menu-item-color: var(--theme-text-primary);
+  --menu-item-color-disabled: var(--theme-text-disabled);
+  --menu-item-gap: var(--spacing-sm);
+
+  display: flex;
+  align-items: center;
+  gap: var(--menu-item-gap);
+
+  @include px(4);
+  @include py(2);
+
+  color: var(--menu-item-color);
+  cursor: pointer;
+
+  @include transition(background-color);
+
+  user-select: none;
+  outline: none;
+  border-radius: var(--radius-md);
+
+  &:hover:not([data-disabled='true']) {
+    background: var(--menu-item-bg-hover);
+  }
+
+  &[data-focused='true']:not([data-disabled='true']) {
+    background: var(--menu-item-bg-hover);
+  }
+
+  &[data-selected='true'] {
+    background: var(--menu-item-bg-active);
+  }
+
+  &[data-disabled='true'] {
+    color: var(--menu-item-color-disabled);
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+}
+
+.menuItemContent {
+  flex: 1;
+  min-width: 0;
+}
+
+.menuItemCheck {
+  flex-shrink: 0;
+  color: var(--theme-primary);
+  width: 16px;
+  height: 16px;
+}
+
+.menuItemCheckPlaceholder {
+  flex-shrink: 0;
+  width: 16px;
+  height: 16px;
+}
+
+.menuItemStartIcon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.menuItemEndIcon {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+}
+
+.menuItemShortcut {
+  margin-left: auto;
+  font-size: var(--font-size-sm);
+  color: var(--theme-text-tertiary);
+  flex-shrink: 0;
+}
+

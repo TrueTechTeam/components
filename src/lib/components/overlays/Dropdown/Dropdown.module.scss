@@ -1,0 +1,9 @@
+@use '../../../styles/mixins/component' as *;
+
+.dropdownChevron {
+  @include transition(transform);
+
+  &[data-open='true'] {
+    transform: rotate(180deg);
+  }
+}

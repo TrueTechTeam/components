@@ -1,0 +1,13 @@
+@use '../../../styles/mixins/component' as *;
+@use '../../../styles/mixins/spacing' as *;
+
+.menuDivider {
+  --menu-divider-color: var(--theme-border-primary);
+  --menu-divider-margin: var(--spacing-xs);
+
+  @include my(1);
+
+  height: 1px;
+  background: var(--menu-divider-color);
+  list-style: none;
+}

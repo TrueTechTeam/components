@@ -1,0 +1,213 @@
+@use '../../../styles/mixins/component' as *;
+@use '../../../styles/mixins/spacing' as *;
+
+.container {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.radioRow {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+
+  &[data-label-placement='start'] {
+    flex-direction: row-reverse;
+  }
+}
+
+.labelText {
+  font-size: var(--font-size-base);
+  color: var(--theme-text-primary);
+  user-select: none;
+
+  // Only show pointer cursor when clickable
+  &:not([data-disabled='true'], [data-readonly='true']) {
+    cursor: pointer;
+  }
+
+  // Show not-allowed cursor when disabled
+  &[data-disabled='true'] {
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  // Show default cursor when readonly
+  &[data-readonly='true'] {
+    cursor: default;
+  }
+}
+
+
+.radio {
+  // CSS Custom Properties with defaults
+  --radio-size: var(--spacing-lg);
+  --radio-bg: var(--theme-control-bg);
+  --radio-border: var(--theme-control-border);
+  --radio-dot-color: var(--theme-primary);
+  --radio-focus-ring: var(--theme-interactive-focus);
+  --radio-transition: all 0.15s ease-in-out;
+
+  position: relative;
+  display: inline-block;
+  user-select: none;
+
+  // Only show pointer cursor when clickable
+  &:not([data-disabled='true'], [data-readonly='true']) {
+    cursor: pointer;
+  }
+
+  // Sizes
+  &[data-size='sm'] {
+    --radio-size: 16px;
+  }
+
+  &[data-size='md'] {
+    --radio-size: var(--spacing-lg);
+  }
+
+  &[data-size='lg'] {
+    --radio-size: 28px;
+  }
+
+  // Variants - Checked state
+  &[data-variant='primary'][data-checked='true'] {
+    --radio-dot-color: var(--theme-primary-500);
+  }
+
+  &[data-variant='secondary'][data-checked='true'] {
+    --radio-dot-color: var(--theme-secondary-500);
+  }
+
+  &[data-variant='success'][data-checked='true'] {
+    --radio-dot-color: var(--theme-success-500);
+  }
+
+  &[data-variant='warning'][data-checked='true'] {
+    --radio-dot-color: var(--theme-warning-500);
+  }
+
+  &[data-variant='danger'][data-checked='true'] {
+    --radio-dot-color: var(--theme-error);
+  }
+
+  // Disabled state
+  &[data-disabled='true'] {
+    --radio-bg: var(--theme-input-bg-disabled);
+    --radio-border: var(--theme-control-border);
+    --radio-dot-color: var(--theme-neutral-400);
+
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  // Readonly state
+  &[data-readonly='true'] {
+    cursor: default;
+  }
+}
+
+.circle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--radio-size);
+  height: var(--radio-size);
+  background-color: var(--radio-bg);
+  border: 2px solid var(--radio-border);
+  border-radius: 50%;
+  transition: var(--radio-transition);
+
+  // Checked state - show border color
+  .input:checked + & {
+    border-color: var(--radio-dot-color);
+  }
+
+  // Focus state
+  .input:focus-visible + & {
+    outline: 2px solid var(--radio-focus-ring);
+    outline-offset: 2px;
+  }
+
+  // Hover state (only when not disabled/readonly)
+  .radio:not([data-disabled='true'], [data-readonly='true']):hover & {
+    border-color: var(--radio-dot-color);
+  }
+}
+
+.input {
+  @include button-reset;
+
+  position: absolute;
+  opacity: 0;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+
+  // Only show pointer cursor when clickable
+  &:not(:disabled, :read-only) {
+    cursor: pointer;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+
+  &:read-only {
+    cursor: default;
+  }
+
+  // Active state
+  .radio:not([data-disabled='true'], [data-readonly='true']):active & {
+    transform: scale(0.95);
+  }
+
+  // Inner dot
+  &::after {
+    content: '';
+    width: calc(var(--radio-size) * 0.5);
+    height: calc(var(--radio-size) * 0.5);
+    background-color: var(--radio-dot-color);
+    border-radius: 50%;
+    opacity: 0;
+    transform: scale(0);
+    transition: var(--radio-transition);
+  }
+
+  // Show dot when checked
+  .input:checked + &::after {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.icon {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--radio-dot-color);
+  font-size: calc(var(--radio-size) * 0.5);
+  opacity: 0;
+  transform: scale(0);
+  transition: var(--radio-transition);
+
+  // Show icon when checked (if provided, replaces dot)
+  .input:checked ~ .circle & {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  // Hide the default dot when custom icon is present
+  .input:checked ~ .circle:has(&)::after {
+    display: none;
+  }
+}
+
+.helperText {
+  font-size: var(--font-size-sm);
+  color: var(--theme-text-secondary);
+}
+

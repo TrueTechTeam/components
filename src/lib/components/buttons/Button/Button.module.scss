@@ -1,0 +1,203 @@
+@use '../../../styles/mixins/component' as *;
+@use '../../../styles/mixins/spacing' as *;
+
+.button {
+  @include button-reset;
+
+  // Define default CSS variable values
+  --button-bg: var(--theme-primary);
+  --button-bg-hover: var(--theme-primary-hover);
+  --button-bg-active: var(--theme-primary-active);
+  --button-bg-disabled: var(--theme-primary-disabled);
+  --button-color: var(--theme-text-on-primary);
+  --button-border-color: transparent;
+  --button-border-color-hover: transparent;
+  --button-gap: var(--spacing-sm);
+  --button-radius: var(--radius-md);
+  --button-border-width: 1px;
+  --button-disabled-opacity: 0.5;
+  --button-icon-padding: var(--spacing-sm);
+
+  // Base styles
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--button-gap);
+  font-family: var(--font-family-primary);
+  font-weight: var(--font-weight-medium);
+  border-radius: var(--button-radius);
+  border: var(--button-border-width) solid var(--button-border-color);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  user-select: none;
+  white-space: nowrap;
+
+  @include px(4);
+  @include py(2);
+
+  // Apply colors using CSS variables
+  background-color: var(--button-bg);
+  color: var(--button-color);
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: var(--button-disabled-opacity);
+    background-color: var(--button-bg-disabled);
+  }
+
+  &:hover:not(:disabled) {
+    background-color: var(--button-bg-hover);
+    border-color: var(--button-border-color-hover);
+  }
+
+  &:active:not(:disabled) {
+    background-color: var(--button-bg-active);
+    transform: translateY(1px);
+  }
+
+  // Size variants
+  &[data-size='xs'] {
+    @include px(2);
+    @include py(1);
+
+    font-size: var(--font-size-xs);
+    min-height: 24px;
+  }
+
+  &[data-size='sm'] {
+    @include px(3);
+    @include py(1.5);
+
+    font-size: var(--font-size-sm);
+    min-height: 32px;
+  }
+
+  &[data-size='md'] {
+    @include px(4);
+    @include py(2);
+
+    font-size: var(--font-size-base);
+    min-height: 40px;
+  }
+
+  &[data-size='lg'] {
+    @include px(6);
+    @include py(3);
+
+    font-size: var(--font-size-lg);
+    min-height: 48px;
+  }
+
+  &[data-size='xl'] {
+    @include px(8);
+    @include py(4);
+
+    font-size: var(--font-size-xl);
+    min-height: 56px;
+  }
+
+  // Color variants
+  &[data-variant='primary'] {
+    --button-bg: var(--theme-primary);
+    --button-bg-hover: var(--theme-primary-hover);
+    --button-bg-active: var(--theme-primary-active);
+    --button-bg-disabled: var(--theme-primary-disabled);
+    --button-color: var(--theme-text-on-primary);
+    --button-border-color: transparent;
+  }
+
+  &[data-variant='secondary'] {
+    --button-bg: var(--theme-secondary);
+    --button-bg-hover: var(--theme-secondary-hover);
+    --button-bg-active: var(--theme-secondary-active);
+    --button-bg-disabled: var(--theme-secondary-disabled);
+    --button-color: var(--theme-text-contrast);
+    --button-border-color: transparent;
+  }
+
+  &[data-variant='outline'] {
+    --button-bg: transparent;
+    --button-bg-hover: var(--theme-interactive-hover);
+    --button-bg-active: var(--theme-interactive-active);
+    --button-color: var(--theme-primary);
+    --button-border-color: var(--theme-primary);
+    --button-border-color-hover: var(--theme-primary-hover);
+
+    &:disabled {
+      --button-color: var(--theme-text-disabled);
+      --button-border-color: var(--theme-border-primary);
+    }
+  }
+
+  &[data-variant='ghost'] {
+    --button-bg: transparent;
+    --button-bg-hover: var(--theme-interactive-hover);
+    --button-bg-active: var(--theme-interactive-active);
+    --button-bg-disabled: transparent;
+    --button-color: var(--theme-primary);
+    --button-border-color: transparent;
+  }
+
+  &[data-variant='success'] {
+    --button-bg: var(--theme-success);
+    --button-bg-hover: var(--theme-success-hover);
+    --button-bg-active: var(--theme-success-active);
+    --button-bg-disabled: var(--theme-success-disabled);
+    --button-color: var(--theme-text-on-primary);
+    --button-border-color: transparent;
+  }
+
+  &[data-variant='warning'] {
+    --button-bg: var(--theme-warning);
+    --button-bg-hover: var(--theme-warning-hover);
+    --button-bg-active: var(--theme-warning-active);
+    --button-bg-disabled: var(--theme-warning-disabled);
+    --button-color: var(--theme-text-primary);
+    --button-border-color: transparent;
+  }
+
+  &[data-variant='danger'] {
+    --button-bg: var(--theme-error);
+    --button-bg-hover: var(--theme-error-hover);
+    --button-bg-active: var(--theme-error-active);
+    --button-bg-disabled: var(--theme-error-disabled);
+    --button-color: var(--theme-text-on-primary);
+    --button-border-color: transparent;
+  }
+
+  // Full width
+  &[data-full-width='true'] {
+    width: 100%;
+  }
+
+  // Icon-only button (deprecated - use IconButton instead)
+  &[data-icon-only='true'] {
+    padding: var(--button-icon-padding);
+    min-width: auto;
+
+    &[data-size='xs'] {
+      padding: spacing(1);
+    }
+
+    &[data-size='sm'] {
+      padding: spacing(1.5);
+    }
+
+    &[data-size='md'] {
+      padding: spacing(2);
+    }
+
+    &[data-size='lg'] {
+      padding: spacing(3);
+    }
+
+    &[data-size='xl'] {
+      padding: spacing(4);
+    }
+  }
+}
+

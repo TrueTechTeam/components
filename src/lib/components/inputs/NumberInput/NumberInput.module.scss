@@ -1,0 +1,43 @@
+@use '../../../styles/mixins/component' as *;
+@use '../../../styles/mixins/spacing' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  width: 100%;
+}
+
+.label {
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  color: var(--theme-text-primary);
+}
+
+.input {
+  --input-padding-x: 0;
+  --input-padding-y: 0;
+
+  // Center the number text within the input field
+  input {
+    text-align: center;
+  }
+}
+
+// Shared styles for both increment and decrement buttons
+.iconButton {
+  --button-bg-disabled: var(--theme-background-primary);
+
+  // Make the button square - same width as height
+  aspect-ratio: 1;
+  height: 100%;
+}
+
+.required {
+  color: var(--theme-error);
+
+  .label[data-required='true'] & {
+    margin-left: 2px;
+  }
+}
+

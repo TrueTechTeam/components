@@ -1,0 +1,121 @@
+@use '../../../styles/mixins/component' as *;
+@use '../../../styles/mixins/spacing' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  width: 100%;
+
+  &.horizontal {
+    flex-direction: row;
+    align-items: center;
+  }
+}
+
+.label {
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  color: var(--theme-text-primary);
+
+  .container.horizontal & {
+    margin-bottom: 0;
+    margin-right: var(--spacing-md);
+    white-space: nowrap;
+  }
+}
+
+.inputContainer {
+  position: relative;
+  display: flex;
+  align-items: stretch;
+  gap: var(--spacing-xs);
+  width: 100%;
+}
+
+.countrySelectWrapper {
+  flex-shrink: 0;
+
+  .countrySelect {
+    // Use CSS variables to override Select component styles
+    --select-border-color: transparent;
+    --select-background-color: transparent;
+  }
+}
+
+// Using a more specific selector without :global
+[data-component='select'] {
+  .countrySelectWrapper & {
+    border: none !important;
+    background: transparent !important;
+    padding: 0 var(--spacing-sm) !important;
+    min-width: auto !important;
+
+    &:hover {
+      background: var(--theme-background-secondary) !important;
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--theme-input-border-focus);
+      outline-offset: 2px;
+    }
+  }
+}
+
+.phoneNumberInput {
+  --input-padding-x: 0;
+  --input-padding-y: 0;
+
+  flex: 1;
+}
+
+.countryCodeDisplay {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  white-space: nowrap;
+}
+
+.flag {
+  font-size: 1.25em;
+  line-height: 1;
+}
+
+.dialCode {
+  font-size: var(--font-size-sm);
+  color: var(--theme-text-secondary);
+  font-weight: 500;
+}
+
+.countryOption {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  width: 100%;
+
+  .flag {
+    font-size: 1.25em;
+    flex-shrink: 0;
+  }
+
+  .countryName {
+    flex: 1;
+    font-size: var(--font-size-sm);
+    color: var(--theme-text-primary);
+  }
+
+  .dialCode {
+    font-size: var(--font-size-sm);
+    color: var(--theme-text-secondary);
+    flex-shrink: 0;
+  }
+}
+
+.required {
+  color: var(--theme-error);
+
+  .label[data-required='true'] & {
+    margin-left: 2px;
+  }
+}
+

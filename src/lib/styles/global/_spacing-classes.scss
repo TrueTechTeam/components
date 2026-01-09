@@ -1,0 +1,74 @@
+@use '../theme/variables' as *;
+
+// Margin classes (m-0 to m-20, for 0-20 grid units = 0-80px)
+@for $i from 0 through 20 {
+  .m-#{$i} {
+    margin: #{$i * $spacing-unit};
+  }
+  .mt-#{$i} {
+    margin-top: #{$i * $spacing-unit};
+  }
+  .mr-#{$i} {
+    margin-right: #{$i * $spacing-unit};
+  }
+  .mb-#{$i} {
+    margin-bottom: #{$i * $spacing-unit};
+  }
+  .ml-#{$i} {
+    margin-left: #{$i * $spacing-unit};
+  }
+  .mx-#{$i} {
+    margin-left: #{$i * $spacing-unit};
+    margin-right: #{$i * $spacing-unit};
+  }
+  .my-#{$i} {
+    margin-top: #{$i * $spacing-unit};
+    margin-bottom: #{$i * $spacing-unit};
+  }
+}
+
+// Padding classes (p-0 to p-20)
+@for $i from 0 through 20 {
+  .p-#{$i} {
+    padding: #{$i * $spacing-unit};
+  }
+  .pt-#{$i} {
+    padding-top: #{$i * $spacing-unit};
+  }
+  .pr-#{$i} {
+    padding-right: #{$i * $spacing-unit};
+  }
+  .pb-#{$i} {
+    padding-bottom: #{$i * $spacing-unit};
+  }
+  .pl-#{$i} {
+    padding-left: #{$i * $spacing-unit};
+  }
+  .px-#{$i} {
+    padding-left: #{$i * $spacing-unit};
+    padding-right: #{$i * $spacing-unit};
+  }
+  .py-#{$i} {
+    padding-top: #{$i * $spacing-unit};
+    padding-bottom: #{$i * $spacing-unit};
+  }
+}
+
+// Negative margins
+@for $i from 1 through 10 {
+  .-m-#{$i} {
+    margin: #{-$i * $spacing-unit};
+  }
+  .-mt-#{$i} {
+    margin-top: #{-$i * $spacing-unit};
+  }
+  .-mr-#{$i} {
+    margin-right: #{-$i * $spacing-unit};
+  }
+  .-mb-#{$i} {
+    margin-bottom: #{-$i * $spacing-unit};
+  }
+  .-ml-#{$i} {
+    margin-left: #{-$i * $spacing-unit};
+  }
+}

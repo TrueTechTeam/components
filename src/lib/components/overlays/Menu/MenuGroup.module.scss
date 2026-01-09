@@ -1,0 +1,21 @@
+@use '../../../styles/mixins/component' as *;
+@use '../../../styles/mixins/spacing' as *;
+
+.menuGroup {
+  // No special styling for group wrapper
+}
+
+.menuGroupLabel {
+  --menu-group-label-color: var(--theme-text-tertiary);
+  --menu-group-label-size: var(--font-size-xs);
+  --menu-group-label-weight: var(--font-weight-semibold);
+
+  @include px(4);
+  @include py(1.5);
+
+  color: var(--menu-group-label-color);
+  font-size: var(--menu-group-label-size);
+  font-weight: var(--menu-group-label-weight);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}

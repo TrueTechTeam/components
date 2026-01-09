@@ -1,0 +1,302 @@
+@use '../../../styles/mixins/component' as *;
+@use '../../../styles/mixins/spacing' as *;
+
+.inputField {
+  flex: 1;
+  min-width: 0; // Allows text to truncate
+  background: transparent;
+  border: none;
+  outline: none;
+  color: var(--input-text-color);
+  font-family: var(--font-family-primary);
+  padding: 0;
+  margin: 0;
+
+  &::placeholder {
+    color: var(--input-placeholder-color);
+  }
+
+  &[readonly] {
+    cursor: default;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+
+  // Remove number input spinners
+  &[type='number'] {
+    &::-webkit-outer-spin-button,
+    &::-webkit-inner-spin-button {
+      appearance: none;
+      margin: 0;
+    }
+  }
+
+  // Remove search input clear button (we have our own)
+  &[type='search'] {
+    &::-webkit-search-cancel-button {
+      appearance: none;
+    }
+  }
+}
+
+.inputWrapper {
+  // CSS Variables for theming - can be overridden by parent className
+  --input-bg: var(--theme-background-primary);
+  --input-border-color: var(--theme-border-primary);
+  --input-border-color-hover: var(--theme-primary);
+  --input-border-color-focus: var(--theme-primary);
+  --input-text-color: var(--theme-text-primary);
+  --input-placeholder-color: var(--theme-text-tertiary);
+  --input-border-width: 1px;
+  --input-border-radius: var(--radius-md);
+  --input-padding-x: calc(var(--spacing-unit) * 3);
+  --input-padding-y: var(--spacing-sm);
+  --input-gap: var(--spacing-sm);
+
+  display: flex;
+  flex-direction: column;
+  gap: spacing(1);
+  width: 100%;
+
+  &[data-state='focused'] {
+    border-color: var(--input-border-color-focus);
+
+    @include focus-ring(var(--input-border-color-focus), 0);
+  }
+
+  &[data-state='error'] {
+    --input-border-color: var(--theme-error);
+    --input-border-color-hover: var(--theme-error);
+    --input-border-color-focus: var(--theme-error);
+  }
+
+  &[data-state='disabled'] {
+    --input-bg: var(--theme-interactive-disabled);
+    --input-text-color: var(--theme-text-disabled);
+
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  &[data-state='readonly'] {
+    --input-bg: var(--theme-background-secondary);
+
+    cursor: default;
+  }
+
+  // Size variants
+  &[data-size='sm'] {
+    --input-padding-x: calc(var(--spacing-unit) * 2.5);
+    --input-padding-y: calc(var(--spacing-unit) * 1.5);
+    --input-gap: calc(var(--spacing-unit) * 1.5);
+
+    min-height: 32px;
+
+    .inputField {
+      font-size: var(--font-size-sm);
+    }
+  }
+
+  &[data-size='md'] {
+    --input-padding-x: calc(var(--spacing-unit) * 3);
+    --input-padding-y: var(--spacing-sm);
+    --input-gap: var(--spacing-sm);
+
+    min-height: 40px;
+
+    .inputField {
+      font-size: var(--font-size-base);
+    }
+  }
+
+  &[data-size='lg'] {
+    --input-padding-x: var(--spacing-md);
+    --input-padding-y: calc(var(--spacing-unit) * 3);
+    --input-gap: calc(var(--spacing-unit) * 2.5);
+
+    min-height: 48px;
+
+    .inputField {
+      font-size: var(--font-size-lg);
+    }
+  }
+
+  // Style variants
+  &[data-variant='secondary'] {
+    --input-bg: var(--theme-background-secondary);
+    --input-border-color: var(--theme-border-secondary);
+  }
+
+  &[data-variant='outline'] {
+    --input-bg: transparent;
+    --input-border-width: 2px;
+  }
+
+  &[data-variant='ghost'] {
+    --input-bg: transparent;
+    --input-border-color: transparent;
+
+    &:hover:not([data-state='disabled']) {
+      --input-bg: var(--theme-interactive-hover);
+    }
+  }
+}
+
+.inputLabel {
+  display: flex;
+  align-items: center;
+  gap: spacing(0.5);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--theme-text-primary);
+  cursor: pointer;
+}
+
+.requiredIndicator {
+  font-weight: var(--font-weight-semibold);
+
+  .inputLabel[data-required='true'] & {
+    color: var(--theme-error);
+    margin-left: spacing(0.5);
+  }
+}
+
+.inputContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--input-gap);
+  padding: var(--input-padding-y) var(--input-padding-x);
+  background-color: var(--input-bg);
+  border: var(--input-border-width) solid var(--input-border-color);
+  border-radius: var(--input-border-radius);
+
+  @include transition(border-color, background-color, box-shadow);
+
+  &:hover:not([data-state='disabled']) {
+    border-color: var(--input-border-color-hover);
+  }
+}
+
+.inputPrefix,
+.inputSuffix {
+  display: flex;
+  align-items: center;
+  gap: spacing(1);
+  flex-shrink: 0;
+  color: var(--theme-text-secondary);
+
+  .prefixText,
+  .suffixText {
+    font-size: inherit;
+    white-space: nowrap;
+  }
+}
+
+.clearButton,
+.passwordToggle {
+  @include button-reset;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: spacing(0.5);
+  color: var(--theme-text-secondary);
+  border-radius: var(--radius-sm);
+
+  @include transition(background-color, color);
+
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--theme-interactive-hover);
+    color: var(--theme-text-primary);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+
+  &:active {
+    background-color: var(--theme-interactive-active);
+  }
+}
+
+.spinner {
+  color: var(--theme-primary);
+  animation: spin 1s linear infinite;
+
+  circle {
+    stroke-dasharray: 31.4 31.4;
+    stroke-dashoffset: 0;
+    transform-origin: center;
+  }
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.inputFooter {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: spacing(2);
+  min-height: 20px; // Prevents layout shift
+}
+
+.helperText {
+  flex: 1;
+  font-size: var(--font-size-xs);
+  color: var(--theme-text-secondary);
+  line-height: var(--line-height-tight);
+}
+
+.errorMessage {
+  flex: 1;
+  font-size: var(--font-size-xs);
+  color: var(--theme-error);
+  line-height: var(--line-height-tight);
+  display: flex;
+  align-items: flex-start;
+  gap: spacing(1);
+
+  &::before {
+    content: '⚠';
+    font-size: var(--font-size-sm);
+    flex-shrink: 0;
+  }
+}
+
+.characterCounter {
+  flex-shrink: 0;
+  font-size: var(--font-size-xs);
+  color: var(--theme-text-tertiary);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+  line-height: var(--line-height-tight);
+
+  &.atWarning {
+    color: var(--theme-warning);
+    font-weight: var(--font-weight-medium);
+  }
+
+  &.atLimit {
+    color: var(--theme-error);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  .currentCount,
+  .separator,
+  .maxCount {
+    display: inline;
+  }
+}

@@ -1,0 +1,211 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Introduction/Components Overview" />
+
+# Component Library Overview
+
+Welcome to the **True Tech Team UI Components** library! This library provides a comprehensive set of reusable React components built with TypeScript, SCSS Modules, and a focus on accessibility and theming.
+
+## 📚 Component Organization
+
+Components are organized into **5 logical categories** based on their purpose:
+
+### 🔘 Buttons
+Action and trigger components for user interactions.
+
+- **Button** - Primary call-to-action component with multiple variants (primary, secondary, outline, ghost, success, warning, danger)
+
+👉 [View Buttons Category →](/?path=/story/buttons-button--default)
+
+---
+
+### 🎨 Display
+Components for presenting content and visual elements.
+
+- **Icon** - SVG-based icon system with 21+ icons
+
+👉 [View Display Category →](/?path=/story/display-icon--default)
+
+---
+
+### 🎭 Overlays
+Floating UI elements that appear above other content.
+
+- **Popover** - Contextual floating content container
+- **Tooltip** - Hover-triggered information display
+- **Dropdown** - Dropdown menu trigger and content
+- **Menu** - Composite menu system (Menu, MenuItem, MenuList, MenuGroup, MenuDivider)
+- **Portal** - Renders content outside DOM hierarchy (utility for overlays)
+
+👉 [View Overlays Category →](/?path=/story/overlays-popover--default)
+
+---
+
+### 📝 Inputs
+Form input components for collecting user data.
+
+#### Basic Text Inputs
+- **Input** - Standard text input with validation and masking
+- **Textarea** - Multi-line text input
+- **NumberInput** - Numeric-only input with increment/decrement
+- **PhoneInput** - International phone number input
+- **TagInput** - Multiple tag entry
+
+#### Selection Inputs
+- **Select** - Dropdown selection with options
+- **Autocomplete** - Searchable dropdown with filtering
+- **Checkbox** - Multi-select boolean input
+- **Radio/RadioGroup** - Single-select from options
+- **Toggle** - Boolean switch
+
+#### Specialized Inputs
+- **Slider** - Range selection with marks
+- **Rating** - Star/numeric rating input
+- **ColorPicker** - Color selection with format options (hex, rgb, hsl)
+- **DatePicker** - Single date selection
+- **DateRangePicker** - Date range selection with presets
+- **FilePicker** - File upload component
+
+👉 [View Inputs Category →](/?path=/story/inputs-input--default)
+
+---
+
+### 📋 Forms
+Form composition and state management utilities.
+
+- **FormBuilder** - Advanced form composition with validation, state management, and dynamic field rendering
+
+👉 [View Forms Category →](/?path=/docs/forms-formbuilder--docs)
+
+---
+
+## 🎯 Key Features
+
+### Theme Support
+All components support **light and dark themes** via the theme toggle in the toolbar above.
+
+### Accessibility
+Components are built with accessibility in mind:
+- Semantic HTML
+- ARIA attributes
+- Keyboard navigation
+- Focus management
+
+### Customization
+- CSS custom properties for theming
+- SCSS variables and mixins
+- 500+ utility classes
+- 37 color families with 10 shades each
+
+### Type Safety
+Full TypeScript support with:
+- Comprehensive prop interfaces
+- Type exports for all components
+- Strict type checking
+
+## 📖 Usage
+
+### Installation
+
+```bash
+npm install @true-tech-team/ui-components
+```
+
+### Basic Import
+
+```tsx
+import { Button, Input, Icon } from '@true-tech-team/ui-components';
+
+function MyComponent() {
+  return (
+    <div>
+      <Button variant="primary" size="md">
+        Click me
+      </Button>
+      <Input placeholder="Enter text..." />
+      <Icon name="check" size={24} />
+    </div>
+  );
+}
+```
+
+### With Global Provider
+
+Wrap your app with `GlobalProvider` to enable theming:
+
+```tsx
+import { GlobalProvider } from '@true-tech-team/ui-components';
+
+function App() {
+  return (
+    <GlobalProvider themeConfig={{ mode: 'dark' }}>
+      {/* Your app */}
+    </GlobalProvider>
+  );
+}
+```
+
+### Category-Specific Imports
+
+For better tree-shaking, import from specific categories:
+
+```tsx
+import { Button } from '@true-tech-team/ui-components/buttons';
+import { Input, Select } from '@true-tech-team/ui-components/inputs';
+import { Tooltip } from '@true-tech-team/ui-components/overlays';
+```
+
+## 🎨 Styling System
+
+### 4px Grid System
+All spacing uses a 4px base unit for consistency:
+
+```scss
+--spacing-xs: 4px
+--spacing-sm: 8px
+--spacing-md: 16px
+--spacing-lg: 24px
+--spacing-xl: 32px
+--spacing-xxl: 48px
+```
+
+### Utility Classes
+Over 500 utility classes available:
+
+```tsx
+<div className="flex items-center gap-md p-lg">
+  <Button className="m-sm">Button</Button>
+</div>
+```
+
+### Theme Colors
+Access theme colors via CSS custom properties:
+
+```scss
+background-color: var(--theme-primary);
+color: var(--theme-text-on-primary);
+border-color: var(--theme-border-primary);
+```
+
+## 🔍 Finding Components
+
+Use the sidebar to browse components by category:
+- **Buttons/** - Action components
+- **Display/** - Visual content
+- **Overlays/** - Floating UI
+- **Inputs/** - Form inputs
+- **Forms/** - Form utilities
+
+## 📚 Additional Resources
+
+- [GitHub Repository](#) - Source code and issues
+- [Component Organization Guide](./COMPONENT_ORGANIZATION.md) - Detailed organization documentation
+- [Component Style Guide](./COMPONENT_STYLE_GUIDE.md) - Development patterns and conventions
+
+## 🚀 Version
+
+**Current Version:** 0.0.1
+
+---
+
+Built with ❤️ by the True Tech Team

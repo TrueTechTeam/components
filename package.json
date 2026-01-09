@@ -1,0 +1,54 @@
+{
+  "name": "@true-tech-team/ui-components",
+  "version": "0.0.1",
+  "description": "React TypeScript component library",
+  "main": "./index.js",
+  "types": "./index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./index.mjs",
+      "require": "./index.js",
+      "types": "./index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "nx build ui-components",
+    "test": "nx test ui-components",
+    "test:watch": "nx test ui-components --watch",
+    "test:coverage": "nx test ui-components --coverage",
+    "lint": "nx lint ui-components",
+    "lint:fix": "nx lint ui-components --fix",
+    "storybook": "nx storybook ui-components",
+    "storybook:build": "nx build-storybook ui-components",
+    "typecheck": "tsc --noEmit -p tsconfig.lib.json"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "files": [
+    "index.js",
+    "index.mjs",
+    "index.d.ts",
+    "**/*.js",
+    "**/*.mjs",
+    "**/*.d.ts",
+    "**/*.css",
+    "**/*.scss"
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "repository": {
+    "type": "git",
+    "directory": "libs/ui-components"
+  },
+  "keywords": [
+    "react",
+    "components",
+    "typescript",
+    "ui",
+    "library"
+  ],
+  "license": "MIT"
+}

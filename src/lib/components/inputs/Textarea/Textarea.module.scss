@@ -1,0 +1,182 @@
+@use '../../../styles/mixins/component' as *;
+@use '../../../styles/mixins/spacing' as *;
+
+.container {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  width: 100%;
+}
+
+.label {
+  font-size: var(--font-size-base);
+  font-weight: 500;
+  color: var(--theme-text-primary);
+}
+
+.required {
+  color: var(--theme-error);
+
+  .label[data-required='true'] & {
+    margin-left: 2px;
+  }
+}
+
+.textareaWrapper {
+  position: relative;
+  width: 100%;
+}
+
+.textarea {
+  // CSS Custom Properties
+  --textarea-bg: var(--theme-background-primary);
+  --textarea-border: var(--theme-neutral-400);
+  --textarea-text: var(--theme-text-primary);
+  --textarea-placeholder: var(--theme-text-tertiary);
+  --textarea-focus-border: var(--theme-primary-500);
+  --textarea-focus-ring: var(--theme-primary-200);
+  --textarea-padding: var(--spacing-sm);
+  --textarea-font-size: var(--font-size-base);
+  --textarea-line-height: 1.5;
+  --textarea-transition: all 0.15s ease-in-out;
+
+  width: 100%;
+  font-family: inherit;
+  font-size: var(--textarea-font-size);
+  line-height: var(--textarea-line-height);
+  color: var(--textarea-text);
+  background-color: var(--textarea-bg);
+  border: 1px solid var(--textarea-border);
+  border-radius: var(--radius-md);
+  padding: var(--textarea-padding);
+  transition: var(--textarea-transition);
+  outline: none;
+
+  &::placeholder {
+    color: var(--textarea-placeholder);
+  }
+
+  // Sizes
+  &[data-size='sm'] {
+    --textarea-padding: var(--spacing-xs);
+    --textarea-font-size: var(--font-size-sm);
+  }
+
+  &[data-size='md'] {
+    --textarea-padding: var(--spacing-sm);
+    --textarea-font-size: var(--font-size-base);
+  }
+
+  &[data-size='lg'] {
+    --textarea-padding: var(--spacing-md);
+    --textarea-font-size: var(--font-size-lg);
+  }
+
+  // Variants
+  &[data-variant='primary'] {
+    --textarea-focus-border: var(--theme-primary-500);
+    --textarea-focus-ring: var(--theme-primary-200);
+  }
+
+  &[data-variant='secondary'] {
+    --textarea-focus-border: var(--theme-secondary-500);
+    --textarea-focus-ring: var(--theme-secondary-200);
+  }
+
+  &[data-variant='success'] {
+    --textarea-focus-border: var(--theme-success-500);
+    --textarea-focus-ring: var(--theme-success-hover);
+  }
+
+  &[data-variant='warning'] {
+    --textarea-focus-border: var(--theme-warning-500);
+    --textarea-focus-ring: var(--theme-warning-hover);
+  }
+
+  &[data-variant='danger'] {
+    --textarea-focus-border: var(--theme-error);
+    --textarea-focus-ring: var(--theme-error-hover);
+  }
+
+  // Resize control
+  &[data-resize='none'] {
+    resize: none;
+  }
+
+  &[data-resize='both'] {
+    resize: both;
+  }
+
+  &[data-resize='horizontal'] {
+    resize: horizontal;
+  }
+
+  &[data-resize='vertical'] {
+    resize: vertical;
+  }
+
+  // Focus state
+  &:focus {
+    border-color: var(--textarea-focus-border);
+    box-shadow: 0 0 0 3px var(--textarea-focus-ring);
+  }
+
+  // Error state
+  &[data-error='true'] {
+    --textarea-border: var(--theme-error);
+    --textarea-focus-border: var(--theme-error);
+    --textarea-focus-ring: var(--theme-error-hover);
+  }
+
+  // Disabled state
+  &:disabled {
+    background-color: var(--theme-neutral-100);
+    border-color: var(--theme-neutral-300);
+    color: var(--theme-text-disabled);
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  // Read-only state
+  &:read-only {
+    background-color: var(--theme-neutral-50);
+    cursor: default;
+  }
+
+  // Hover state
+  &:not(:disabled, :read-only):hover {
+    border-color: var(--textarea-focus-border);
+  }
+}
+
+.counter {
+  position: absolute;
+  bottom: var(--spacing-sm);
+  right: var(--spacing-md);
+  font-size: var(--font-size-sm);
+  color: var(--theme-text-secondary);
+  padding: 2px var(--spacing-xs);
+  background-color: var(--theme-background-primary);
+  border-radius: var(--radius-sm);
+  pointer-events: none;
+
+  &[data-warning='true'] {
+    color: var(--theme-warning-600);
+    font-weight: 500;
+  }
+
+  &[data-error='true'] {
+    color: var(--theme-error);
+    font-weight: 500;
+  }
+}
+
+.helperText {
+  font-size: var(--font-size-sm);
+  color: var(--theme-text-secondary);
+
+  &[data-error='true'] {
+    color: var(--theme-error);
+  }
+}
+

@@ -1,0 +1,87 @@
+@use '../theme/variables' as *;
+@use 'sass:math';
+@use 'sass:list';
+
+// Spacing function - converts spacing units to pixel values
+// Accepts single value or multiple values for shorthand properties
+// Examples: spacing(2) => 8px, spacing(2 4) => 8px 16px
+@function spacing($values...) {
+  $result: ();
+
+  @each $value in $values {
+    @if $value == 0 {
+      $result: list.append($result, 0);
+    } @else {
+      $result: list.append($result, #{$value * $spacing-unit});
+    }
+  }
+
+  @return $result;
+}
+
+// Spacing mixin - generates margin or padding based on 4px grid
+@mixin spacing($property, $value) {
+  #{$property}: #{$value * $spacing-unit};
+}
+
+// Margin mixins
+@mixin m($value) {
+  margin: #{$value * $spacing-unit};
+}
+
+@mixin mt($value) {
+  margin-top: #{$value * $spacing-unit};
+}
+
+@mixin mr($value) {
+  margin-right: #{$value * $spacing-unit};
+}
+
+@mixin mb($value) {
+  margin-bottom: #{$value * $spacing-unit};
+}
+
+@mixin ml($value) {
+  margin-left: #{$value * $spacing-unit};
+}
+
+@mixin mx($value) {
+  margin-left: #{$value * $spacing-unit};
+  margin-right: #{$value * $spacing-unit};
+}
+
+@mixin my($value) {
+  margin-top: #{$value * $spacing-unit};
+  margin-bottom: #{$value * $spacing-unit};
+}
+
+// Padding mixins
+@mixin p($value) {
+  padding: #{$value * $spacing-unit};
+}
+
+@mixin pt($value) {
+  padding-top: #{$value * $spacing-unit};
+}
+
+@mixin pr($value) {
+  padding-right: #{$value * $spacing-unit};
+}
+
+@mixin pb($value) {
+  padding-bottom: #{$value * $spacing-unit};
+}
+
+@mixin pl($value) {
+  padding-left: #{$value * $spacing-unit};
+}
+
+@mixin px($value) {
+  padding-left: #{$value * $spacing-unit};
+  padding-right: #{$value * $spacing-unit};
+}
+
+@mixin py($value) {
+  padding-top: #{$value * $spacing-unit};
+  padding-bottom: #{$value * $spacing-unit};
+}

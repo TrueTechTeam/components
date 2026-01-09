@@ -1,0 +1,320 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Forms/Overview" />
+
+# Forms
+
+Advanced form composition and state management utilities.
+
+## Components in this Category
+
+### FormBuilder
+A powerful form builder component with built-in validation, state management, and dynamic field rendering.
+
+**Features:**
+- 🔄 **Dynamic Field Rendering** - Automatically renders form fields from configuration
+- ✅ **Built-in Validation** - Comprehensive validation system with custom rules
+- 📊 **State Management** - Manages form state, errors, and touched fields
+- 🎯 **Field Dependencies** - Show/hide fields based on other field values
+- 🎨 **Customizable** - Full control over layout and styling
+- 📝 **Type Safe** - Full TypeScript support with inferred types
+
+[View FormBuilder Documentation →](/?path=/docs/forms-formbuilder--docs)
+
+## Basic Usage
+
+```tsx
+import { FormBuilder } from '@true-tech-team/ui-components';
+import type { FormFieldConfig } from '@true-tech-team/ui-components';
+
+function MyForm() {
+  const fields: FormFieldConfig[] = [
+    {
+      name: 'email',
+      label: 'Email',
+      type: 'email',
+      required: true,
+      validation: {
+        pattern: {
+          value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
+          message: 'Invalid email address'
+        }
+      }
+    },
+    {
+      name: 'password',
+      label: 'Password',
+      type: 'password',
+      required: true,
+      validation: {
+        minLength: {
+          value: 8,
+          message: 'Password must be at least 8 characters'
+        }
+      }
+    },
+    {
+      name: 'subscribe',
+      label: 'Subscribe to newsletter',
+      type: 'checkbox'
+    }
+  ];
+
+  const handleSubmit = (values: any) => {
+    console.log('Form submitted:', values);
+  };
+
+  return (
+    <FormBuilder
+      fields={fields}
+      onSubmit={handleSubmit}
+      submitLabel="Sign Up"
+    />
+  );
+}
+```
+
+## Advanced Usage with Dependencies
+
+```tsx
+import { FormBuilder } from '@true-tech-team/ui-components';
+import type { FormFieldConfig } from '@true-tech-team/ui-components';
+
+function ConditionalForm() {
+  const fields: FormFieldConfig[] = [
+    {
+      name: 'hasAccount',
+      label: 'Do you have an account?',
+      type: 'radio-group',
+      options: [
+        { value: 'yes', label: 'Yes' },
+        { value: 'no', label: 'No' }
+      ]
+    },
+    {
+      name: 'email',
+      label: 'Email',
+      type: 'email',
+      required: true,
+      // Only show if user has an account
+      dependencies: [
+        {
+          field: 'hasAccount',
+          condition: (value) => value === 'yes'
+        }
+      ]
+    },
+    {
+      name: 'username',
+      label: 'Choose a username',
+      type: 'text',
+      required: true,
+      // Only show if user doesn't have an account
+      dependencies: [
+        {
+          field: 'hasAccount',
+          condition: (value) => value === 'no'
+        }
+      ]
+    }
+  ];
+
+  return (
+    <FormBuilder
+      fields={fields}
+      onSubmit={(values) => console.log(values)}
+    />
+  );
+}
+```
+
+## Form State Management
+
+Use the `useFormState` hook for manual form control:
+
+```tsx
+import { useFormState } from '@true-tech-team/ui-components';
+
+function CustomForm() {
+  const {
+    values,
+    errors,
+    touched,
+    handleChange,
+    handleBlur,
+    handleSubmit,
+    setFieldValue,
+    resetForm
+  } = useFormState({
+    initialValues: {
+      name: '',
+      email: ''
+    },
+    onSubmit: (values) => {
+      console.log('Submitted:', values);
+    }
+  });
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <input
+        name="name"
+        value={values.name}
+        onChange={handleChange}
+        onBlur={handleBlur}
+      />
+      {touched.name && errors.name && (
+        <span className="error">{errors.name}</span>
+      )}
+      {/* More fields... */}
+    </form>
+  );
+}
+```
+
+## Validation
+
+### Built-in Validators
+
+FormBuilder supports common validation rules:
+
+```tsx
+const field: FormFieldConfig = {
+  name: 'username',
+  label: 'Username',
+  type: 'text',
+  validation: {
+    required: 'Username is required',
+    minLength: {
+      value: 3,
+      message: 'Username must be at least 3 characters'
+    },
+    maxLength: {
+      value: 20,
+      message: 'Username must be no more than 20 characters'
+    },
+    pattern: {
+      value: /^[a-zA-Z0-9_]+$/,
+      message: 'Username can only contain letters, numbers, and underscores'
+    }
+  }
+};
+```
+
+### Custom Validation Functions
+
+```tsx
+const field: FormFieldConfig = {
+  name: 'email',
+  label: 'Email',
+  type: 'email',
+  validation: {
+    custom: (value) => {
+      if (!value.endsWith('@company.com')) {
+        return 'Must use company email address';
+      }
+      return true;
+    }
+  }
+};
+```
+
+### Async Validation
+
+```tsx
+const field: FormFieldConfig = {
+  name: 'username',
+  label: 'Username',
+  type: 'text',
+  validation: {
+    custom: async (value) => {
+      const response = await fetch(`/api/check-username?name=${value}`);
+      const data = await response.json();
+
+      if (!data.available) {
+        return 'Username is already taken';
+      }
+      return true;
+    }
+  }
+};
+```
+
+## Field Types
+
+FormBuilder supports all input component types:
+
+| Type | Component | Description |
+|------|-----------|-------------|
+| `text` | Input | Standard text input |
+| `email` | Input | Email input with validation |
+| `password` | Input | Password input (masked) |
+| `number` | NumberInput | Numeric input with controls |
+| `tel` | PhoneInput | Phone number input |
+| `textarea` | Textarea | Multi-line text |
+| `select` | Select | Dropdown selection |
+| `checkbox` | Checkbox | Single checkbox |
+| `radio-group` | RadioGroup | Radio button group |
+| `toggle` | Toggle | Boolean switch |
+| `slider` | Slider | Range slider |
+| `rating` | Rating | Star rating |
+| `color` | ColorPicker | Color selection |
+| `date` | DatePicker | Date selection |
+| `date-range` | DateRangePicker | Date range selection |
+| `file` | FilePicker | File upload |
+| `tags` | TagInput | Multiple tags |
+
+## Layout Customization
+
+FormBuilder supports custom layouts:
+
+```tsx
+<FormBuilder
+  fields={fields}
+  layout="grid"
+  columns={2}
+  gap="md"
+  onSubmit={handleSubmit}
+/>
+```
+
+## Design Guidelines
+
+### When to Use FormBuilder
+
+**Use FormBuilder when:**
+- Building forms with 3+ fields
+- Need validation and error handling
+- Want consistent form layout
+- Building dynamic forms from configuration
+- Need field dependencies or conditional logic
+
+**Don't use FormBuilder when:**
+- Simple 1-2 field forms (use individual inputs)
+- Need highly custom layout (build manually with input components)
+- Performance is critical and you need fine-grained control
+
+### Best Practices
+
+1. **Group related fields** - Use field groups for better organization
+2. **Validate on blur** - Provide immediate feedback without being intrusive
+3. **Show all errors on submit** - Make all validation errors visible when user tries to submit
+4. **Disable submit during validation** - Prevent submission while async validation is running
+5. **Provide clear error messages** - Tell users exactly what's wrong and how to fix it
+6. **Use appropriate field types** - Match field types to data (email, tel, date, etc.)
+7. **Consider mobile users** - Ensure form is responsive and touch-friendly
+
+### Accessibility
+
+FormBuilder follows accessibility best practices:
+
+- ✅ Proper label associations
+- ✅ ARIA error announcements
+- ✅ Keyboard navigation
+- ✅ Focus management
+- ✅ Required field indicators
+- ✅ Error summaries for screen readers
+
+## API Reference
+
+For detailed API documentation, see the [FormBuilder component documentation](/?path=/docs/forms-formbuilder--docs).

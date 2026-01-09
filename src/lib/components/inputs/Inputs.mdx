@@ -1,0 +1,176 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Inputs/Overview" />
+
+# Inputs
+
+Form input components for collecting and validating user data.
+
+## Categories
+
+### 📝 Basic Text Inputs
+
+Components for collecting text-based information.
+
+- **Input** - Standard text input with validation, masking, and advanced features
+- **Textarea** - Multi-line text input with auto-resize
+- **NumberInput** - Numeric-only input with increment/decrement controls
+- **PhoneInput** - International phone number input with country codes
+- **TagInput** - Multiple tag entry with add/remove functionality
+
+### ✅ Selection Inputs
+
+Components for selecting from predefined options.
+
+- **Select** - Dropdown selection with single or multi-select
+- **Autocomplete** - Searchable dropdown with filtering
+- **Checkbox** - Multi-select boolean input
+- **Radio/RadioGroup** - Single-select from mutually exclusive options
+- **Toggle** - Boolean switch for on/off states
+
+### 🎯 Specialized Inputs
+
+Components for specific data types or interactions.
+
+- **Slider** - Range selection with marks and custom steps
+- **Rating** - Star or numeric rating input
+- **ColorPicker** - Color selection with format options (hex, rgb, hsl)
+- **DatePicker** - Single date selection with calendar
+- **DateRangePicker** - Date range selection with presets
+- **FilePicker** - File upload with drag-and-drop support
+
+## Common Features
+
+All input components share these features:
+
+- ✅ **Validation** - Built-in and custom validation support
+- ✅ **Error States** - Visual feedback for validation errors
+- ✅ **Disabled States** - Support for disabled/readonly modes
+- ✅ **Labels & Help Text** - Accessible labels and descriptive help
+- ✅ **Theming** - Light and dark theme support
+- ✅ **Type Safety** - Full TypeScript support
+
+## Usage Example
+
+```tsx
+import {
+  Input,
+  Select,
+  Checkbox,
+  DatePicker,
+  Slider
+} from '@true-tech-team/ui-components';
+
+function MyForm() {
+  return (
+    <form>
+      <Input
+        label="Email"
+        type="email"
+        placeholder="you@example.com"
+        required
+      />
+
+      <Select
+        label="Country"
+        options={[
+          { value: 'us', label: 'United States' },
+          { value: 'ca', label: 'Canada' },
+        ]}
+      />
+
+      <Checkbox label="Subscribe to newsletter" />
+
+      <DatePicker
+        label="Birth Date"
+        placeholder="Select date"
+      />
+
+      <Slider
+        label="Volume"
+        min={0}
+        max={100}
+        value={50}
+      />
+    </form>
+  );
+}
+```
+
+## Validation Example
+
+```tsx
+import { Input } from '@true-tech-team/ui-components';
+
+function ValidatedInput() {
+  const validateEmail = (value: string) => {
+    if (!value.includes('@')) {
+      return { valid: false, message: 'Must be a valid email' };
+    }
+    return { valid: true };
+  };
+
+  return (
+    <Input
+      label="Email"
+      type="email"
+      validation={validateEmail}
+      required
+    />
+  );
+}
+```
+
+## Design Guidelines
+
+### When to Use Each Input
+
+| Component | Use When |
+|-----------|----------|
+| **Input** | Collecting short text (name, email, URL) |
+| **Textarea** | Collecting long-form text (comments, descriptions) |
+| **NumberInput** | Collecting numeric values with increment controls |
+| **PhoneInput** | Collecting phone numbers with international support |
+| **TagInput** | Collecting multiple items (tags, keywords, emails) |
+| **Select** | Choosing from a predefined list (5+ options) |
+| **Autocomplete** | Choosing from a large list with search |
+| **Checkbox** | Multiple selections or single on/off |
+| **Radio** | Single selection from 2-5 options |
+| **Toggle** | Binary choice with clear on/off state |
+| **Slider** | Selecting from a continuous range |
+| **Rating** | Collecting user ratings or feedback |
+| **ColorPicker** | Selecting colors |
+| **DatePicker** | Selecting single dates |
+| **DateRangePicker** | Selecting date ranges |
+| **FilePicker** | Uploading files |
+
+### Best Practices
+
+1. **Always provide labels** - Every input should have a clear, descriptive label
+2. **Use placeholder text wisely** - Placeholders should provide examples, not replace labels
+3. **Show validation inline** - Display errors immediately after blur or on submit
+4. **Group related inputs** - Use fieldsets or visual grouping for related fields
+5. **Make required fields clear** - Use asterisks or "Required" text
+6. **Provide help text** - Explain complex requirements or formatting
+7. **Use appropriate input types** - Leverage HTML5 input types for better UX
+8. **Support keyboard navigation** - All inputs should be fully keyboard accessible
+
+## Accessibility
+
+All input components follow WCAG 2.1 Level AA guidelines:
+
+- ✅ Proper label associations
+- ✅ ARIA attributes for screen readers
+- ✅ Keyboard navigation support
+- ✅ Focus indicators
+- ✅ Error announcements
+- ✅ Sufficient color contrast
+
+## Quick Links
+
+- [Input](/?path=/story/inputs-input--default)
+- [Select](/?path=/story/inputs-select--default)
+- [Checkbox](/?path=/story/inputs-checkbox--default)
+- [DatePicker](/?path=/story/inputs-datepicker--default)
+- [ColorPicker](/?path=/story/inputs-colorpicker--default)
+- [View All Inputs →](/?path=/story/inputs-input--default)

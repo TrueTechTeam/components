@@ -1,0 +1,161 @@
+import type { Meta, StoryObj } from '@storybook/react';
+import { Button } from './Button';
+import { Icon } from '../../display/Icon';
+import { iconRegistry } from '../../../assets/icons';
+
+// Dynamically generate icon options from iconRegistry
+const iconOptions = [null, ...Object.keys(iconRegistry)] as const;
+
+const meta: Meta<typeof Button> = {
+  title: 'Buttons/Button',
+  component: Button,
+  tags: ['autodocs'],
+  argTypes: {
+    variant: {
+      control: 'select',
+      options: ['primary', 'secondary', 'outline', 'ghost', 'success', 'warning', 'danger'],
+      description: 'Button variant style',
+    },
+    size: {
+      control: 'select',
+      options: ['sm', 'md', 'lg'],
+      description: 'Button size',
+    },
+    disabled: {
+      control: 'boolean',
+      description: 'Whether the button is disabled',
+    },
+    fullWidth: {
+      control: 'boolean',
+      description: 'Whether the button takes full width',
+    },
+    startIcon: {
+      control: 'select',
+      options: iconOptions,
+      description: 'Icon to display before the text (string name or component)',
+    },
+    endIcon: {
+      control: 'select',
+      options: iconOptions,
+      description: 'Icon to display after the text (string name or component)',
+    },
+    // Hide other controls
+    onClick: { table: { disable: true } },
+    children: { table: { disable: true } },
+    className: { table: { disable: true } },
+    'data-testid': { table: { disable: true } },
+    'aria-label': { table: { disable: true } },
+    style: { table: { disable: true } },
+    type: { table: { disable: true } },
+  },
+};
+
+export default meta;
+type Story = StoryObj<typeof Button>;
+
+/**
+ * Default button with primary variant
+ */
+export const Default: Story = {
+  args: {
+    children: 'Button',
+    variant: 'primary',
+    size: 'md',
+  },
+};
+
+/**
+ * All button variants
+ */
+export const Variants: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+      <Button variant="primary">Primary</Button>
+      <Button variant="secondary">Secondary</Button>
+      <Button variant="outline">Outline</Button>
+      <Button variant="ghost">Ghost</Button>
+      <Button variant="success">Success</Button>
+      <Button variant="warning">Warning</Button>
+      <Button variant="danger">Danger</Button>
+    </div>
+  ),
+};
+
+/**
+ * Semantic color variants for success, warning, and danger actions
+ */
+export const SemanticVariants: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+      <Button variant="success" startIcon="check">
+        Success
+      </Button>
+      <Button variant="warning" startIcon="warning">
+        Warning
+      </Button>
+      <Button variant="danger" startIcon="error">
+        Danger
+      </Button>
+    </div>
+  ),
+};
+
+/**
+ * All button sizes
+ */
+export const Sizes: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+      <Button size="sm">Small</Button>
+      <Button size="md">Medium</Button>
+      <Button size="lg">Large</Button>
+    </div>
+  ),
+};
+
+/**
+ * Buttons with icons
+ */
+export const WithIcons: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+      <Button startIcon={<Icon name="check" size={16} />}>Save</Button>
+      <Button endIcon={<Icon name="chevron-right" size={16} />}>Next</Button>
+      <Button
+        variant="outline"
+        startIcon={<Icon name="info" size={16} />}
+        endIcon={<Icon name="chevron-down" size={16} />}
+      >
+        More Info
+      </Button>
+    </div>
+  ),
+};
+
+/**
+ * Disabled state
+ */
+export const Disabled: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+      <Button disabled>Primary Disabled</Button>
+      <Button variant="secondary" disabled>
+        Secondary Disabled
+      </Button>
+      <Button variant="outline" disabled>
+        Outline Disabled
+      </Button>
+    </div>
+  ),
+};
+
+/**
+ * Full width button
+ */
+export const FullWidth: Story = {
+  args: {
+    children: 'Full Width Button',
+    fullWidth: true,
+  },
+};
+

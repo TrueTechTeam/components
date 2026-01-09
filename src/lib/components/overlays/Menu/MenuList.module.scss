@@ -1,0 +1,22 @@
+@use '../../../styles/mixins/component' as *;
+@use '../../../styles/mixins/spacing' as *;
+
+.menuList {
+  --menu-list-padding: var(--spacing-xs);
+  --menu-list-max-height: 400px;
+  --menu-list-min-width: auto;
+  --menu-list-max-width: none;
+  --menu-list-width: auto;
+
+  @include py(1);
+
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: var(--menu-list-max-height);
+  min-width: var(--menu-list-min-width);
+  max-width: var(--menu-list-max-width);
+  width: var(--menu-list-width);
+  overflow-y: auto;
+}
+

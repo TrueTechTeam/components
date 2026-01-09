@@ -1,0 +1,55 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Buttons/Overview" />
+
+# Buttons
+
+Action and trigger components for user interactions.
+
+## Components in this Category
+
+### Button
+Primary call-to-action component with multiple variants and sizes.
+
+**Features:**
+- Multiple variants: primary, secondary, outline, ghost, success, warning, danger
+- Three sizes: sm, md, lg
+- Icon support (left and right)
+- Full-width option
+- Loading states
+- Disabled states
+
+**Common Use Cases:**
+- Form submissions
+- Navigation actions
+- Triggering modals or dialogs
+- Confirming or canceling operations
+
+[View Button Stories →](/?path=/story/buttons-button--default)
+
+## Usage Example
+
+```tsx
+import { Button } from '@true-tech-team/ui-components';
+
+function MyComponent() {
+  return (
+    <div>
+      <Button variant="primary" size="md">
+        Submit
+      </Button>
+      <Button variant="outline" size="md" iconLeft="check">
+        Save
+      </Button>
+    </div>
+  );
+}
+```
+
+## Design Guidelines
+
+- Use **primary** for the main action on a page
+- Use **secondary** for secondary actions
+- Use **outline** for less prominent actions
+- Use **ghost** for tertiary actions or icon-only buttons
+- Use semantic variants (**success**, **warning**, **danger**) for context-specific actions

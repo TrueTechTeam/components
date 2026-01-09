@@ -1,0 +1,150 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Display/Overview" />
+
+# Display
+
+Components for presenting visual content and elements.
+
+## Components in this Category
+
+### Icon
+SVG-based icon system with 21+ built-in icons.
+
+**Features:**
+- 21 built-in icons covering common use cases
+- Customizable size and color
+- Supports custom SVG icons
+- Optimized performance
+- Accessibility support
+
+**Available Icons:**
+- **Navigation:** chevron-down, chevron-up, chevron-left, chevron-right
+- **Status:** check, close, error, warning, info, help
+- **Visibility:** eye, eye-off
+- **User/Account:** account, profile, logout
+- **Actions:** edit, delete, copy, preferences, settings
+- **Calendar:** calendar
+
+[View Icon Stories →](/?path=/story/display-icon--default)
+
+## Usage Example
+
+```tsx
+import { Icon } from '@true-tech-team/ui-components';
+import type { IconName } from '@true-tech-team/ui-components';
+
+function MyComponent() {
+  return (
+    <div>
+      {/* Basic icon */}
+      <Icon name="check" size={24} />
+
+      {/* Colored icon */}
+      <Icon
+        name="warning"
+        size={32}
+        color="var(--theme-warning)"
+      />
+
+      {/* Icon with custom styling */}
+      <Icon
+        name="settings"
+        size={20}
+        className="custom-icon"
+      />
+    </div>
+  );
+}
+```
+
+## Using Icons in Other Components
+
+Icons integrate seamlessly with other components:
+
+```tsx
+import { Button, Icon } from '@true-tech-team/ui-components';
+
+function MyComponent() {
+  return (
+    <div>
+      {/* Icon in button (using icon name) */}
+      <Button iconLeft="check">
+        Save
+      </Button>
+
+      {/* Icon in button (using Icon component) */}
+      <Button iconLeft={<Icon name="settings" />}>
+        Settings
+      </Button>
+    </div>
+  );
+}
+```
+
+## Custom Icons
+
+You can also use custom SVG icons:
+
+```tsx
+import { Icon } from '@true-tech-team/ui-components';
+
+function CustomIcon() {
+  return (
+    <Icon
+      name="custom"
+      size={24}
+      // The icon registry will fall back to a placeholder
+      // or you can register custom icons
+    />
+  );
+}
+```
+
+## Icon Registry
+
+All icons are stored in a central registry for easy access:
+
+```tsx
+import { iconRegistry } from '@true-tech-team/ui-components';
+
+// Get all available icon names
+const iconNames = Object.keys(iconRegistry);
+
+// Use in a select or autocomplete
+<Select
+  options={iconNames.map(name => ({
+    value: name,
+    label: name
+  }))}
+/>
+```
+
+## Design Guidelines
+
+### Size Guidelines
+- **16px** - Small icons in dense layouts, inline text
+- **20px** - Default for buttons and input fields
+- **24px** - Standard icon size for most UI elements
+- **32px** - Large icons for headers or emphasis
+- **48px+** - Hero icons or large empty states
+
+### Color Guidelines
+- Use theme colors for consistency: `var(--theme-primary)`, `var(--theme-error)`, etc.
+- Icons should match surrounding text color in most cases
+- Use semantic colors (success, warning, error) when indicating status
+- Ensure sufficient contrast for accessibility (4.5:1 ratio minimum)
+
+### Accessibility
+- Icons used for actions should have labels or tooltips
+- Decorative icons should have `aria-hidden="true"`
+- Icon-only buttons should have accessible labels
+
+```tsx
+// Good: Icon with label
+<Button iconLeft="settings">Settings</Button>
+```
+
+## Future Additions
+
+More icons will be added based on common use cases. If you need a specific icon, please submit a request or contribution to the component library.

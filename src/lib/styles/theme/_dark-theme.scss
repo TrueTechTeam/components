@@ -1,0 +1,128 @@
+@use './colors' as *;
+
+:root[data-theme='dark'] {
+  // Primary colors (cyan/teal)
+  --theme-primary: #00adb5;
+  --theme-primary-hover: #00c4ce;
+  --theme-primary-active: #009ba3;
+  --theme-primary-disabled: #005f66;
+
+  // Primary color shades
+  --theme-primary-50: #0a2527;
+  --theme-primary-100: #14393c;
+  --theme-primary-200: #1f5558;
+  --theme-primary-500: #00adb5;
+  --theme-primary-600: #00c4cd;
+  --theme-primary-700: #1ad6df;
+  --theme-primary-900: #5de9ef;
+
+  // Secondary colors (light gray)
+  --theme-secondary: #eee;
+  --theme-secondary-hover: #fff;
+  --theme-secondary-active: #ddd;
+  --theme-secondary-disabled: #999;
+
+  // Secondary color shades
+  --theme-secondary-50: #0f1115;
+  --theme-secondary-100: #1f2229;
+  --theme-secondary-200: #2f343d;
+  --theme-secondary-400: #51596d;
+  --theme-secondary-500: #393e46;
+  --theme-secondary-700: #60677d;
+
+  // Tertiary color system
+  --theme-tertiary: #818cf8;
+  --theme-tertiary-50: #1e1b4b;
+  --theme-tertiary-100: #312e81;
+  --theme-tertiary-200: #3730a3;
+  --theme-tertiary-400: #6366f1;
+  --theme-tertiary-500: #818cf8;
+  --theme-tertiary-700: #a5b4fc;
+
+  // Semantic colors
+  --theme-success: var(--color-green-500);
+  --theme-warning: var(--color-amber-500);
+  --theme-error: var(--color-red-500);
+  --theme-info: #00adb5;
+
+  // Success variant tokens
+  --theme-success-hover: var(--color-green-400);
+  --theme-success-active: var(--color-green-600);
+  --theme-success-disabled: var(--color-green-800);
+  --theme-success-500: #34d399;
+
+  // Warning variant tokens
+  --theme-warning-hover: var(--color-amber-400);
+  --theme-warning-active: var(--color-amber-600);
+  --theme-warning-disabled: var(--color-amber-800);
+  --theme-warning-500: #fbbf24;
+  --theme-warning-600: #f59e0b;
+
+  // Error/Danger variant tokens
+  --theme-error-hover: var(--color-red-400);
+  --theme-error-active: var(--color-red-600);
+  --theme-error-disabled: var(--color-red-800);
+
+  // Backgrounds
+  --theme-background-primary: #393e46;
+  --theme-background-secondary: #31363f;
+  --theme-background-tertiary: #2a2e35;
+
+  // Surfaces
+  --theme-surface-primary: #222831;
+  --theme-surface-secondary: #1a1e25;
+  --theme-surface-elevated: #2d3139;
+
+  // Text
+  --theme-text-primary: #eee;
+  --theme-text-secondary: #ccc;
+  --theme-text-tertiary: #999;
+  --theme-text-disabled: #666;
+  --theme-text-contrast: #1f2937;
+  --theme-text-on-primary: #fff;
+  --theme-text-placeholder: var(--theme-input-placeholder);
+
+  // Borders
+  --theme-border-primary: #31363f;
+  --theme-border-secondary: #2a2e35;
+  --theme-border-focus: #00adb5;
+
+  // Interactive
+  --theme-interactive-hover: #353b45;
+  --theme-interactive-focus: rgb(0 173 181 / 25%);
+  --theme-interactive-active: #222831;
+  --theme-interactive-disabled: #1a1e25;
+
+  // Shadows
+  --theme-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 30%);
+  --theme-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 40%);
+  --theme-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 40%);
+  --theme-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 50%);
+
+  // Form input colors
+  --theme-white: #fff;
+  --theme-neutral-50: #1a1e25;
+  --theme-neutral-100: #222831;
+  --theme-neutral-200: #2a2e35;
+  --theme-neutral-300: #31363f;
+  --theme-neutral-400: #4a5058;
+  --theme-neutral-500: #6b7280;
+  --theme-neutral-600: #9ca3af;
+  --theme-neutral-800: #e5e7eb;
+
+  // Input-specific tokens
+  --theme-input-bg: #2a2e35;
+  --theme-input-bg-disabled: #1a1e25;
+  --theme-input-border: #4a5058;
+  --theme-input-border-hover: #6b7280;
+  --theme-input-border-focus: #00adb5;
+  --theme-input-text: #eee;
+  --theme-input-placeholder: #6b7280;
+
+  // Form control backgrounds
+  --theme-control-bg: #2a2e35;
+  --theme-control-bg-checked: #00adb5;
+  --theme-control-border: #4a5058;
+  --theme-control-border-hover: #6b7280;
+}
+

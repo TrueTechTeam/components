@@ -1,0 +1,37 @@
+@use '../../../styles/mixins/component' as *;
+@use '../../../styles/mixins/spacing' as *;
+
+.popoverContent {
+  // CSS Variables
+  --popover-bg: var(--theme-surface-elevated);
+  --popover-shadow: var(--theme-shadow-lg);
+  --popover-border: var(--theme-border-primary);
+  --popover-radius: var(--radius-md);
+  --popover-z-index: var(--z-popover);
+
+  position: fixed;
+  background: var(--popover-bg);
+  border: 1px solid var(--popover-border);
+  border-radius: var(--popover-radius);
+  box-shadow: var(--popover-shadow);
+  z-index: var(--popover-z-index);
+
+  @include transition(opacity, transform);
+
+  // Animation states
+  &[data-state='opening'] {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+
+  &[data-state='open'] {
+    opacity: 1;
+    transform: scale(1);
+  }
+
+  &[data-state='closing'] {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+}
+

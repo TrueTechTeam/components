@@ -1,0 +1,113 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Overlays/Overview" />
+
+# Overlays
+
+Floating UI elements that appear above other content to provide contextual information or interactions.
+
+## Components in this Category
+
+### Popover
+Contextual floating content container with flexible positioning.
+
+**Use Cases:**
+- Additional information panels
+- Settings menus
+- Complex tooltips with interactive content
+- Context-specific actions
+
+[View Popover Stories →](/?path=/story/overlays-popover--default)
+
+---
+
+### Tooltip
+Hover-triggered information display for brief explanatory text.
+
+**Use Cases:**
+- Icon explanations
+- Form field help text
+- Button descriptions
+- Disabled element explanations
+
+[View Tooltip Stories →](/?path=/story/overlays-tooltip--default)
+
+---
+
+### Dropdown
+Dropdown menu trigger and content with keyboard navigation.
+
+**Use Cases:**
+- Action menus
+- Selection lists
+- Navigation menus
+- Context menus
+
+[View Dropdown Stories →](/?path=/story/overlays-dropdown--default)
+
+---
+
+### Menu
+Composite menu system with MenuList, MenuItem, MenuGroup, and MenuDivider.
+
+**Use Cases:**
+- Application menus
+- Navigation structures
+- Grouped actions
+- Multi-level menus
+
+[View Menu Stories →](/?path=/story/overlays-menu--default)
+
+---
+
+### Portal
+Utility component that renders content outside the DOM hierarchy.
+
+**Use Cases:**
+- Rendering modals at document root
+- Breaking out of overflow:hidden containers
+- Z-index management
+- Custom overlay implementations
+
+[View Portal Stories →](/?path=/story/overlays-portal--default)
+
+## Usage Example
+
+```tsx
+import { Popover, Tooltip, Menu, MenuItem } from '@true-tech-team/ui-components';
+
+function MyComponent() {
+  return (
+    <div>
+      {/* Tooltip for simple help text */}
+      <Tooltip content="Click to save">
+        <button>Save</button>
+      </Tooltip>
+
+      {/* Popover for complex content */}
+      <Popover trigger={<button>Settings</button>}>
+        <div className="p-md">
+          <h3>Settings Panel</h3>
+          {/* Complex content */}
+        </div>
+      </Popover>
+
+      {/* Menu for actions */}
+      <Menu>
+        <MenuItem>Edit</MenuItem>
+        <MenuItem>Delete</MenuItem>
+      </Menu>
+    </div>
+  );
+}
+```
+
+## Design Guidelines
+
+- Use **Tooltip** for brief, non-interactive information (1-2 sentences)
+- Use **Popover** for complex, interactive content or detailed information
+- Use **Dropdown** for selection from a list of options
+- Use **Menu** for grouped actions or navigation
+- Keep overlay content concise and focused
+- Ensure overlays are dismissible (ESC key, click outside)
+- Position overlays to avoid obscuring important content

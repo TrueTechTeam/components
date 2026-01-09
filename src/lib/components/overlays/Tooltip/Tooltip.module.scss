@@ -1,0 +1,103 @@
+@use '../../../styles/mixins/component' as *;
+@use '../../../styles/mixins/spacing' as *;
+
+.tooltipTrigger {
+  display: inline-flex;
+  align-items: center;
+}
+
+.tooltipContent {
+  // Override popover variables
+  --popover-bg: var(--theme-background-primary);
+  --popover-border: var(--theme-border-primary);
+  --popover-shadow: var(--theme-shadow-md);
+  --popover-radius: var(--radius-sm);
+  --popover-z-index: var(--z-tooltip);
+}
+
+.tooltipInner {
+  @include px(3);
+  @include py(2);
+
+  color: var(--theme-text-on-primary);
+  font-size: var(--font-size-sm);
+  max-width: 300px;
+  position: relative;
+  line-height: 1.4;
+}
+
+.tooltipArrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border: 6px solid transparent;
+
+  // Top edge (arrow points up from bottom of tooltip)
+  &[data-position='top'] {
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-bottom-color: var(--theme-background-primary);
+    border-top: none;
+  }
+
+  // Top-left corner (arrow points up-left from bottom-left)
+  &[data-position='top-left'] {
+    top: -12px;
+    left: 12px;
+    border-bottom-color: var(--theme-background-primary);
+    border-top: none;
+  }
+
+  // Top-right corner (arrow points up-right from bottom-right)
+  &[data-position='top-right'] {
+    top: -12px;
+    right: 12px;
+    border-bottom-color: var(--theme-background-primary);
+    border-top: none;
+  }
+
+  // Bottom edge (arrow points down from top of tooltip)
+  &[data-position='bottom'] {
+    bottom: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    border-top-color: var(--theme-background-primary);
+    border-bottom: none;
+  }
+
+  // Bottom-left corner (arrow points down-left from top-left)
+  &[data-position='bottom-left'] {
+    bottom: -12px;
+    left: 12px;
+    border-top-color: var(--theme-background-primary);
+    border-bottom: none;
+  }
+
+  // Bottom-right corner (arrow points down-right from top-right)
+  &[data-position='bottom-right'] {
+    bottom: -12px;
+    right: 12px;
+    border-top-color: var(--theme-background-primary);
+    border-bottom: none;
+  }
+
+  // Left edge (arrow points left from right of tooltip)
+  &[data-position='left'] {
+    left: -12px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-right-color: var(--theme-background-primary);
+    border-left: none;
+  }
+
+  // Right edge (arrow points right from left of tooltip)
+  &[data-position='right'] {
+    right: -12px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-left-color: var(--theme-background-primary);
+    border-right: none;
+  }
+}
+
