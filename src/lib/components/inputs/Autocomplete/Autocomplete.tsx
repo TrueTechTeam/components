@@ -273,8 +273,6 @@ export const Autocomplete: React.FC<AutocompleteProps> = ({
         trigger={({ ref }) => (
           <div ref={ref as any}>
             <Input
-              variant={variant}
-              size={size}
               label={label}
               placeholder={placeholder}
               value={inputValue}

@@ -1,10 +1,11 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { action } from '@storybook/addon-actions';
 import { RadioGroup } from './RadioGroup';
 import { Radio } from './Radio';
 import { useState } from 'react';
 
 const meta: Meta<typeof RadioGroup> = {
-  title: 'Forms/Radio',
+  title: 'Inputs/Radio',
   component: RadioGroup,
   tags: ['autodocs'],
   argTypes: {
@@ -22,14 +23,6 @@ const meta: Meta<typeof RadioGroup> = {
       control: 'select',
       options: ['horizontal', 'vertical'],
       description: 'Layout orientation',
-    },
-    value: {
-      control: 'text',
-      description: 'Selected value (controlled)',
-    },
-    defaultValue: {
-      control: 'text',
-      description: 'Default selected value (uncontrolled)',
     },
     label: {
       control: 'text',
@@ -59,6 +52,23 @@ const meta: Meta<typeof RadioGroup> = {
       control: 'boolean',
       description: 'Required field',
     },
+    gap: {
+      control: 'number',
+      description: 'Gap between radio buttons (in spacing units)',
+    },
+    // Disable complex props
+    onChange: {
+      action: 'onChange',
+      table: { disable: true },
+    },
+    value: { table: { disable: true } },
+    defaultValue: { table: { disable: true } },
+    children: { table: { disable: true } },
+    className: { table: { disable: true } },
+    style: { table: { disable: true } },
+    id: { table: { disable: true } },
+    name: { table: { disable: true } },
+    'data-testid': { table: { disable: true } },
   },
 };
 
@@ -66,8 +76,11 @@ export default meta;
 type Story = StoryObj<typeof RadioGroup>;
 
 export const Default: Story = {
-  render: () => (
-    <RadioGroup label="Select size">
+  args: {
+    onChange: action('onChange'),
+  },
+  render: (args) => (
+    <RadioGroup label="Select size" {...args}>
       <Radio value="small" label="Small" />
       <Radio value="medium" label="Medium" />
       <Radio value="large" label="Large" />
@@ -79,7 +92,10 @@ const ControlledComponent = () => {
   const [value, setValue] = useState('medium');
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      <RadioGroup label="Select size" value={value} onChange={setValue}>
+      <RadioGroup label="Select size" value={value} onChange={(newValue) => {
+        setValue(newValue);
+        action('onChange')(newValue);
+      }}>
         <Radio value="small" label="Small" />
         <Radio value="medium" label="Medium" />
         <Radio value="large" label="Large" />
@@ -90,10 +106,12 @@ const ControlledComponent = () => {
 };
 
 export const Controlled: Story = {
+  parameters: { controls: { disable: true } },
   render: () => <ControlledComponent />,
 };
 
 export const Uncontrolled: Story = {
+  parameters: { controls: { disable: true } },
   render: () => (
     <RadioGroup label="Select size" defaultValue="medium">
       <Radio value="small" label="Small" />
@@ -104,6 +122,7 @@ export const Uncontrolled: Story = {
 };
 
 export const Variants: Story = {
+  parameters: { controls: { disable: true } },
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       <RadioGroup label="Primary" variant="primary" defaultValue="option2">
@@ -140,6 +159,7 @@ export const Variants: Story = {
 };
 
 export const Sizes: Story = {
+  parameters: { controls: { disable: true } },
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       <RadioGroup label="Small" size="sm" defaultValue="option2">
@@ -164,6 +184,7 @@ export const Sizes: Story = {
 };
 
 export const Orientation: Story = {
+  parameters: { controls: { disable: true } },
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       <RadioGroup label="Vertical (default)" orientation="vertical" defaultValue="option2">
@@ -182,6 +203,7 @@ export const Orientation: Story = {
 };
 
 export const WithHelperText: Story = {
+  parameters: { controls: { disable: true } },
   render: () => (
     <RadioGroup
       label="Shipping method"
@@ -196,6 +218,7 @@ export const WithHelperText: Story = {
 };
 
 export const ErrorState: Story = {
+  parameters: { controls: { disable: true } },
   render: () => (
     <RadioGroup
       label="Select payment method"
@@ -211,6 +234,7 @@ export const ErrorState: Story = {
 };
 
 export const DisabledState: Story = {
+  parameters: { controls: { disable: true } },
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       <RadioGroup label="Entire group disabled" disabled defaultValue="option2">
@@ -229,6 +253,7 @@ export const DisabledState: Story = {
 };
 
 export const ReadOnlyState: Story = {
+  parameters: { controls: { disable: true } },
   render: () => (
     <RadioGroup label="Read-only group" readOnly defaultValue="option2">
       <Radio value="option1" label="Option 1" />
@@ -239,6 +264,7 @@ export const ReadOnlyState: Story = {
 };
 
 export const RequiredField: Story = {
+  parameters: { controls: { disable: true } },
   render: () => (
     <RadioGroup
       label="Select your plan"
@@ -254,6 +280,7 @@ export const RequiredField: Story = {
 };
 
 export const LabelPlacement: Story = {
+  parameters: { controls: { disable: true } },
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '2rem' }}>
       <RadioGroup label="Labels at end (default)" defaultValue="option2">
@@ -318,6 +345,7 @@ const ComplexExampleComponent = () => {
 };
 
 export const ComplexExample: Story = {
+  parameters: { controls: { disable: true } },
   render: () => <ComplexExampleComponent />,
 };
 
@@ -328,6 +356,7 @@ export const Playground: Story = {
     size: 'md',
     orientation: 'vertical',
     helperText: '',
+    onChange: action('onChange'),
   },
   render: (args) => (
     <RadioGroup {...args}>
@@ -337,4 +366,3 @@ export const Playground: Story = {
     </RadioGroup>
   ),
 };
-

@@ -36,6 +36,11 @@ export interface ColorPickerProps extends Omit<BaseComponentProps, 'children'> {
   onChange?: (color: string) => void;
 
   /**
+   * Callback when input loses focus
+   */
+  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
+
+  /**
    * Color format for display and output
    */
   format?: ColorFormat;
@@ -130,6 +135,7 @@ export const ColorPicker = forwardRef<HTMLInputElement, ColorPickerProps>(
       value: controlledValue,
       defaultValue = '#FF5733',
       onChange,
+      onBlur,
       format = 'hex',
       showAlpha = false,
       showPresets = true,
@@ -712,6 +718,7 @@ export const ColorPicker = forwardRef<HTMLInputElement, ColorPickerProps>(
               type="text"
               value={inputValue}
               onChange={(e) => handleInputChange(e)}
+              onBlur={onBlur}
               disabled={disabled}
               placeholder={inputPlaceholder}
               maxLength={inputMaxLength}

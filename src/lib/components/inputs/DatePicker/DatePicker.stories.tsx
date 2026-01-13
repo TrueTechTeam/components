@@ -1,47 +1,159 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { action } from '@storybook/addon-actions';
 import { DatePicker } from './DatePicker';
 
 const meta: Meta<typeof DatePicker> = {
-  title: 'Forms/DatePicker',
+  title: 'Inputs/DatePicker',
   component: DatePicker,
   tags: ['autodocs'],
   argTypes: {
-    onChange: { action: 'changed' },
+    // Simple controls
+    label: {
+      control: 'text',
+      description: 'Input label text',
+    },
+    placeholder: {
+      control: 'text',
+      description: 'Placeholder text',
+    },
+    helperText: {
+      control: 'text',
+      description: 'Helper text displayed below the input',
+    },
+    errorMessage: {
+      control: 'text',
+      description: 'Error message (shows when error is true)',
+    },
+    disabled: {
+      control: 'boolean',
+      description: 'Whether the input is disabled',
+    },
+    required: {
+      control: 'boolean',
+      description: 'Whether the field is required',
+    },
+    error: {
+      control: 'boolean',
+      description: 'Whether the input is in an error state',
+    },
+    format: {
+      control: 'text',
+      description: 'Date format string',
+    },
+    showCalendar: {
+      control: 'boolean',
+      description: 'Show calendar popup',
+    },
+    showClearButton: {
+      control: 'boolean',
+      description: 'Show clear button',
+    },
+    // Disabled complex props
+    onChange: {
+      table: { disable: true },
+      description: 'Callback when date changes',
+    },
+    onBlur: {
+      table: { disable: true },
+      description: 'Callback when input loses focus',
+    },
+    className: {
+      table: { disable: true },
+    },
+    style: {
+      table: { disable: true },
+    },
+    value: {
+      table: { disable: true },
+      description: 'Controlled date value',
+    },
+    defaultValue: {
+      table: { disable: true },
+      description: 'Default date value (uncontrolled)',
+    },
+    minDate: {
+      table: { disable: true },
+      description: 'Minimum selectable date',
+    },
+    maxDate: {
+      table: { disable: true },
+      description: 'Maximum selectable date',
+    },
+    disabledDates: {
+      table: { disable: true },
+      description: 'Array of disabled dates',
+    },
+    startIcon: {
+      table: { disable: true },
+      description: 'Start icon (calendar icon by default)',
+    },
+    'data-testid': {
+      table: { disable: true },
+    },
+    'aria-label': {
+      table: { disable: true },
+    },
   },
 };
 
 export default meta;
 type Story = StoryObj<typeof DatePicker>;
 
+/**
+ * Default DatePicker with label
+ */
 export const Default: Story = {
   args: {
     label: 'Select Date',
+    onChange: action('date-changed'),
+    onBlur: action('blurred'),
   },
 };
 
+/**
+ * DatePicker with a pre-selected default value
+ */
 export const WithDefaultValue: Story = {
   args: {
     label: 'Event Date',
     defaultValue: new Date(2024, 5, 15), // June 15, 2024
   },
+  parameters: {
+    controls: { disable: true },
+  },
 };
 
+/**
+ * DatePicker with minimum date restriction
+ */
 export const WithMinDate: Story = {
   args: {
     label: 'Select Future Date',
     minDate: new Date(),
     helperText: 'You can only select dates from today onwards',
   },
+  parameters: {
+    controls: { disable: true },
+  },
 };
 
+/**
+ * DatePicker with maximum date restriction
+ */
 export const WithMaxDate: Story = {
   args: {
     label: 'Select Past Date',
     maxDate: new Date(),
     helperText: 'You can only select dates up to today',
   },
+  parameters: {
+    controls: { disable: true },
+  },
 };
 
+/**
+ * DatePicker with both minimum and maximum date restrictions
+ */
 export const WithDateRange: Story = {
   args: {
     label: 'Select Date',
@@ -57,8 +169,14 @@ export const WithDateRange: Story = {
     })(),
     helperText: 'Only dates within 3 months of today are selectable',
   },
+  parameters: {
+    controls: { disable: true },
+  },
 };
 
+/**
+ * DatePicker with specific disabled dates (weekends)
+ */
 export const WithDisabledDates: Story = {
   args: {
     label: 'Select Weekday',
@@ -82,23 +200,41 @@ export const WithDisabledDates: Story = {
     })(),
     helperText: 'Weekends are disabled for the next 30 days',
   },
+  parameters: {
+    controls: { disable: true },
+  },
 };
 
+/**
+ * DatePicker with custom date format
+ */
 export const CustomFormat: Story = {
   args: {
     label: 'Birth Date',
     format: 'DD/MM/YYYY',
     placeholder: 'DD/MM/YYYY',
   },
+  parameters: {
+    controls: { disable: true },
+  },
 };
 
+/**
+ * DatePicker without clear button
+ */
 export const NoClearButton: Story = {
   args: {
     label: 'Select Date',
     showClearButton: false,
   },
+  parameters: {
+    controls: { disable: true },
+  },
 };
 
+/**
+ * DatePicker without calendar popup (manual input only)
+ */
 export const NoCalendar: Story = {
   args: {
     label: 'Enter Date',
@@ -106,39 +242,69 @@ export const NoCalendar: Story = {
     placeholder: 'MM/DD/YYYY',
     helperText: 'Type the date manually',
   },
+  parameters: {
+    controls: { disable: true },
+  },
 };
 
+/**
+ * DatePicker with helper text
+ */
 export const WithHelperText: Story = {
   args: {
     label: 'Appointment Date',
     helperText: 'Choose your preferred appointment date',
   },
+  parameters: {
+    controls: { disable: true },
+  },
 };
 
+/**
+ * DatePicker in error state
+ */
 export const WithError: Story = {
   args: {
     label: 'Date',
     error: true,
     errorMessage: 'Date is required',
   },
+  parameters: {
+    controls: { disable: true },
+  },
 };
 
+/**
+ * DatePicker with required field indicator
+ */
 export const Required: Story = {
   args: {
     label: 'Start Date',
     required: true,
     helperText: 'This field is required',
   },
+  parameters: {
+    controls: { disable: true },
+  },
 };
 
+/**
+ * DatePicker in disabled state
+ */
 export const Disabled: Story = {
   args: {
     label: 'Date',
     defaultValue: new Date(2024, 5, 15),
     disabled: true,
   },
+  parameters: {
+    controls: { disable: true },
+  },
 };
 
+/**
+ * Real-world example: Birthday picker
+ */
 export const BirthdayPicker: Story = {
   args: {
     label: 'Date of Birth',
@@ -146,16 +312,28 @@ export const BirthdayPicker: Story = {
     format: 'MM/DD/YYYY',
     helperText: 'Enter your birth date',
   },
+  parameters: {
+    controls: { disable: true },
+  },
 };
 
+/**
+ * Real-world example: Event planner
+ */
 export const EventPlanner: Story = {
   args: {
     label: 'Event Date',
     minDate: new Date(),
     helperText: 'Select a future date for your event',
   },
+  parameters: {
+    controls: { disable: true },
+  },
 };
 
+/**
+ * Interactive playground for testing all props
+ */
 export const Playground: Story = {
   args: {
     label: 'Date Picker',
@@ -163,6 +341,7 @@ export const Playground: Story = {
     showCalendar: true,
     showClearButton: true,
     helperText: 'Select or enter a date',
+    onChange: action('date-changed'),
+    onBlur: action('blurred'),
   },
 };
-

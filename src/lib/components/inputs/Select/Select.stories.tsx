@@ -1,11 +1,81 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { action } from '@storybook/addon-actions';
 import { Select } from './Select';
 import { useState } from 'react';
 
 const meta: Meta<typeof Select> = {
-  title: 'Forms/Select',
+  title: 'Inputs/Select',
   component: Select,
   tags: ['autodocs'],
+  argTypes: {
+    // Simple controls
+    label: {
+      control: 'text',
+      description: 'Label text to display above select',
+    },
+    placeholder: {
+      control: 'text',
+      description: 'Placeholder text when no option is selected',
+    },
+    helperText: {
+      control: 'text',
+      description: 'Helper text to display below select',
+    },
+    errorMessage: {
+      control: 'text',
+      description: 'Error message to display when in error state',
+    },
+    searchPlaceholder: {
+      control: 'text',
+      description: 'Placeholder text for search input',
+    },
+    disabled: {
+      control: 'boolean',
+      description: 'Whether the select is disabled',
+    },
+    readOnly: {
+      control: 'boolean',
+      description: 'Whether the select is read-only',
+    },
+    required: {
+      control: 'boolean',
+      description: 'Whether the select is required',
+    },
+    error: {
+      control: 'boolean',
+      description: 'Whether the select is in an error state',
+    },
+    searchable: {
+      control: 'boolean',
+      description: 'Enable search functionality for filtering options',
+    },
+    showClearButton: {
+      control: 'boolean',
+      description: 'Show clear button to reset selection',
+    },
+    scrollToSelected: {
+      control: 'boolean',
+      description: 'Whether to scroll to the selected item when menu opens',
+    },
+    enableTypeAhead: {
+      control: 'boolean',
+      description: 'Enable keyboard type-ahead navigation',
+    },
+    // Disable complex props
+    options: { table: { disable: true } },
+    onChange: { table: { disable: true } },
+    onBlur: { table: { disable: true } },
+    className: { table: { disable: true } },
+    style: { table: { disable: true } },
+    id: { table: { disable: true } },
+    'aria-label': { table: { disable: true } },
+    ref: { table: { disable: true } },
+    value: { table: { disable: true } },
+    defaultValue: { table: { disable: true } },
+    startIcon: { table: { disable: true } },
+    endIcon: { table: { disable: true } },
+    typeAheadDelay: { table: { disable: true } },
+  },
 };
 
 export default meta;
@@ -25,6 +95,8 @@ export const Default: Story = {
     label: 'Country',
     options: countryOptions,
     placeholder: 'Select a country',
+    onChange: action('onChange'),
+    onBlur: action('onBlur'),
   },
 };
 
@@ -36,7 +108,10 @@ const ControlledComponent = () => {
         label="Country"
         options={countryOptions}
         value={value}
-        onChange={setValue}
+        onChange={(newValue) => {
+          setValue(newValue);
+          action('onChange')(newValue);
+        }}
       />
       <p>Selected: {value}</p>
     </div>
@@ -45,33 +120,48 @@ const ControlledComponent = () => {
 
 export const Controlled: Story = {
   render: () => <ControlledComponent />,
+  parameters: {
+    controls: { disable: true },
+  },
 };
 
 export const WithGroups: Story = {
-  args: {
-    label: 'Favorite food',
-    options: [
-      { value: 'pizza', label: 'Pizza', group: 'Italian' },
-      { value: 'pasta', label: 'Pasta', group: 'Italian' },
-      { value: 'sushi', label: 'Sushi', group: 'Japanese' },
-      { value: 'ramen', label: 'Ramen', group: 'Japanese' },
-      { value: 'tacos', label: 'Tacos', group: 'Mexican' },
-      { value: 'burrito', label: 'Burrito', group: 'Mexican' },
-    ],
-    placeholder: 'Select your favorite',
+  render: () => (
+    <Select
+      label="Favorite food"
+      options={[
+        { value: 'pizza', label: 'Pizza', group: 'Italian' },
+        { value: 'pasta', label: 'Pasta', group: 'Italian' },
+        { value: 'sushi', label: 'Sushi', group: 'Japanese' },
+        { value: 'ramen', label: 'Ramen', group: 'Japanese' },
+        { value: 'tacos', label: 'Tacos', group: 'Mexican' },
+        { value: 'burrito', label: 'Burrito', group: 'Mexican' },
+      ]}
+      placeholder="Select your favorite"
+      onChange={action('onChange')}
+    />
+  ),
+  parameters: {
+    controls: { disable: true },
   },
 };
 
 export const WithClearButton: Story = {
-  args: {
-    label: 'Size',
-    options: [
-      { value: 'sm', label: 'Small' },
-      { value: 'md', label: 'Medium' },
-      { value: 'lg', label: 'Large' },
-    ],
-    defaultValue: 'md',
-    showClearButton: true,
+  render: () => (
+    <Select
+      label="Size"
+      options={[
+        { value: 'sm', label: 'Small' },
+        { value: 'md', label: 'Medium' },
+        { value: 'lg', label: 'Large' },
+      ]}
+      defaultValue="md"
+      showClearButton
+      onChange={action('onChange')}
+    />
+  ),
+  parameters: {
+    controls: { disable: true },
   },
 };
 
@@ -83,56 +173,85 @@ export const WithIcons: Story = {
         options={countryOptions}
         startIcon="check"
         placeholder="Select option"
+        onChange={action('onChange')}
       />
       <Select
         label="With custom end icon"
         options={countryOptions}
         endIcon="check"
         placeholder="Select option"
+        onChange={action('onChange')}
       />
     </div>
   ),
+  parameters: {
+    controls: { disable: true },
+  },
 };
 
 export const ErrorState: Story = {
-  args: {
-    label: 'Country',
-    options: countryOptions,
-    error: true,
-    errorMessage: 'Please select a country',
-    placeholder: 'Select a country',
+  render: () => (
+    <Select
+      label="Country"
+      options={countryOptions}
+      error
+      errorMessage="Please select a country"
+      placeholder="Select a country"
+      onChange={action('onChange')}
+    />
+  ),
+  parameters: {
+    controls: { disable: true },
   },
 };
 
 export const DisabledOptions: Story = {
-  args: {
-    label: 'Options',
-    options: [
-      { value: '1', label: 'Option 1' },
-      { value: '2', label: 'Option 2 (disabled)', disabled: true },
-      { value: '3', label: 'Option 3' },
-      { value: '4', label: 'Option 4 (disabled)', disabled: true },
-    ],
-    placeholder: 'Select option',
+  render: () => (
+    <Select
+      label="Options"
+      options={[
+        { value: '1', label: 'Option 1' },
+        { value: '2', label: 'Option 2 (disabled)', disabled: true },
+        { value: '3', label: 'Option 3' },
+        { value: '4', label: 'Option 4 (disabled)', disabled: true },
+      ]}
+      placeholder="Select option"
+      onChange={action('onChange')}
+    />
+  ),
+  parameters: {
+    controls: { disable: true },
   },
 };
 
 export const DisabledSelect: Story = {
-  args: {
-    label: 'Country',
-    options: countryOptions,
-    defaultValue: 'us',
-    disabled: true,
+  render: () => (
+    <Select
+      label="Country"
+      options={countryOptions}
+      defaultValue="us"
+      disabled
+      onChange={action('onChange')}
+    />
+  ),
+  parameters: {
+    controls: { disable: true },
   },
 };
 
 export const Searchable: Story = {
-  args: {
-    label: 'Country',
-    options: countryOptions,
-    placeholder: 'Select a country',
-    searchable: true,
-    searchPlaceholder: 'Search countries...',
+  render: () => (
+    <Select
+      label="Country"
+      options={countryOptions}
+      placeholder="Select a country"
+      searchable
+      searchPlaceholder="Search countries..."
+      onChange={action('onChange')}
+    />
+  ),
+  parameters: {
+    controls: { disable: true },
   },
 };
 
@@ -181,7 +300,10 @@ const SearchableWithManyOptionsComponent = () => {
         label="Select a country"
         options={manyOptions}
         value={value}
-        onChange={(newValue) => setValue(newValue)}
+        onChange={(newValue) => {
+          setValue(newValue);
+          action('onChange')(newValue);
+        }}
         placeholder="Choose a country"
         searchable
         searchPlaceholder="Type to search..."
@@ -194,6 +316,9 @@ const SearchableWithManyOptionsComponent = () => {
 
 export const SearchableWithManyOptions: Story = {
   render: () => <SearchableWithManyOptionsComponent />,
+  parameters: {
+    controls: { disable: true },
+  },
 };
 
 const SearchableWithGroupsComponent = () => {
@@ -224,7 +349,10 @@ const SearchableWithGroupsComponent = () => {
         label="Favorite food"
         options={groupedOptions}
         value={value}
-        onChange={(newValue) => setValue(newValue)}
+        onChange={(newValue) => {
+          setValue(newValue);
+          action('onChange')(newValue);
+        }}
         placeholder="Select your favorite"
         searchable
         searchPlaceholder="Search for food..."
@@ -237,6 +365,9 @@ const SearchableWithGroupsComponent = () => {
 
 export const SearchableWithGroups: Story = {
   render: () => <SearchableWithGroupsComponent />,
+  parameters: {
+    controls: { disable: true },
+  },
 };
 
 const SearchableWithClearButtonComponent = () => {
@@ -248,7 +379,10 @@ const SearchableWithClearButtonComponent = () => {
         label="Country"
         options={countryOptions}
         value={value}
-        onChange={(newValue) => setValue(newValue)}
+        onChange={(newValue) => {
+          setValue(newValue);
+          action('onChange')(newValue);
+        }}
         placeholder="Select a country"
         searchable
         showClearButton
@@ -261,6 +395,9 @@ const SearchableWithClearButtonComponent = () => {
 
 export const SearchableWithClearButton: Story = {
   render: () => <SearchableWithClearButtonComponent />,
+  parameters: {
+    controls: { disable: true },
+  },
 };
 
 export const Playground: Story = {
@@ -269,5 +406,7 @@ export const Playground: Story = {
     options: countryOptions,
     placeholder: 'Choose an option',
     searchable: false,
+    onChange: action('onChange'),
+    onBlur: action('onBlur'),
   },
 };

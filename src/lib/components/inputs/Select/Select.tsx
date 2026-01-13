@@ -62,6 +62,11 @@ export interface SelectProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 
   onChange?: (value: string, event: React.ChangeEvent<HTMLSelectElement>) => void;
 
   /**
+   * Callback fired when select loses focus
+   */
+  onBlur?: (event: React.FocusEvent<HTMLDivElement>) => void;
+
+  /**
    * Whether the select is disabled
    * @default false
    */
@@ -184,6 +189,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
       value: controlledValue,
       defaultValue,
       onChange,
+      onBlur,
       label,
       helperText,
       errorMessage,
@@ -346,6 +352,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
               role="button"
               tabIndex={disabled || readOnly ? -1 : 0}
               onClick={handleTriggerClick}
+              onBlur={onBlur}
               {...rest}
             >
               {startIcon && <div className={styles.startIcon}>{renderIcon(startIcon)}</div>}

@@ -55,6 +55,11 @@ export interface DateRangePickerProps extends Omit<BaseComponentProps, 'children
   onChange?: (startDate: Date | null, endDate: Date | null) => void;
 
   /**
+   * Callback when input loses focus
+   */
+  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
+
+  /**
    * Minimum selectable date
    */
   minDate?: Date;
@@ -212,6 +217,7 @@ export const DateRangePicker = forwardRef<HTMLInputElement, DateRangePickerProps
       defaultStartDate = null,
       defaultEndDate = null,
       onChange,
+      onBlur,
       minDate,
       maxDate,
       minDays,
@@ -512,24 +518,27 @@ export const DateRangePicker = forwardRef<HTMLInputElement, DateRangePickerProps
               const isDisabled = isDateDisabled(date, minDate, maxDate);
 
               return (
-                <Button
+                <div
                   key={index}
-                  variant={isSelected ? 'primary' : 'ghost'}
-                  size="sm"
-                  onClick={() => !isDisabled && handleDateSelect(date)}
                   onMouseEnter={() => setHoverDate(date)}
                   onMouseLeave={() => setHoverDate(null)}
-                  disabled={isDisabled}
-                  aria-label={formatDate(date, format)}
-                  type="button"
-                  className={styles.dayCell}
-                  data-current-month={isCurrentMonth || undefined}
-                  data-today={isTodayDate || undefined}
-                  data-in-range={isInSelectedRange || undefined}
-                  data-in-hover-range={isInHoverRange || undefined}
                 >
-                  {date.getDate()}
-                </Button>
+                  <Button
+                    variant={isSelected ? 'primary' : 'ghost'}
+                    size="sm"
+                    onClick={() => !isDisabled && handleDateSelect(date)}
+                    disabled={isDisabled}
+                    aria-label={formatDate(date, format)}
+                    type="button"
+                    className={styles.dayCell}
+                    data-current-month={isCurrentMonth || undefined}
+                    data-today={isTodayDate || undefined}
+                    data-in-range={isInSelectedRange || undefined}
+                    data-in-hover-range={isInHoverRange || undefined}
+                  >
+                    {date.getDate()}
+                  </Button>
+                </div>
               );
             })}
           </div>
@@ -559,6 +568,7 @@ export const DateRangePicker = forwardRef<HTMLInputElement, DateRangePickerProps
                   type="text"
                   value={inputValue}
                   onChange={handleInputChange}
+                  onBlur={onBlur}
                   disabled={disabled}
                   placeholder={placeholder}
                   onFocus={() => setIsPopoverOpen(true)}
@@ -610,6 +620,7 @@ export const DateRangePicker = forwardRef<HTMLInputElement, DateRangePickerProps
             type="text"
             value={inputValue}
             onChange={handleInputChange}
+            onBlur={onBlur}
             disabled={disabled}
             placeholder={placeholder}
             aria-label={ariaLabel || label || 'Date range picker'}

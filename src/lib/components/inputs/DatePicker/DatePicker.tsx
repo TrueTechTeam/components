@@ -39,6 +39,11 @@ export interface DatePickerProps extends Omit<BaseComponentProps, 'children'> {
   onChange?: (date: Date | null) => void;
 
   /**
+   * Callback when input loses focus
+   */
+  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
+
+  /**
    * Minimum selectable date
    */
   minDate?: Date;
@@ -117,6 +122,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
       value: controlledValue,
       defaultValue = null,
       onChange,
+      onBlur,
       minDate,
       maxDate,
       disabledDates,
@@ -283,6 +289,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
                   type="text"
                   value={inputValue}
                   onChange={handleInputChange}
+                  onBlur={onBlur}
                   disabled={disabled}
                   placeholder={placeholder}
                   aria-label={ariaLabel || label || 'Date picker'}
@@ -318,7 +325,6 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
 
                 <div className={styles.monthYearSelectors}>
                   <Select
-                    variant="primary"
                     options={Array.from({ length: 12 }, (_, i) => ({
                       value: i.toString(),
                       label: getMonthName(i, true),
@@ -334,7 +340,6 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
                   />
 
                   <Select
-                    variant="primary"
                     options={years.map((year) => ({
                       value: year.toString(),
                       label: year.toString(),
@@ -408,6 +413,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
             type="text"
             value={inputValue}
             onChange={handleInputChange}
+            onBlur={onBlur}
             disabled={disabled}
             placeholder={placeholder}
             aria-label={ariaLabel || label || 'Date picker'}

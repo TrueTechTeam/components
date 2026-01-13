@@ -1,5 +1,5 @@
 import React, { forwardRef, useState, useId, useCallback, useEffect, useRef } from 'react';
-import type { ValidationResult, ValidationTiming } from '../../Input/Input';
+import type { ValidationResult, ValidationTiming } from '../Input/Input';
 import styles from './Textarea.module.scss';
 
 export interface TextareaProps extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'size'> {
@@ -84,6 +84,11 @@ export interface TextareaProps extends Omit<React.TextareaHTMLAttributes<HTMLTex
    * Auto-generated if not provided
    */
   id?: string;
+
+  /**
+   * Data test ID for testing
+   */
+  'data-testid'?: string;
 }
 
 /**

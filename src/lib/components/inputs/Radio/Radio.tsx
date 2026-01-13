@@ -38,6 +38,11 @@ export interface RadioProps
    * Auto-generated if not provided
    */
   id?: string;
+
+  /**
+   * Data test ID for testing
+   */
+  'data-testid'?: string;
 }
 
 /**

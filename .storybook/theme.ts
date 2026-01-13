@@ -4,7 +4,8 @@ export const lightTheme = create({
   base: 'light',
 
   // Brand
-  brandTitle: 'True Tech Team Components',
+  brandTitle:
+    '<div style="display: flex; flex-direction: column; align-items: flex-start; gap: 8px;"><img src="./logo/logo.svg" style="height: 50px" /> True Tech Team Components</div>',
   brandUrl: 'https://truetechteam.com',
   brandTarget: '_self',
 
@@ -19,8 +20,7 @@ export const lightTheme = create({
   appBorderRadius: 8,
 
   // Typography
-  fontBase:
-    'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+  fontBase: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
   fontCode: '"Courier New", monospace',
 
   // Text colors
@@ -43,7 +43,8 @@ export const darkTheme = create({
   base: 'dark',
 
   // Brand
-  brandTitle: 'True Tech Team Components',
+  brandTitle:
+    '<div style="display: flex; flex-direction: column; align-items: flex-start; gap: 8px;"><img src="./logo/logo.svg" style="height: 50px" /> True Tech Team Components</div>',
   brandUrl: 'https://truetechteam.com',
   brandTarget: '_self',
 
@@ -58,8 +59,7 @@ export const darkTheme = create({
   appBorderRadius: 8,
 
   // Typography
-  fontBase:
-    'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+  fontBase: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
   fontCode: '"Courier New", monospace',
 
   // Text colors
@@ -78,4 +78,5 @@ export const darkTheme = create({
   inputBorderRadius: 4,
 });
 
-export default lightTheme;
+export default darkTheme;
+

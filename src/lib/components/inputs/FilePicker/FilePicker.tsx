@@ -44,6 +44,11 @@ export interface FilePickerProps extends Omit<BaseComponentProps, 'children'> {
   onError?: (errors: FileError[]) => void;
 
   /**
+   * Callback when input loses focus
+   */
+  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
+
+  /**
    * Input label text
    */
   label?: string;
@@ -153,6 +158,7 @@ export const FilePicker = forwardRef<HTMLInputElement, FilePickerProps>(
       maxSize,
       onChange,
       onError,
+      onBlur,
       label,
       helperText,
       errorMessage,
@@ -383,6 +389,7 @@ export const FilePicker = forwardRef<HTMLInputElement, FilePickerProps>(
           accept={accept}
           multiple={multiple}
           onChange={handleInputChange}
+          onBlur={onBlur}
           disabled={disabled}
           className={styles.hiddenInput}
           aria-label={ariaLabel || label || 'File picker'}

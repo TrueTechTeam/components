@@ -1,0 +1,19 @@
+<svg width="512" height="512" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="512" height="512" rx="48" fill="#00adb5"/>
+
+  <!-- Letters -->
+  <g fill="#ffffff">
+    <!-- Left T -->
+    <rect x="86" y="311" width="130" height="40"/>
+    <rect x="131" y="350" width="40" height="130"/>
+
+    <!-- Middle T -->
+    <rect x="222" y="311" width="130" height="40"/>
+    <rect x="267" y="350" width="40" height="130"/>
+
+    <!-- Right T -->
+    <rect x="358" y="311" width="130" height="40"/>
+    <rect x="403" y="350" width="40" height="130"/>
+  </g>
+</svg>

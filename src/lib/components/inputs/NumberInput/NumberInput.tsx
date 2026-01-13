@@ -4,10 +4,11 @@ import { Input } from '../Input';
 import styles from './NumberInput.module.scss';
 
 export interface NumberInputProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size' | 'type' | 'onChange'> {
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size' | 'type' | 'onChange' | 'onBlur'> {
   value?: number;
   defaultValue?: number;
   onChange?: (value: number) => void;
+  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
   min?: number;
   max?: number;
   step?: number;
@@ -17,6 +18,7 @@ export interface NumberInputProps
   error?: boolean;
   formatDisplay?: (value: number) => string;
   id?: string;
+  'data-testid'?: string;
 }
 
 export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
@@ -25,6 +27,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
       value: controlledValue,
       defaultValue = 0,
       onChange,
+      onBlur,
       min,
       max,
       step = 1,
@@ -118,6 +121,7 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
           type={formatDisplay ? 'text' : 'number'}
           value={displayValue.toString()}
           onChange={(e) => handleChange(Number(e.target.value))}
+          onBlur={onBlur}
           error={error}
           disabled={disabled}
           readOnly={readOnly}

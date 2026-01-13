@@ -4,11 +4,12 @@ import { Icon } from '../../display/Icon';
 import type { IconName } from '../../../assets/icons';
 import styles from './Rating.module.scss';
 
-export interface RatingProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange'> {
+export interface RatingProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange' | 'onBlur'> {
   size?: ComponentSize;
   value?: number;
   defaultValue?: number;
   onChange?: (value: number) => void;
+  onBlur?: (event: React.FocusEvent<HTMLDivElement>) => void;
   max?: number;
   precision?: number;
   icon?: React.ReactNode | IconName;
@@ -19,6 +20,7 @@ export interface RatingProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 
   disabled?: boolean;
   required?: boolean;
   id?: string;
+  'data-testid'?: string;
 }
 
 export const Rating = forwardRef<HTMLDivElement, RatingProps>(
@@ -28,6 +30,7 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
       value: controlledValue,
       defaultValue = 0,
       onChange,
+      onBlur,
       max = 5,
       precision = 1,
       icon = '★',
@@ -119,6 +122,7 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
           data-component="rating"
           role="radiogroup"
           aria-label={label}
+          onBlur={onBlur}
           {...rest}
         >
           {items}

@@ -1,12 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { action } from '@storybook/addon-actions';
 import { Checkbox } from './Checkbox';
 import { useState } from 'react';
 
 const meta: Meta<typeof Checkbox> = {
-  title: 'Forms/Checkbox',
+  title: 'Inputs/Checkbox',
   component: Checkbox,
   tags: ['autodocs'],
   argTypes: {
+    // Simple controls
     variant: {
       control: 'select',
       options: ['primary', 'secondary', 'success', 'warning', 'danger'],
@@ -16,18 +18,6 @@ const meta: Meta<typeof Checkbox> = {
       control: 'select',
       options: ['sm', 'md', 'lg'],
       description: 'Checkbox size',
-    },
-    checked: {
-      control: 'boolean',
-      description: 'Whether the checkbox is checked (controlled)',
-    },
-    defaultChecked: {
-      control: 'boolean',
-      description: 'Default checked state (uncontrolled)',
-    },
-    indeterminate: {
-      control: 'boolean',
-      description: 'Indeterminate state',
     },
     label: {
       control: 'text',
@@ -62,6 +52,22 @@ const meta: Meta<typeof Checkbox> = {
       control: 'boolean',
       description: 'Required field',
     },
+    indeterminate: {
+      control: 'boolean',
+      description: 'Indeterminate state',
+    },
+    // Disable complex props
+    checked: { table: { disable: true } },
+    defaultChecked: { table: { disable: true } },
+    onChange: { table: { disable: true } },
+    checkIcon: { table: { disable: true } },
+    indeterminateIcon: { table: { disable: true } },
+    className: { table: { disable: true } },
+    style: { table: { disable: true } },
+    id: { table: { disable: true } },
+    name: { table: { disable: true } },
+    'data-testid': { table: { disable: true } },
+    'aria-label': { table: { disable: true } },
   },
 };
 
@@ -71,6 +77,7 @@ type Story = StoryObj<typeof Checkbox>;
 export const Default: Story = {
   args: {
     label: 'Accept terms and conditions',
+    onChange: action('onChange'),
   },
 };
 
@@ -81,7 +88,10 @@ const ControlledComponent = () => {
       <Checkbox
         label="Accept terms and conditions"
         checked={checked}
-        onChange={(newChecked) => setChecked(newChecked)}
+        onChange={(newChecked) => {
+          action('onChange')(newChecked);
+          setChecked(newChecked);
+        }}
       />
       <p>Checked: {checked ? 'Yes' : 'No'}</p>
     </div>
@@ -90,12 +100,14 @@ const ControlledComponent = () => {
 
 export const Controlled: Story = {
   render: () => <ControlledComponent />,
+  parameters: { controls: { disable: true } },
 };
 
 export const Uncontrolled: Story = {
   args: {
     label: 'Subscribe to newsletter',
     defaultChecked: true,
+    onChange: action('onChange'),
   },
 };
 
@@ -109,6 +121,7 @@ export const Variants: Story = {
       <Checkbox variant="danger" label="Danger" defaultChecked />
     </div>
   ),
+  parameters: { controls: { disable: true } },
 };
 
 export const Sizes: Story = {
@@ -119,6 +132,7 @@ export const Sizes: Story = {
       <Checkbox size="lg" label="Large" defaultChecked />
     </div>
   ),
+  parameters: { controls: { disable: true } },
 };
 
 const IndeterminateStateComponent = () => {
@@ -162,6 +176,7 @@ const IndeterminateStateComponent = () => {
 
 export const IndeterminateState: Story = {
   render: () => <IndeterminateStateComponent />,
+  parameters: { controls: { disable: true } },
 };
 
 export const WithLabelPlacement: Story = {
@@ -171,12 +186,14 @@ export const WithLabelPlacement: Story = {
       <Checkbox label="Label at start" labelPlacement="start" />
     </div>
   ),
+  parameters: { controls: { disable: true } },
 };
 
 export const WithHelperText: Story = {
   args: {
     label: 'Send me promotional emails',
     helperText: 'You can unsubscribe at any time',
+    onChange: action('onChange'),
   },
 };
 
@@ -185,6 +202,7 @@ export const ErrorState: Story = {
     label: 'I agree to the terms',
     error: true,
     errorMessage: 'You must accept the terms to continue',
+    onChange: action('onChange'),
   },
 };
 
@@ -196,6 +214,7 @@ export const DisabledState: Story = {
       <Checkbox label="Disabled (indeterminate)" disabled indeterminate />
     </div>
   ),
+  parameters: { controls: { disable: true } },
 };
 
 export const ReadOnlyState: Story = {
@@ -205,6 +224,7 @@ export const ReadOnlyState: Story = {
       <Checkbox label="Read-only (checked)" readOnly defaultChecked />
     </div>
   ),
+  parameters: { controls: { disable: true } },
 };
 
 export const RequiredField: Story = {
@@ -212,12 +232,14 @@ export const RequiredField: Story = {
     label: 'I agree to the terms and conditions',
     required: true,
     helperText: 'This field is required',
+    onChange: action('onChange'),
   },
 };
 
 export const WithoutLabel: Story = {
   args: {
     'aria-label': 'Accept terms',
+    onChange: action('onChange'),
   },
 };
 
@@ -233,15 +255,13 @@ const CheckboxListComponent = () => {
   ];
 
   const toggleOption = (id: string) => {
-    setSelected(prev =>
-      prev.includes(id) ? prev.filter(item => item !== id) : [...prev, id]
-    );
+    setSelected((prev) => (prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]));
   };
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
       <h4>Select your favorite languages:</h4>
-      {options.map(option => (
+      {options.map((option) => (
         <Checkbox
           key={option.id}
           label={option.label}
@@ -258,6 +278,7 @@ const CheckboxListComponent = () => {
 
 export const CheckboxList: Story = {
   render: () => <CheckboxListComponent />,
+  parameters: { controls: { disable: true } },
 };
 
 export const Comprehensive: Story = {
@@ -297,6 +318,7 @@ export const Comprehensive: Story = {
       </div>
     </div>
   ),
+  parameters: { controls: { disable: true } },
 };
 
 export const Playground: Story = {
@@ -307,5 +329,6 @@ export const Playground: Story = {
     labelPlacement: 'end',
     helperText: '',
     defaultChecked: false,
+    onChange: action('onChange'),
   },
 };

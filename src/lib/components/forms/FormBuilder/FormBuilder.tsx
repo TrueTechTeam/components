@@ -227,7 +227,7 @@ const renderField = (
         <Select
           {...commonProps}
           value={value}
-          onChange={(e) => handleChange(e.target.value)}
+          onChange={(val) => handleChange(val)}
           onBlur={handleBlur}
           options={props.options || []}
         />
@@ -266,7 +266,6 @@ const renderField = (
           {...commonProps}
           value={value || ''}
           onChange={(phone) => handleChange(phone)}
-          onBlur={handleBlur}
         />
       );
 
@@ -489,7 +488,6 @@ export const FormBuilder = forwardRef<HTMLFormElement, FormBuilderProps>(
                   type="submit"
                   variant={submitButtonVariant || variant}
                   disabled={disabled || loading || formContext.isSubmitting}
-                  loading={formContext.isSubmitting}
                 >
                   {submitButtonText}
                 </Button>

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { action } from '@storybook/addon-actions';
 import { Dropdown, type DropdownItem } from './Dropdown';
 import { MenuList, MenuItem, MenuDivider } from '../Menu';
 
@@ -25,6 +26,18 @@ const meta: Meta<typeof Dropdown> = {
       control: 'boolean',
       description: 'Full width button',
     },
+    // Disable complex props
+    children: { table: { disable: true } },
+    trigger: { table: { disable: true } },
+    onClick: { table: { disable: true } },
+    className: { table: { disable: true } },
+    style: { table: { disable: true } },
+    items: { table: { disable: true } },
+    icon: { table: { disable: true } },
+    label: { table: { disable: true } },
+    // Actions for event handlers
+    onOpenChange: { action: 'openChange' },
+    onSelectionChange: { action: 'selectionChange' },
   },
   parameters: {
     docs: {
@@ -39,22 +52,29 @@ const meta: Meta<typeof Dropdown> = {
 export default meta;
 type Story = StoryObj<typeof Dropdown>;
 
+/**
+ * Default dropdown with basic items
+ */
 export const Default: Story = {
   render: () => {
     const items: DropdownItem[] = [
-      { itemKey: 'option-1', label: 'Option 1' },
-      { itemKey: 'option-2', label: 'Option 2' },
-      { itemKey: 'option-3', label: 'Option 3' },
+      { itemKey: 'option-1', label: 'Option 1', onClick: action('option-1-clicked') },
+      { itemKey: 'option-2', label: 'Option 2', onClick: action('option-2-clicked') },
+      { itemKey: 'option-3', label: 'Option 3', onClick: action('option-3-clicked') },
     ];
 
     return (
       <div style={{ padding: '100px', display: 'flex', justifyContent: 'center' }}>
-        <Dropdown label="Select Option" items={items} />
+        <Dropdown label="Select Option" items={items} onOpenChange={action('openChange')} />
       </div>
     );
   },
+  parameters: { controls: { disable: true } },
 };
 
+/**
+ * All button variants
+ */
 export const Variants: Story = {
   render: () => {
     const items: DropdownItem[] = [
@@ -71,8 +91,12 @@ export const Variants: Story = {
       </div>
     );
   },
+  parameters: { controls: { disable: true } },
 };
 
+/**
+ * All button sizes
+ */
 export const Sizes: Story = {
   render: () => {
     const items: DropdownItem[] = [
@@ -96,8 +120,12 @@ export const Sizes: Story = {
       </div>
     );
   },
+  parameters: { controls: { disable: true } },
 };
 
+/**
+ * Dropdown with icons on button and menu items
+ */
 export const WithIcon: Story = {
   render: () => {
     const items: DropdownItem[] = [
@@ -114,8 +142,12 @@ export const WithIcon: Story = {
       </div>
     );
   },
+  parameters: { controls: { disable: true } },
 };
 
+/**
+ * Dropdown without chevron icon
+ */
 export const NoChevron: Story = {
   render: () => {
     const items: DropdownItem[] = [
@@ -130,8 +162,12 @@ export const NoChevron: Story = {
       </div>
     );
   },
+  parameters: { controls: { disable: true } },
 };
 
+/**
+ * Full width dropdown
+ */
 export const FullWidth: Story = {
   render: () => {
     const items: DropdownItem[] = [
@@ -146,8 +182,12 @@ export const FullWidth: Story = {
       </div>
     );
   },
+  parameters: { controls: { disable: true } },
 };
 
+/**
+ * Dropdown with selection state
+ */
 export const WithSelection: Story = {
   render: () => {
     const items: DropdownItem[] = [
@@ -163,16 +203,21 @@ export const WithSelection: Story = {
           selectionMode="single"
           defaultSelectedKeys={['md']}
           items={items}
+          onSelectionChange={action('selectionChange')}
         />
       </div>
     );
   },
+  parameters: { controls: { disable: true } },
 };
 
+/**
+ * Dropdown with custom children instead of items prop
+ */
 export const CustomChildren: Story = {
   render: () => (
     <div style={{ padding: '100px', display: 'flex', justifyContent: 'center' }}>
-      <Dropdown label="Custom Menu">
+      <Dropdown label="Custom Menu" onOpenChange={action('openChange')}>
         <MenuList>
           <MenuItem itemKey="new" startIcon="edit">
             New File
@@ -191,4 +236,24 @@ export const CustomChildren: Story = {
       </Dropdown>
     </div>
   ),
+  parameters: { controls: { disable: true } },
+};
+
+/**
+ * Interactive playground for testing all dropdown props
+ */
+export const Playground: Story = {
+  args: {
+    label: 'Playground Dropdown',
+    variant: 'outline',
+    size: 'md',
+    showChevron: true,
+    fullWidth: false,
+    items: [
+      { itemKey: '1', label: 'Option 1' },
+      { itemKey: '2', label: 'Option 2' },
+      { itemKey: '3', label: 'Option 3' },
+    ],
+    onOpenChange: action('openChange'),
+  },
 };

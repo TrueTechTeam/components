@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { action } from '@storybook/addon-actions';
 import { Button } from './Button';
 import { Icon } from '../../display/Icon';
 import { iconRegistry } from '../../../assets/icons';
@@ -61,6 +62,7 @@ export const Default: Story = {
     children: 'Button',
     variant: 'primary',
     size: 'md',
+    onClick: action('clicked'),
   },
 };
 
@@ -79,6 +81,7 @@ export const Variants: Story = {
       <Button variant="danger">Danger</Button>
     </div>
   ),
+  parameters: { controls: { disable: true } },
 };
 
 /**
@@ -98,6 +101,7 @@ export const SemanticVariants: Story = {
       </Button>
     </div>
   ),
+  parameters: { controls: { disable: true } },
 };
 
 /**
@@ -111,6 +115,7 @@ export const Sizes: Story = {
       <Button size="lg">Large</Button>
     </div>
   ),
+  parameters: { controls: { disable: true } },
 };
 
 /**
@@ -130,6 +135,7 @@ export const WithIcons: Story = {
       </Button>
     </div>
   ),
+  parameters: { controls: { disable: true } },
 };
 
 /**
@@ -147,6 +153,7 @@ export const Disabled: Story = {
       </Button>
     </div>
   ),
+  parameters: { controls: { disable: true } },
 };
 
 /**
@@ -159,3 +166,16 @@ export const FullWidth: Story = {
   },
 };
 
+/**
+ * Interactive playground for testing all button props
+ */
+export const Playground: Story = {
+  args: {
+    children: 'Playground Button',
+    variant: 'primary',
+    size: 'md',
+    disabled: false,
+    fullWidth: false,
+    onClick: action('clicked'),
+  },
+};

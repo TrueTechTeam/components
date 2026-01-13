@@ -1,12 +1,18 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { action } from '@storybook/addon-actions';
 import { Toggle } from './Toggle';
 import { useState } from 'react';
 
 const meta: Meta<typeof Toggle> = {
-  title: 'Forms/Toggle',
+  title: 'Inputs/Toggle',
   component: Toggle,
   tags: ['autodocs'],
   argTypes: {
+    // Simple controls
+    label: {
+      control: 'text',
+      description: 'Label text to display next to toggle',
+    },
     variant: {
       control: 'select',
       options: ['primary', 'secondary', 'success', 'warning', 'danger'],
@@ -17,47 +23,56 @@ const meta: Meta<typeof Toggle> = {
       options: ['sm', 'md', 'lg'],
       description: 'Toggle size',
     },
-    checked: {
-      control: 'boolean',
-      description: 'Whether the toggle is checked (controlled)',
-    },
-    defaultChecked: {
-      control: 'boolean',
-      description: 'Default checked state (uncontrolled)',
-    },
-    label: {
-      control: 'text',
-      description: 'Label text',
-    },
     labelPlacement: {
       control: 'select',
       options: ['start', 'end'],
-      description: 'Label placement',
+      description: 'Label placement relative to toggle',
     },
     helperText: {
       control: 'text',
-      description: 'Helper text below toggle',
+      description: 'Helper text to display below the toggle',
     },
     errorMessage: {
       control: 'text',
-      description: 'Error message',
+      description: 'Error message to display when toggle is in error state',
     },
     error: {
       control: 'boolean',
-      description: 'Error state',
+      description: 'Whether the toggle is in an error state',
     },
     disabled: {
       control: 'boolean',
-      description: 'Disabled state',
+      description: 'Whether the toggle is disabled',
     },
     readOnly: {
       control: 'boolean',
-      description: 'Read-only state',
+      description: 'Whether the toggle is read-only',
     },
     required: {
       control: 'boolean',
-      description: 'Required field',
+      description: 'Whether the toggle is required',
     },
+    // Disable complex props
+    onChange: {
+      table: { disable: true },
+      action: 'onChange',
+    },
+    onBlur: {
+      table: { disable: true },
+      action: 'onBlur',
+    },
+    className: { table: { disable: true } },
+    style: { table: { disable: true } },
+    id: { table: { disable: true } },
+    'data-testid': { table: { disable: true } },
+    'aria-label': { table: { disable: true } },
+    'aria-describedby': { table: { disable: true } },
+    'aria-invalid': { table: { disable: true } },
+    'aria-required': { table: { disable: true } },
+    ref: { table: { disable: true } },
+    checked: { table: { disable: true } },
+    defaultChecked: { table: { disable: true } },
+    name: { table: { disable: true } },
   },
 };
 
@@ -67,6 +82,8 @@ type Story = StoryObj<typeof Toggle>;
 export const Default: Story = {
   args: {
     label: 'Enable notifications',
+    onChange: action('onChange'),
+    onBlur: action('onBlur'),
   },
 };
 
@@ -86,12 +103,18 @@ const ControlledComponent = () => {
 
 export const Controlled: Story = {
   render: () => <ControlledComponent />,
+  parameters: {
+    controls: { disable: true },
+  },
 };
 
 export const Uncontrolled: Story = {
   args: {
     label: 'Enable notifications',
     defaultChecked: true,
+  },
+  parameters: {
+    controls: { disable: true },
   },
 };
 
@@ -105,6 +128,9 @@ export const Variants: Story = {
       <Toggle variant="danger" label="Danger" defaultChecked />
     </div>
   ),
+  parameters: {
+    controls: { disable: true },
+  },
 };
 
 export const Sizes: Story = {
@@ -115,6 +141,9 @@ export const Sizes: Story = {
       <Toggle size="lg" label="Large" defaultChecked />
     </div>
   ),
+  parameters: {
+    controls: { disable: true },
+  },
 };
 
 export const WithLabelPlacement: Story = {
@@ -124,12 +153,18 @@ export const WithLabelPlacement: Story = {
       <Toggle label="Label at start" labelPlacement="start" />
     </div>
   ),
+  parameters: {
+    controls: { disable: true },
+  },
 };
 
 export const WithHelperText: Story = {
   args: {
     label: 'Email notifications',
     helperText: 'Receive notifications about new messages',
+  },
+  parameters: {
+    controls: { disable: true },
   },
 };
 
@@ -138,6 +173,9 @@ export const ErrorState: Story = {
     label: 'Accept terms and conditions',
     error: true,
     errorMessage: 'You must accept the terms to continue',
+  },
+  parameters: {
+    controls: { disable: true },
   },
 };
 
@@ -148,6 +186,9 @@ export const DisabledState: Story = {
       <Toggle label="Disabled (checked)" disabled defaultChecked />
     </div>
   ),
+  parameters: {
+    controls: { disable: true },
+  },
 };
 
 export const ReadOnlyState: Story = {
@@ -157,6 +198,9 @@ export const ReadOnlyState: Story = {
       <Toggle label="Read-only (checked)" readOnly defaultChecked />
     </div>
   ),
+  parameters: {
+    controls: { disable: true },
+  },
 };
 
 export const RequiredField: Story = {
@@ -165,11 +209,17 @@ export const RequiredField: Story = {
     required: true,
     helperText: 'This field is required',
   },
+  parameters: {
+    controls: { disable: true },
+  },
 };
 
 export const WithoutLabel: Story = {
   args: {
     'aria-label': 'Toggle notifications',
+  },
+  parameters: {
+    controls: { disable: true },
   },
 };
 
@@ -243,6 +293,9 @@ const ComprehensiveComponent = () => {
 
 export const Comprehensive: Story = {
   render: () => <ComprehensiveComponent />,
+  parameters: {
+    controls: { disable: true },
+  },
 };
 
 export const Playground: Story = {
@@ -253,5 +306,7 @@ export const Playground: Story = {
     labelPlacement: 'end',
     helperText: '',
     defaultChecked: false,
+    onChange: action('onChange'),
+    onBlur: action('onBlur'),
   },
 };

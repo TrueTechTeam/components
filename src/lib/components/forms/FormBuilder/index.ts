@@ -13,5 +13,4 @@ export type {
   FormActions,
   FormContext,
   UseFormStateOptions,
-  DateRangePreset,
 } from './types';

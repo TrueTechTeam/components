@@ -5,7 +5,7 @@ import styles from './TagInput.module.scss';
 import type { InputBaseProps } from '../../../types/component.types';
 
 export interface TagInputProps
-  extends Omit<InputBaseProps, 'value' | 'onChange' | 'type' | 'defaultValue'> {
+  extends Omit<InputBaseProps, 'value' | 'onChange' | 'type' | 'defaultValue' | 'onBlur'> {
   /**
    * Controlled tags array
    */
@@ -20,6 +20,11 @@ export interface TagInputProps
    * Callback when tags change
    */
   onChange?: (tags: string[]) => void;
+
+  /**
+   * Callback when input loses focus
+   */
+  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
 
   /**
    * Input label text
@@ -125,6 +130,7 @@ export const TagInput = forwardRef<HTMLInputElement, TagInputProps>(
       value: controlledValue,
       defaultValue = [],
       onChange,
+      onBlur: onBlurProp,
       label,
       labelPlacement = 'top',
       helperText,
@@ -288,7 +294,7 @@ export const TagInput = forwardRef<HTMLInputElement, TagInputProps>(
     );
 
     // Handle blur
-    const handleBlur = useCallback(() => {
+    const handleBlur = useCallback((event: React.FocusEvent<HTMLInputElement>) => {
       if (addOnBlur && inputValue) {
         addTag(inputValue);
       } else if (clearOnBlur) {
@@ -299,7 +305,9 @@ export const TagInput = forwardRef<HTMLInputElement, TagInputProps>(
         setShowSuggestionsDropdown(false);
         setSelectedSuggestionIndex(-1);
       }, 200);
-    }, [addOnBlur, clearOnBlur, inputValue, addTag]);
+
+      onBlurProp?.(event);
+    }, [addOnBlur, clearOnBlur, inputValue, addTag, onBlurProp]);
 
     // Handle suggestion click
     const handleSuggestionClick = useCallback(

@@ -1,14 +1,14 @@
 {
-  "name": "@true-tech-team/ui-components",
+  "name": "@true-tech-team/react-components",
   "version": "0.0.1",
   "description": "React TypeScript component library",
   "main": "./index.js",
   "types": "./index.d.ts",
   "exports": {
     ".": {
+      "types": "./index.d.ts",
       "import": "./index.mjs",
-      "require": "./index.js",
-      "types": "./index.d.ts"
+      "require": "./index.js"
     }
   },
   "scripts": {
@@ -52,3 +52,4 @@
   ],
   "license": "MIT"
 }
+

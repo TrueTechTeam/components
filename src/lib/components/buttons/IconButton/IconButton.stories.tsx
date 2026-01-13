@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { action } from '@storybook/addon-actions';
 import { IconButton } from './IconButton';
 import { iconRegistry } from '../../../assets/icons';
 
@@ -28,15 +29,18 @@ const meta: Meta<typeof IconButton> = {
       control: 'boolean',
       description: 'Whether the button is disabled',
     },
-    onClick: { table: { disable: true } },
-    className: { table: { disable: true } },
-    'data-testid': { table: { disable: true } },
     'aria-label': {
       control: 'text',
       description: 'Accessible label (REQUIRED)',
     },
+    // Disable complex props
+    onClick: { table: { disable: true } },
+    className: { table: { disable: true } },
     style: { table: { disable: true } },
+    id: { table: { disable: true } },
+    'data-testid': { table: { disable: true } },
     type: { table: { disable: true } },
+    ref: { table: { disable: true } },
   },
 };
 
@@ -52,6 +56,7 @@ export const Default: Story = {
     'aria-label': 'Confirm',
     variant: 'ghost',
     size: 'md',
+    onClick: action('onClick'),
   },
 };
 
@@ -70,6 +75,9 @@ export const Variants: Story = {
       <IconButton icon="error" aria-label="Danger" variant="danger" />
     </div>
   ),
+  parameters: {
+    controls: { disable: true },
+  },
 };
 
 /**
@@ -85,6 +93,9 @@ export const Sizes: Story = {
       <IconButton icon="check" aria-label="Extra Large" size="xl" />
     </div>
   ),
+  parameters: {
+    controls: { disable: true },
+  },
 };
 
 /**
@@ -101,6 +112,9 @@ export const CommonUseCases: Story = {
       <IconButton icon="plus" aria-label="Add" variant="primary" />
     </div>
   ),
+  parameters: {
+    controls: { disable: true },
+  },
 };
 
 /**
@@ -115,6 +129,9 @@ export const Disabled: Story = {
       <IconButton icon="check" aria-label="Ghost Disabled" variant="ghost" disabled />
     </div>
   ),
+  parameters: {
+    controls: { disable: true },
+  },
 };
 
 /**
@@ -155,4 +172,21 @@ export const IconSizeCorrelation: Story = {
       </div>
     </div>
   ),
+  parameters: {
+    controls: { disable: true },
+  },
+};
+
+/**
+ * Playground story with all interactive controls
+ */
+export const Playground: Story = {
+  args: {
+    icon: 'check',
+    'aria-label': 'Icon Button',
+    variant: 'primary',
+    size: 'md',
+    disabled: false,
+    onClick: action('onClick'),
+  },
 };

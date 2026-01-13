@@ -15,7 +15,7 @@ export interface Country {
   format?: string; // Phone number format mask (e.g., "(###) ###-####")
 }
 
-export interface PhoneInputProps extends Omit<InputBaseProps, 'value' | 'onChange' | 'type'> {
+export interface PhoneInputProps extends Omit<InputBaseProps, 'value' | 'onChange' | 'type' | 'onBlur'> {
   /**
    * Controlled phone number value (full number with country code)
    */
@@ -35,6 +35,11 @@ export interface PhoneInputProps extends Omit<InputBaseProps, 'value' | 'onChang
    * Callback when phone number changes
    */
   onChange?: (phone: string, country: Country) => void;
+
+  /**
+   * Callback when input loses focus
+   */
+  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
 
   /**
    * Input label text
@@ -155,6 +160,7 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
       defaultValue = '',
       defaultCountry = 'US',
       onChange,
+      onBlur,
       label,
       labelPlacement = 'top',
       helperText,
@@ -281,6 +287,7 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
             type="tel"
             value={phoneValue}
             onChange={handlePhoneChange}
+            onBlur={onBlur}
             disabled={disabled}
             required={required}
             placeholder={placeholder}

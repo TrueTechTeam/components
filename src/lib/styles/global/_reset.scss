@@ -21,7 +21,7 @@ body {
   font-size: var(--font-size-base);
   line-height: var(--line-height-normal);
   color: var(--theme-text-primary);
-  background-color: var(--theme-background-primary);
+  background-color: var(--theme-surface-primary);
 }
 
 img,
@@ -49,3 +49,4 @@ h5,
 h6 {
   overflow-wrap: break-word;
 }
+

@@ -1,7 +1,25 @@
 import type { Preview } from '@storybook/react';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { GlobalProvider } from '../src/lib/providers/GlobalProvider';
+import { create } from '@storybook/theming';
 import '../src/lib/styles/index.scss';
+
+const docsTheme = create({
+  base: 'dark',
+
+  colorPrimary: '#00adb5',
+  colorSecondary: '#eee',
+
+  // Docs backgrounds
+  appBg: '#222831',
+  appContentBg: '#393e46',
+
+  // Text
+  textColor: '#eee',
+  textInverseColor: '#1f2937',
+
+  fontBase: '"Inter", sans-serif',
+});
 
 const preview: Preview = {
   parameters: {
@@ -13,15 +31,19 @@ const preview: Preview = {
       },
     },
     backgrounds: {
-      default: 'dark',
-      values: [
-        { name: 'light', value: '#ffffff' },
-        { name: 'dark', value: '#222831' },
-      ],
+      disable: true,
+    },
+    docs: {
+      theme: docsTheme,
     },
     layout: 'centered',
   },
   decorators: [
+    (Story) => (
+      <div style={{ minWidth: '400px' }}>
+        <Story />
+      </div>
+    ),
     (Story, context) => {
       const theme = context.globals.theme || 'dark';
 

@@ -8,7 +8,7 @@ export interface Mark {
 }
 
 export interface SliderProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange' | 'size'> {
+  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange' | 'size' | 'defaultValue'> {
   variant?: ComponentVariant;
   size?: ComponentSize;
   value?: number | number[];
@@ -28,6 +28,7 @@ export interface SliderProps
   valueLabelFormat?: (value: number) => string;
   orientation?: 'horizontal' | 'vertical';
   id?: string;
+  'data-testid'?: string;
 }
 
 export const Slider = forwardRef<HTMLInputElement, SliderProps>(

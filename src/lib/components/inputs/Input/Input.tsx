@@ -222,7 +222,7 @@ const renderIcon = (
 ): React.ReactNode => {
   if (!icon) {return null;}
   if (typeof icon === 'string') {
-    return <Icon name={icon} size={size} />;
+    return <Icon name={icon as IconName} size={size} />;
   }
   return icon;
 };
