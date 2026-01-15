@@ -12,9 +12,6 @@ export type { BadgeProps } from './display/Badge';
 export { Chip } from './display/Chip';
 export type { ChipProps } from './display/Chip';
 
-export { Label } from './display/Label';
-export type { LabelProps } from './display/Label';
-
 export { Pill } from './display/Pill';
 export type { PillProps } from './display/Pill';
 
@@ -32,9 +29,6 @@ export type { ProgressBarProps } from './display/ProgressBar';
 
 export { CircularProgress } from './display/CircularProgress';
 export type { CircularProgressProps } from './display/CircularProgress';
-
-export { Stat } from './display/Stat';
-export type { StatProps } from './display/Stat';
 
 export { KPI } from './display/KPI';
 export type { KPIProps } from './display/KPI';
@@ -76,7 +70,13 @@ export type { DropdownProps } from './overlays/Dropdown';
 
 // Inputs
 export { Input } from './inputs/Input';
-export type { InputProps, ValidationResult, FormatMask, ValidationTiming, InputType } from './inputs/Input';
+export type {
+  InputProps,
+  ValidationResult,
+  FormatMask,
+  ValidationTiming,
+  InputType,
+} from './inputs/Input';
 
 export { Autocomplete } from './inputs/Autocomplete';
 export type { AutocompleteProps, AutocompleteOption } from './inputs/Autocomplete';
@@ -140,3 +140,4 @@ export type {
   FormContext,
   UseFormStateOptions,
 } from './forms/FormBuilder';
+

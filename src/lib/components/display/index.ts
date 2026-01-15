@@ -1,13 +1,12 @@
 export * from './Icon';
 export * from './Badge';
 export * from './Chip';
-export * from './Label';
 export * from './Pill';
 export * from './Tag';
 export * from './Avatar';
 export * from './StatusIndicator';
 export * from './ProgressBar';
 export * from './CircularProgress';
-export * from './Stat';
 export * from './KPI';
 export * from './Skeleton';
+
