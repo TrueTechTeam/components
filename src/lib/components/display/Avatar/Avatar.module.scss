@@ -1,0 +1,116 @@
+@use '../../../styles/mixins/component' as *;
+@use '../../../styles/mixins/spacing' as *;
+
+.avatar {
+  // CSS variables with defaults
+  --avatar-size: 40px;
+  --avatar-bg: var(--theme-neutral-200);
+  --avatar-color: var(--theme-neutral-800);
+  --avatar-border-radius: 50%;
+  --avatar-font-size: var(--font-size-sm);
+  --avatar-font-weight: 500;
+  --avatar-status-position: 0px;
+
+  // Base styles
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--avatar-size);
+  height: var(--avatar-size);
+  background: var(--avatar-bg);
+  color: var(--avatar-color);
+  border-radius: var(--avatar-border-radius);
+  font-size: var(--avatar-font-size);
+  font-weight: var(--avatar-font-weight);
+  flex-shrink: 0;
+  user-select: none;
+
+  // Variant styles - Override CSS variables
+  &[data-variant='circular'] {
+    --avatar-border-radius: 50%;
+  }
+
+  &[data-variant='rounded'] {
+    --avatar-border-radius: var(--radius-md);
+  }
+
+  &[data-variant='square'] {
+    --avatar-border-radius: 0;
+  }
+
+  // Size styles - Override CSS variables
+  &[data-size='xs'] {
+    --avatar-size: 24px;
+    --avatar-font-size: var(--font-size-xs);
+    --avatar-status-position: 0px;
+  }
+
+  &[data-size='sm'] {
+    --avatar-size: 32px;
+    --avatar-font-size: var(--font-size-xs);
+    --avatar-status-position: 1px;
+  }
+
+  &[data-size='md'] {
+    --avatar-size: 40px;
+    --avatar-font-size: var(--font-size-sm);
+    --avatar-status-position: 2px;
+  }
+
+  &[data-size='lg'] {
+    --avatar-size: 56px;
+    --avatar-font-size: var(--font-size-lg);
+    --avatar-status-position: 3px;
+  }
+
+  &[data-size='xl'] {
+    --avatar-size: 80px;
+    --avatar-font-size: var(--font-size-xl);
+    --avatar-status-position: 4px;
+  }
+}
+
+// Image element
+.avatarImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  border-radius: inherit;
+  overflow: hidden;
+}
+
+// Initials element
+.avatarInitials {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-transform: uppercase;
+  line-height: 1;
+  user-select: none;
+}
+
+// Fallback element
+.avatarFallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+}
+
+// Status indicator
+.avatarStatus {
+  position: absolute;
+  bottom: var(--avatar-status-position);
+  right: var(--avatar-status-position);
+  background: var(--theme-background-primary, #ffffff);
+  border-radius: 50%;
+  padding: 2px;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+

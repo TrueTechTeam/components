@@ -20,7 +20,7 @@ export default {
     '!src/**/index.ts',
     '!src/test-setup.ts',
   ],
-  coverageThresholds: {
+  coverageThreshold: {
     global: {
       branches: 70,
       functions: 70,

@@ -1,0 +1,88 @@
+@use '../../../styles/mixins/component' as *;
+@use '../../../styles/mixins/spacing' as *;
+
+@keyframes skeleton-pulse {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.4;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes skeleton-wave {
+  0% {
+    transform: translateX(-100%);
+  }
+  50% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.skeleton {
+  // CSS variables with defaults
+  --skeleton-bg: var(--theme-neutral-200);
+  --skeleton-radius: var(--radius-sm);
+
+  display: block;
+  background: var(--skeleton-bg);
+  border-radius: var(--skeleton-radius);
+  position: relative;
+  overflow: hidden;
+
+  // Animation
+  &[data-animated='true'] {
+    animation: skeleton-pulse 2s ease-in-out infinite;
+
+    &::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(
+        90deg,
+        transparent,
+        rgba(255, 255, 255, 0.4),
+        transparent
+      );
+      animation: skeleton-wave 2s linear infinite;
+    }
+  }
+
+  // Variant: text
+  &[data-variant='text'] {
+    --skeleton-radius: var(--radius-sm);
+    transform: scale(1, 0.6);
+    transform-origin: 0 60%;
+  }
+
+  // Variant: circular
+  &[data-variant='circular'] {
+    --skeleton-radius: 50%;
+  }
+
+  // Variant: rectangular
+  &[data-variant='rectangular'] {
+    --skeleton-radius: 0;
+  }
+
+  // Variant: rounded
+  &[data-variant='rounded'] {
+    --skeleton-radius: var(--radius-md);
+  }
+}
+
+.skeletonGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  width: 100%;
+}

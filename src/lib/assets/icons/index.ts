@@ -22,6 +22,13 @@ import Profile from './profile.svg?react';
 import Preferences from './preferences.svg?react';
 import Account from './account.svg?react';
 import Logout from './logout.svg?react';
+import User from './user.svg?react';
+import Users from './users.svg?react';
+import Building from './building.svg?react';
+import Dollar from './dollar.svg?react';
+import ChartLine from './chart-line.svg?react';
+import ChartBar from './chart-bar.svg?react';
+import TrendingDown from './trending-down.svg?react';
 
 /**
  * Icon registry mapping icon names to SVG components
@@ -50,6 +57,13 @@ export const iconRegistry = {
   preferences: Preferences,
   account: Account,
   logout: Logout,
+  user: User,
+  users: Users,
+  building: Building,
+  dollar: Dollar,
+  'chart-line': ChartLine,
+  'chart-bar': ChartBar,
+  'trending-down': TrendingDown,
 } as const;
 
 /**
@@ -84,5 +98,12 @@ export {
   Preferences,
   Account,
   Logout,
+  User,
+  Users,
+  Building,
+  Dollar,
+  ChartLine,
+  ChartBar,
+  TrendingDown,
 };
 

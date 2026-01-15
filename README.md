@@ -97,7 +97,109 @@ SVG-based icon system with customizable size and color.
 <Icon name="check" size={24} color="var(--theme-primary)" />
 ```
 
-**Available icons:** chevron-down, chevron-up, chevron-left, chevron-right, close, check, info, warning, error, eye, eye-off
+**Available icons:** chevron-down, chevron-up, chevron-left, chevron-right, close, check, info, warning, error, eye, eye-off, user, users, building, dollar, chart-line, chart-bar, trending-down, and more
+
+#### Avatar
+User profile avatars with image, initials, and icon variants.
+
+```tsx
+<Avatar src="/path/to/image.jpg" alt="User name" size="md" />
+<Avatar initials="JD" size="lg" />
+<Avatar icon={<Icon name="user" />} variant="secondary" />
+```
+
+**Sizes:** xs, sm, md, lg, xl
+**Variants:** primary, secondary, tertiary
+
+#### Badge
+Notification badges with count display.
+
+```tsx
+<Badge count={5} variant="primary" />
+<Badge count={99} max={99} variant="error" />
+```
+
+#### Chip
+Interactive chips for tags and selections.
+
+```tsx
+<Chip label="React" onDelete={() => {}} />
+<Chip label="TypeScript" variant="outlined" />
+```
+
+#### Pill
+Status and category pills.
+
+```tsx
+<Pill label="Active" variant="success" />
+<Pill label="Pending" variant="warning" />
+```
+
+#### Tag
+Labeling and categorization tags.
+
+```tsx
+<Tag>New</Tag>
+<Tag variant="success">Available</Tag>
+```
+
+#### StatusIndicator
+Status indicator dots with labels.
+
+```tsx
+<StatusIndicator status="online" label="Online" />
+<StatusIndicator status="offline" label="Offline" />
+```
+
+#### ProgressBar
+Linear progress bars with labels and variants.
+
+```tsx
+<ProgressBar value={75} max={100} variant="primary" />
+<ProgressBar value={50} label="50%" showLabel />
+```
+
+#### CircularProgress
+Circular progress indicators.
+
+```tsx
+<CircularProgress value={75} size={64} />
+<CircularProgress indeterminate size={48} />
+```
+
+#### Skeleton
+Loading skeleton screens for content placeholders.
+
+```tsx
+<Skeleton variant="text" width="100%" />
+<Skeleton variant="circular" width={40} height={40} />
+<Skeleton variant="rectangular" width={200} height={100} />
+```
+
+#### KPI
+Key Performance Indicator display component.
+
+```tsx
+<KPI
+  value="$45,231"
+  label="Total Revenue"
+  trend={12.5}
+  trendDirection="up"
+  icon={<Icon name="dollar" />}
+/>
+```
+
+#### Stat
+Statistical display component for metrics.
+
+```tsx
+<Stat
+  label="Total Users"
+  value="1,234"
+  change="+12.5%"
+  changeType="increase"
+/>
+```
 
 ### Inputs
 

@@ -1,0 +1,269 @@
+@use '../../../styles/mixins/component' as *;
+@use '../../../styles/mixins/spacing' as *;
+
+.pill {
+  // CSS variables with defaults
+  --pill-bg: var(--theme-primary-500);
+  --pill-color: var(--theme-text-on-primary);
+  --pill-border-color: transparent;
+  --pill-border-width: 0;
+  --pill-padding: var(--spacing-xs) var(--spacing-sm);
+  --pill-font-size: var(--font-size-sm);
+  --pill-border-radius: var(--radius-full);
+  --pill-gap: var(--spacing-xs);
+  --pill-transition: all 0.15s ease;
+  --pill-hover-bg: var(--theme-primary-600);
+
+  // Base styles
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--pill-gap);
+
+  background: var(--pill-bg);
+  color: var(--pill-color);
+  padding: var(--pill-padding);
+  font-size: var(--pill-font-size);
+  border-radius: var(--pill-border-radius);
+  border: var(--pill-border-width) solid var(--pill-border-color);
+  font-weight: 500;
+  line-height: 1;
+  white-space: nowrap;
+  transition: var(--pill-transition);
+
+  // Remove default button styles when clickable
+  &[data-clickable='true'] {
+    cursor: pointer;
+    border: var(--pill-border-width) solid var(--pill-border-color);
+
+    &:hover:not([data-disabled='true']) {
+      background: var(--pill-hover-bg);
+    }
+
+    &:focus-visible {
+      outline: 2px solid var(--theme-border-focus);
+      outline-offset: 2px;
+    }
+  }
+
+  // Variant: filled (default)
+  &[data-variant='filled'] {
+    // Primary color
+    &[data-color='primary'] {
+      --pill-bg: var(--theme-primary-500);
+      --pill-color: var(--theme-text-on-primary);
+      --pill-hover-bg: var(--theme-primary-600);
+    }
+
+    &[data-color='secondary'] {
+      --pill-bg: var(--theme-secondary-500);
+      --pill-color: var(--theme-text-on-primary);
+      --pill-hover-bg: var(--theme-secondary-600);
+    }
+
+    &[data-color='success'] {
+      --pill-bg: var(--theme-success);
+      --pill-color: var(--theme-text-on-primary);
+      --pill-hover-bg: var(--theme-success-hover);
+    }
+
+    &[data-color='warning'] {
+      --pill-bg: var(--theme-warning);
+      --pill-color: var(--theme-text-contrast);
+      --pill-hover-bg: var(--theme-warning-hover);
+    }
+
+    &[data-color='danger'] {
+      --pill-bg: var(--theme-error);
+      --pill-color: var(--theme-text-on-primary);
+      --pill-hover-bg: var(--theme-error-hover);
+    }
+
+    &[data-color='info'] {
+      --pill-bg: var(--theme-info);
+      --pill-color: var(--theme-text-on-primary);
+      --pill-hover-bg: var(--theme-primary-hover);
+    }
+
+    &[data-color='neutral'] {
+      --pill-bg: var(--theme-neutral-500);
+      --pill-color: var(--theme-text-on-primary);
+      --pill-hover-bg: var(--theme-neutral-600);
+    }
+  }
+
+  // Variant: outlined
+  &[data-variant='outlined'] {
+    --pill-bg: transparent;
+    --pill-border-width: 1px;
+
+    &[data-color='primary'] {
+      --pill-color: var(--theme-primary-700);
+      --pill-border-color: var(--theme-primary-500);
+      --pill-hover-bg: var(--theme-primary-50);
+    }
+
+    &[data-color='secondary'] {
+      --pill-color: var(--theme-secondary-700);
+      --pill-border-color: var(--theme-secondary-500);
+      --pill-hover-bg: var(--theme-secondary-50);
+    }
+
+    &[data-color='success'] {
+      --pill-color: var(--theme-success);
+      --pill-border-color: var(--theme-success);
+      --pill-hover-bg: var(--theme-interactive-hover);
+    }
+
+    &[data-color='warning'] {
+      --pill-color: var(--theme-warning);
+      --pill-border-color: var(--theme-warning);
+      --pill-hover-bg: var(--theme-interactive-hover);
+    }
+
+    &[data-color='danger'] {
+      --pill-color: var(--theme-error);
+      --pill-border-color: var(--theme-error);
+      --pill-hover-bg: var(--theme-interactive-hover);
+    }
+
+    &[data-color='info'] {
+      --pill-color: var(--theme-info);
+      --pill-border-color: var(--theme-info);
+      --pill-hover-bg: var(--theme-interactive-hover);
+    }
+
+    &[data-color='neutral'] {
+      --pill-color: var(--theme-neutral-800);
+      --pill-border-color: var(--theme-neutral-500);
+      --pill-hover-bg: var(--theme-neutral-50);
+    }
+  }
+
+  // Variant: subtle
+  &[data-variant='subtle'] {
+    &[data-color='primary'] {
+      --pill-bg: var(--theme-primary-100);
+      --pill-color: var(--theme-primary-700);
+      --pill-hover-bg: var(--theme-primary-200);
+    }
+
+    &[data-color='secondary'] {
+      --pill-bg: var(--theme-secondary-100);
+      --pill-color: var(--theme-secondary-700);
+      --pill-hover-bg: var(--theme-secondary-200);
+    }
+
+    &[data-color='success'] {
+      --pill-bg: var(--theme-success);
+      --pill-color: var(--theme-text-on-primary);
+      --pill-hover-bg: var(--theme-success-hover);
+    }
+
+    &[data-color='warning'] {
+      --pill-bg: var(--theme-warning);
+      --pill-color: var(--theme-text-contrast);
+      --pill-hover-bg: var(--theme-warning-hover);
+    }
+
+    &[data-color='danger'] {
+      --pill-bg: var(--theme-error);
+      --pill-color: var(--theme-text-on-primary);
+      --pill-hover-bg: var(--theme-error-hover);
+    }
+
+    &[data-color='info'] {
+      --pill-bg: var(--theme-info);
+      --pill-color: var(--theme-text-on-primary);
+      --pill-hover-bg: var(--theme-primary-hover);
+    }
+
+    &[data-color='neutral'] {
+      --pill-bg: var(--theme-neutral-100);
+      --pill-color: var(--theme-neutral-800);
+      --pill-hover-bg: var(--theme-neutral-200);
+    }
+  }
+
+  // Size styles - Override CSS variables
+  &[data-size='sm'] {
+    --pill-padding: 2px var(--spacing-xs);
+    --pill-font-size: var(--font-size-xs);
+    --pill-gap: 2px;
+  }
+
+  &[data-size='md'] {
+    --pill-padding: var(--spacing-xs) var(--spacing-sm);
+    --pill-font-size: var(--font-size-sm);
+    --pill-gap: var(--spacing-xs);
+  }
+
+  &[data-size='lg'] {
+    --pill-padding: var(--spacing-sm) var(--spacing-md);
+    --pill-font-size: var(--font-size-base);
+    --pill-gap: var(--spacing-sm);
+  }
+
+  // Disabled state
+  &[data-disabled='true'] {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+}
+
+.pillText {
+  display: inline-flex;
+  align-items: center;
+}
+
+.pillIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  font-size: 1em;
+  line-height: 1;
+
+  svg {
+    width: 1em;
+    height: 1em;
+  }
+}
+
+.pillRemove {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  padding: 0;
+  margin: 0;
+  background: none;
+  border: none;
+  color: inherit;
+  cursor: pointer;
+  border-radius: var(--radius-full);
+  transition: opacity 0.15s ease;
+  opacity: 0.7;
+  line-height: 1;
+
+  &:hover:not(:disabled) {
+    opacity: 1;
+  }
+
+  &:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 1px;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+  }
+
+  svg {
+    display: block;
+    width: 12px;
+    height: 12px;
+  }
+}

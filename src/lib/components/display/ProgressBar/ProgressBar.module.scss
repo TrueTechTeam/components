@@ -1,0 +1,150 @@
+@use '../../../styles/mixins/component' as *;
+@use '../../../styles/mixins/spacing' as *;
+
+@keyframes progress-stripes {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 40px 0;
+  }
+}
+
+.progressBar {
+  // CSS variables with defaults
+  --progress-bar-gap: var(--spacing-xs);
+  --progress-bar-font-size: var(--font-size-sm);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--progress-bar-gap);
+  width: 100%;
+  font-size: var(--progress-bar-font-size);
+
+  // Size styles - Override CSS variables
+  &[data-size='sm'] {
+    --progress-bar-font-size: var(--font-size-xs);
+  }
+
+  &[data-size='md'] {
+    --progress-bar-font-size: var(--font-size-sm);
+  }
+
+  &[data-size='lg'] {
+    --progress-bar-font-size: var(--font-size-base);
+  }
+}
+
+.progressBarHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--spacing-sm);
+  color: var(--theme-text-primary);
+  font-size: var(--progress-bar-font-size);
+  font-weight: 500;
+}
+
+.progressBarLabel {
+  flex: 1;
+}
+
+.progressBarValue {
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.progressBarTrack {
+  // CSS variables with defaults
+  --progress-track-height: 8px;
+  --progress-track-bg: var(--theme-neutral-200);
+  --progress-track-radius: var(--radius-full);
+
+  position: relative;
+  width: 100%;
+  height: var(--progress-track-height);
+  background: var(--progress-track-bg);
+  border-radius: var(--progress-track-radius);
+  overflow: hidden;
+
+  // Size variants
+  .progressBar[data-size='sm'] & {
+    --progress-track-height: 4px;
+  }
+
+  .progressBar[data-size='md'] & {
+    --progress-track-height: 8px;
+  }
+
+  .progressBar[data-size='lg'] & {
+    --progress-track-height: 12px;
+  }
+}
+
+.progressBarFill {
+  // CSS variables with defaults
+  --progress-fill-bg: var(--theme-primary-500);
+  --progress-fill-transition: width 0.3s ease;
+
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: var(--progress-fill-bg);
+  border-radius: var(--progress-track-radius);
+  transition: var(--progress-fill-transition);
+
+  // Variant styles - Override CSS variables
+  .progressBar[data-variant='primary'] & {
+    --progress-fill-bg: var(--theme-primary-500);
+  }
+
+  .progressBar[data-variant='secondary'] & {
+    --progress-fill-bg: var(--theme-secondary-500);
+  }
+
+  .progressBar[data-variant='success'] & {
+    --progress-fill-bg: var(--theme-success);
+  }
+
+  .progressBar[data-variant='warning'] & {
+    --progress-fill-bg: var(--theme-warning);
+  }
+
+  .progressBar[data-variant='danger'] & {
+    --progress-fill-bg: var(--theme-error);
+  }
+
+  .progressBar[data-variant='info'] & {
+    --progress-fill-bg: var(--theme-info);
+  }
+
+  .progressBar[data-variant='neutral'] & {
+    --progress-fill-bg: var(--theme-neutral-500);
+  }
+
+  // Striped pattern
+  &[data-striped='true'] {
+    background-image: linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.15) 25%,
+      transparent 25%,
+      transparent 50%,
+      rgba(255, 255, 255, 0.15) 50%,
+      rgba(255, 255, 255, 0.15) 75%,
+      transparent 75%,
+      transparent
+    );
+    background-size: 40px 40px;
+  }
+
+  // Animated stripes
+  &[data-striped='true'][data-animated='true'] {
+    animation: progress-stripes 1s linear infinite;
+  }
+
+  // Just animated without stripes
+  &[data-animated='true']:not([data-striped='true']) {
+    transition: var(--progress-fill-transition);
+  }
+}

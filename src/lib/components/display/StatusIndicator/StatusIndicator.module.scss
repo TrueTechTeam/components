@@ -1,0 +1,109 @@
+@use '../../../styles/mixins/component' as *;
+@use '../../../styles/mixins/spacing' as *;
+
+.statusIndicator {
+  // CSS variables with defaults
+  --indicator-dot-size: 8px;
+  --indicator-dot-color: var(--theme-neutral-500);
+  --indicator-gap: var(--spacing-xs);
+  --indicator-font-size: var(--font-size-sm);
+  --indicator-transition: all 0.2s ease;
+
+  // Base styles
+  display: inline-flex;
+  align-items: center;
+  gap: var(--indicator-gap);
+  transition: var(--indicator-transition);
+
+  // Dot element
+  .dot {
+    display: inline-block;
+    width: var(--indicator-dot-size);
+    height: var(--indicator-dot-size);
+    border-radius: 50%;
+    background-color: var(--indicator-dot-color);
+    flex-shrink: 0;
+    transition: var(--indicator-transition);
+  }
+
+  // Text element
+  .text {
+    font-size: var(--indicator-font-size);
+    line-height: 1.5;
+    color: var(--theme-text-primary);
+  }
+
+  // Status styles - Override CSS variables
+  &[data-status='success'] {
+    --indicator-dot-color: var(--theme-success-500);
+  }
+
+  &[data-status='warning'] {
+    --indicator-dot-color: var(--theme-warning-500);
+  }
+
+  &[data-status='error'] {
+    --indicator-dot-color: var(--theme-error-500);
+  }
+
+  &[data-status='info'] {
+    --indicator-dot-color: var(--theme-info-500);
+  }
+
+  &[data-status='neutral'] {
+    --indicator-dot-color: var(--theme-neutral-500);
+  }
+
+  &[data-status='processing'] {
+    --indicator-dot-color: var(--theme-primary-500);
+  }
+
+  // Size styles - Override CSS variables
+  &[data-size='xs'] {
+    --indicator-dot-size: 4px;
+    --indicator-gap: var(--spacing-xs);
+    --indicator-font-size: var(--font-size-xs);
+  }
+
+  &[data-size='sm'] {
+    --indicator-dot-size: 6px;
+    --indicator-gap: var(--spacing-xs);
+    --indicator-font-size: var(--font-size-xs);
+  }
+
+  &[data-size='md'] {
+    --indicator-dot-size: 8px;
+    --indicator-gap: var(--spacing-xs);
+    --indicator-font-size: var(--font-size-sm);
+  }
+
+  &[data-size='lg'] {
+    --indicator-dot-size: 10px;
+    --indicator-gap: var(--spacing-sm);
+    --indicator-font-size: var(--font-size-base);
+  }
+
+  &[data-size='xl'] {
+    --indicator-dot-size: 12px;
+    --indicator-gap: var(--spacing-sm);
+    --indicator-font-size: var(--font-size-lg);
+  }
+
+  // Pulse animation
+  &[data-pulse='true'] {
+    .dot {
+      animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+  }
+}
+
+// Keyframes for pulse animation
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}

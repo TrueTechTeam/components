@@ -40,28 +40,30 @@
   --theme-tertiary-700: #a5b4fc;
 
   // Semantic colors
-  --theme-success: var(--color-green-500);
-  --theme-warning: var(--color-amber-500);
-  --theme-error: var(--color-red-500);
+  --theme-success: var(--color-green-700);
+  --theme-warning: var(--color-amber-700);
+  --theme-error: var(--color-red-700);
   --theme-info: #00adb5;
+  --theme-info-500: #00adb5;
 
   // Success variant tokens
-  --theme-success-hover: var(--color-green-400);
-  --theme-success-active: var(--color-green-600);
-  --theme-success-disabled: var(--color-green-800);
-  --theme-success-500: #34d399;
+  --theme-success-hover: var(--color-green-600);
+  --theme-success-active: var(--color-green-800);
+  --theme-success-disabled: var(--color-green-900);
+  --theme-success-500: #059669;
 
   // Warning variant tokens
-  --theme-warning-hover: var(--color-amber-400);
-  --theme-warning-active: var(--color-amber-600);
-  --theme-warning-disabled: var(--color-amber-800);
-  --theme-warning-500: #fbbf24;
-  --theme-warning-600: #f59e0b;
+  --theme-warning-hover: var(--color-amber-600);
+  --theme-warning-active: var(--color-amber-800);
+  --theme-warning-disabled: var(--color-amber-900);
+  --theme-warning-500: #d97706;
+  --theme-warning-600: #b45309;
 
   // Error/Danger variant tokens
-  --theme-error-hover: var(--color-red-400);
-  --theme-error-active: var(--color-red-600);
-  --theme-error-disabled: var(--color-red-800);
+  --theme-error-hover: var(--color-red-600);
+  --theme-error-active: var(--color-red-800);
+  --theme-error-disabled: var(--color-red-900);
+  --theme-error-500: #dc2626;
 
   // Backgrounds
   --theme-background-primary: #393e46;

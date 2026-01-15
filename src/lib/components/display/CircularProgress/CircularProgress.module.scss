@@ -1,0 +1,86 @@
+@use '../../../styles/mixins/component' as *;
+@use '../../../styles/mixins/spacing' as *;
+
+.circularProgress {
+  // CSS variables with defaults
+  --circle-size: 96px;
+  --circle-track-color: var(--theme-neutral-200);
+  --circle-fill-color: var(--theme-primary-500);
+  --circle-transition: stroke-dashoffset 0.3s ease;
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--circle-size);
+  height: var(--circle-size);
+
+  // Variant styles - Override CSS variables
+  &[data-variant='primary'] {
+    --circle-fill-color: var(--theme-primary-500);
+  }
+
+  &[data-variant='secondary'] {
+    --circle-fill-color: var(--theme-secondary-500);
+  }
+
+  &[data-variant='success'] {
+    --circle-fill-color: var(--theme-success);
+  }
+
+  &[data-variant='warning'] {
+    --circle-fill-color: var(--theme-warning);
+  }
+
+  &[data-variant='danger'] {
+    --circle-fill-color: var(--theme-error);
+  }
+
+  &[data-variant='info'] {
+    --circle-fill-color: var(--theme-info);
+  }
+
+  &[data-variant='neutral'] {
+    --circle-fill-color: var(--theme-neutral-500);
+  }
+}
+
+.circularProgressSvg {
+  display: block;
+  transform: rotate(-90deg); // Start from top
+}
+
+.circularProgressTrack {
+  stroke: var(--circle-track-color);
+}
+
+.circularProgressFill {
+  stroke: var(--circle-fill-color);
+  transition: var(--circle-transition);
+}
+
+.circularProgressLabel {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: var(--theme-text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: 600;
+  text-align: center;
+  pointer-events: none;
+
+  // Size-specific font sizes
+  .circularProgress[data-size='sm'] & {
+    font-size: var(--font-size-xs);
+  }
+
+  .circularProgress[data-size='md'] & {
+    font-size: var(--font-size-sm);
+  }
+
+  .circularProgress[data-size='lg'] & {
+    font-size: var(--font-size-base);
+  }
+}
+

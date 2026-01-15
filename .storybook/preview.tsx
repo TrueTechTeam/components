@@ -40,7 +40,14 @@ const preview: Preview = {
   },
   decorators: [
     (Story) => (
-      <div style={{ minWidth: '400px' }}>
+      <div
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          minWidth: '400px',
+        }}
+      >
         <Story />
       </div>
     ),

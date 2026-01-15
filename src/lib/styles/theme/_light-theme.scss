@@ -41,28 +41,30 @@
   --theme-tertiary-700: #4338ca;
 
   // Semantic colors
-  --theme-success: var(--color-green-600);
-  --theme-warning: var(--color-amber-600);
-  --theme-error: var(--color-red-600);
+  --theme-success: var(--color-green-700);
+  --theme-warning: var(--color-amber-700);
+  --theme-error: var(--color-red-700);
   --theme-info: #00adb5;
+  --theme-info-500: #00adb5;
 
   // Success variant tokens
-  --theme-success-hover: var(--color-green-700);
-  --theme-success-active: var(--color-green-800);
+  --theme-success-hover: var(--color-green-800);
+  --theme-success-active: var(--color-green-900);
   --theme-success-disabled: var(--color-green-200);
-  --theme-success-500: #10b981;
+  --theme-success-500: #047857;
 
   // Warning variant tokens
-  --theme-warning-hover: var(--color-amber-700);
-  --theme-warning-active: var(--color-amber-800);
+  --theme-warning-hover: var(--color-amber-800);
+  --theme-warning-active: var(--color-amber-900);
   --theme-warning-disabled: var(--color-amber-200);
-  --theme-warning-500: #f59e0b;
-  --theme-warning-600: #d97706;
+  --theme-warning-500: #d97706;
+  --theme-warning-600: #b45309;
 
   // Error/Danger variant tokens
-  --theme-error-hover: var(--color-red-700);
-  --theme-error-active: var(--color-red-800);
+  --theme-error-hover: var(--color-red-800);
+  --theme-error-active: var(--color-red-900);
   --theme-error-disabled: var(--color-red-200);
+  --theme-error-500: #dc2626;
 
   // Backgrounds
   --theme-background-primary: #f3f4f6;

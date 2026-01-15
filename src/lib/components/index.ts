@@ -6,6 +6,42 @@ export type { ButtonProps } from './buttons/Button';
 export { Icon } from './display/Icon';
 export type { IconProps } from './display/Icon';
 
+export { Badge } from './display/Badge';
+export type { BadgeProps } from './display/Badge';
+
+export { Chip } from './display/Chip';
+export type { ChipProps } from './display/Chip';
+
+export { Label } from './display/Label';
+export type { LabelProps } from './display/Label';
+
+export { Pill } from './display/Pill';
+export type { PillProps } from './display/Pill';
+
+export { Tag } from './display/Tag';
+export type { TagProps } from './display/Tag';
+
+export { Avatar } from './display/Avatar';
+export type { AvatarProps } from './display/Avatar';
+
+export { StatusIndicator } from './display/StatusIndicator';
+export type { StatusIndicatorProps } from './display/StatusIndicator';
+
+export { ProgressBar } from './display/ProgressBar';
+export type { ProgressBarProps } from './display/ProgressBar';
+
+export { CircularProgress } from './display/CircularProgress';
+export type { CircularProgressProps } from './display/CircularProgress';
+
+export { Stat } from './display/Stat';
+export type { StatProps } from './display/Stat';
+
+export { KPI } from './display/KPI';
+export type { KPIProps } from './display/KPI';
+
+export { Skeleton } from './display/Skeleton';
+export type { SkeletonProps } from './display/Skeleton';
+
 // Overlays
 export { Portal } from './overlays/Portal';
 export type { PortalProps } from './overlays/Portal';
