@@ -199,5 +199,16 @@
       padding: spacing(4);
     }
   }
+
+  // Loading state
+  &[data-loading='true'] {
+    cursor: wait;
+    pointer-events: none;
+
+    // Maintain opacity for loading (don't use disabled opacity)
+    &:disabled {
+      opacity: 0.9;
+    }
+  }
 }
 

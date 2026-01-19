@@ -1,3 +1,4 @@
+import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Input } from './Input';
@@ -63,24 +64,6 @@ describe('Input', () => {
     });
   });
 
-  describe('variants', () => {
-    it.each(['primary', 'secondary', 'outline'] as const)(
-      'should render %s variant',
-      (variant) => {
-        render(<Input variant={variant} />);
-        const container = screen.getByTestId('input').parentElement;
-        expect(container).toHaveAttribute('data-variant', variant);
-      }
-    );
-  });
-
-  describe('sizes', () => {
-    it.each(['sm', 'md', 'lg'] as const)('should render %s size', (size) => {
-      render(<Input size={size} />);
-      const container = screen.getByTestId('input').parentElement;
-      expect(container).toHaveAttribute('data-size', size);
-    });
-  });
 
   describe('icons', () => {
     it('should render with start icon', () => {

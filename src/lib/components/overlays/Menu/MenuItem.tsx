@@ -6,7 +6,7 @@ import { useEffect, useCallback, useRef, type ReactNode, type MouseEvent, useSta
 import { useMenuContext } from './MenuContext';
 import type { BaseComponentProps } from '../../../types';
 import { Icon, type IconProps } from '../../display/Icon';
-import type { IconName } from '../../../assets/icons';
+import type { IconName } from '../../display/Icon/icons';
 import styles from './MenuItem.module.scss';
 
 /**

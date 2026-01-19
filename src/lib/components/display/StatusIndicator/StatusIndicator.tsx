@@ -10,7 +10,7 @@ export interface StatusIndicatorProps extends BaseComponentProps {
    * Status variant of the indicator
    * @default 'neutral'
    */
-  status?: 'success' | 'warning' | 'error' | 'info' | 'neutral' | 'processing';
+  status?: 'online' | 'offline' | 'away' | 'busy' | 'success' | 'warning' | 'error' | 'info' | 'neutral' | 'processing';
 
   /**
    * Size of the indicator
@@ -83,6 +83,7 @@ export const StatusIndicator = forwardRef<HTMLSpanElement, StatusIndicatorProps>
         data-size={size}
         data-pulse={pulse || undefined}
         data-with-text={withText || undefined}
+        aria-label={`Status: ${status}`}
         {...restProps}
       >
         <span className={styles.dot} aria-hidden="true" />

@@ -8,7 +8,8 @@ import React, {
 } from 'react';
 import type { InputBaseProps } from '../../../types';
 import { Icon } from '../../display/Icon';
-import type { IconName } from '../../../assets/icons';
+import { IconButton } from '../../buttons/IconButton';
+import type { IconName } from '../../display/Icon/icons';
 import styles from './Input.module.scss';
 
 /**
@@ -635,26 +636,24 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                 !loading &&
                 renderIcon(endIcon, 16)}
               {showClearBtn && (
-                <button
-                  type="button"
-                  className={styles.clearButton}
+                <IconButton
+                  icon="close"
+                  size="xs"
+                  variant="ghost"
+                  className={styles.inputActionButton}
                   onClick={handleClear}
                   aria-label="Clear input"
-                  tabIndex={-1}
-                >
-                  <Icon name="close" size={16} />
-                </button>
+                />
               )}
               {showPasswordToggleBtn && (
-                <button
-                  type="button"
-                  className={styles.passwordToggle}
+                <IconButton
+                  icon={showPassword ? 'eye-off' : 'eye'}
+                  size="xs"
+                  variant="ghost"
+                  className={styles.inputActionButton}
                   onClick={togglePasswordVisibility}
                   aria-label={showPassword ? 'Hide password' : 'Show password'}
-                  tabIndex={-1}
-                >
-                  <Icon name={showPassword ? 'eye-off' : 'eye'} size={16} />
-                </button>
+                />
               )}
             </div>
           )}

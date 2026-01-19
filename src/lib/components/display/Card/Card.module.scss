@@ -1,0 +1,125 @@
+@use '../../../styles/mixins/component' as *;
+@use '../../../styles/mixins/spacing' as *;
+
+.card {
+  // CSS variables with defaults
+  --card-bg: var(--theme-surface-primary);
+  --card-border-color: var(--theme-border-primary);
+  --card-border-width: 1px;
+  --card-border-radius: var(--radius-md);
+  --card-padding: var(--spacing-md);
+  --card-shadow: none;
+  --card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.15);
+  --card-transition: var(--transition-normal);
+
+  // Base styles
+  display: flex;
+  flex-direction: column;
+  background: var(--card-bg);
+  border-radius: var(--card-border-radius);
+  transition:
+    box-shadow var(--card-transition),
+    transform var(--card-transition);
+
+  // Variant styles
+  &[data-variant='outlined'] {
+    border: var(--card-border-width) solid var(--card-border-color);
+  }
+
+  &[data-variant='elevated'] {
+    --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+    box-shadow: var(--card-shadow);
+  }
+
+  &[data-variant='filled'] {
+    --card-bg: var(--theme-surface-secondary);
+  }
+
+  // Size variants (border-radius)
+  &[data-size='sm'] {
+    --card-border-radius: var(--radius-sm);
+  }
+
+  &[data-size='md'] {
+    --card-border-radius: var(--radius-md);
+  }
+
+  &[data-size='lg'] {
+    --card-border-radius: var(--radius-lg);
+  }
+
+  // Padding variants
+  &[data-padding='none'] {
+    --card-padding: 0;
+  }
+
+  &[data-padding='sm'] {
+    --card-padding: var(--spacing-sm);
+  }
+
+  &[data-padding='md'] {
+    --card-padding: var(--spacing-md);
+  }
+
+  &[data-padding='lg'] {
+    --card-padding: var(--spacing-lg);
+  }
+
+  // Hoverable state
+  &[data-hoverable='true']:not([data-disabled='true']) {
+    cursor: pointer;
+
+    &:hover {
+      box-shadow: var(--card-shadow-hover);
+      transform: translateY(-2px);
+    }
+  }
+
+  // Interactive state
+  &[data-interactive='true'] {
+    cursor: pointer;
+    user-select: none;
+
+    &:focus-visible {
+      @include focus-ring;
+    }
+
+    &:active:not([data-disabled='true']) {
+      transform: translateY(1px);
+    }
+  }
+
+  // Disabled state
+  &[data-disabled='true'] {
+    opacity: 0.6;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  // Full width
+  &[data-full-width='true'] {
+    width: 100%;
+  }
+}
+
+.cardHeader {
+  padding: var(--card-padding);
+
+  &[data-divider='true'] {
+    border-bottom: 1px solid var(--theme-border-secondary);
+  }
+}
+
+.cardBody {
+  padding: var(--card-padding);
+  flex: 1;
+}
+
+.cardFooter {
+  padding: var(--card-padding);
+
+  &[data-divider='true'] {
+    border-top: 1px solid var(--theme-border-secondary);
+  }
+}
+

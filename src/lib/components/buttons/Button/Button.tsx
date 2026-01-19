@@ -1,7 +1,8 @@
-import React, { forwardRef } from 'react';
+import React, { forwardRef, useRef, useState, useEffect } from 'react';
 import type { ExtendedComponentSize, ComponentVariant, BaseComponentProps } from '../../../types';
 import { Icon } from '../../display/Icon';
-import type { IconName } from '../../../assets/icons';
+import type { IconName } from '../../display/Icon/icons';
+import { Spinner } from '../../display/Spinner';
 import styles from './Button.module.scss';
 
 // Helper to render icon from IconName or ReactNode
@@ -63,11 +64,46 @@ export interface ButtonProps extends BaseComponentProps {
    * Can be an icon name or a React component
    */
   endIcon?: React.ReactNode | IconName;
+
+  /**
+   * Whether the button is in loading state
+   * @default false
+   */
+  loading?: boolean;
+
+  /**
+   * Text to display while loading (replaces children)
+   */
+  loadingText?: string;
+
+  /**
+   * Position of the loading spinner
+   * @default 'start'
+   */
+  loadingPosition?: 'start' | 'end' | 'center';
 }
 
 /**
  * Button component with multiple variants and sizes
  */
+// Map button size to spinner size
+const getSpinnerSize = (buttonSize: ExtendedComponentSize): ExtendedComponentSize => {
+  switch (buttonSize) {
+    case 'xs':
+      return 'xs';
+    case 'sm':
+      return 'xs';
+    case 'md':
+      return 'sm';
+    case 'lg':
+      return 'sm';
+    case 'xl':
+      return 'md';
+    default:
+      return 'sm';
+  }
+};
+
 export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   (
     {
@@ -80,6 +116,9 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
       fullWidth = false,
       startIcon,
       endIcon,
+      loading = false,
+      loadingText,
+      loadingPosition = 'start',
       className,
       'data-testid': testId,
       'aria-label': ariaLabel,
@@ -88,27 +127,87 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
     },
     ref
   ) => {
+    const internalRef = useRef<HTMLButtonElement>(null);
+    const [minWidth, setMinWidth] = useState<number | undefined>();
+
+    // Capture button width before loading starts to prevent layout shift
+    useEffect(() => {
+      const buttonEl = internalRef.current;
+      if (buttonEl && !loading) {
+        setMinWidth(buttonEl.offsetWidth);
+      }
+    }, [loading, children]);
+
+    // Merge refs
+    const setRefs = (element: HTMLButtonElement | null) => {
+      (internalRef as React.MutableRefObject<HTMLButtonElement | null>).current = element;
+      if (typeof ref === 'function') {
+        ref(element);
+      } else if (ref) {
+        (ref as React.MutableRefObject<HTMLButtonElement | null>).current = element;
+      }
+    };
+
     const buttonClasses = [styles.button, className].filter(Boolean).join(' ');
+    const isDisabled = disabled || loading;
+
+    const spinner = (
+      <Spinner
+        size={getSpinnerSize(size)}
+        variant="currentColor"
+        spinnerStyle="circular"
+        srText=""
+      />
+    );
+
+    const renderContent = () => {
+      if (loading) {
+        const text = loadingText !== undefined ? loadingText : children;
+
+        if (loadingPosition === 'center') {
+          return spinner;
+        }
+
+        return (
+          <>
+            {loadingPosition === 'start' && spinner}
+            {text}
+            {loadingPosition === 'end' && spinner}
+          </>
+        );
+      }
+
+      return (
+        <>
+          {startIcon && renderIcon(startIcon, size)}
+          {children}
+          {endIcon && renderIcon(endIcon, size)}
+        </>
+      );
+    };
 
     return (
       <button
-        ref={ref}
+        ref={setRefs}
         type={type}
         className={buttonClasses}
         data-variant={variant}
         data-size={size}
         data-full-width={fullWidth || undefined}
-        disabled={disabled}
+        data-loading={loading || undefined}
+        disabled={isDisabled}
         onClick={onClick}
         data-component="button"
         data-testid={testId || 'button'}
         aria-label={ariaLabel}
-        style={style}
+        aria-busy={loading}
+        style={{
+          ...style,
+          ...(minWidth && loading ? { minWidth: `${minWidth}px` } : {}),
+        }}
         {...restProps}
       >
-        {startIcon && renderIcon(startIcon, size)}
-        {children}
-        {endIcon && renderIcon(endIcon, size)}
+        {renderContent()}
       </button>
     );
   }

@@ -14,7 +14,7 @@ import { Menu } from '../../overlays/Menu';
 import { MenuList } from '../../overlays/Menu/MenuList';
 import { MenuItem } from '../../overlays/Menu/MenuItem';
 import { MenuGroup } from '../../overlays/Menu/MenuGroup';
-import type { IconName } from '../../../assets/icons';
+import type { IconName } from '../../display/Icon/icons';
 import styles from './Select.module.scss';
 
 export interface SelectOption {

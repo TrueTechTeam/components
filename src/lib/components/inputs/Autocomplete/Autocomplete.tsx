@@ -13,7 +13,7 @@ import {
 import { Menu, MenuList, MenuItem } from '../../overlays/Menu';
 import { Input } from '../Input';
 import { useDebounce } from '../../../hooks';
-import type { IconName } from '../../../assets/icons';
+import type { IconName } from '../../display/Icon/icons';
 import type { ComponentVariant, ComponentSize, BaseComponentProps } from '../../../types';
 import styles from './Autocomplete.module.scss';
 
@@ -194,7 +194,7 @@ export const Autocomplete: React.FC<AutocompleteProps> = ({
     let cancelled = false;
 
     const loadOptions = async () => {
-      if (cancelled) return;
+      if (cancelled) {return;}
       setAsyncLoading(true);
 
       try {

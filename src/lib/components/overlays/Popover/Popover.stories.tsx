@@ -38,6 +38,13 @@ const meta: Meta<typeof Popover> = {
       control: 'boolean',
       description: 'Close popover when pressing Escape key',
     },
+    onOpenChange: { table: { disable: true } },
+    onClose: { table: { disable: true } },
+    isOpen: { table: { disable: true } },
+    trigger: { table: { disable: true } },
+    children: { table: { disable: true } },
+    className: { table: { disable: true } },
+    style: { table: { disable: true } },
   },
   parameters: {
     docs: {
@@ -252,20 +259,13 @@ const RenderPropTriggerComponent = () => {
     <div style={{ padding: '100px', display: 'flex', justifyContent: 'center' }}>
       <Popover
         trigger={({ ref }) => (
-          <button
+          <Button
             ref={ref}
+            variant="secondary"
             onClick={() => setIsOpen(!isOpen)}
-            style={{
-              padding: '8px 16px',
-              background: 'var(--theme-secondary)',
-              color: 'white',
-              border: 'none',
-              borderRadius: '4px',
-              cursor: 'pointer',
-            }}
           >
             Render Prop Trigger
-          </button>
+          </Button>
         )}
         isOpen={isOpen}
         onOpenChange={setIsOpen}

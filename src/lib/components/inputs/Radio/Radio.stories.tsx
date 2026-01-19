@@ -57,10 +57,7 @@ const meta: Meta<typeof RadioGroup> = {
       description: 'Gap between radio buttons (in spacing units)',
     },
     // Disable complex props
-    onChange: {
-      action: 'onChange',
-      table: { disable: true },
-    },
+    onChange: { table: { disable: true } },
     value: { table: { disable: true } },
     defaultValue: { table: { disable: true } },
     children: { table: { disable: true } },

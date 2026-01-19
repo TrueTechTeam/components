@@ -5,6 +5,12 @@ export default [
     ...baseConfig,
     ...nx.configs["flat/react"],
     {
+        ignores: [
+            ".claude/**",
+            "**/*.template.*"
+        ]
+    },
+    {
         files: [
             "**/*.ts",
             "**/*.tsx",

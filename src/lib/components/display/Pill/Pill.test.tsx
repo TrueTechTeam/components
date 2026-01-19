@@ -57,20 +57,20 @@ describe('Pill', () => {
   // 2. Variant tests
   describe('variants', () => {
     it('renders filled variant by default', () => {
-      render(<Pill>Test</Pill>);
-      const element = screen.getByText('Test');
+      const { container } = render(<Pill>Test</Pill>);
+      const element = container.querySelector('[data-component="pill"]');
       expect(element).toHaveAttribute('data-variant', 'filled');
     });
 
     it('renders outlined variant', () => {
-      render(<Pill variant="outlined">Test</Pill>);
-      const element = screen.getByText('Test');
+      const { container } = render(<Pill variant="outlined">Test</Pill>);
+      const element = container.querySelector('[data-component="pill"]');
       expect(element).toHaveAttribute('data-variant', 'outlined');
     });
 
     it('renders subtle variant', () => {
-      render(<Pill variant="subtle">Test</Pill>);
-      const element = screen.getByText('Test');
+      const { container } = render(<Pill variant="subtle">Test</Pill>);
+      const element = container.querySelector('[data-component="pill"]');
       expect(element).toHaveAttribute('data-variant', 'subtle');
     });
   });
@@ -78,44 +78,44 @@ describe('Pill', () => {
   // 3. Color tests
   describe('colors', () => {
     it('renders primary color by default', () => {
-      render(<Pill>Test</Pill>);
-      const element = screen.getByText('Test');
+      const { container } = render(<Pill>Test</Pill>);
+      const element = container.querySelector('[data-component="pill"]');
       expect(element).toHaveAttribute('data-color', 'primary');
     });
 
     it('renders secondary color', () => {
-      render(<Pill color="secondary">Test</Pill>);
-      const element = screen.getByText('Test');
+      const { container } = render(<Pill color="secondary">Test</Pill>);
+      const element = container.querySelector('[data-component="pill"]');
       expect(element).toHaveAttribute('data-color', 'secondary');
     });
 
     it('renders success color', () => {
-      render(<Pill color="success">Test</Pill>);
-      const element = screen.getByText('Test');
+      const { container } = render(<Pill color="success">Test</Pill>);
+      const element = container.querySelector('[data-component="pill"]');
       expect(element).toHaveAttribute('data-color', 'success');
     });
 
     it('renders warning color', () => {
-      render(<Pill color="warning">Test</Pill>);
-      const element = screen.getByText('Test');
+      const { container } = render(<Pill color="warning">Test</Pill>);
+      const element = container.querySelector('[data-component="pill"]');
       expect(element).toHaveAttribute('data-color', 'warning');
     });
 
     it('renders danger color', () => {
-      render(<Pill color="danger">Test</Pill>);
-      const element = screen.getByText('Test');
+      const { container } = render(<Pill color="danger">Test</Pill>);
+      const element = container.querySelector('[data-component="pill"]');
       expect(element).toHaveAttribute('data-color', 'danger');
     });
 
     it('renders info color', () => {
-      render(<Pill color="info">Test</Pill>);
-      const element = screen.getByText('Test');
+      const { container } = render(<Pill color="info">Test</Pill>);
+      const element = container.querySelector('[data-component="pill"]');
       expect(element).toHaveAttribute('data-color', 'info');
     });
 
     it('renders neutral color', () => {
-      render(<Pill color="neutral">Test</Pill>);
-      const element = screen.getByText('Test');
+      const { container } = render(<Pill color="neutral">Test</Pill>);
+      const element = container.querySelector('[data-component="pill"]');
       expect(element).toHaveAttribute('data-color', 'neutral');
     });
   });
@@ -123,20 +123,20 @@ describe('Pill', () => {
   // 4. Size tests
   describe('sizes', () => {
     it('renders medium size by default', () => {
-      render(<Pill>Test</Pill>);
-      const element = screen.getByText('Test');
+      const { container } = render(<Pill>Test</Pill>);
+      const element = container.querySelector('[data-component="pill"]');
       expect(element).toHaveAttribute('data-size', 'md');
     });
 
     it('renders small size', () => {
-      render(<Pill size="sm">Test</Pill>);
-      const element = screen.getByText('Test');
+      const { container } = render(<Pill size="sm">Test</Pill>);
+      const element = container.querySelector('[data-component="pill"]');
       expect(element).toHaveAttribute('data-size', 'sm');
     });
 
     it('renders large size', () => {
-      render(<Pill size="lg">Test</Pill>);
-      const element = screen.getByText('Test');
+      const { container } = render(<Pill size="lg">Test</Pill>);
+      const element = container.querySelector('[data-component="pill"]');
       expect(element).toHaveAttribute('data-size', 'lg');
     });
   });
@@ -144,26 +144,26 @@ describe('Pill', () => {
   // 5. State tests
   describe('states', () => {
     it('renders disabled state', () => {
-      render(<Pill disabled>Test</Pill>);
-      const element = screen.getByText('Test');
+      const { container } = render(<Pill disabled>Test</Pill>);
+      const element = container.querySelector('[data-component="pill"]');
       expect(element).toHaveAttribute('data-disabled', 'true');
     });
 
     it('does not add disabled attribute when not disabled', () => {
-      render(<Pill>Test</Pill>);
-      const element = screen.getByText('Test');
+      const { container } = render(<Pill>Test</Pill>);
+      const element = container.querySelector('[data-component="pill"]');
       expect(element).not.toHaveAttribute('data-disabled');
     });
 
     it('adds clickable attribute when onClick is provided', () => {
-      render(<Pill onClick={() => {}}>Test</Pill>);
-      const element = screen.getByText('Test');
+      const { container } = render(<Pill onClick={() => {}}>Test</Pill>);
+      const element = container.querySelector('[data-component="pill"]');
       expect(element).toHaveAttribute('data-clickable', 'true');
     });
 
     it('adds removable attribute when onRemove is provided', () => {
-      render(<Pill onRemove={() => {}}>Test</Pill>);
-      const element = screen.getByText('Test');
+      const { container } = render(<Pill onRemove={() => {}}>Test</Pill>);
+      const element = container.querySelector('[data-component="pill"]');
       expect(element).toHaveAttribute('data-removable', 'true');
     });
   });
@@ -172,24 +172,24 @@ describe('Pill', () => {
   describe('interactions', () => {
     it('calls onClick when clicked', () => {
       const handleClick = jest.fn();
-      render(<Pill onClick={handleClick}>Test</Pill>);
+      const { container } = render(<Pill onClick={handleClick}>Test</Pill>);
 
-      const element = screen.getByText('Test');
-      fireEvent.click(element);
+      const element = container.querySelector('[data-component="pill"]');
+      fireEvent.click(element!);
 
       expect(handleClick).toHaveBeenCalledTimes(1);
     });
 
     it('does not call onClick when disabled', () => {
       const handleClick = jest.fn();
-      render(
+      const { container } = render(
         <Pill onClick={handleClick} disabled>
           Test
         </Pill>
       );
 
-      const element = screen.getByText('Test');
-      fireEvent.click(element);
+      const element = container.querySelector('[data-component="pill"]');
+      fireEvent.click(element!);
 
       expect(handleClick).not.toHaveBeenCalled();
     });
@@ -288,8 +288,8 @@ describe('Pill', () => {
     });
 
     it('includes data-component attribute', () => {
-      render(<Pill>Test</Pill>);
-      const element = screen.getByText('Test');
+      const { container } = render(<Pill>Test</Pill>);
+      const element = container.querySelector('[data-component="pill"]');
       expect(element).toHaveAttribute('data-component', 'pill');
     });
 
@@ -305,8 +305,8 @@ describe('Pill', () => {
     });
 
     it('clickable pill has type="button"', () => {
-      render(<Pill onClick={() => {}}>Test</Pill>);
-      const element = screen.getByText('Test');
+      const { container } = render(<Pill onClick={() => {}}>Test</Pill>);
+      const element = container.querySelector('[data-component="pill"]');
       expect(element).toHaveAttribute('type', 'button');
     });
   });

@@ -6,7 +6,7 @@ import { useState, useMemo, type ReactNode, type ReactElement } from 'react';
 import { Menu, type MenuProps, MenuItem, MenuList, MenuDivider } from '../Menu';
 import { Button } from '../../buttons/Button';
 import { Icon } from '../../display/Icon';
-import type { IconName } from '../../../assets/icons';
+import type { IconName } from '../../display/Icon/icons';
 import type { ComponentVariant, ComponentSize } from '../../../types';
 import styles from './Dropdown.module.scss';
 

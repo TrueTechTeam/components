@@ -49,14 +49,8 @@ const meta: Meta<typeof DatePicker> = {
       description: 'Show clear button',
     },
     // Disabled complex props
-    onChange: {
-      table: { disable: true },
-      description: 'Callback when date changes',
-    },
-    onBlur: {
-      table: { disable: true },
-      description: 'Callback when input loses focus',
-    },
+    onChange: { table: { disable: true } },
+    onBlur: { table: { disable: true } },
     className: {
       table: { disable: true },
     },

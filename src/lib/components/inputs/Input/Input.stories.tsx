@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { useState } from 'react';
 import { Input } from './Input';
-import { iconRegistry } from '../../../assets/icons';
+import { iconRegistry } from '../../display/Icon/icons';
 
 // Dynamically generate icon options from iconRegistry
 const iconOptions = [null, ...Object.keys(iconRegistry)] as const;

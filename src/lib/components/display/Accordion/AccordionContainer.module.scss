@@ -1,0 +1,34 @@
+.accordionContainer {
+  --accordion-container-gap: 0;
+
+  display: flex;
+  flex-direction: column;
+}
+
+.accordionContainerControls {
+  display: flex;
+  gap: var(--spacing-sm, 8px);
+  margin-bottom: var(--spacing-sm, 8px);
+
+  &[data-position='top-right'],
+  &[data-position='bottom-right'] {
+    justify-content: flex-end;
+  }
+
+  &[data-position='top-left'],
+  &[data-position='bottom-left'] {
+    justify-content: flex-start;
+  }
+
+  &[data-position='bottom-left'],
+  &[data-position='bottom-right'] {
+    margin-top: var(--spacing-sm, 8px);
+    margin-bottom: 0;
+  }
+}
+
+.accordionContainerContent {
+  display: flex;
+  flex-direction: column;
+  gap: var(--accordion-container-gap);
+}

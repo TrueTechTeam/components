@@ -19,7 +19,7 @@ import {
 } from '../../../utils/dateUtils';
 import { Popover } from '../../overlays/Popover';
 import styles from './DatePicker.module.scss';
-import type { IconName } from '../../../assets/icons';
+import type { IconName } from '../../display/Icon/icons';
 import Button from '../../buttons/Button';
 
 export interface DatePickerProps extends Omit<BaseComponentProps, 'children'> {

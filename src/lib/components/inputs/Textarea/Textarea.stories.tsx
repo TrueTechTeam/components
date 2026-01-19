@@ -119,7 +119,7 @@ export const WithCharacterCounter: Story = {
       label="Bio"
       placeholder="Tell us about yourself..."
       maxLength={200}
-      showCounter={true}
+      showCounter
       onChange={action('onChange')}
       onBlur={action('onBlur')}
       onFocus={action('onFocus')}
@@ -186,7 +186,7 @@ export const ErrorState: Story = {
   render: () => (
     <Textarea
       label="Comments"
-      error={true}
+      error
       errorMessage="This field is required"
       onChange={action('onChange')}
       onBlur={action('onBlur')}

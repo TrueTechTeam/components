@@ -1,0 +1,107 @@
+@use '../../../styles/mixins/component' as *;
+
+.flipCard {
+  // CSS Variables for customization
+  --flipcard-duration: 600ms;
+  --flipcard-easing: ease-in-out;
+  --flipcard-perspective: 1000px;
+  --flipcard-height: 200px;
+  --flipcard-width: 300px;
+  --flipcard-border-radius: var(--radius-md);
+  --flipcard-bg-front: var(--theme-surface-primary);
+  --flipcard-bg-back: var(--theme-surface-secondary);
+  --flipcard-border-color: var(--theme-border-primary);
+  --flipcard-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+
+  perspective: var(--flipcard-perspective);
+  width: var(--flipcard-width);
+  height: var(--flipcard-height);
+  display: inline-block;
+
+  // Interactive states
+  &[data-trigger='click'],
+  &[data-trigger='hover'] {
+    cursor: pointer;
+
+    &:focus-visible {
+      @include focus-ring;
+      border-radius: var(--flipcard-border-radius);
+    }
+  }
+
+  &[data-disabled='true'] {
+    cursor: not-allowed;
+    opacity: 0.6;
+    pointer-events: none;
+  }
+
+  // Size variants
+  &[data-size='sm'] {
+    --flipcard-border-radius: var(--radius-sm);
+  }
+
+  &[data-size='md'] {
+    --flipcard-border-radius: var(--radius-md);
+  }
+
+  &[data-size='lg'] {
+    --flipcard-border-radius: var(--radius-lg);
+  }
+}
+
+.flipCardInner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform var(--flipcard-duration) var(--flipcard-easing);
+
+  // Horizontal flip (Y-axis rotation)
+  .flipCard[data-flip-direction='horizontal'][data-flipped='true'] & {
+    transform: rotateY(180deg);
+  }
+
+  // Vertical flip (X-axis rotation)
+  .flipCard[data-flip-direction='vertical'][data-flipped='true'] & {
+    transform: rotateX(180deg);
+  }
+}
+
+.flipCardFront,
+.flipCardBack {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  border-radius: var(--flipcard-border-radius);
+  overflow: hidden;
+  box-shadow: var(--flipcard-shadow);
+  border: 1px solid var(--flipcard-border-color);
+}
+
+.flipCardFront {
+  background: var(--flipcard-bg-front);
+  z-index: 2;
+}
+
+.flipCardBack {
+  background: var(--flipcard-bg-back);
+
+  // Horizontal flip - back face rotated on Y-axis
+  .flipCard[data-flip-direction='horizontal'] & {
+    transform: rotateY(180deg);
+  }
+
+  // Vertical flip - back face rotated on X-axis
+  .flipCard[data-flip-direction='vertical'] & {
+    transform: rotateX(180deg);
+  }
+}
+
+// Animation state (prevent interaction during animation)
+.flipCard[data-animating='true'] {
+  pointer-events: none;
+}

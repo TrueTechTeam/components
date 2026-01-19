@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { Button } from './Button';
 import { Icon } from '../../display/Icon';
-import { iconRegistry } from '../../../assets/icons';
+import { iconRegistry } from '../../display/Icon/icons';
 
 // Dynamically generate icon options from iconRegistry
 const iconOptions = [null, ...Object.keys(iconRegistry)] as const;
@@ -39,6 +39,19 @@ const meta: Meta<typeof Button> = {
       control: 'select',
       options: iconOptions,
       description: 'Icon to display after the text (string name or component)',
+    },
+    loading: {
+      control: 'boolean',
+      description: 'Whether the button is in loading state',
+    },
+    loadingText: {
+      control: 'text',
+      description: 'Text to display while loading',
+    },
+    loadingPosition: {
+      control: 'select',
+      options: ['start', 'end', 'center'],
+      description: 'Position of the loading spinner',
     },
     // Hide other controls
     onClick: { table: { disable: true } },
@@ -167,6 +180,83 @@ export const FullWidth: Story = {
 };
 
 /**
+ * Loading state
+ */
+export const Loading: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
+      <Button loading>Loading</Button>
+      <Button loading loadingText="Saving...">
+        Save
+      </Button>
+      <Button loading loadingPosition="end">
+        Submit
+      </Button>
+      <Button loading loadingPosition="center" style={{ minWidth: '100px' }} />
+    </div>
+  ),
+  parameters: { controls: { disable: true } },
+};
+
+/**
+ * Loading state with different variants
+ */
+export const LoadingVariants: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap' }}>
+      <Button variant="primary" loading>
+        Primary
+      </Button>
+      <Button variant="secondary" loading>
+        Secondary
+      </Button>
+      <Button variant="outline" loading>
+        Outline
+      </Button>
+      <Button variant="ghost" loading>
+        Ghost
+      </Button>
+      <Button variant="success" loading>
+        Success
+      </Button>
+      <Button variant="warning" loading>
+        Warning
+      </Button>
+      <Button variant="danger" loading>
+        Danger
+      </Button>
+    </div>
+  ),
+  parameters: { controls: { disable: true } },
+};
+
+/**
+ * Loading state with different sizes
+ */
+export const LoadingSizes: Story = {
+  render: () => (
+    <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+      <Button size="xs" loading>
+        Extra Small
+      </Button>
+      <Button size="sm" loading>
+        Small
+      </Button>
+      <Button size="md" loading>
+        Medium
+      </Button>
+      <Button size="lg" loading>
+        Large
+      </Button>
+      <Button size="xl" loading>
+        Extra Large
+      </Button>
+    </div>
+  ),
+  parameters: { controls: { disable: true } },
+};
+
+/**
  * Interactive playground for testing all button props
  */
 export const Playground: Story = {
@@ -176,6 +266,8 @@ export const Playground: Story = {
     size: 'md',
     disabled: false,
     fullWidth: false,
+    loading: false,
+    loadingPosition: 'start',
     onClick: action('clicked'),
   },
 };

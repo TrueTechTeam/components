@@ -9,8 +9,24 @@ export type { GlobalProviderProps } from './lib/providers';
 export { ThemeProvider, useTheme } from './lib/contexts';
 export type { ThemeProviderProps } from './lib/contexts';
 
+export { PageMessagesProvider, usePageMessages } from './lib/contexts';
+export type {
+  PageMessagesProviderProps,
+  PageMessagesContextValue,
+  PageMessagesDefaults,
+  PageMessagesGlobalActions,
+} from './lib/contexts';
+
 // Hooks
 export { useTheme as useThemeHook } from './lib/hooks';
+export { useDialog } from './lib/hooks';
+export type { UseDialogOptions, UseDialogReturn } from './lib/hooks';
+export { useAlert } from './lib/hooks';
+export type { UseAlertOptions, UseAlertReturn } from './lib/hooks';
+export { useToast } from './lib/hooks';
+export type { UseToastOptions, UseToastReturn } from './lib/hooks';
+export { useAsyncToast } from './lib/hooks';
+export type { UseAsyncToastReturn, AsyncToastConfig } from './lib/hooks';
 
 // Types
 export type {
@@ -101,7 +117,7 @@ export {
 export * from './lib/components';
 
 // Icons
-export { iconRegistry, type IconName } from './lib/assets/icons';
+export { iconRegistry, type IconName } from './lib/components/display/Icon/icons';
 export {
   ChevronDown,
   ChevronUp,
@@ -114,4 +130,4 @@ export {
   Error,
   Eye,
   EyeOff,
-} from './lib/assets/icons';
+} from './lib/components/display/Icon/icons';

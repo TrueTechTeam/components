@@ -10,6 +10,15 @@
   }
 }
 
+@keyframes progress-indeterminate {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(400%);
+  }
+}
+
 .progressBar {
   // CSS variables with defaults
   --progress-bar-gap: var(--spacing-xs);
@@ -147,4 +156,60 @@
   &[data-animated='true']:not([data-striped='true']) {
     transition: var(--progress-fill-transition);
   }
+
+  // Indeterminate mode
+  &[data-indeterminate='true'] {
+    width: 25%;
+    left: 0;
+    animation: progress-indeterminate 1.5s ease-in-out infinite;
+  }
+
+  // Reduced motion
+  @media (prefers-reduced-motion: reduce) {
+    &[data-indeterminate='true'] {
+      animation-duration: 2.5s;
+    }
+  }
 }
+
+// Buffer track (for buffering states)
+.progressBarBuffer {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  background: var(--progress-fill-bg);
+  opacity: 0.3;
+  border-radius: var(--progress-track-radius);
+  transition: width 0.3s ease;
+
+  // Variant styles
+  .progressBar[data-variant='primary'] & {
+    background: var(--theme-primary-500);
+  }
+
+  .progressBar[data-variant='secondary'] & {
+    background: var(--theme-secondary-500);
+  }
+
+  .progressBar[data-variant='success'] & {
+    background: var(--theme-success);
+  }
+
+  .progressBar[data-variant='warning'] & {
+    background: var(--theme-warning);
+  }
+
+  .progressBar[data-variant='danger'] & {
+    background: var(--theme-error);
+  }
+
+  .progressBar[data-variant='info'] & {
+    background: var(--theme-info);
+  }
+
+  .progressBar[data-variant='neutral'] & {
+    background: var(--theme-neutral-500);
+  }
+}
+

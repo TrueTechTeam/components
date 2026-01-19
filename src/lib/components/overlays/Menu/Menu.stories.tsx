@@ -7,6 +7,15 @@ const meta: Meta<typeof Menu> = {
   title: 'Overlays/Menu',
   component: Menu,
   tags: ['autodocs'],
+  argTypes: {
+    onOpenChange: { table: { disable: true } },
+    onSelectionChange: { table: { disable: true } },
+    isOpen: { table: { disable: true } },
+    trigger: { table: { disable: true } },
+    children: { table: { disable: true } },
+    className: { table: { disable: true } },
+    style: { table: { disable: true } },
+  },
   parameters: {
     docs: {
       description: {

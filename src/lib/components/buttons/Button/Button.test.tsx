@@ -27,7 +27,7 @@ describe('Button', () => {
       (variant) => {
         render(<Button variant={variant}>Button</Button>);
         const button = screen.getByRole('button');
-        expect(button).toHaveClass(`button--${variant}`);
+        expect(button).toHaveAttribute('data-variant', variant);
       }
     );
   });
@@ -36,7 +36,7 @@ describe('Button', () => {
     it.each(['sm', 'md', 'lg'] as const)('should render %s size', (size) => {
       render(<Button size={size}>Button</Button>);
       const button = screen.getByRole('button');
-      expect(button).toHaveClass(`button--${size}`);
+      expect(button).toHaveAttribute('data-size', size);
     });
   });
 
@@ -80,7 +80,7 @@ describe('Button', () => {
   describe('fullWidth', () => {
     it('should render full width button', () => {
       render(<Button fullWidth>Full Width</Button>);
-      expect(screen.getByRole('button')).toHaveClass('button--fullWidth');
+      expect(screen.getByRole('button')).toHaveAttribute('data-full-width', 'true');
     });
   });
 

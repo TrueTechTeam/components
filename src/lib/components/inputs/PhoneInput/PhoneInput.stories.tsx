@@ -209,7 +209,7 @@ export const WithError: Story = {
     <PhoneInput
       label="Phone Number"
       defaultCountry="US"
-      error={true}
+      error
       errorMessage="Invalid phone number format"
       onChange={action('onChange')}
     />
@@ -227,7 +227,7 @@ export const Required: Story = {
     <PhoneInput
       label="Phone Number"
       defaultCountry="US"
-      required={true}
+      required
       helperText="This field is required"
       onChange={action('onChange')}
     />
@@ -246,7 +246,7 @@ export const Disabled: Story = {
       label="Phone Number"
       defaultCountry="US"
       defaultValue="(555) 123-4567"
-      disabled={true}
+      disabled
       onChange={action('onChange')}
     />
   ),

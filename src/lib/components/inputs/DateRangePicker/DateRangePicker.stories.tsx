@@ -143,7 +143,7 @@ export const WithDefaultRange: Story = {
 };
 
 export const WithPresets: Story = {
-  render: () => <DateRangePicker label="Date Range" showPresets={true} />,
+  render: () => <DateRangePicker label="Date Range" showPresets />,
   parameters: {
     controls: { disable: true },
   },
@@ -160,7 +160,7 @@ export const CustomPresets: Story = {
   render: () => (
     <DateRangePicker
       label="Analytics Period"
-      showPresets={true}
+      showPresets
       presets={[
         {
           label: 'Yesterday',
@@ -347,7 +347,7 @@ export const WithHelperText: Story = {
 
 export const WithError: Story = {
   render: () => (
-    <DateRangePicker label="Date Range" error={true} errorMessage="Date range is required" />
+    <DateRangePicker label="Date Range" error errorMessage="Date range is required" />
   ),
   parameters: {
     controls: { disable: true },
@@ -356,7 +356,7 @@ export const WithError: Story = {
 
 export const Required: Story = {
   render: () => (
-    <DateRangePicker label="Date Range" required={true} helperText="This field is required" />
+    <DateRangePicker label="Date Range" required helperText="This field is required" />
   ),
   parameters: {
     controls: { disable: true },
@@ -373,7 +373,7 @@ export const Disabled: Story = {
         return date;
       })()}
       defaultEndDate={new Date()}
-      disabled={true}
+      disabled
     />
   ),
   parameters: {
@@ -388,7 +388,7 @@ export const HotelBooking: Story = {
       minDate={new Date()}
       minDays={1}
       maxDays={30}
-      showPresets={true}
+      showPresets
       helperText="Select your stay dates (1-30 nights)"
     />
   ),
@@ -401,7 +401,7 @@ export const AnalyticsReport: Story = {
   render: () => (
     <DateRangePicker
       label="Report Period"
-      showPresets={true}
+      showPresets
       maxDate={new Date()}
       helperText="Select the time period for your report"
     />

@@ -1,7 +1,7 @@
 import React, { forwardRef } from 'react';
 import type { ComponentVariant, BaseComponentProps, ExtendedComponentSize } from '../../../types';
 import { Icon } from '../../display/Icon';
-import type { IconName } from '../../../assets/icons';
+import type { IconName } from '../../display/Icon/icons';
 import styles from './IconButton.module.scss';
 import { ICON_SIZE_MAP } from '../../display/Icon/Icon';
 

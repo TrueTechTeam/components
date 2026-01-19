@@ -42,6 +42,14 @@ const meta: Meta<typeof ProgressBar> = {
       control: 'boolean',
       description: 'Whether to show striped pattern',
     },
+    indeterminate: {
+      control: 'boolean',
+      description: 'Indeterminate mode for infinite loading',
+    },
+    bufferValue: {
+      control: { type: 'range', min: 0, max: 100, step: 1 },
+      description: 'Buffer/secondary progress value',
+    },
     className: {
       table: { disable: true },
     },
@@ -252,7 +260,47 @@ export const LoadingStates: Story = {
   },
 };
 
-// 9. All Combinations (Grid)
+// 9. Indeterminate Mode
+export const Indeterminate: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', width: '100%' }}>
+      <ProgressBar indeterminate label="Loading..." />
+      <ProgressBar indeterminate variant="secondary" label="Processing..." />
+      <ProgressBar indeterminate variant="success" label="Syncing..." />
+      <ProgressBar indeterminate variant="info" size="sm" label="Small indeterminate" />
+      <ProgressBar indeterminate variant="warning" size="lg" label="Large indeterminate" />
+    </div>
+  ),
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      description: {
+        story: 'Indeterminate progress bars for unknown duration tasks.',
+      },
+    },
+  },
+};
+
+// 10. Buffer Progress
+export const BufferProgress: Story = {
+  render: () => (
+    <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', width: '100%' }}>
+      <ProgressBar value={30} bufferValue={60} label="Video loading (buffering)" showValue />
+      <ProgressBar value={45} bufferValue={80} variant="info" label="Streaming..." showValue />
+      <ProgressBar value={10} bufferValue={50} variant="success" label="Download progress" showValue />
+    </div>
+  ),
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      description: {
+        story: 'Progress bars with buffer/secondary progress for buffering states.',
+      },
+    },
+  },
+};
+
+// 11. All Combinations (Grid)
 export const AllCombinations: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
@@ -281,7 +329,7 @@ export const AllCombinations: Story = {
   },
 };
 
-// 10. Playground story with interactive controls
+// 12. Playground story with interactive controls
 export const Playground: Story = {
   args: {
     variant: 'primary',
@@ -292,6 +340,7 @@ export const Playground: Story = {
     label: 'Progress',
     animated: true,
     striped: false,
+    indeterminate: false,
   },
   parameters: {
     docs: {

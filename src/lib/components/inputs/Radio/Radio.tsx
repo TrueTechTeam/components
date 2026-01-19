@@ -1,6 +1,6 @@
 import React, { forwardRef, useId, useCallback } from 'react';
 import { Icon } from '../../display/Icon';
-import type { IconName } from '../../../assets/icons';
+import type { IconName } from '../../display/Icon/icons';
 import { useRadioGroup } from './RadioGroup';
 import styles from './Radio.module.scss';
 

@@ -1,7 +1,7 @@
 import React, { forwardRef, useState, useId, useCallback } from 'react';
 import type { ComponentSize } from '../../../types';
 import { Icon } from '../../display/Icon';
-import type { IconName } from '../../../assets/icons';
+import type { IconName } from '../../display/Icon/icons';
 import styles from './Rating.module.scss';
 
 export interface RatingProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange' | 'onBlur'> {

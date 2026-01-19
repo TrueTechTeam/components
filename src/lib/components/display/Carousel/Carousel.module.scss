@@ -1,0 +1,180 @@
+@use '../../../styles/mixins/component' as *;
+
+.carousel {
+  // CSS Variables for customization
+  --carousel-transition-duration: 300ms;
+  --carousel-gap: 16px;
+  --carousel-slides-to-show: 1;
+  --carousel-translate: 0;
+  --carousel-arrow-width: 80px;
+  --carousel-arrow-color: var(--theme-text-primary);
+  --carousel-dot-size: 8px;
+  --carousel-dot-gap: 8px;
+  --carousel-dot-color: var(--theme-border-primary);
+  --carousel-dot-color-active: var(--theme-primary);
+
+  position: relative;
+  width: 100%;
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+
+  // Show arrows on hover
+  &:hover {
+    .arrow {
+      opacity: 1;
+    }
+  }
+
+  // Arrows outside - use flexbox layout with wrap for dots below
+  &[data-arrows-outside='true'] {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--spacing-md);
+
+    .viewport {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .dots {
+      width: 100%;
+      margin-top: var(--spacing-md);
+    }
+  }
+
+  // Dots position top (without arrows outside)
+  &[data-dots-position='top']:not([data-arrows-outside='true']) {
+    display: flex;
+    flex-direction: column;
+
+    .viewport {
+      order: 1;
+    }
+
+    .dots {
+      order: 0;
+      margin-bottom: var(--spacing-md);
+      margin-top: 0;
+    }
+  }
+
+  // Dots position top with arrows outside
+  &[data-dots-position='top'][data-arrows-outside='true'] {
+    .dots {
+      order: -1;
+      margin-bottom: var(--spacing-md);
+      margin-top: 0;
+    }
+  }
+}
+
+.viewport {
+  position: relative;
+  overflow: hidden;
+  width: 100%;
+  border-radius: var(--radius-md);
+}
+
+.track {
+  display: flex;
+  gap: var(--carousel-gap);
+  transform: translateX(var(--carousel-translate));
+  transition: transform var(--carousel-transition-duration) ease-in-out;
+}
+
+.slide {
+  flex: 0 0
+    calc(
+      (100% - (var(--carousel-slides-to-show) - 1) * var(--carousel-gap)) /
+        var(--carousel-slides-to-show)
+    );
+  min-width: 0;
+}
+
+// Navigation Arrows
+.arrow {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--carousel-arrow-width);
+  height: auto;
+  min-height: 0;
+  padding: 0;
+  border: none;
+  border-radius: 0;
+  aspect-ratio: unset;
+  color: var(--carousel-arrow-color);
+  cursor: pointer;
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+
+  &:focus-visible {
+    opacity: 1;
+    @include focus-ring;
+  }
+
+  &:disabled {
+    opacity: 0 !important;
+    cursor: not-allowed;
+  }
+}
+
+.arrowPrev {
+  left: 0;
+  background: linear-gradient(to right, rgba(0, 0, 0, 0.3), transparent);
+  justify-content: flex-start;
+  padding-left: var(--spacing-sm);
+  border-radius: var(--radius-md) 0 0 var(--radius-md);
+}
+
+.arrowNext {
+  right: 0;
+  background: linear-gradient(to left, rgba(0, 0, 0, 0.3), transparent);
+  justify-content: flex-end;
+  padding-right: var(--spacing-sm);
+  border-radius: 0 var(--radius-md) var(--radius-md) 0;
+}
+
+// Navigation Dots
+.dots {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: var(--carousel-dot-gap);
+  margin-top: var(--spacing-md);
+  padding: var(--spacing-xs) 0;
+}
+
+.dot {
+  width: var(--carousel-dot-size);
+  height: var(--carousel-dot-size);
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-full);
+  background: var(--carousel-dot-color);
+  cursor: pointer;
+  transition:
+    background-color var(--transition-fast),
+    transform var(--transition-fast);
+
+  &:hover {
+    transform: scale(1.2);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+
+  &[data-active='true'] {
+    background: var(--carousel-dot-color-active);
+    transform: scale(1.2);
+  }
+}
+

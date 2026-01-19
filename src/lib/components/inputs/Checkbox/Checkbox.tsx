@@ -1,7 +1,7 @@
 import React, { forwardRef, useState, useId, useCallback, useEffect, useRef } from 'react';
 import type { ComponentSize, ComponentVariant, InputBaseProps } from '../../../types';
 import { Icon } from '../../display/Icon';
-import type { IconName } from '../../../assets/icons';
+import type { IconName } from '../../display/Icon/icons';
 import styles from './Checkbox.module.scss';
 
 export interface CheckboxProps extends Omit<InputBaseProps, 'value' | 'onChange' | 'placeholder'> {

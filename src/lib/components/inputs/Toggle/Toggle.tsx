@@ -16,6 +16,12 @@ export interface ToggleProps extends Omit<InputBaseProps, 'value' | 'onChange' |
   size?: ComponentSize;
 
   /**
+   * Whether the toggle is in loading state
+   * @default false
+   */
+  loading?: boolean;
+
+  /**
    * Whether the toggle is checked
    */
   checked?: boolean;
@@ -84,6 +90,7 @@ export const Toggle = forwardRef<HTMLInputElement, ToggleProps>(
     {
       variant = 'primary',
       size = 'md',
+      loading = false,
       checked,
       defaultChecked = false,
       onChange,
@@ -113,9 +120,11 @@ export const Toggle = forwardRef<HTMLInputElement, ToggleProps>(
     // Use controlled value if provided, otherwise use internal state
     const isChecked = checked !== undefined ? checked : internalChecked;
 
+    const isDisabled = disabled || loading;
+
     const handleChange = useCallback(
       (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (disabled || readOnly) {
+        if (isDisabled || readOnly) {
           return;
         }
 
@@ -129,7 +138,7 @@ export const Toggle = forwardRef<HTMLInputElement, ToggleProps>(
         // Call onChange callback
         onChange?.(newChecked, event);
       },
-      [checked, disabled, readOnly, onChange]
+      [checked, isDisabled, readOnly, onChange]
     );
 
     const toggleSwitch = (
@@ -140,7 +149,8 @@ export const Toggle = forwardRef<HTMLInputElement, ToggleProps>(
         data-size={size}
         data-checked={isChecked || undefined}
         data-error={error || undefined}
-        data-disabled={disabled || undefined}
+        data-disabled={isDisabled || undefined}
+        data-loading={loading || undefined}
         data-readonly={readOnly || undefined}
         data-component="toggle"
       >
@@ -151,14 +161,14 @@ export const Toggle = forwardRef<HTMLInputElement, ToggleProps>(
           name={name}
           checked={isChecked}
           onChange={handleChange}
-          disabled={disabled}
+          disabled={isDisabled}
           readOnly={readOnly}
           required={required}
           className={styles.input}
           data-testid={dataTestId}
           aria-label={ariaLabel || label}
           aria-checked={isChecked}
-          aria-disabled={disabled}
+          aria-disabled={isDisabled}
           aria-readonly={readOnly}
           aria-invalid={error}
           {...rest}

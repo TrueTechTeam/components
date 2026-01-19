@@ -1,0 +1,100 @@
+@use '../../../styles/mixins/component' as *;
+
+.reveal {
+  // CSS Variables for customization
+  --reveal-duration: 500ms;
+  --reveal-delay: 0ms;
+  --reveal-easing: ease-out;
+  --reveal-distance: 20px;
+
+  // Base hidden state
+  opacity: 0;
+  transition:
+    opacity var(--reveal-duration) var(--reveal-easing) var(--reveal-delay),
+    transform var(--reveal-duration) var(--reveal-easing) var(--reveal-delay);
+
+  // Animation-specific initial states
+  &[data-animation='fade'] {
+    // Just opacity (default)
+  }
+
+  &[data-animation='slideUp'] {
+    transform: translateY(var(--reveal-distance));
+  }
+
+  &[data-animation='slideDown'] {
+    transform: translateY(calc(-1 * var(--reveal-distance)));
+  }
+
+  &[data-animation='slideLeft'] {
+    transform: translateX(var(--reveal-distance));
+  }
+
+  &[data-animation='slideRight'] {
+    transform: translateX(calc(-1 * var(--reveal-distance)));
+  }
+
+  &[data-animation='zoom'],
+  &[data-animation='zoomIn'] {
+    transform: scale(0.9);
+  }
+
+  &[data-animation='zoomOut'] {
+    transform: scale(1.1);
+  }
+
+  // Revealed state
+  &[data-revealed='true'] {
+    opacity: 1;
+    transform: translateY(0) translateX(0) scale(1);
+  }
+
+  // Cascade container doesn't animate itself
+  &[data-cascade='true'] {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+// Cascade items
+.cascadeItem {
+  opacity: 0;
+  transition:
+    opacity var(--reveal-duration) var(--reveal-easing) var(--reveal-delay),
+    transform var(--reveal-duration) var(--reveal-easing) var(--reveal-delay);
+
+  &[data-animation='fade'] {
+    // Just opacity
+  }
+
+  &[data-animation='slideUp'] {
+    transform: translateY(var(--reveal-distance));
+  }
+
+  &[data-animation='slideDown'] {
+    transform: translateY(calc(-1 * var(--reveal-distance)));
+  }
+
+  &[data-animation='slideLeft'] {
+    transform: translateX(var(--reveal-distance));
+  }
+
+  &[data-animation='slideRight'] {
+    transform: translateX(calc(-1 * var(--reveal-distance)));
+  }
+
+  &[data-animation='zoom'],
+  &[data-animation='zoomIn'] {
+    transform: scale(0.9);
+  }
+
+  &[data-animation='zoomOut'] {
+    transform: scale(1.1);
+  }
+
+  &[data-revealed='true'] {
+    opacity: 1;
+    transform: translateY(0) translateX(0) scale(1);
+  }
+}

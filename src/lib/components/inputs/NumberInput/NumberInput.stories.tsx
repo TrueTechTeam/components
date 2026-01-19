@@ -170,7 +170,7 @@ export const WithError: Story = {
     <NumberInput
       label="Quantity"
       defaultValue={150}
-      error={true}
+      error
       errorMessage="Value must be between 1 and 100"
       min={1}
       max={100}
@@ -191,7 +191,7 @@ export const Disabled: Story = {
     <NumberInput
       label="Disabled Input"
       defaultValue={50}
-      disabled={true}
+      disabled
       onChange={action('onChange')}
       onBlur={action('onBlur')}
     />
@@ -209,7 +209,7 @@ export const ReadOnly: Story = {
     <NumberInput
       label="Read-only Input"
       defaultValue={75}
-      readOnly={true}
+      readOnly
       onChange={action('onChange')}
       onBlur={action('onBlur')}
     />
@@ -227,7 +227,7 @@ export const Required: Story = {
     <NumberInput
       label="Required Input"
       defaultValue={0}
-      required={true}
+      required
       onChange={action('onChange')}
       onBlur={action('onBlur')}
     />

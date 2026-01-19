@@ -22,9 +22,7 @@ const meta: Meta<typeof Chip> = {
       control: 'boolean',
       description: 'Whether the component is disabled',
     },
-    onRemove: {
-      description: 'Callback when the remove button is clicked',
-    },
+    onRemove: { table: { disable: true } },
     removeButtonAriaLabel: {
       control: 'text',
       description: 'ARIA label for the remove button',

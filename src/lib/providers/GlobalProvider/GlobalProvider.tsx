@@ -1,5 +1,12 @@
 import React, { useEffect, type ReactNode } from 'react';
 import { ThemeProvider } from '../../contexts/ThemeContext';
+import {
+  PageMessagesProvider,
+  type PageMessagesProviderProps,
+} from '../../contexts/PageMessagesContext';
+import { DialogProvider, type DialogProviderProps } from '../../components/overlays/Dialog';
+import { AlertProvider, type AlertProviderProps } from '../../components/overlays/Alert';
+import { ToastProvider, type ToastProviderProps } from '../../components/overlays/Toast';
 import type { ThemeConfig } from '../../types';
 import '../../styles/index.scss';
 
@@ -18,6 +25,26 @@ export interface GlobalProviderProps {
    * Whether to inject global styles (default: true)
    */
   injectGlobalStyles?: boolean;
+
+  /**
+   * PageMessages default configuration
+   */
+  pageMessagesConfig?: Omit<PageMessagesProviderProps, 'children'>;
+
+  /**
+   * Dialog provider configuration
+   */
+  dialogConfig?: Omit<DialogProviderProps, 'children'>;
+
+  /**
+   * Alert provider configuration
+   */
+  alertConfig?: Omit<AlertProviderProps, 'children'>;
+
+  /**
+   * Toast provider configuration
+   */
+  toastConfig?: Omit<ToastProviderProps, 'children'>;
 }
 
 /**
@@ -62,6 +89,10 @@ export function GlobalProvider({
   children,
   themeConfig,
   injectGlobalStyles = true,
+  pageMessagesConfig,
+  dialogConfig,
+  alertConfig,
+  toastConfig,
 }: GlobalProviderProps) {
   // Apply theme overrides if provided
   useEffect(() => {
@@ -78,7 +109,19 @@ export function GlobalProvider({
     }
   }, [themeConfig, injectGlobalStyles]);
 
-  return <ThemeProvider themeConfig={themeConfig}>{children}</ThemeProvider>;
+  return (
+    <ThemeProvider themeConfig={themeConfig}>
+      <PageMessagesProvider {...pageMessagesConfig}>
+        <DialogProvider {...dialogConfig}>
+          <AlertProvider {...alertConfig}>
+            <ToastProvider {...toastConfig}>
+              {children}
+            </ToastProvider>
+          </AlertProvider>
+        </DialogProvider>
+      </PageMessagesProvider>
+    </ThemeProvider>
+  );
 }
 
 export default GlobalProvider;

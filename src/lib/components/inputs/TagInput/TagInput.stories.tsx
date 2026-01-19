@@ -147,7 +147,7 @@ export const WithSuggestions: Story = {
         'PHP',
         'Swift',
       ]}
-      showSuggestions={true}
+      showSuggestions
     />
   ),
   parameters: {
@@ -209,7 +209,7 @@ export const AllowDuplicates: Story = {
     <TagInput
       label="Tags (Duplicates Allowed)"
       placeholder="Add a tag..."
-      allowDuplicates={true}
+      allowDuplicates
       helperText="You can add duplicate tags"
     />
   ),
@@ -226,7 +226,7 @@ export const AddOnBlur: Story = {
     <TagInput
       label="Tags"
       placeholder="Type and click away to add..."
-      addOnBlur={true}
+      addOnBlur
       helperText="Tags will be added when you click away"
     />
   ),
@@ -260,7 +260,7 @@ export const WithError: Story = {
     <TagInput
       label="Tags"
       placeholder="Add a tag..."
-      error={true}
+      error
       errorMessage="At least one tag is required"
     />
   ),
@@ -277,7 +277,7 @@ export const Required: Story = {
     <TagInput
       label="Tags"
       placeholder="Add a tag..."
-      required={true}
+      required
       helperText="This field is required"
     />
   ),
@@ -295,7 +295,7 @@ export const Disabled: Story = {
       label="Tags"
       placeholder="Add a tag..."
       defaultValue={['React', 'TypeScript', 'CSS']}
-      disabled={true}
+      disabled
     />
   ),
   parameters: {

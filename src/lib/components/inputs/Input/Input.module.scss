@@ -195,32 +195,12 @@
   }
 }
 
-.clearButton,
-.passwordToggle {
-  @include button-reset;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: spacing(0.5);
+// Simplified styling for IconButton used as input action buttons
+.inputActionButton {
   color: var(--theme-text-secondary);
-  border-radius: var(--radius-sm);
-
-  @include transition(background-color, color);
-
-  cursor: pointer;
 
   &:hover {
-    background-color: var(--theme-interactive-hover);
     color: var(--theme-text-primary);
-  }
-
-  &:focus-visible {
-    @include focus-ring;
-  }
-
-  &:active {
-    background-color: var(--theme-interactive-active);
   }
 }
 

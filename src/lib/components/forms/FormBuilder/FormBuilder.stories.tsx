@@ -52,18 +52,9 @@ const meta: Meta<typeof FormBuilder> = {
       control: 'boolean',
       description: 'Show reset button',
     },
-    onSubmit: {
-      action: 'form-submitted',
-      description: 'Callback when form is submitted',
-    },
-    onChange: {
-      action: 'form-changed',
-      description: 'Callback when form values change',
-    },
-    onValidate: {
-      action: 'validation-errors',
-      description: 'Callback when validation changes',
-    },
+    onSubmit: { table: { disable: true } },
+    onChange: { table: { disable: true } },
+    onValidate: { table: { disable: true } },
     // Hide complex controls
     fields: { table: { disable: true } },
     children: { table: { disable: true } },
@@ -626,56 +617,58 @@ export const WithDefaultValues: Story = {
 /**
  * Form with onChange handler
  */
-export const WithOnChange: Story = {
-  render: () => {
-    const [formValues, setFormValues] = useState<Record<string, any>>({});
+const WithOnChangeForm = () => {
+  const [formValues, setFormValues] = useState<Record<string, unknown>>({});
 
-    const fields: FormFieldConfig[] = [
-      {
-        name: 'firstName',
-        type: 'input',
-        label: 'First Name',
-        props: { placeholder: 'Enter first name' },
-      },
-      {
-        name: 'lastName',
-        type: 'input',
-        label: 'Last Name',
-        props: { placeholder: 'Enter last name' },
-      },
-      {
-        name: 'email',
-        type: 'input',
-        label: 'Email',
-        props: { type: 'email', placeholder: 'Enter email' },
-      },
-    ];
+  const fields: FormFieldConfig[] = [
+    {
+      name: 'firstName',
+      type: 'input',
+      label: 'First Name',
+      props: { placeholder: 'Enter first name' },
+    },
+    {
+      name: 'lastName',
+      type: 'input',
+      label: 'Last Name',
+      props: { placeholder: 'Enter last name' },
+    },
+    {
+      name: 'email',
+      type: 'input',
+      label: 'Email',
+      props: { type: 'email', placeholder: 'Enter email' },
+    },
+  ];
 
-    return (
-      <div style={{ maxWidth: '600px' }}>
-        <h3>Form with Real-time Values</h3>
-        <FormBuilder
-          fields={fields}
-          onChange={(values) => {
-            action('form-changed')(values);
-            setFormValues(values);
-          }}
-          onSubmit={action('form-submitted')}
-        />
-        <div
-          style={{
-            marginTop: '24px',
-            padding: '16px',
-            background: 'var(--theme-background-primary)',
-            borderRadius: '8px',
-          }}
-        >
-          <h4>Current Form Values:</h4>
-          <pre>{JSON.stringify(formValues, null, 2)}</pre>
-        </div>
+  return (
+    <div style={{ maxWidth: '600px' }}>
+      <h3>Form with Real-time Values</h3>
+      <FormBuilder
+        fields={fields}
+        onChange={(values) => {
+          action('form-changed')(values);
+          setFormValues(values);
+        }}
+        onSubmit={action('form-submitted')}
+      />
+      <div
+        style={{
+          marginTop: '24px',
+          padding: '16px',
+          background: 'var(--theme-background-primary)',
+          borderRadius: '8px',
+        }}
+      >
+        <h4>Current Form Values:</h4>
+        <pre>{JSON.stringify(formValues, null, 2)}</pre>
       </div>
-    );
-  },
+    </div>
+  );
+};
+
+export const WithOnChange: Story = {
+  render: () => <WithOnChangeForm />,
   parameters: { controls: { disable: true } },
 };
 
@@ -835,51 +828,54 @@ export const WithoutButtons: Story = {
 /**
  * Async form submission
  */
+const AsyncSubmissionForm = () => {
+  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const fields: FormFieldConfig[] = [
+    {
+      name: 'email',
+      type: 'input',
+      label: 'Email',
+      validation: { required: true },
+      props: { type: 'email', placeholder: 'Enter email' },
+    },
+    {
+      name: 'password',
+      type: 'input',
+      label: 'Password',
+      validation: { required: true },
+      props: { type: 'password', placeholder: 'Enter password' },
+    },
+  ];
+
+  const handleSubmit = async (values: Record<string, unknown>) => {
+    setIsSubmitting(true);
+    action('form-submitted')(values);
+
+    // Simulate API call
+    await new Promise((resolve) => setTimeout(resolve, 2000));
+
+    action('form-submitted')({ status: 'success', data: values });
+    // eslint-disable-next-line no-alert
+    alert('Login successful!');
+    setIsSubmitting(false);
+  };
+
+  return (
+    <div style={{ maxWidth: '500px' }}>
+      <h3>Login Form (Async)</h3>
+      <FormBuilder
+        fields={fields}
+        onSubmit={handleSubmit}
+        submitButtonText="Sign In"
+        loading={isSubmitting}
+      />
+    </div>
+  );
+};
+
 export const AsyncSubmission: Story = {
-  render: () => {
-    const [isSubmitting, setIsSubmitting] = useState(false);
-
-    const fields: FormFieldConfig[] = [
-      {
-        name: 'email',
-        type: 'input',
-        label: 'Email',
-        validation: { required: true },
-        props: { type: 'email', placeholder: 'Enter email' },
-      },
-      {
-        name: 'password',
-        type: 'input',
-        label: 'Password',
-        validation: { required: true },
-        props: { type: 'password', placeholder: 'Enter password' },
-      },
-    ];
-
-    const handleSubmit = async (values: Record<string, any>) => {
-      setIsSubmitting(true);
-      action('form-submitted')(values);
-
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 2000));
-
-      action('form-submitted')({ status: 'success', data: values });
-      alert('Login successful!');
-      setIsSubmitting(false);
-    };
-
-    return (
-      <div style={{ maxWidth: '500px' }}>
-        <h3>Login Form (Async)</h3>
-        <FormBuilder
-          fields={fields}
-          onSubmit={handleSubmit}
-          submitButtonText="Sign In"
-          loading={isSubmitting}
-        />
-      </div>
-    );
-  },
+  render: () => <AsyncSubmissionForm />,
   parameters: { controls: { disable: true } },
 };
 

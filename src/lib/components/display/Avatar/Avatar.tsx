@@ -44,7 +44,7 @@ export interface AvatarProps extends Omit<BaseComponentProps, 'children'> {
   /**
    * Status indicator
    */
-  status?: 'success' | 'warning' | 'error' | 'info' | 'neutral' | 'processing';
+  status?: 'online' | 'offline' | 'away' | 'busy' | 'success' | 'warning' | 'error' | 'info' | 'neutral' | 'processing';
 }
 
 /**

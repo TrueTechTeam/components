@@ -1,5 +1,5 @@
 import React from 'react';
-import { iconRegistry, type IconName } from '../../../assets/icons';
+import { iconRegistry, type IconName } from './icons';
 import type { BaseComponentProps, ExtendedComponentSize } from '../../../types';
 import styles from './Icon.module.scss';
 

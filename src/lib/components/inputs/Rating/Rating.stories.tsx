@@ -42,14 +42,8 @@ const meta: Meta<typeof Rating> = {
       description: 'Size of the rating component',
     },
     // Disable complex props
-    onChange: {
-      table: { disable: true },
-      action: 'onChange',
-    },
-    onBlur: {
-      table: { disable: true },
-      action: 'onBlur',
-    },
+    onChange: { table: { disable: true } },
+    onBlur: { table: { disable: true } },
     className: { table: { disable: true } },
     style: { table: { disable: true } },
     id: { table: { disable: true } },

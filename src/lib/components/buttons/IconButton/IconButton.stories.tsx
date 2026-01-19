@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { IconButton } from './IconButton';
-import { iconRegistry } from '../../../assets/icons';
+import { iconRegistry } from '../../display/Icon/icons';
 
 const iconOptions = Object.keys(iconRegistry) as const;
 

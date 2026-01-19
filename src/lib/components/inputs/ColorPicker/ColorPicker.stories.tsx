@@ -150,7 +150,7 @@ export const WithAlpha: Story = {
   render: () => (
     <ColorPicker
       label="Color with Alpha"
-      showAlpha={true}
+      showAlpha
       defaultValue="#FF5733"
       onChange={action('color-changed')}
       onBlur={action('blurred')}
@@ -181,7 +181,7 @@ export const CustomPresets: Story = {
   render: () => (
     <ColorPicker
       label="Brand Colors"
-      showPresets={true}
+      showPresets
       presetColors={[
         '#3B82F6', // Blue
         '#10B981', // Green
@@ -237,7 +237,7 @@ export const SwatchOnly: Story = {
     <ColorPicker
       label="Pick Color"
       showInput={false}
-      showSwatch={true}
+      showSwatch
       onChange={action('color-changed')}
       onBlur={action('blurred')}
     />
@@ -268,7 +268,7 @@ export const WithError: Story = {
   render: () => (
     <ColorPicker
       label="Color"
-      error={true}
+      error
       errorMessage="Invalid color value"
       onChange={action('color-changed')}
       onBlur={action('blurred')}
@@ -284,7 +284,7 @@ export const Required: Story = {
   render: () => (
     <ColorPicker
       label="Brand Color"
-      required={true}
+      required
       helperText="This field is required"
       onChange={action('color-changed')}
       onBlur={action('blurred')}
@@ -301,7 +301,7 @@ export const Disabled: Story = {
     <ColorPicker
       label="Color"
       defaultValue="#3B82F6"
-      disabled={true}
+      disabled
       onChange={action('color-changed')}
       onBlur={action('blurred')}
     />
@@ -317,10 +317,10 @@ export const FullFeatured: Story = {
     <ColorPicker
       label="Advanced Color Picker"
       defaultValue="#8B5CF6"
-      showAlpha={true}
-      showPresets={true}
-      showInput={true}
-      showSwatch={true}
+      showAlpha
+      showPresets
+      showInput
+      showSwatch
       helperText="Choose a color using the canvas, sliders, or presets"
       onChange={action('color-changed')}
       onBlur={action('blurred')}

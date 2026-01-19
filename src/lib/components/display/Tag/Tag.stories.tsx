@@ -24,14 +24,8 @@ const meta: Meta<typeof Tag> = {
       control: 'boolean',
       description: 'Whether the tag can be removed',
     },
-    onRemove: {
-      action: 'removed',
-      description: 'Callback when remove button is clicked',
-    },
-    onClick: {
-      action: 'clicked',
-      description: 'Callback when tag is clicked (makes tag interactive)',
-    },
+    onRemove: { table: { disable: true } },
+    onClick: { table: { disable: true } },
     children: {
       control: 'text',
       description: 'Content to display inside the tag',

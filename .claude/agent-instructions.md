@@ -108,9 +108,11 @@ Follow this 5-phase process when generating components:
 - ❌ **NEVER** use `spacing()` function in CSS variables
 - ❌ **NEVER** concatenate className strings with variants
 - ❌ **NEVER** hardcode colors - use theme variables
+- ❌ **NEVER** create custom styled elements when existing components can be used
 - ✅ **ALWAYS** use data attributes for variants/sizes
 - ✅ **ALWAYS** use pre-defined spacing variables in CSS variables
 - ✅ **ALWAYS** forward refs
+- ✅ **ALWAYS** use existing library components (Button, Card, Icon, Input, etc.) instead of creating custom HTML elements with inline styles
 
 ### Phase 3: Testing
 
@@ -153,7 +155,37 @@ Follow this 5-phase process when generating components:
 **Actions**:
 1. **Use stories template**: [templates/display-component.template.stories.tsx](./templates/display-component.template.stories.tsx)
 
-2. **Create minimum 5 stories**:
+2. **Use existing library components in stories** ⚠️ CRITICAL:
+   - **ALWAYS** import and use existing components instead of creating custom styled elements
+   - Use `Card` for container/card-like demo content (not custom `<div>` with styles)
+   - Use `Button` for action elements (not custom `<button>` with styles)
+   - Use `Icon` for icons (not emojis or custom SVGs)
+   - Use `Input`, `Select`, etc. for form demos
+   - This ensures stories showcase real component integration and maintain consistency
+
+   ```typescript
+   // ✅ CORRECT - Use existing components
+   import { Card } from '../Card';
+   import { Button } from '../../buttons/Button';
+   import { Icon } from '../Icon';
+
+   <Reveal animation="fade">
+     <Card variant="elevated" padding="lg">
+       <Icon name="star" size="md" /> Featured Content
+       <Button variant="primary">Action</Button>
+     </Card>
+   </Reveal>
+
+   // ❌ WRONG - Custom styled elements
+   <Reveal animation="fade">
+     <div style={{ padding: '24px', background: '#667eea', borderRadius: '8px' }}>
+       ⭐ Featured Content
+       <button style={{ padding: '8px 16px' }}>Action</button>
+     </div>
+   </Reveal>
+   ```
+
+3. **Create minimum 5 stories**:
    - **Default** - Basic usage with default props
    - **Variants** - All variants displayed in a row
    - **Sizes** - All sizes displayed side-by-side
@@ -691,6 +723,37 @@ export const Badge = forwardRef(...);  // ❌ No displayName
 export const Badge = forwardRef(...);
 Badge.displayName = 'Badge';  // ✅ For React DevTools
 ```
+
+### 8. Using Custom Styled Elements Instead of Existing Components ❌
+
+**Problem**:
+```tsx
+// In stories or component implementation
+<div style={{ padding: '24px', background: '#667eea', borderRadius: '8px' }}>
+  ⭐ Content
+  <button style={{ padding: '8px 16px' }}>Click</button>
+</div>
+```
+
+**Solution**:
+```tsx
+// Use existing library components
+import { Card } from '../Card';
+import { Button } from '../../buttons/Button';
+import { Icon } from '../Icon';
+
+<Card variant="elevated" padding="lg">
+  <Icon name="star" size="md" /> Content
+  <Button variant="primary">Click</Button>
+</Card>
+```
+
+**Why This Matters**: Using existing components ensures:
+- Consistent styling across the library
+- Proper theming support (light/dark mode)
+- Accessibility compliance
+- Stories demonstrate real component integration
+- Reduced maintenance burden
 
 ## Quality Standards
 

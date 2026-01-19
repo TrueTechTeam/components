@@ -95,6 +95,7 @@
 .chipRemove {
   // CSS variables with defaults
   --chip-remove-size: 16px;
+  --chip-remove-icon-size: 12px;
   --chip-remove-hover-bg: rgba(0, 0, 0, 0.1);
 
   display: inline-flex;
@@ -110,6 +111,7 @@
   border-radius: var(--radius-full);
   cursor: pointer;
   transition: background-color 0.15s ease;
+  font-size: var(--chip-remove-icon-size);
 
   &:hover:not(:disabled) {
     background: var(--chip-remove-hover-bg);
@@ -125,28 +127,14 @@
     opacity: 0.5;
   }
 
-  svg {
-    display: block;
-    width: 12px;
-    height: 12px;
-  }
-
   // Size variants
   .chip[data-size='sm'] & {
     --chip-remove-size: 14px;
-
-    svg {
-      width: 10px;
-      height: 10px;
-    }
+    --chip-remove-icon-size: 10px;
   }
 
   .chip[data-size='lg'] & {
     --chip-remove-size: 18px;
-
-    svg {
-      width: 14px;
-      height: 14px;
-    }
+    --chip-remove-icon-size: 14px;
   }
 }

@@ -35,9 +35,8 @@ const meta: Meta<typeof Dropdown> = {
     items: { table: { disable: true } },
     icon: { table: { disable: true } },
     label: { table: { disable: true } },
-    // Actions for event handlers
-    onOpenChange: { action: 'openChange' },
-    onSelectionChange: { action: 'selectionChange' },
+    onOpenChange: { table: { disable: true } },
+    onSelectionChange: { table: { disable: true } },
   },
   parameters: {
     docs: {

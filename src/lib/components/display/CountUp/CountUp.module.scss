@@ -1,0 +1,44 @@
+@use '../../../styles/mixins/component' as *;
+
+.countUp {
+  // CSS Variables for customization
+  --countup-font-size: var(--font-size-xl);
+  --countup-font-weight: 600;
+  --countup-color: var(--theme-text-primary);
+  --countup-prefix-color: var(--theme-text-secondary);
+  --countup-suffix-color: var(--theme-text-secondary);
+
+  display: inline-flex;
+  align-items: baseline;
+  font-size: var(--countup-font-size);
+  font-weight: var(--countup-font-weight);
+  color: var(--countup-color);
+  font-variant-numeric: tabular-nums;
+
+  // Size variants
+  &[data-size='sm'] {
+    --countup-font-size: var(--font-size-base);
+  }
+
+  &[data-size='md'] {
+    --countup-font-size: var(--font-size-xl);
+  }
+
+  &[data-size='lg'] {
+    --countup-font-size: var(--font-size-2xl, 1.5rem);
+  }
+}
+
+.prefix {
+  color: var(--countup-prefix-color);
+  margin-right: 2px;
+}
+
+.value {
+  color: inherit;
+}
+
+.suffix {
+  color: var(--countup-suffix-color);
+  margin-left: 2px;
+}

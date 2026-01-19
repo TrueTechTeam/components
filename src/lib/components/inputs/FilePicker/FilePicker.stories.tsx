@@ -165,7 +165,7 @@ export const MultipleFiles: Story = {
   render: () => (
     <FilePicker
       label="Upload Multiple Files"
-      multiple={true}
+      multiple
       buttonText="Choose Multiple Files"
       helperText="You can select multiple files"
       onChange={action('onChange')}
@@ -184,7 +184,7 @@ export const WithMaxFiles: Story = {
   render: () => (
     <FilePicker
       label="Upload Files (Max 3)"
-      multiple={true}
+      multiple
       maxFiles={3}
       helperText="Maximum 3 files allowed"
       onChange={action('onChange')}
@@ -203,7 +203,7 @@ export const WithMaxSize: Story = {
   render: () => (
     <FilePicker
       label="Upload Files (Max 2MB each)"
-      multiple={true}
+      multiple
       maxSize={2 * 1024 * 1024}
       helperText="Maximum file size: 2MB"
       onChange={action('onChange')}
@@ -240,7 +240,7 @@ export const NoPreview: Story = {
     <FilePicker
       label="Upload Images"
       accept="image/*"
-      multiple={true}
+      multiple
       showPreview={false}
       onChange={action('onChange')}
       onError={action('onError')}
@@ -258,7 +258,7 @@ export const NoFileList: Story = {
   render: () => (
     <FilePicker
       label="Upload Files"
-      multiple={true}
+      multiple
       showFileList={false}
       onChange={action('onChange')}
       onError={action('onError')}
@@ -296,7 +296,7 @@ export const WithError: Story = {
   render: () => (
     <FilePicker
       label="Upload Files"
-      error={true}
+      error
       errorMessage="File upload failed. Please try again."
       onChange={action('onChange')}
       onError={action('onError')}
@@ -314,7 +314,7 @@ export const Required: Story = {
   render: () => (
     <FilePicker
       label="Upload Files"
-      required={true}
+      required
       helperText="This field is required"
       onChange={action('onChange')}
       onError={action('onError')}
@@ -332,7 +332,7 @@ export const Disabled: Story = {
   render: () => (
     <FilePicker
       label="Upload Files"
-      disabled={true}
+      disabled
       onChange={action('onChange')}
       onError={action('onError')}
     />
@@ -352,9 +352,9 @@ export const CompleteExample: Story = {
       accept="image/png,image/jpeg,image/jpg"
       multiple={false}
       maxSize={5 * 1024 * 1024}
-      dragAndDrop={true}
-      showPreview={true}
-      showFileList={true}
+      dragAndDrop
+      showPreview
+      showFileList
       buttonText="Choose Image"
       dropzoneText="or drag and drop your image here"
       helperText="PNG, JPG up to 5MB"

@@ -1,0 +1,22 @@
+@use '../../../styles/mixins/component' as *;
+
+.collapse {
+  // CSS Variables for customization
+  --collapse-duration: 250ms;
+  --collapse-easing: ease-in-out;
+
+  display: grid;
+  grid-template-rows: 0fr;
+  overflow: hidden;
+
+  transition: grid-template-rows var(--collapse-duration) var(--collapse-easing);
+
+  &[data-open='true'] {
+    grid-template-rows: 1fr;
+  }
+}
+
+.collapseInner {
+  min-height: 0;
+  overflow: hidden;
+}

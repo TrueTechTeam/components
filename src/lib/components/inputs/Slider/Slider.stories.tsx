@@ -141,7 +141,7 @@ export const WithMarks: Story = {
       min={0}
       max={100}
       step={25}
-      marks={true}
+      marks
       defaultValue={50}
       onChange={action('onChange')}
       onChangeCommitted={action('onChangeCommitted')}
