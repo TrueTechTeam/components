@@ -7,6 +7,45 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.5] - 2026-01-25
+
+### Added
+- New navigation components:
+  - Stepper - Multi-step progress indicator with customizable steps
+  - Breadcrumbs - Navigation breadcrumb trail with path utilities
+  - Navbar - Responsive navigation bar with collapsible menu
+  - SideNav - Sidebar navigation with groups and dividers
+  - Pagination - Page navigation with customizable controls
+  - BottomNavigation - Mobile-friendly bottom navigation bar
+  - CollapsibleSidebar - Expandable/collapsible sidebar
+  - NavLink - Navigation link with active state styling
+- New layout components:
+  - Panes - Resizable split pane layouts
+  - ResponsiveStack - Stack layout that adapts to screen size
+  - AdaptiveGrid - Auto-adjusting grid layout
+  - MasonryLayout - Pinterest-style masonry grid
+- New display components:
+  - Tabs - Tabbed content navigation
+  - ScrollArea - Custom scrollable container
+  - OverflowText - Text with overflow handling and tooltips
+  - TruncatedList - List with show more/less functionality
+- New input components:
+  - CheckboxGroup - Group of related checkboxes with shared state
+- New button components:
+  - ButtonToggleGroup - Group of toggle buttons with single/multi selection
+  - ToggleButton - Individual toggle button component
+- New icons:
+  - BookmarkFilled, HeartFilled, StarFilled, ThumbsUpFilled (filled variants)
+  - ChevronsLeft, ChevronsRight (double chevrons)
+  - More (three dots menu icon)
+- New hooks:
+  - useResizeObserver - Hook for observing element resize events
+
+### Changed
+- Updated Card component styles
+- Updated Tooltip styles
+- Enhanced useAlert and useDialog hooks
+
 ## [0.0.4] - 2026-01-19
 
 ### Added
@@ -120,7 +159,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Test coverage configuration
 - Storybook integration
 
-[Unreleased]: https://github.com/your-org/true-tech-team/compare/v0.0.4...HEAD
+[Unreleased]: https://github.com/your-org/true-tech-team/compare/v0.0.5...HEAD
+[0.0.5]: https://github.com/your-org/true-tech-team/compare/v0.0.4...v0.0.5
 [0.0.4]: https://github.com/your-org/true-tech-team/compare/v0.0.3...v0.0.4
 [0.0.3]: https://github.com/your-org/true-tech-team/compare/v0.0.2...v0.0.3
 [0.0.2]: https://github.com/your-org/true-tech-team/compare/v0.0.1...v0.0.2

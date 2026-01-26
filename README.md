@@ -444,6 +444,144 @@ Flexible menu system with items, groups, and dividers.
 </Menu>
 ```
 
+### Navigation
+
+#### Stepper
+Multi-step progress indicator for wizard-like interfaces.
+
+```tsx
+<Stepper activeStep={1}>
+  <Step label="Account" description="Create your account" />
+  <Step label="Profile" description="Set up your profile" />
+  <Step label="Review" description="Review and submit" />
+</Stepper>
+```
+
+#### Breadcrumbs
+Navigation breadcrumb trail for hierarchical page structure.
+
+```tsx
+<Breadcrumbs>
+  <BreadcrumbItem href="/">Home</BreadcrumbItem>
+  <BreadcrumbItem href="/products">Products</BreadcrumbItem>
+  <BreadcrumbItem>Current Page</BreadcrumbItem>
+</Breadcrumbs>
+```
+
+#### Navbar
+Responsive navigation bar with collapsible menu support.
+
+```tsx
+<Navbar>
+  <NavbarBrand>My App</NavbarBrand>
+  <NavbarToggle />
+  <NavbarCollapse>
+    <NavbarNav>
+      <NavLink href="/">Home</NavLink>
+      <NavLink href="/about">About</NavLink>
+    </NavbarNav>
+    <NavbarActions>
+      <Button>Sign In</Button>
+    </NavbarActions>
+  </NavbarCollapse>
+</Navbar>
+```
+
+#### SideNav
+Sidebar navigation with groups, items, and dividers.
+
+```tsx
+<SideNav>
+  <SideNavGroup label="Main">
+    <SideNavItem icon={<Icon name="home" />} href="/">Dashboard</SideNavItem>
+    <SideNavItem icon={<Icon name="users" />} href="/users">Users</SideNavItem>
+  </SideNavGroup>
+  <SideNavDivider />
+  <SideNavItem icon={<Icon name="settings" />} href="/settings">Settings</SideNavItem>
+</SideNav>
+```
+
+#### Pagination
+Page navigation with customizable controls.
+
+```tsx
+<Pagination
+  currentPage={page}
+  totalPages={10}
+  onPageChange={setPage}
+  showFirstLast
+/>
+```
+
+#### BottomNavigation
+Mobile-friendly bottom navigation bar.
+
+```tsx
+<BottomNavigation value={tab} onChange={setTab}>
+  <BottomNavigationItem icon={<Icon name="home" />} label="Home" value="home" />
+  <BottomNavigationItem icon={<Icon name="search" />} label="Search" value="search" />
+  <BottomNavigationItem icon={<Icon name="user" />} label="Profile" value="profile" />
+</BottomNavigation>
+```
+
+#### Tabs
+Tabbed content navigation.
+
+```tsx
+<Tabs defaultValue="tab1">
+  <TabList>
+    <Tab value="tab1">Tab 1</Tab>
+    <Tab value="tab2">Tab 2</Tab>
+  </TabList>
+  <TabPanel value="tab1">Content 1</TabPanel>
+  <TabPanel value="tab2">Content 2</TabPanel>
+</Tabs>
+```
+
+### Layout
+
+#### Panes
+Resizable split pane layouts.
+
+```tsx
+<Panes direction="horizontal">
+  <Pane minSize={200}>Left Panel</Pane>
+  <Pane>Right Panel</Pane>
+</Panes>
+```
+
+#### ResponsiveStack
+Stack layout that adapts to screen size.
+
+```tsx
+<ResponsiveStack breakpoint={768} spacing={4}>
+  <Card>Item 1</Card>
+  <Card>Item 2</Card>
+</ResponsiveStack>
+```
+
+#### AdaptiveGrid
+Auto-adjusting grid layout based on container width.
+
+```tsx
+<AdaptiveGrid minItemWidth={250} gap={16}>
+  <Card>Item 1</Card>
+  <Card>Item 2</Card>
+  <Card>Item 3</Card>
+</AdaptiveGrid>
+```
+
+#### MasonryLayout
+Pinterest-style masonry grid for variable-height items.
+
+```tsx
+<MasonryLayout columns={3} gap={16}>
+  <Card>Short content</Card>
+  <Card>Much longer content that takes more space</Card>
+  <Card>Medium content</Card>
+</MasonryLayout>
+```
+
 ### Forms
 
 #### FormBuilder
