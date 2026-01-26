@@ -1,0 +1,20 @@
+# Netlify configuration for Storybook (separate deployment)
+
+[build]
+  # Base directory
+  base = "libs/ui-components"
+
+  # Build command - runs from repo root
+  command = "cd ../.. && npx nx build-storybook ui-components"
+
+  # Storybook output directory
+  publish = "../../dist/storybook/ui-components"
+
+[build.environment]
+  NODE_VERSION = "20"
+
+# Cache static assets
+[[headers]]
+  for = "/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
