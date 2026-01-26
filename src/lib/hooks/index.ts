@@ -32,3 +32,6 @@ export type { UseToastOptions, UseToastReturn } from './useToast';
 
 export { useAsyncToast } from './useAsyncToast';
 export type { UseAsyncToastReturn, AsyncToastConfig } from './useAsyncToast';
+
+export { useResizeObserver } from './useResizeObserver';
+export type { UseResizeObserverOptions, UseResizeObserverReturn } from './useResizeObserver';

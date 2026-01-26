@@ -1,0 +1,85 @@
+.panes {
+  // CSS Variables
+  --panes-gap: 16px;
+  --panes-animation-duration: 250ms;
+  --panes-animation-easing: ease-in-out;
+
+  display: flex;
+  flex-direction: row;
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+  gap: var(--panes-gap);
+}
+
+.pane {
+  // CSS Variables
+  --pane-min-width: 200px;
+  --pane-max-width: none;
+  --pane-preferred-width: auto;
+  --pane-grow: 1;
+  --pane-shrink: 1;
+  --pane-animation-duration: 250ms;
+  --pane-animation-easing: ease-in-out;
+
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-width: var(--pane-min-width);
+  max-width: var(--pane-max-width);
+  flex-basis: var(--pane-preferred-width);
+  flex-grow: var(--pane-grow);
+  flex-shrink: var(--pane-shrink);
+  min-height: 0; // Allow vertical shrinking
+  overflow: hidden;
+  will-change: opacity, transform, width, min-width, flex-basis;
+
+  // Animation properties
+  transition:
+    opacity var(--pane-animation-duration) var(--pane-animation-easing),
+    transform var(--pane-animation-duration) var(--pane-animation-easing),
+    width var(--pane-animation-duration) var(--pane-animation-easing),
+    min-width var(--pane-animation-duration) var(--pane-animation-easing),
+    flex-basis var(--pane-animation-duration) var(--pane-animation-easing);
+
+  // Visible state - fully shown
+  &[data-visible='true'] {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  // Entering state - slides in from the appropriate side
+  &[data-entering='true'] {
+    opacity: 0;
+    // Default: slide from right
+    transform: translateX(100%);
+
+    // First pane slides from left
+    &:first-child {
+      transform: translateX(-100%);
+    }
+  }
+
+  // Exiting state - slides out to the appropriate side
+  &[data-exiting='true'] {
+    opacity: 0;
+    min-width: 0;
+    width: 0;
+    flex-basis: 0;
+    // Default: slide to right
+    transform: translateX(100%);
+
+    // First pane slides to left
+    &:first-child {
+      transform: translateX(-100%);
+    }
+  }
+
+  // Reduced motion - only use opacity
+  @media (prefers-reduced-motion: reduce) {
+    transition: opacity var(--pane-animation-duration) var(--pane-animation-easing);
+    transform: none !important;
+    will-change: opacity;
+  }
+}
+

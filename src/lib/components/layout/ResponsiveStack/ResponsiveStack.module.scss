@@ -1,0 +1,18 @@
+.responsiveStack {
+  // CSS Variables
+  --stack-direction: row;
+  --stack-gap: 16px;
+  --stack-align: stretch;
+  --stack-justify: flex-start;
+  --stack-wrap: nowrap;
+
+  display: flex;
+  flex-direction: var(--stack-direction);
+  gap: var(--stack-gap);
+  align-items: var(--stack-align);
+  justify-content: var(--stack-justify);
+  flex-wrap: var(--stack-wrap);
+  width: 100%;
+  min-width: 0; // Allow shrinking below content size in flex containers
+}
+

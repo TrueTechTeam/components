@@ -1,0 +1,62 @@
+.truncatedList {
+  // CSS Variables
+  --list-gap: 8px;
+  --list-direction: row;
+
+  display: flex;
+  flex-direction: var(--list-direction);
+  gap: var(--list-gap);
+  align-items: center;
+  flex-wrap: wrap;
+
+  &[data-direction='vertical'] {
+    align-items: flex-start;
+  }
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+}
+
+.moreWrapper {
+  display: inline-flex;
+  align-items: center;
+
+  &[role='button'] {
+    cursor: pointer;
+  }
+}
+
+.moreIndicator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);
+  background: var(--theme-background-secondary, #f5f5f5);
+  border-radius: var(--radius-sm, 4px);
+  font-size: var(--font-size-sm, 14px);
+  color: var(--theme-text-secondary, #666);
+  white-space: nowrap;
+  cursor: help;
+
+  &:hover {
+    background: var(--theme-background-tertiary, #e0e0e0);
+  }
+}
+
+.tooltipList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs, 4px);
+
+  &[data-direction='horizontal'] {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+}
+
+.tooltipItem {
+  display: inline-flex;
+  align-items: center;
+}

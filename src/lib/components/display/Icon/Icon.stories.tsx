@@ -1,6 +1,75 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { useState } from 'react';
 import { Icon } from './Icon';
 import { iconRegistry } from './icons';
+import { Input } from '../../inputs/Input';
+
+const AllIconsRenderer = () => {
+  const [search, setSearch] = useState('');
+  const iconNames = Object.keys(iconRegistry);
+  const filteredIcons = iconNames.filter((name) =>
+    name.toLowerCase().includes(search.toLowerCase())
+  );
+
+  return (
+    <div style={{ minWidth: '800px' }}>
+      <div style={{ marginBottom: 'var(--spacing-lg)' }}>
+        <Input
+          type="search"
+          placeholder="Search icons..."
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          startIcon="search"
+          showClearButton
+          onClear={() => setSearch('')}
+        />
+        <p
+          style={{
+            marginTop: 'var(--spacing-sm)',
+            fontSize: 'var(--font-size-xs)',
+            color: 'var(--theme-text-tertiary)',
+          }}
+        >
+          Showing {filteredIcons.length} of {iconNames.length} icons
+        </p>
+      </div>
+      <div
+        style={{
+          display: 'grid',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))',
+          gap: 'var(--spacing-md)',
+        }}
+      >
+        {filteredIcons.map((iconName) => (
+          <div
+            key={iconName}
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: 'var(--spacing-sm)',
+              padding: 'var(--spacing-md) var(--spacing-sm)',
+              backgroundColor: 'var(--theme-background-secondary)',
+              borderRadius: 'var(--radius-lg)',
+            }}
+          >
+            <Icon name={iconName as keyof typeof iconRegistry} size="xl" />
+            <span
+              style={{
+                fontSize: 'var(--font-size-xs)',
+                textAlign: 'center',
+                wordBreak: 'break-word',
+                color: 'var(--theme-text-secondary)',
+              }}
+            >
+              {iconName}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
 
 const meta: Meta<typeof Icon> = {
   title: 'Display/Icon',
@@ -44,34 +113,10 @@ export const Default: Story = {
 };
 
 /**
- * All available icons
+ * All available icons with search functionality
  */
 export const AllIcons: Story = {
-  render: () => (
-    <div
-      style={{
-        display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(120px, 1fr))',
-        gap: '24px',
-        minWidth: '800px',
-      }}
-    >
-      {Object.keys(iconRegistry).map((iconName) => (
-        <div
-          key={iconName}
-          style={{
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'center',
-            gap: '8px',
-          }}
-        >
-          <Icon name={iconName as keyof typeof iconRegistry} size="xl" />
-          <span style={{ fontSize: '12px', textAlign: 'center' }}>{iconName}</span>
-        </div>
-      ))}
-    </div>
-  ),
+  render: () => <AllIconsRenderer />,
   parameters: { controls: { disable: true } },
 };
 
@@ -162,3 +207,4 @@ export const Playground: Story = {
     color: 'var(--theme-primary)',
   },
 };
+

@@ -1,0 +1,128 @@
+@use '../../../styles/mixins/component' as *;
+@use '../../../styles/mixins/spacing' as *;
+
+.bottomNavigation {
+  // CSS Variables
+  --bottom-nav-height: 56px;
+  --bottom-nav-safe-area-bottom: env(safe-area-inset-bottom, 0px);
+  --bottom-nav-bg: var(--theme-background-primary);
+  --bottom-nav-border-color: var(--theme-border-primary);
+  --bottom-nav-item-color: var(--theme-text-secondary);
+  --bottom-nav-item-active-color: var(--theme-primary);
+  --bottom-nav-transition: 150ms ease-in-out;
+  --bottom-nav-z-index: var(--z-fixed, 1200);
+
+  display: flex;
+  align-items: stretch;
+  justify-content: space-around;
+  width: 100%;
+  height: calc(var(--bottom-nav-height) + var(--bottom-nav-safe-area-bottom));
+  padding-bottom: var(--bottom-nav-safe-area-bottom);
+  background-color: var(--bottom-nav-bg);
+  border-top: 1px solid var(--bottom-nav-border-color);
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: var(--bottom-nav-z-index);
+}
+
+.item {
+  @include button-reset;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex: 1;
+  min-width: 0;
+  padding: var(--spacing-xs) var(--spacing-sm);
+  color: var(--bottom-nav-item-color);
+  text-decoration: none;
+  transition:
+    color var(--bottom-nav-transition),
+    transform var(--bottom-nav-transition);
+
+  &:hover:not([data-disabled='true']) {
+    color: var(--bottom-nav-item-active-color);
+  }
+
+  &:focus-visible {
+    @include focus-ring(var(--theme-primary), 2px);
+    border-radius: var(--radius-md);
+  }
+
+  &:active:not([data-disabled='true']) {
+    transform: scale(0.95);
+  }
+
+  &[data-selected='true'] {
+    color: var(--bottom-nav-item-active-color);
+  }
+
+  &[data-disabled='true'] {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}
+
+.iconWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+
+  svg {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+.badge {
+  position: absolute;
+  top: -4px;
+  right: -8px;
+  pointer-events: none;
+}
+
+.label {
+  margin-top: 2px;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.2;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+
+  [data-selected='true'] & {
+    font-weight: var(--font-weight-semibold);
+  }
+}
+
+// Animation for showing/hiding labels
+[data-show-selected-label='true'] {
+  .item {
+    .label {
+      opacity: 0;
+      transform: translateY(4px);
+      transition:
+        opacity var(--bottom-nav-transition),
+        transform var(--bottom-nav-transition);
+    }
+
+    &[data-selected='true'] .label {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+// Reduced motion
+@media (prefers-reduced-motion: reduce) {
+  .item,
+  .label {
+    transition: none;
+  }
+}

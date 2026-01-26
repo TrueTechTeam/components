@@ -1,0 +1,132 @@
+@use '../../../styles/mixins/component' as *;
+@use '../../../styles/mixins/spacing' as *;
+
+.navLink {
+  // CSS Variables
+  --nav-link-color: var(--theme-text-secondary);
+  --nav-link-color-hover: var(--theme-primary);
+  --nav-link-color-active: var(--theme-primary);
+  --nav-link-bg: transparent;
+  --nav-link-bg-hover: transparent;
+  --nav-link-bg-active: transparent;
+  --nav-link-font-size: var(--font-size-base);
+  --nav-link-font-weight: var(--font-weight-medium);
+  --nav-link-padding-x: var(--spacing-sm);
+  --nav-link-padding-y: var(--spacing-xs);
+  --nav-link-gap: var(--spacing-xs);
+  --nav-link-radius: var(--radius-md);
+  --nav-link-underline-height: 2px;
+  --nav-link-transition: var(--transition-fast);
+
+  display: inline-flex;
+  align-items: center;
+  gap: var(--nav-link-gap);
+  padding: var(--nav-link-padding-y) var(--nav-link-padding-x);
+  font-size: var(--nav-link-font-size);
+  font-weight: var(--nav-link-font-weight);
+  color: var(--nav-link-color);
+  text-decoration: none;
+  background-color: var(--nav-link-bg);
+  border-radius: var(--nav-link-radius);
+  transition:
+    color var(--nav-link-transition),
+    background-color var(--nav-link-transition),
+    border-color var(--nav-link-transition);
+  cursor: pointer;
+  position: relative;
+
+  &:hover:not([data-disabled='true']) {
+    color: var(--nav-link-color-hover);
+    background-color: var(--nav-link-bg-hover);
+  }
+
+  &:focus-visible {
+    @include focus-ring(var(--theme-primary), 2px);
+  }
+
+  &[data-active='true'] {
+    color: var(--nav-link-color-active);
+    background-color: var(--nav-link-bg-active);
+  }
+
+  &[data-disabled='true'] {
+    opacity: 0.5;
+    cursor: not-allowed;
+    pointer-events: none;
+  }
+
+  // Size variants
+  &[data-size='sm'] {
+    --nav-link-font-size: var(--font-size-sm);
+    --nav-link-padding-x: var(--spacing-xs);
+    --nav-link-padding-y: 2px;
+    --nav-link-gap: 4px;
+  }
+
+  &[data-size='lg'] {
+    --nav-link-font-size: var(--font-size-lg);
+    --nav-link-padding-x: var(--spacing-md);
+    --nav-link-padding-y: var(--spacing-sm);
+    --nav-link-gap: var(--spacing-sm);
+  }
+
+  // Variant: default
+  &[data-variant='default'] {
+    --nav-link-bg-hover: var(--theme-background-secondary);
+    --nav-link-bg-active: var(--theme-background-secondary);
+  }
+
+  // Variant: underline
+  &[data-variant='underline'] {
+    --nav-link-radius: 0;
+    padding-bottom: calc(var(--nav-link-padding-y) + var(--nav-link-underline-height));
+
+    &::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: var(--nav-link-padding-x);
+      right: var(--nav-link-padding-x);
+      height: var(--nav-link-underline-height);
+      background-color: transparent;
+      transition: background-color var(--nav-link-transition);
+    }
+
+    &:hover:not([data-disabled='true'])::after {
+      background-color: var(--nav-link-color-hover);
+    }
+
+    &[data-active='true']::after {
+      background-color: var(--nav-link-color-active);
+    }
+  }
+
+  // Variant: pill
+  &[data-variant='pill'] {
+    --nav-link-radius: var(--radius-full);
+    --nav-link-bg-hover: var(--theme-background-tertiary);
+    --nav-link-bg-active: var(--theme-primary-100, rgba(0, 173, 181, 0.1));
+  }
+
+  // Variant: ghost
+  &[data-variant='ghost'] {
+    --nav-link-color: var(--theme-text-primary);
+    --nav-link-bg-hover: transparent;
+    --nav-link-bg-active: transparent;
+
+    &:hover:not([data-disabled='true']) {
+      text-decoration: underline;
+    }
+  }
+}
+
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.label {
+  white-space: nowrap;
+}

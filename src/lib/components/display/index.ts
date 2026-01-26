@@ -9,4 +9,7 @@ export * from './ProgressBar';
 export * from './CircularProgress';
 export * from './KPI';
 export * from './Skeleton';
+export * from './OverflowText';
+export * from './TruncatedList';
+export * from './Collapse';
 

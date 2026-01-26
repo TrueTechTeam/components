@@ -113,6 +113,9 @@
 .cardBody {
   padding: var(--card-padding);
   flex: 1;
+  min-height: 0;
+  overflow: auto;
+  height: 100%;
 }
 
 .cardFooter {

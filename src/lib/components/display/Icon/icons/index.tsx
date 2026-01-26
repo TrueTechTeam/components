@@ -22,6 +22,7 @@ import BellOff from './BellOff';
 import Bluetooth from './Bluetooth';
 import Bold from './Bold';
 import Bookmark from './Bookmark';
+import BookmarkFilled from './BookmarkFilled';
 import BookmarkPlus from './BookmarkPlus';
 import Building from './Building';
 import Calendar from './Calendar';
@@ -32,6 +33,8 @@ import Check from './Check';
 import ChevronDown from './ChevronDown';
 import ChevronLeft from './ChevronLeft';
 import ChevronRight from './ChevronRight';
+import ChevronsLeft from './ChevronsLeft';
+import ChevronsRight from './ChevronsRight';
 import ChevronUp from './ChevronUp';
 import Clock from './Clock';
 import Close from './Close';
@@ -74,6 +77,7 @@ import Grid from './Grid';
 import HardDrive from './HardDrive';
 import Hash from './Hash';
 import Heart from './Heart';
+import HeartFilled from './HeartFilled';
 import Help from './Help';
 import Home from './Home';
 import Hourglass from './Hourglass';
@@ -104,6 +108,7 @@ import MicOff from './MicOff';
 import Minimize from './Minimize';
 import Minus from './Minus';
 import Monitor from './Monitor';
+import More from './More';
 import Music from './Music';
 import Navigation from './Navigation';
 import Navigation2 from './Navigation2';
@@ -149,6 +154,7 @@ import SkipBack from './SkipBack';
 import SkipForward from './SkipForward';
 import Smartphone from './Smartphone';
 import Star from './Star';
+import StarFilled from './StarFilled';
 import Stop from './Stop';
 import Stopwatch from './Stopwatch';
 import Sunrise from './Sunrise';
@@ -158,6 +164,7 @@ import Tag from './Tag';
 import Target from './Target';
 import Terminal from './Terminal';
 import ThumbsUp from './ThumbsUp';
+import ThumbsUpFilled from './ThumbsUpFilled';
 import TrendingDown from './TrendingDown';
 import TrendingUp from './TrendingUp';
 import Type from './Type';
@@ -210,6 +217,7 @@ export const iconRegistry = {
   bluetooth: Bluetooth,
   bold: Bold,
   bookmark: Bookmark,
+  'bookmark-filled': BookmarkFilled,
   'bookmark-plus': BookmarkPlus,
   building: Building,
   calendar: Calendar,
@@ -220,6 +228,8 @@ export const iconRegistry = {
   'chevron-down': ChevronDown,
   'chevron-left': ChevronLeft,
   'chevron-right': ChevronRight,
+  'chevrons-left': ChevronsLeft,
+  'chevrons-right': ChevronsRight,
   'chevron-up': ChevronUp,
   clock: Clock,
   close: Close,
@@ -262,6 +272,7 @@ export const iconRegistry = {
   'hard-drive': HardDrive,
   hash: Hash,
   heart: Heart,
+  'heart-filled': HeartFilled,
   help: Help,
   home: Home,
   hourglass: Hourglass,
@@ -292,6 +303,7 @@ export const iconRegistry = {
   minimize: Minimize,
   minus: Minus,
   monitor: Monitor,
+  more: More,
   music: Music,
   navigation: Navigation,
   'navigation-2': Navigation2,
@@ -337,6 +349,7 @@ export const iconRegistry = {
   'skip-forward': SkipForward,
   smartphone: Smartphone,
   star: Star,
+  'star-filled': StarFilled,
   stop: Stop,
   stopwatch: Stopwatch,
   sunrise: Sunrise,
@@ -346,6 +359,7 @@ export const iconRegistry = {
   target: Target,
   terminal: Terminal,
   'thumbs-up': ThumbsUp,
+  'thumbs-up-filled': ThumbsUpFilled,
   'trending-down': TrendingDown,
   'trending-up': TrendingUp,
   type: Type,
@@ -404,6 +418,7 @@ export {
   Bluetooth,
   Bold,
   Bookmark,
+  BookmarkFilled,
   BookmarkPlus,
   Building,
   Calendar,
@@ -414,6 +429,8 @@ export {
   ChevronDown,
   ChevronLeft,
   ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
   ChevronUp,
   Clock,
   Close,
@@ -456,6 +473,7 @@ export {
   HardDrive,
   Hash,
   Heart,
+  HeartFilled,
   Help,
   Home,
   Hourglass,
@@ -486,6 +504,7 @@ export {
   Minimize,
   Minus,
   Monitor,
+  More,
   Music,
   Navigation,
   Navigation2,
@@ -531,6 +550,7 @@ export {
   SkipForward,
   Smartphone,
   Star,
+  StarFilled,
   Stop,
   Stopwatch,
   Sunrise,
@@ -540,6 +560,7 @@ export {
   Target,
   Terminal,
   ThumbsUp,
+  ThumbsUpFilled,
   TrendingDown,
   TrendingUp,
   Type,

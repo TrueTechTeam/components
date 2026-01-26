@@ -3,8 +3,7 @@
  */
 
 import { useCallback } from 'react';
-import { useAlertContextStrict } from '../../components/overlays/Alert';
-import type { AlertProps } from '../../components/overlays/Alert';
+import { useAlertContextStrict, type AlertProps } from '../../components/overlays/Alert';
 
 /**
  * Hook options

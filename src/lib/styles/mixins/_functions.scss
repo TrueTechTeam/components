@@ -1,0 +1,11 @@
+// SCSS functions for working with CSS variables
+
+/// Applies an alpha value to a CSS variable color
+/// This works by using color-mix() which can blend a CSS variable with transparent
+/// @param {String} $css-var - The CSS variable name (e.g., --theme-surface-primary)
+/// @param {Number} $alpha - The alpha value from 0 to 1 (e.g., 0.5 for 50%)
+/// @return {String} - A color-mix() expression
+@function alpha($css-var, $alpha) {
+  $percentage: $alpha * 100%;
+  @return color-mix(in srgb, var(#{$css-var}) #{$percentage}, transparent);
+}

@@ -1,0 +1,253 @@
+@use '../../../styles/mixins/component' as *;
+@use '../../../styles/mixins/spacing' as *;
+
+.stepper {
+  // CSS Variables
+  --stepper-indicator-size-sm: 24px;
+  --stepper-indicator-size-md: 32px;
+  --stepper-indicator-size-lg: 40px;
+  --stepper-indicator-size: var(--stepper-indicator-size-md);
+  --stepper-indicator-bg: var(--theme-background-secondary);
+  --stepper-indicator-active-bg: var(--theme-primary);
+  --stepper-indicator-completed-bg: var(--theme-success);
+  --stepper-indicator-error-bg: var(--theme-error);
+  --stepper-indicator-text: var(--theme-text-secondary);
+  --stepper-indicator-active-text: var(--theme-text-on-primary);
+  --stepper-connector-color: var(--theme-border-primary);
+  --stepper-connector-completed-color: var(--theme-success);
+  --stepper-connector-thickness: 2px;
+  --stepper-title-color: var(--theme-text-primary);
+  --stepper-description-color: var(--theme-text-secondary);
+  --stepper-transition: var(--transition-normal);
+  --stepper-gap: var(--spacing-md);
+  --stepper-font-size: var(--font-size-sm);
+  // Reserve space for absolutely positioned labels (title + description + gap)
+  --stepper-label-height: calc(var(--stepper-font-size) * 2.5 + var(--spacing-sm));
+
+  display: flex;
+
+  // Orientation: horizontal
+  &[data-orientation='horizontal'] {
+    flex-direction: row;
+    align-items: flex-start;
+    // Reserve space for absolutely positioned labels
+    padding-bottom: var(--stepper-label-height);
+
+    .step {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      // Fixed width for indicator only - label is positioned absolutely
+      width: var(--stepper-indicator-size);
+      flex-shrink: 0;
+    }
+
+    .stepHeader {
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      position: relative;
+    }
+
+    .labelContainer {
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      transform: translateX(-50%);
+      margin-top: var(--spacing-sm);
+      white-space: nowrap;
+    }
+
+    .connector {
+      flex: 1;
+      min-width: var(--spacing-lg);
+      height: var(--stepper-connector-thickness);
+      margin-top: calc(var(--stepper-indicator-size) / 2);
+      transform: translateY(-50%);
+    }
+  }
+
+  // Orientation: vertical
+  &[data-orientation='vertical'] {
+    flex-direction: column;
+
+    .step {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .stepHeader {
+      flex-direction: row;
+      align-items: center;
+    }
+
+    .labelContainer {
+      margin-left: var(--spacing-md);
+    }
+
+    .connector {
+      width: var(--stepper-connector-thickness);
+      min-height: var(--spacing-xl);
+      margin-left: calc(var(--stepper-indicator-size) / 2 - var(--stepper-connector-thickness) / 2);
+    }
+
+    .content {
+      margin-left: calc(var(--stepper-indicator-size) / 2 - var(--stepper-connector-thickness) / 2);
+      padding-left: var(--spacing-xl);
+      padding-top: var(--spacing-sm);
+      padding-bottom: var(--spacing-lg);
+      border-left: var(--stepper-connector-thickness) solid var(--stepper-connector-color);
+    }
+  }
+
+  // Icon variant - more space between steps
+  &[data-variant='icon'] {
+    gap: var(--spacing-sm);
+  }
+
+  // Size variants
+  &[data-size='sm'] {
+    --stepper-indicator-size: var(--stepper-indicator-size-sm);
+    --stepper-font-size: var(--font-size-xs);
+  }
+
+  &[data-size='lg'] {
+    --stepper-indicator-size: var(--stepper-indicator-size-lg);
+    --stepper-font-size: var(--font-size-base);
+  }
+}
+
+.step {
+  position: relative;
+}
+
+.stepHeader {
+  display: flex;
+  cursor: default;
+
+  [data-clickable='true'] & {
+    cursor: pointer;
+
+    &:hover .indicator {
+      box-shadow: 0 0 0 4px var(--theme-primary-100, rgba(0, 173, 181, 0.1));
+    }
+
+    &:focus-visible .indicator {
+      @include focus-ring(var(--theme-primary), 2px);
+    }
+  }
+}
+
+.indicator {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--stepper-indicator-size);
+  height: var(--stepper-indicator-size);
+  border-radius: var(--radius-full);
+  background-color: var(--stepper-indicator-bg);
+  color: var(--stepper-indicator-text);
+  font-size: calc(var(--stepper-font-size) * 0.9);
+  font-weight: var(--font-weight-semibold);
+  transition:
+    background-color var(--stepper-transition),
+    color var(--stepper-transition),
+    box-shadow var(--stepper-transition);
+  flex-shrink: 0;
+
+  svg {
+    width: 50%;
+    height: 50%;
+  }
+
+  [data-active='true'] & {
+    background-color: var(--stepper-indicator-active-bg);
+    color: var(--stepper-indicator-active-text);
+  }
+
+  [data-completed='true'] & {
+    background-color: var(--stepper-indicator-completed-bg);
+    color: var(--stepper-indicator-active-text);
+  }
+
+  [data-error='true'] & {
+    background-color: var(--stepper-indicator-error-bg);
+    color: var(--stepper-indicator-active-text);
+  }
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: var(--radius-full);
+  background-color: currentColor;
+}
+
+.number {
+  line-height: 1;
+}
+
+.labelContainer {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.title {
+  font-size: var(--stepper-font-size);
+  font-weight: var(--font-weight-medium);
+  color: var(--stepper-title-color);
+
+  [data-active='true'] & {
+    color: var(--theme-primary);
+    font-weight: var(--font-weight-semibold);
+  }
+
+  [data-error='true'] & {
+    color: var(--theme-error);
+  }
+}
+
+.optional {
+  margin-left: var(--spacing-xs);
+  font-size: calc(var(--stepper-font-size) * 0.85);
+  font-weight: var(--font-weight-normal);
+  color: var(--stepper-description-color);
+}
+
+.description {
+  font-size: calc(var(--stepper-font-size) * 0.85);
+  color: var(--stepper-description-color);
+}
+
+.errorMessage {
+  font-size: calc(var(--stepper-font-size) * 0.85);
+  color: var(--theme-error);
+}
+
+.connector {
+  background-color: var(--stepper-connector-color);
+  transition: background-color var(--stepper-transition);
+
+  // Color connector based on step completion
+  [data-completed='true'] + & {
+    background-color: var(--stepper-connector-completed-color);
+  }
+}
+
+.content {
+  display: none;
+
+  &[data-active='true'] {
+    display: block;
+  }
+}
+
+// Reduced motion
+@media (prefers-reduced-motion: reduce) {
+  .indicator,
+  .connector {
+    transition: none;
+  }
+}

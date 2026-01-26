@@ -1,0 +1,140 @@
+@use '../../../styles/mixins/component' as *;
+@use '../../../styles/mixins/spacing' as *;
+
+.scrollArea {
+  --scroll-area-max-height: auto;
+  --scroll-area-max-width: auto;
+  --scrollbar-size: 8px;
+  --scrollbar-thumb-bg: var(--theme-neutral-400);
+  --scrollbar-thumb-bg-hover: var(--theme-neutral-500);
+  --scrollbar-track-bg: var(--theme-background-secondary);
+  --scrollbar-radius: var(--radius-sm);
+
+  position: relative;
+  overflow: hidden;
+  max-height: var(--scroll-area-max-height);
+  max-width: var(--scroll-area-max-width);
+}
+
+.viewport {
+  width: 100%;
+  height: 100%;
+  max-height: inherit;
+  max-width: inherit;
+  overflow: auto;
+
+  // Custom scrollbar styling (Webkit - Chrome, Safari, Edge)
+  &::-webkit-scrollbar {
+    width: var(--scrollbar-size);
+    height: var(--scrollbar-size);
+  }
+
+  &::-webkit-scrollbar-track {
+    background: var(--scrollbar-track-bg);
+    border-radius: var(--scrollbar-radius);
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background: var(--scrollbar-thumb-bg);
+    border-radius: var(--scrollbar-radius);
+    transition: background 0.15s ease;
+
+    &:hover {
+      background: var(--scrollbar-thumb-bg-hover);
+    }
+  }
+
+  &::-webkit-scrollbar-corner {
+    background: var(--scrollbar-track-bg);
+  }
+
+  // Firefox scrollbar
+  scrollbar-width: thin;
+  scrollbar-color: var(--scrollbar-thumb-bg) var(--scrollbar-track-bg);
+
+  // Focus ring for keyboard navigation
+  &:focus-visible {
+    @include focus-ring;
+  }
+
+  // Direction constraints
+  .scrollArea[data-direction='vertical'] & {
+    overflow-x: hidden;
+    overflow-y: auto;
+  }
+
+  .scrollArea[data-direction='horizontal'] & {
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+
+  .scrollArea[data-direction='both'] & {
+    overflow: auto;
+  }
+}
+
+// Shadow indicators for scroll position
+.scrollArea[data-shadow='true'] {
+  &::before,
+  &::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 24px;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--transition-fast);
+    z-index: 1;
+  }
+
+  &::before {
+    top: 0;
+    background: linear-gradient(to bottom, rgb(0 0 0 / 8%), transparent);
+  }
+
+  &::after {
+    bottom: 0;
+    background: linear-gradient(to top, rgb(0 0 0 / 8%), transparent);
+  }
+
+  &:not([data-at-top='true'])::before {
+    opacity: 1;
+  }
+
+  &:not([data-at-bottom='true'])::after {
+    opacity: 1;
+  }
+
+  // Horizontal shadow indicators
+  &[data-direction='horizontal'],
+  &[data-direction='both'] {
+    &::before,
+    &::after {
+      top: 0;
+      bottom: 0;
+      height: auto;
+      width: 24px;
+    }
+
+    &::before {
+      left: 0;
+      right: auto;
+      background: linear-gradient(to right, rgb(0 0 0 / 8%), transparent);
+    }
+
+    &::after {
+      right: 0;
+      left: auto;
+      background: linear-gradient(to left, rgb(0 0 0 / 8%), transparent);
+    }
+
+    &:not([data-at-left='true'])::before {
+      opacity: 1;
+    }
+
+    &:not([data-at-right='true'])::after {
+      opacity: 1;
+    }
+  }
+}

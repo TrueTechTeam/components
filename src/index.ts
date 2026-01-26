@@ -28,6 +28,9 @@ export type { UseToastOptions, UseToastReturn } from './lib/hooks';
 export { useAsyncToast } from './lib/hooks';
 export type { UseAsyncToastReturn, AsyncToastConfig } from './lib/hooks';
 
+export { useResizeObserver } from './lib/hooks';
+export type { UseResizeObserverOptions, UseResizeObserverReturn } from './lib/hooks';
+
 // Types
 export type {
   // Theme types

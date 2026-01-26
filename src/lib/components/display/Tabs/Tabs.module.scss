@@ -1,0 +1,210 @@
+@use '../../../styles/mixins/component' as *;
+@use '../../../styles/mixins/spacing' as *;
+
+.tabs {
+  --tabs-border-color: var(--theme-border-primary);
+  --tabs-indicator-color: var(--theme-primary);
+  --tabs-bg: var(--theme-background-primary);
+
+  display: flex;
+  flex-direction: column;
+
+  &[data-orientation='vertical'] {
+    flex-direction: row;
+  }
+}
+
+.tabList {
+  display: flex;
+  border-bottom: 1px solid var(--tabs-border-color);
+
+  .tabs[data-orientation='vertical'] & {
+    flex-direction: column;
+    border-bottom: none;
+    border-right: 1px solid var(--tabs-border-color);
+  }
+
+  &[data-fitted='true'] {
+    .tab {
+      flex: 1;
+    }
+  }
+
+  // Variant: line (default)
+  &[data-variant='line'] {
+    gap: var(--spacing-xs);
+  }
+
+  // Variant: enclosed
+  &[data-variant='enclosed'] {
+    gap: 0;
+    border-bottom: 1px solid var(--tabs-border-color);
+
+    .tab {
+      border: 1px solid transparent;
+      border-bottom: none;
+      margin-bottom: -1px;
+      border-radius: var(--radius-md) var(--radius-md) 0 0;
+
+      &[data-selected='true'] {
+        border-color: var(--tabs-border-color);
+        border-bottom-color: var(--tabs-bg);
+        background: var(--tabs-bg);
+      }
+    }
+  }
+
+  // Variant: soft-rounded
+  &[data-variant='soft-rounded'] {
+    gap: var(--spacing-xs);
+    border-bottom: none;
+    padding: var(--spacing-xs);
+    background: var(--theme-background-secondary);
+    border-radius: var(--radius-lg);
+
+    .tab {
+      border-radius: var(--radius-md);
+
+      &[data-selected='true'] {
+        background: var(--theme-primary-100);
+        color: var(--theme-primary);
+      }
+    }
+  }
+
+  // Variant: solid-rounded
+  &[data-variant='solid-rounded'] {
+    gap: var(--spacing-xs);
+    border-bottom: none;
+    padding: var(--spacing-xs);
+    background: var(--theme-background-secondary);
+    border-radius: var(--radius-lg);
+
+    .tab {
+      border-radius: var(--radius-md);
+
+      &[data-selected='true'] {
+        background: var(--theme-primary);
+        color: var(--theme-text-on-primary);
+      }
+    }
+  }
+}
+
+.tab {
+  @include button-reset;
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  color: var(--theme-text-secondary);
+  font-family: var(--font-family-primary);
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+  transition: all var(--transition-fast);
+  cursor: pointer;
+
+  &:hover:not(:disabled) {
+    color: var(--theme-text-primary);
+  }
+
+  &[data-selected='true'] {
+    color: var(--tabs-indicator-color);
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+
+    z-index: 1;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+
+  // Line variant indicator
+  .tabList[data-variant='line'] &[data-selected='true']::after {
+    content: '';
+    position: absolute;
+    bottom: -1px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--tabs-indicator-color);
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  }
+
+  // Vertical orientation for line variant
+  .tabs[data-orientation='vertical'] .tabList[data-variant='line'] &[data-selected='true']::after {
+    top: 0;
+    bottom: 0;
+    left: auto;
+    right: -1px;
+    width: 2px;
+    height: auto;
+    border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  }
+}
+
+// Size variants
+.tabs[data-size='sm'] {
+  .tab {
+    @include px(2);
+    @include py(1.5);
+
+    font-size: var(--font-size-sm);
+  }
+
+  .tabPanel {
+    @include p(3);
+  }
+}
+
+.tabs[data-size='md'] {
+  .tab {
+    @include px(3);
+    @include py(2);
+
+    font-size: var(--font-size-base);
+  }
+
+  .tabPanel {
+    @include p(4);
+  }
+}
+
+.tabs[data-size='lg'] {
+  .tab {
+    @include px(4);
+    @include py(2.5);
+
+    font-size: var(--font-size-lg);
+  }
+
+  .tabPanel {
+    @include p(5);
+  }
+}
+
+.tabIcon {
+  flex-shrink: 0;
+}
+
+.tabLabel {
+  // Label styling
+}
+
+.tabPanel {
+  flex: 1;
+
+  &[hidden] {
+    display: none;
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+

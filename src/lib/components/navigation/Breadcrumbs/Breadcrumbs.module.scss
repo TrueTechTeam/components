@@ -1,0 +1,106 @@
+@use '../../../styles/mixins/component' as *;
+@use '../../../styles/mixins/spacing' as *;
+
+.breadcrumbs {
+  // CSS Variables
+  --breadcrumbs-gap: var(--spacing-sm);
+  --breadcrumbs-separator-gap: var(--spacing-xs);
+  --breadcrumbs-text-color: var(--theme-text-secondary);
+  --breadcrumbs-link-color: var(--theme-text-primary);
+  --breadcrumbs-link-hover-color: var(--theme-primary);
+  --breadcrumbs-current-color: var(--theme-text-primary);
+  --breadcrumbs-separator-color: var(--theme-text-tertiary);
+  --breadcrumbs-font-size: var(--font-size-sm);
+
+  // Size variants
+  &[data-size='sm'] {
+    --breadcrumbs-font-size: var(--font-size-xs);
+    --breadcrumbs-gap: var(--spacing-xs);
+    --breadcrumbs-separator-gap: 2px;
+  }
+
+  &[data-size='lg'] {
+    --breadcrumbs-font-size: var(--font-size-base);
+    --breadcrumbs-gap: var(--spacing-md);
+    --breadcrumbs-separator-gap: var(--spacing-sm);
+  }
+}
+
+.list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--breadcrumbs-separator-gap);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--breadcrumbs-font-size);
+}
+
+.listItem {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--breadcrumbs-separator-gap);
+}
+
+.item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--breadcrumbs-link-color);
+  text-decoration: none;
+  transition: color var(--transition-fast);
+
+  &:hover:not([data-current='true']) {
+    color: var(--breadcrumbs-link-hover-color);
+  }
+
+  &:focus-visible {
+    @include focus-ring(var(--theme-primary), 2px);
+    border-radius: var(--radius-sm);
+  }
+
+  &[data-current='true'] {
+    color: var(--breadcrumbs-current-color);
+    font-weight: var(--font-weight-medium);
+    cursor: default;
+  }
+}
+
+.itemIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+
+  svg {
+    width: 1em;
+    height: 1em;
+  }
+}
+
+.itemText {
+  white-space: nowrap;
+}
+
+.separator {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--breadcrumbs-separator-color);
+  user-select: none;
+  flex-shrink: 0;
+
+  svg {
+    width: 1em;
+    height: 1em;
+  }
+}
+
+.ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--breadcrumbs-text-color);
+  padding: 0 var(--spacing-xs);
+}

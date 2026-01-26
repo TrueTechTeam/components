@@ -6,8 +6,8 @@ import { useCallback } from 'react';
 import {
   useDialogContextStrict,
   type DialogContextValue,
+  type DialogProps,
 } from '../../components/overlays/Dialog';
-import type { DialogProps } from '../../components/overlays/Dialog';
 
 /**
  * Hook options

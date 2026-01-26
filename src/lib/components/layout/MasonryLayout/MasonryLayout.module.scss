@@ -1,0 +1,22 @@
+.masonryLayout {
+  // CSS Variables
+  --masonry-gap: 16px;
+  --masonry-animation-duration: 250ms;
+  --masonry-animation-easing: ease-out;
+
+  position: relative;
+  width: 100%;
+}
+
+.masonryItem {
+  transition:
+    left var(--masonry-animation-duration) var(--masonry-animation-easing),
+    top var(--masonry-animation-duration) var(--masonry-animation-easing),
+    width var(--masonry-animation-duration) var(--masonry-animation-easing),
+    opacity var(--masonry-animation-duration) var(--masonry-animation-easing);
+
+  // Reduced motion
+  @media (prefers-reduced-motion: reduce) {
+    transition: opacity var(--masonry-animation-duration) var(--masonry-animation-easing);
+  }
+}

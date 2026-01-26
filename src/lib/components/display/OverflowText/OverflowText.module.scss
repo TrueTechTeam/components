@@ -1,0 +1,33 @@
+@use '../../../styles/mixins/component' as *;
+
+.overflowText {
+  // CSS Variables
+  --overflow-text-lines: 1;
+  --overflow-text-tooltip-max-width: 300px;
+
+  display: block;
+  max-width: 100%;
+
+  // Multi-line truncation using line-clamp
+  @include line-clamp(var(--overflow-text-lines));
+
+  // Single line uses simpler truncate
+  &[data-lines='1'] {
+    display: block;
+    @include truncate;
+    // Reset line-clamp for single line
+    -webkit-line-clamp: unset;
+    -webkit-box-orient: unset;
+  }
+
+  // Visual indicator for overflowing state
+  &[data-overflowing='true'] {
+    cursor: help;
+  }
+}
+
+.tooltipContent {
+  display: block;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}

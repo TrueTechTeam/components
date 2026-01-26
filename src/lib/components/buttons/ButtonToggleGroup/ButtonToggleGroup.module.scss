@@ -1,0 +1,175 @@
+@use '../../../styles/mixins/component' as *;
+@use '../../../styles/mixins/spacing' as *;
+
+.buttonToggleGroup {
+  --btg-border-radius: var(--radius-md);
+  --btg-border-color: var(--theme-border-primary);
+  --btg-bg: var(--theme-background-primary);
+  --btg-item-bg: var(--theme-background-primary);
+  --btg-item-bg-hover: var(--theme-interactive-hover);
+  --btg-item-bg-selected: var(--theme-primary);
+  --btg-item-color: var(--theme-text-primary);
+  --btg-item-color-selected: var(--theme-text-on-primary);
+  --btg-disabled-opacity: 0.5;
+
+  display: inline-flex;
+  border-radius: var(--btg-border-radius);
+  overflow: hidden;
+  border: 1px solid var(--btg-border-color);
+  background: var(--btg-bg);
+
+  &[data-orientation='vertical'] {
+    flex-direction: column;
+  }
+
+  &[data-full-width='true'] {
+    display: flex;
+    width: 100%;
+
+    .item {
+      flex: 1;
+    }
+  }
+
+  // Size variants
+  &[data-size='sm'] {
+    --btg-border-radius: var(--radius-sm);
+
+    .item {
+      @include px(2);
+      @include py(1);
+
+      font-size: var(--font-size-sm);
+      min-height: 28px;
+    }
+  }
+
+  &[data-size='md'] {
+    .item {
+      @include px(3);
+      @include py(1.5);
+
+      font-size: var(--font-size-base);
+      min-height: 36px;
+    }
+  }
+
+  &[data-size='lg'] {
+    --btg-border-radius: var(--radius-lg);
+
+    .item {
+      @include px(4);
+      @include py(2);
+
+      font-size: var(--font-size-lg);
+      min-height: 44px;
+    }
+  }
+
+  // Variant styles
+  &[data-variant='primary'] {
+    --btg-item-bg-selected: var(--theme-primary);
+    --btg-item-color-selected: var(--theme-text-on-primary);
+  }
+
+  &[data-variant='secondary'] {
+    --btg-item-bg-selected: var(--theme-secondary);
+    --btg-item-color-selected: var(--theme-text-contrast);
+  }
+
+  &[data-variant='outline'] {
+    --btg-item-bg-selected: transparent;
+    --btg-item-color-selected: var(--theme-primary);
+    --btg-border-color: var(--theme-primary);
+
+    .item[data-selected='true'] {
+      background: var(--theme-primary-light, rgba(var(--theme-primary-rgb, 59, 130, 246), 0.1));
+      border-color: var(--theme-primary);
+    }
+  }
+
+  &[data-variant='ghost'] {
+    border-color: transparent;
+    background: transparent;
+    --btg-item-bg: transparent;
+    --btg-item-bg-selected: var(--theme-interactive-active);
+    --btg-item-color-selected: var(--theme-primary);
+  }
+
+  &[data-variant='success'] {
+    --btg-item-bg-selected: var(--theme-success);
+    --btg-item-color-selected: var(--theme-text-on-primary);
+  }
+
+  &[data-variant='warning'] {
+    --btg-item-bg-selected: var(--theme-warning);
+    --btg-item-color-selected: var(--theme-text-primary);
+  }
+
+  &[data-variant='danger'] {
+    --btg-item-bg-selected: var(--theme-error);
+    --btg-item-color-selected: var(--theme-text-on-primary);
+  }
+}
+
+.item {
+  @include button-reset;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-xs);
+  background: var(--btg-item-bg);
+  color: var(--btg-item-color);
+  border: none;
+  border-right: 1px solid var(--btg-border-color);
+  transition: all var(--transition-fast);
+  cursor: pointer;
+  font-family: var(--font-family-primary);
+  font-weight: var(--font-weight-medium);
+  white-space: nowrap;
+
+  &:last-child {
+    border-right: none;
+  }
+
+  // Vertical orientation
+  .buttonToggleGroup[data-orientation='vertical'] & {
+    border-right: none;
+    border-bottom: 1px solid var(--btg-border-color);
+
+    &:last-child {
+      border-bottom: none;
+    }
+  }
+
+  &:hover:not(:disabled):not([data-selected='true']) {
+    background: var(--btg-item-bg-hover);
+  }
+
+  &[data-selected='true'] {
+    background: var(--btg-item-bg-selected);
+    color: var(--btg-item-color-selected);
+  }
+
+  &:disabled {
+    opacity: var(--btg-disabled-opacity);
+    cursor: not-allowed;
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+
+    z-index: 1;
+    position: relative;
+  }
+}
+
+.icon {
+  flex-shrink: 0;
+}
+
+.label {
+  // Text label styling
+}
+

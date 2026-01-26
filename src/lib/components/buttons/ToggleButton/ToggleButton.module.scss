@@ -1,0 +1,119 @@
+@use '../../../styles/mixins/component' as *;
+@use '../../../styles/mixins/spacing' as *;
+
+.toggleButton {
+  @include button-reset;
+
+  // CSS Custom Properties
+  --toggle-button-active-color: var(--theme-error);
+  --toggle-button-inactive-color: var(--theme-text-secondary);
+  --toggle-button-bg: transparent;
+  --toggle-button-bg-hover: var(--theme-interactive-hover);
+  --toggle-button-bg-active: var(--theme-interactive-active);
+  --toggle-button-radius: var(--radius-full);
+  --toggle-button-disabled-opacity: 0.5;
+
+  // Base styles
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  min-width: auto;
+  aspect-ratio: 1 / 1;
+  border-radius: var(--toggle-button-radius);
+  border: none;
+  background-color: var(--toggle-button-bg);
+  color: var(--toggle-button-inactive-color);
+  cursor: pointer;
+  transition: all var(--transition-normal);
+  user-select: none;
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: var(--toggle-button-disabled-opacity);
+  }
+
+  &:hover:not(:disabled) {
+    background-color: var(--toggle-button-bg-hover);
+  }
+
+  &:active:not(:disabled) {
+    background-color: var(--toggle-button-bg-active);
+  }
+
+  // Active state - changes icon color
+  &[data-active='true'] {
+    color: var(--toggle-button-active-color);
+
+    .icon {
+      fill: currentcolor;
+    }
+  }
+
+  // Animation on toggle
+  &[data-animated='true'][data-active='true'] {
+    animation: toggle-pop 0.3s ease-out;
+  }
+
+  // Size variants
+  &[data-size='xs'] {
+    @include p(1);
+
+    min-height: 20px;
+    min-width: 20px;
+  }
+
+  &[data-size='sm'] {
+    @include p(1.5);
+
+    min-height: 28px;
+    min-width: 28px;
+  }
+
+  &[data-size='md'] {
+    @include p(2);
+
+    min-height: 36px;
+    min-width: 36px;
+  }
+
+  &[data-size='lg'] {
+    @include p(3);
+
+    min-height: 48px;
+    min-width: 48px;
+  }
+
+  &[data-size='xl'] {
+    @include p(4);
+
+    min-height: 64px;
+    min-width: 64px;
+  }
+}
+
+.icon {
+  fill: none;
+  stroke: currentcolor;
+  transition:
+    fill var(--transition-fast),
+    transform var(--transition-fast);
+}
+
+@keyframes toggle-pop {
+  0% {
+    transform: scale(1);
+  }
+
+  50% {
+    transform: scale(1.2);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}

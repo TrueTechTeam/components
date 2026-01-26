@@ -1,0 +1,26 @@
+.adaptiveGrid {
+  // CSS Variables
+  --grid-min-item-width: 200px;
+  --grid-gap: 16px;
+  --grid-row-gap: 16px;
+  --grid-column-gap: 16px;
+  --grid-fill-mode: auto-fill;
+  --grid-align-items: stretch;
+  --grid-justify-items: start;
+  --grid-max-columns: none;
+
+  display: grid;
+  grid-template-columns: repeat(var(--grid-fill-mode), minmax(var(--grid-min-item-width), 1fr));
+  row-gap: var(--grid-row-gap);
+  column-gap: var(--grid-column-gap);
+  align-items: var(--grid-align-items);
+  justify-items: var(--grid-justify-items);
+
+  // When max-columns is set, limit the template
+  &[data-columns='1'] {
+    grid-template-columns: 1fr;
+  }
+
+  // Apply max-columns constraint when needed
+  // This is handled via inline styles for dynamic values
+}

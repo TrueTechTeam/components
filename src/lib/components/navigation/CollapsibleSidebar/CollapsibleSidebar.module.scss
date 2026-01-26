@@ -1,0 +1,117 @@
+.collapsibleSidebar {
+  // CSS Variables
+  --sidebar-width: 240px;
+  --sidebar-expanded-width: 240px;
+  --sidebar-collapsed-width: 64px;
+  --sidebar-animation-duration: 250ms;
+  --sidebar-animation-easing: ease-in-out;
+  --sidebar-bg: var(--theme-background-secondary, #f5f5f5);
+  --sidebar-border-color: var(--theme-border-primary, #e0e0e0);
+
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: var(--sidebar-width);
+  min-width: var(--sidebar-width);
+  max-width: var(--sidebar-width);
+  height: 100%;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border-color);
+  transition: width var(--sidebar-animation-duration) var(--sidebar-animation-easing),
+    min-width var(--sidebar-animation-duration) var(--sidebar-animation-easing),
+    max-width var(--sidebar-animation-duration) var(--sidebar-animation-easing);
+  // Use clip-path instead of overflow:hidden to allow toggle button to be visible
+  overflow: visible;
+
+  &[data-position='right'] {
+    border-right: none;
+    border-left: 1px solid var(--sidebar-border-color);
+  }
+
+  // Reduced motion
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
+
+.header {
+  flex-shrink: 0;
+  padding: var(--spacing-md, 16px);
+  border-bottom: 1px solid var(--sidebar-border-color);
+  overflow: hidden;
+  white-space: nowrap;
+  background: var(--sidebar-bg);
+}
+
+.content {
+  flex: 1;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: var(--spacing-sm, 8px);
+  background: var(--sidebar-bg);
+}
+
+.footer {
+  flex-shrink: 0;
+  padding: var(--spacing-md, 16px);
+  border-top: 1px solid var(--sidebar-border-color);
+  overflow: hidden;
+  white-space: nowrap;
+  background: var(--sidebar-bg);
+}
+
+.toggleButton {
+  position: absolute;
+  top: 50%;
+  right: -12px;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  background: var(--theme-background-primary, white);
+  border: 1px solid var(--sidebar-border-color);
+  border-radius: 50%;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--theme-text-secondary, #666);
+  transition: background-color 0.15s ease, color 0.15s ease;
+  z-index: 10;
+
+  &:hover {
+    background: var(--theme-background-secondary, #f5f5f5);
+    color: var(--theme-text-primary, #333);
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--theme-border-focus, #1976d2);
+    outline-offset: 2px;
+  }
+
+  &[data-position='right'] {
+    right: auto;
+    left: -12px;
+  }
+}
+
+.toggleIcon {
+  transition: transform var(--sidebar-animation-duration) var(--sidebar-animation-easing);
+
+  &[data-collapsed='true'] {
+    transform: rotate(180deg);
+  }
+
+  &[data-position='right'] {
+    transform: rotate(180deg);
+  }
+
+  &[data-position='right'][data-collapsed='true'] {
+    transform: rotate(0deg);
+  }
+
+  // Reduced motion
+  @media (prefers-reduced-motion: reduce) {
+    transition: none;
+  }
+}
