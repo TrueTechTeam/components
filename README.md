@@ -48,10 +48,7 @@ function MyComponent() {
         Click me
       </Button>
 
-      <Button
-        variant="outline"
-        startIcon={<Icon name="check" size={16} />}
-      >
+      <Button variant="outline" startIcon={<Icon name="check" size={16} />}>
         Save
       </Button>
     </div>
@@ -64,6 +61,7 @@ function MyComponent() {
 ### Buttons
 
 #### Button
+
 Versatile button component with multiple variants and sizes.
 
 ```tsx
@@ -80,6 +78,7 @@ Versatile button component with multiple variants and sizes.
 **Sizes:** sm, md, lg
 
 #### IconButton
+
 Button component optimized for icon-only display.
 
 ```tsx
@@ -91,6 +90,7 @@ Button component optimized for icon-only display.
 ### Display
 
 #### Icon
+
 SVG-based icon system with customizable size and color.
 
 ```tsx
@@ -100,6 +100,7 @@ SVG-based icon system with customizable size and color.
 **Available icons:** chevron-down, chevron-up, chevron-left, chevron-right, close, check, info, warning, error, eye, eye-off, user, users, building, dollar, chart-line, chart-bar, trending-down, and more
 
 #### Avatar
+
 User profile avatars with image, initials, and icon variants.
 
 ```tsx
@@ -112,6 +113,7 @@ User profile avatars with image, initials, and icon variants.
 **Variants:** primary, secondary, tertiary
 
 #### Badge
+
 Notification badges with count display.
 
 ```tsx
@@ -120,6 +122,7 @@ Notification badges with count display.
 ```
 
 #### Chip
+
 Interactive chips for tags and selections.
 
 ```tsx
@@ -128,6 +131,7 @@ Interactive chips for tags and selections.
 ```
 
 #### Pill
+
 Status and category pills.
 
 ```tsx
@@ -136,6 +140,7 @@ Status and category pills.
 ```
 
 #### Tag
+
 Labeling and categorization tags.
 
 ```tsx
@@ -144,6 +149,7 @@ Labeling and categorization tags.
 ```
 
 #### StatusIndicator
+
 Status indicator dots with labels.
 
 ```tsx
@@ -152,6 +158,7 @@ Status indicator dots with labels.
 ```
 
 #### ProgressBar
+
 Linear progress bars with labels and variants.
 
 ```tsx
@@ -160,6 +167,7 @@ Linear progress bars with labels and variants.
 ```
 
 #### CircularProgress
+
 Circular progress indicators.
 
 ```tsx
@@ -168,6 +176,7 @@ Circular progress indicators.
 ```
 
 #### Skeleton
+
 Loading skeleton screens for content placeholders.
 
 ```tsx
@@ -177,6 +186,7 @@ Loading skeleton screens for content placeholders.
 ```
 
 #### KPI
+
 Key Performance Indicator display component.
 
 ```tsx
@@ -190,20 +200,147 @@ Key Performance Indicator display component.
 ```
 
 #### Stat
+
 Statistical display component for metrics.
 
 ```tsx
-<Stat
-  label="Total Users"
-  value="1,234"
-  change="+12.5%"
-  changeType="increase"
+<Stat label="Total Users" value="1,234" change="+12.5%" changeType="increase" />
+```
+
+#### List
+
+Comprehensive list component with selection, virtualization, and keyboard navigation.
+
+```tsx
+<List
+  items={users}
+  renderItem={(user) => (
+    <ListItem
+      key={user.id}
+      primary={user.name}
+      secondary={user.email}
+      icon={<Icon name="user" />}
+    />
+  )}
+  selectable
+  onSelectionChange={(selected) => console.log(selected)}
 />
+```
+
+#### Table
+
+Data table component with sorting, selection, and pagination.
+
+```tsx
+<Table
+  data={users}
+  columns={[
+    { key: 'name', header: 'Name', sortable: true },
+    { key: 'email', header: 'Email' },
+    { key: 'role', header: 'Role', sortable: true },
+  ]}
+  selectable
+  pagination={{ pageSize: 10 }}
+  onSort={(key, direction) => console.log(key, direction)}
+/>
+```
+
+### Drag and Drop
+
+#### SortableList
+
+Reorderable list with drag-and-drop functionality.
+
+```tsx
+<DndProvider>
+  <SortableList
+    items={items}
+    onReorder={(newOrder) => setItems(newOrder)}
+    renderItem={(item) => (
+      <div>
+        <DragHandle />
+        {item.label}
+      </div>
+    )}
+  />
+</DndProvider>
+```
+
+#### SortableGrid
+
+Reorderable grid layout with drag-and-drop.
+
+```tsx
+<DndProvider>
+  <SortableGrid
+    items={gridItems}
+    columns={3}
+    onReorder={(newOrder) => setGridItems(newOrder)}
+    renderItem={(item) => <Card>{item.content}</Card>}
+  />
+</DndProvider>
+```
+
+#### KanbanBoard
+
+Kanban-style board with draggable cards between columns.
+
+```tsx
+<DndProvider>
+  <KanbanBoard
+    columns={[
+      { id: 'todo', title: 'To Do', items: todoItems },
+      { id: 'progress', title: 'In Progress', items: progressItems },
+      { id: 'done', title: 'Done', items: doneItems },
+    ]}
+    onCardMove={(cardId, fromColumn, toColumn) => handleMove(cardId, fromColumn, toColumn)}
+  />
+</DndProvider>
+```
+
+#### ResizablePanels
+
+Resizable panel layouts for split views.
+
+```tsx
+<ResizablePanels direction="horizontal">
+  <Panel defaultSize={30} minSize={20}>
+    <Sidebar />
+  </Panel>
+  <Panel>
+    <MainContent />
+  </Panel>
+</ResizablePanels>
+```
+
+### Filters
+
+#### Filter System
+
+Comprehensive filtering system with various field types and layouts.
+
+```tsx
+<FilterProvider filters={filters} onChange={(filters) => console.log(filters)}>
+  <FilterBar>
+    <TextFilter field="name" label="Name" />
+    <SelectFilter
+      field="status"
+      label="Status"
+      options={[
+        { value: 'active', label: 'Active' },
+        { value: 'inactive', label: 'Inactive' },
+      ]}
+    />
+    <DateRangeFilter field="createdAt" label="Created" />
+    <NumberRangeFilter field="price" label="Price" min={0} max={1000} />
+  </FilterBar>
+</FilterProvider>
 ```
 
 ### Inputs
 
 #### Input
+
 Text input with validation, formatting, and various configurations.
 
 ```tsx
@@ -211,37 +348,42 @@ Text input with validation, formatting, and various configurations.
   label="Email"
   type="email"
   placeholder="Enter your email"
-  validation={(value) => value.includes('@') ? { valid: true } : { valid: false, message: 'Invalid email' }}
+  validation={(value) =>
+    value.includes('@') ? { valid: true } : { valid: false, message: 'Invalid email' }
+  }
 />
 ```
 
 #### Autocomplete
+
 Input with dropdown suggestions and filtering.
 
 ```tsx
 <Autocomplete
   options={[
     { value: '1', label: 'Option 1' },
-    { value: '2', label: 'Option 2' }
+    { value: '2', label: 'Option 2' },
   ]}
   placeholder="Search..."
 />
 ```
 
 #### Select
+
 Dropdown select component with search and custom rendering.
 
 ```tsx
 <Select
   options={[
     { value: 'us', label: 'United States' },
-    { value: 'ca', label: 'Canada' }
+    { value: 'ca', label: 'Canada' },
   ]}
   placeholder="Select country"
 />
 ```
 
 #### Checkbox
+
 Checkbox input with labels and indeterminate state.
 
 ```tsx
@@ -249,6 +391,7 @@ Checkbox input with labels and indeterminate state.
 ```
 
 #### Radio & RadioGroup
+
 Radio button inputs with group management.
 
 ```tsx
@@ -259,6 +402,7 @@ Radio button inputs with group management.
 ```
 
 #### Toggle
+
 Switch/toggle component for boolean states.
 
 ```tsx
@@ -266,56 +410,39 @@ Switch/toggle component for boolean states.
 ```
 
 #### Textarea
+
 Multi-line text input with auto-resize.
 
 ```tsx
-<Textarea
-  label="Description"
-  placeholder="Enter description"
-  rows={4}
-  maxLength={500}
-/>
+<Textarea label="Description" placeholder="Enter description" rows={4} maxLength={500} />
 ```
 
 #### NumberInput
+
 Numeric input with increment/decrement controls.
 
 ```tsx
-<NumberInput
-  label="Quantity"
-  min={0}
-  max={100}
-  step={1}
-  value={quantity}
-  onChange={setQuantity}
-/>
+<NumberInput label="Quantity" min={0} max={100} step={1} value={quantity} onChange={setQuantity} />
 ```
 
 #### PhoneInput
+
 International phone number input with country selection.
 
 ```tsx
-<PhoneInput
-  value={phone}
-  onChange={setPhone}
-  defaultCountry="US"
-/>
+<PhoneInput value={phone} onChange={setPhone} defaultCountry="US" />
 ```
 
 #### Slider
+
 Range slider with marks and custom formatting.
 
 ```tsx
-<Slider
-  min={0}
-  max={100}
-  value={volume}
-  onChange={setVolume}
-  marks={[0, 25, 50, 75, 100]}
-/>
+<Slider min={0} max={100} value={volume} onChange={setVolume} marks={[0, 25, 50, 75, 100]} />
 ```
 
 #### Rating
+
 Star rating input component.
 
 ```tsx
@@ -323,17 +450,15 @@ Star rating input component.
 ```
 
 #### TagInput
+
 Input for managing multiple tags.
 
 ```tsx
-<TagInput
-  tags={tags}
-  onChange={setTags}
-  placeholder="Add tag..."
-/>
+<TagInput tags={tags} onChange={setTags} placeholder="Add tag..." />
 ```
 
 #### FilePicker
+
 File upload component with drag-and-drop support.
 
 ```tsx
@@ -345,28 +470,23 @@ File upload component with drag-and-drop support.
 ```
 
 #### ColorPicker
+
 Color selection with multiple format support (hex, rgb, hsl).
 
 ```tsx
-<ColorPicker
-  value={color}
-  onChange={setColor}
-  format="hex"
-/>
+<ColorPicker value={color} onChange={setColor} format="hex" />
 ```
 
 #### DatePicker
+
 Single date selection with calendar interface.
 
 ```tsx
-<DatePicker
-  value={date}
-  onChange={setDate}
-  minDate={new Date()}
-/>
+<DatePicker value={date} onChange={setDate} minDate={new Date()} />
 ```
 
 #### DateRangePicker
+
 Date range selection with presets.
 
 ```tsx
@@ -377,15 +497,14 @@ Date range selection with presets.
     setStartDate(start);
     setEndDate(end);
   }}
-  presets={[
-    { label: 'Last 7 days', value: { start: -7, end: 0 } }
-  ]}
+  presets={[{ label: 'Last 7 days', value: { start: -7, end: 0 } }]}
 />
 ```
 
 ### Overlays
 
 #### Portal
+
 Render children in a different part of the DOM.
 
 ```tsx
@@ -395,16 +514,15 @@ Render children in a different part of the DOM.
 ```
 
 #### Popover
+
 Floating content positioned relative to a trigger.
 
 ```tsx
-<Popover
-  trigger={<Button>Open Popover</Button>}
-  content={<div>Popover content</div>}
-/>
+<Popover trigger={<Button>Open Popover</Button>} content={<div>Popover content</div>} />
 ```
 
 #### Tooltip
+
 Hover tooltip with customizable positioning.
 
 ```tsx
@@ -414,6 +532,7 @@ Hover tooltip with customizable positioning.
 ```
 
 #### Dropdown
+
 Dropdown menu with trigger and content.
 
 ```tsx
@@ -429,6 +548,7 @@ Dropdown menu with trigger and content.
 ```
 
 #### Menu
+
 Flexible menu system with items, groups, and dividers.
 
 ```tsx
@@ -447,6 +567,7 @@ Flexible menu system with items, groups, and dividers.
 ### Navigation
 
 #### Stepper
+
 Multi-step progress indicator for wizard-like interfaces.
 
 ```tsx
@@ -458,6 +579,7 @@ Multi-step progress indicator for wizard-like interfaces.
 ```
 
 #### Breadcrumbs
+
 Navigation breadcrumb trail for hierarchical page structure.
 
 ```tsx
@@ -469,6 +591,7 @@ Navigation breadcrumb trail for hierarchical page structure.
 ```
 
 #### Navbar
+
 Responsive navigation bar with collapsible menu support.
 
 ```tsx
@@ -488,32 +611,36 @@ Responsive navigation bar with collapsible menu support.
 ```
 
 #### SideNav
+
 Sidebar navigation with groups, items, and dividers.
 
 ```tsx
 <SideNav>
   <SideNavGroup label="Main">
-    <SideNavItem icon={<Icon name="home" />} href="/">Dashboard</SideNavItem>
-    <SideNavItem icon={<Icon name="users" />} href="/users">Users</SideNavItem>
+    <SideNavItem icon={<Icon name="home" />} href="/">
+      Dashboard
+    </SideNavItem>
+    <SideNavItem icon={<Icon name="users" />} href="/users">
+      Users
+    </SideNavItem>
   </SideNavGroup>
   <SideNavDivider />
-  <SideNavItem icon={<Icon name="settings" />} href="/settings">Settings</SideNavItem>
+  <SideNavItem icon={<Icon name="settings" />} href="/settings">
+    Settings
+  </SideNavItem>
 </SideNav>
 ```
 
 #### Pagination
+
 Page navigation with customizable controls.
 
 ```tsx
-<Pagination
-  currentPage={page}
-  totalPages={10}
-  onPageChange={setPage}
-  showFirstLast
-/>
+<Pagination currentPage={page} totalPages={10} onPageChange={setPage} showFirstLast />
 ```
 
 #### BottomNavigation
+
 Mobile-friendly bottom navigation bar.
 
 ```tsx
@@ -525,6 +652,7 @@ Mobile-friendly bottom navigation bar.
 ```
 
 #### Tabs
+
 Tabbed content navigation.
 
 ```tsx
@@ -541,6 +669,7 @@ Tabbed content navigation.
 ### Layout
 
 #### Panes
+
 Resizable split pane layouts.
 
 ```tsx
@@ -551,6 +680,7 @@ Resizable split pane layouts.
 ```
 
 #### ResponsiveStack
+
 Stack layout that adapts to screen size.
 
 ```tsx
@@ -561,6 +691,7 @@ Stack layout that adapts to screen size.
 ```
 
 #### AdaptiveGrid
+
 Auto-adjusting grid layout based on container width.
 
 ```tsx
@@ -572,6 +703,7 @@ Auto-adjusting grid layout based on container width.
 ```
 
 #### MasonryLayout
+
 Pinterest-style masonry grid for variable-height items.
 
 ```tsx
@@ -585,6 +717,7 @@ Pinterest-style masonry grid for variable-height items.
 ### Forms
 
 #### FormBuilder
+
 Dynamic form builder with validation and state management.
 
 ```tsx
@@ -595,14 +728,14 @@ Dynamic form builder with validation and state management.
       label: 'Email',
       type: 'email',
       required: true,
-      validation: { pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ }
+      validation: { pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ },
     },
     {
       name: 'password',
       label: 'Password',
       type: 'password',
-      required: true
-    }
+      required: true,
+    },
   ]}
   onSubmit={(values) => console.log(values)}
 />
@@ -625,9 +758,9 @@ function App() {
         // Optional: override theme values
         overrides: {
           colors: {
-            primary: '#007bff'
-          }
-        }
+            primary: '#007bff',
+          },
+        },
       }}
     >
       <YourApp />
@@ -663,29 +796,34 @@ All theme values are exposed as CSS variables for easy customization:
 ### Utility Classes
 
 **Spacing (4px grid):**
+
 ```html
 <div class="m-4 p-2">Margin 16px, Padding 8px</div>
 <div class="mt-2 mb-4 px-6">Margin top 8px, bottom 16px, padding x 24px</div>
 ```
 
 **Flexbox:**
+
 ```html
 <div class="flex items-center justify-between gap-4">...</div>
 <div class="flex-col items-start">...</div>
 ```
 
 **Grid:**
+
 ```html
 <div class="grid grid-cols-3 gap-4">...</div>
 ```
 
 **Colors:**
+
 ```html
 <div class="bg-primary text-on-primary">...</div>
 <div class="bg-surface text-on-surface">...</div>
 ```
 
 **Typography:**
+
 ```html
 <h1 class="text-2xl font-bold">Heading</h1>
 <p class="text-sm text-secondary">Small text</p>
@@ -711,12 +849,7 @@ const spacing = gridSpacing(4); // '16px' (4 * 4px grid)
 ### Color Utils
 
 ```tsx
-import {
-  hexToRgb,
-  rgbToHsl,
-  isLightColor,
-  getBrightness
-} from '@true-tech-team/ui-components';
+import { hexToRgb, rgbToHsl, isLightColor, getBrightness } from '@true-tech-team/ui-components';
 
 const rgb = hexToRgb('#ff0000'); // { r: 255, g: 0, b: 0 }
 const hsl = rgbToHsl(255, 0, 0); // { h: 0, s: 100, l: 50 }
@@ -726,12 +859,7 @@ const isLight = isLightColor('#ffffff'); // true
 ### Date Utils
 
 ```tsx
-import {
-  formatDate,
-  getDaysInMonth,
-  isDateInRange,
-  addDays
-} from '@true-tech-team/ui-components';
+import { formatDate, getDaysInMonth, isDateInRange, addDays } from '@true-tech-team/ui-components';
 
 const formatted = formatDate(new Date(), 'YYYY-MM-DD');
 const daysInMonth = getDaysInMonth(2024, 0); // January 2024
@@ -800,7 +928,7 @@ nx storybook ui-components
 nx build-storybook ui-components
 ```
 
-Storybook will be available at [http://localhost:6006](http://localhost:6006).
+Storybook will be available at http://localhost:6006.
 
 ## Browser Support
 
@@ -819,8 +947,13 @@ Contributions are welcome! Please ensure all tests pass and follow the existing 
 
 ## Repository
 
-[https://github.com/true-tech-team/true-tech-team](https://github.com/true-tech-team/true-tech-team)
+[True Tech Team UI Components Github](https://github.com/TrueTechTeam/true-tech-team/tree/master/libs/ui-components)
+
+## Storybook
+
+[True Tech Team React Components](https://truetechteamcomponents.netlify.app)
 
 ## License
 
 MIT
+

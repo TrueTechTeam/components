@@ -89,15 +89,32 @@ export const Collapse = forwardRef<HTMLDivElement, CollapseProps>(
     ref
   ) => {
     const [shouldRender, setShouldRender] = useState(isOpen);
+    // Separate state for visual open - allows content to mount in collapsed state first
+    const [visuallyOpen, setVisuallyOpen] = useState(isOpen && !unmountOnCollapse);
     const isFirstRender = useRef(true);
     const prevIsOpen = useRef(isOpen);
 
-    // Immediately show content when opening (no effect needed - derived from isOpen)
-    if (isOpen && !shouldRender) {
-      setShouldRender(true);
-    }
+    // When opening with unmountOnCollapse, first render content then animate
+    useEffect(() => {
+      if (isOpen && !shouldRender) {
+        setShouldRender(true);
+      }
+    }, [isOpen, shouldRender]);
 
-    // Handle animation callbacks
+    // Handle the visual state transition with a frame delay for animation
+    useEffect(() => {
+      if (shouldRender && isOpen && !visuallyOpen) {
+        // Use requestAnimationFrame to ensure DOM has updated before triggering animation
+        const frameId = requestAnimationFrame(() => {
+          setVisuallyOpen(true);
+        });
+        return () => cancelAnimationFrame(frameId);
+      } else if (!isOpen && visuallyOpen) {
+        setVisuallyOpen(false);
+      }
+    }, [isOpen, shouldRender, visuallyOpen]);
+
+    // Handle animation callbacks and unmounting
     useEffect(() => {
       // Skip callbacks on first render
       if (isFirstRender.current) {
@@ -148,7 +165,7 @@ export const Collapse = forwardRef<HTMLDivElement, CollapseProps>(
       <div
         ref={ref}
         className={classes}
-        data-open={isOpen || undefined}
+        data-open={visuallyOpen || undefined}
         data-component="collapse"
         data-testid={testId}
         aria-label={ariaLabel}

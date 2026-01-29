@@ -1,0 +1,62 @@
+/**
+ * FilterModal styles
+ */
+
+.filterModal {
+  display: inline-block;
+}
+
+.triggerBadge {
+  margin-left: var(--spacing-xs, 4px);
+}
+
+.headerContent {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm, 8px);
+}
+
+.title {
+  margin: 0;
+  font-size: var(--font-size-lg, 1.125rem);
+  font-weight: var(--font-weight-semibold, 600);
+}
+
+.body {
+  display: flex;
+  flex-direction: column;
+  min-height: 200px;
+}
+
+.activeFiltersContainer {
+  padding-bottom: var(--spacing-md, 16px);
+  margin-bottom: var(--spacing-md, 16px);
+  border-bottom: 1px solid var(--theme-border-primary, #e0e0e0);
+
+  &:last-child {
+    margin-bottom: 0;
+    padding-bottom: 0;
+    margin-top: var(--spacing-md, 16px);
+    padding-top: var(--spacing-md, 16px);
+    border-bottom: none;
+    border-top: 1px solid var(--theme-border-primary, #e0e0e0);
+  }
+}
+
+.content {
+  flex: 1;
+  min-height: 0;
+}
+
+.footerLeft,
+.footerRight {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm, 8px);
+}
+
+// Override DialogFooter to use space-between
+:global(.dialog-footer) {
+  display: flex;
+  justify-content: space-between;
+}

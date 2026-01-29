@@ -1,0 +1,30 @@
+/**
+ * RatingFilter styles
+ */
+
+.ratingFilter {
+  --rating-filter-gap: var(--spacing-sm, 8px);
+  --rating-filter-label-color: var(--theme-text-primary, #1a1a1a);
+  --rating-filter-helper-color: var(--theme-text-tertiary, #666666);
+  --rating-filter-error-color: var(--theme-error, #dc2626);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--rating-filter-gap);
+}
+
+.label {
+  font-size: var(--font-size-sm, 0.875rem);
+  font-weight: var(--font-weight-medium, 500);
+  color: var(--rating-filter-label-color);
+}
+
+.helperText {
+  font-size: var(--font-size-xs, 0.75rem);
+  color: var(--rating-filter-helper-color);
+}
+
+.errorMessage {
+  font-size: var(--font-size-xs, 0.75rem);
+  color: var(--rating-filter-error-color);
+}

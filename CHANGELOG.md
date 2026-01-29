@@ -7,6 +7,48 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.6] - 2026-01-29
+
+### Added
+- New display components:
+  - List - Comprehensive list component with selection, virtualization, and keyboard navigation
+  - ListItem - Individual list items with icons, actions, and selection states
+  - ListGroup - Grouped list items with headers
+  - ListHeader - List headers with sorting controls
+  - ListEmpty - Empty state display for lists
+  - ListSearch - Integrated search functionality for lists
+  - ListSkeleton - Loading skeleton for lists
+  - Table - Data table component with sorting, selection, and pagination
+  - TableHeader - Table header with sortable columns
+  - TableBody - Table body container
+  - TableRow - Table rows with selection and expansion
+  - TableCell - Table cells with alignment and formatting
+  - TableSearch - Integrated search for tables
+  - TableSkeleton - Loading skeleton for tables
+- New drag-and-drop (dnd) components:
+  - DndProvider - Context provider for drag-and-drop functionality
+  - DragHandle - Handle component for initiating drag operations
+  - DragOverlay - Visual overlay during drag operations
+  - SortableList - Reorderable list with drag-and-drop
+  - SortableGrid - Reorderable grid layout with drag-and-drop
+  - KanbanBoard - Kanban-style board with draggable cards between columns
+  - ResizablePanels - Resizable panel layouts
+- New filters system:
+  - FilterContext - Context provider for filter state management
+  - Filter fields (text, select, date range, number range, etc.)
+  - Filter layouts (inline, popover, sidebar)
+  - Filter hooks for state management and persistence
+
+### Changed
+- Improved Collapse component animations and transitions
+- Enhanced OverflowText with better tooltip integration
+- Updated TruncatedList with smoother expand/collapse behavior
+- Improved NumberInput with better keyboard handling
+- Enhanced Dropdown positioning and accessibility
+- Updated Popover with improved positioning logic
+- Enhanced Tooltip styling and positioning
+- Improved ToastProvider with better queue management
+
 ## [0.0.5] - 2026-01-25
 
 ### Added
@@ -159,7 +201,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Test coverage configuration
 - Storybook integration
 
-[Unreleased]: https://github.com/your-org/true-tech-team/compare/v0.0.5...HEAD
+[Unreleased]: https://github.com/your-org/true-tech-team/compare/v0.0.6...HEAD
+[0.0.6]: https://github.com/your-org/true-tech-team/compare/v0.0.5...v0.0.6
 [0.0.5]: https://github.com/your-org/true-tech-team/compare/v0.0.4...v0.0.5
 [0.0.4]: https://github.com/your-org/true-tech-team/compare/v0.0.3...v0.0.4
 [0.0.3]: https://github.com/your-org/true-tech-team/compare/v0.0.2...v0.0.3

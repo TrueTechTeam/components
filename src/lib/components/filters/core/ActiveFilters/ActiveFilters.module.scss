@@ -1,0 +1,47 @@
+/**
+ * ActiveFilters styles
+ */
+
+.activeFilters {
+  --active-filters-gap: var(--spacing-sm, 8px);
+  --active-filters-show-more-color: var(--theme-primary, #2563eb);
+
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--active-filters-gap);
+}
+
+.chipList {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--active-filters-gap);
+}
+
+.showMoreButton,
+.showLessButton {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);
+  background: none;
+  border: none;
+  color: var(--active-filters-show-more-color);
+  font-size: var(--font-size-sm, 0.875rem);
+  cursor: pointer;
+  border-radius: var(--radius-sm, 4px);
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background: var(--theme-interactive-hover, rgba(0, 0, 0, 0.04));
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--theme-primary, #2563eb);
+    outline-offset: 2px;
+  }
+}
+
+.clearAllButton {
+  margin-left: var(--spacing-xs, 4px);
+}

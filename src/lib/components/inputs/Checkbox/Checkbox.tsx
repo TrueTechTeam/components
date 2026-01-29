@@ -1,4 +1,12 @@
-import React, { forwardRef, useState, useId, useCallback, useEffect, useRef } from 'react';
+import React, {
+  forwardRef,
+  useState,
+  useId,
+  useCallback,
+  useEffect,
+  useRef,
+  ReactNode,
+} from 'react';
 import type { ComponentSize, ComponentVariant, InputBaseProps } from '../../../types';
 import { Icon } from '../../display/Icon';
 import type { IconName } from '../../display/Icon/icons';
@@ -43,7 +51,7 @@ export interface CheckboxProps extends Omit<InputBaseProps, 'value' | 'onChange'
   /**
    * Label text to display next to checkbox
    */
-  label?: string;
+  label?: ReactNode;
 
   /**
    * Label placement relative to checkbox
@@ -186,7 +194,9 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
 
     const renderIcon = (icon: React.ReactNode | IconName | undefined, defaultIcon?: IconName) => {
       const iconToRender = icon || defaultIcon;
-      if (!iconToRender) {return null;}
+      if (!iconToRender) {
+        return null;
+      }
 
       if (typeof iconToRender === 'string') {
         return (
@@ -222,7 +232,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
           required={required}
           className={styles.input}
           data-testid={dataTestId}
-          aria-label={ariaLabel || label}
+          aria-label={ariaLabel}
           aria-checked={indeterminate ? 'mixed' : isChecked}
           aria-disabled={disabled}
           aria-readonly={readOnly}

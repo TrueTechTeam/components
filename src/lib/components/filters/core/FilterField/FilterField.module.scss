@@ -1,0 +1,25 @@
+/**
+ * FilterField styles
+ */
+
+.filterField {
+  // Wrapper for consistent spacing
+  display: block;
+
+  // Animation for visibility changes (optional)
+  &[data-animating='true'] {
+    animation: filterFieldFadeIn 0.2s ease-out;
+  }
+}
+
+@keyframes filterFieldFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

@@ -1,0 +1,65 @@
+/**
+ * NumberRangeFilter styles
+ */
+
+.numberRangeFilter {
+  --number-range-gap: var(--spacing-sm, 8px);
+  --number-range-label-color: var(--theme-text-primary, #1a1a1a);
+  --number-range-helper-color: var(--theme-text-tertiary, #666666);
+  --number-range-error-color: var(--theme-error, #dc2626);
+  --number-range-separator-color: var(--theme-text-secondary, #4a5058);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--number-range-gap);
+}
+
+.label {
+  font-size: var(--font-size-sm, 0.875rem);
+  font-weight: var(--font-weight-medium, 500);
+  color: var(--number-range-label-color);
+}
+
+.sliderContainer {
+  padding: var(--spacing-xs, 4px) 0;
+}
+
+.inputsContainer {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm, 8px);
+}
+
+.inputWrapper {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs, 4px);
+}
+
+.inputLabel {
+  font-size: var(--font-size-xs, 0.75rem);
+  color: var(--number-range-helper-color);
+}
+
+.separator {
+  color: var(--number-range-separator-color);
+  padding: 0 var(--spacing-xs, 4px);
+}
+
+.helperText {
+  font-size: var(--font-size-xs, 0.75rem);
+  color: var(--number-range-helper-color);
+}
+
+.errorMessage {
+  font-size: var(--font-size-xs, 0.75rem);
+  color: var(--number-range-error-color);
+}
+
+// Both mode - stack slider on top of inputs
+.numberRangeFilter[data-mode='both'] {
+  .sliderContainer {
+    margin-bottom: var(--spacing-sm, 8px);
+  }
+}

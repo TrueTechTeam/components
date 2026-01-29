@@ -149,6 +149,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
   isOpen: controlledIsOpen,
   onOpenChange,
   selectedKeys,
+  width,
   ...menuProps
 }) => {
   const [uncontrolledIsOpen, setUncontrolledIsOpen] = useState(false);
@@ -234,8 +235,8 @@ export const Dropdown: React.FC<DropdownProps> = ({
   return (
     <Menu
       position="bottom-left"
-      width="trigger"
       {...menuProps}
+      width={width ?? 'trigger'}
       selectedKeys={selectedKeys}
       trigger={
         <Button

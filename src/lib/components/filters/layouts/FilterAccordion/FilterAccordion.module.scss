@@ -1,0 +1,48 @@
+/**
+ * FilterAccordion styles
+ */
+
+.filterAccordion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md, 16px);
+}
+
+.activeFiltersContainer {
+  padding-bottom: var(--spacing-sm, 8px);
+  border-bottom: 1px solid var(--theme-border-primary, #e0e0e0);
+}
+
+.groupTitle {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm, 8px);
+}
+
+.groupIcon {
+  display: flex;
+  align-items: center;
+  color: var(--theme-text-secondary, #666666);
+}
+
+.groupDescription {
+  margin: 0 0 var(--spacing-md, 16px);
+  padding: 0;
+  font-size: var(--font-size-sm, 0.875rem);
+  color: var(--theme-text-tertiary, #666666);
+}
+
+.filterGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md, 16px);
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--spacing-sm, 8px);
+  padding-top: var(--spacing-md, 16px);
+  border-top: 1px solid var(--theme-border-primary, #e0e0e0);
+}

@@ -1,0 +1,107 @@
+/**
+ * FilterSidebar styles
+ */
+
+.filterSidebar {
+  --sidebar-width: 280px;
+  --sidebar-bg: var(--theme-surface-primary, #ffffff);
+  --sidebar-border-color: var(--theme-border-primary, #e0e0e0);
+  --sidebar-header-bg: var(--theme-surface-secondary, #f5f5f5);
+  --sidebar-padding: var(--spacing-md, 16px);
+
+  display: flex;
+  flex-direction: column;
+  width: var(--sidebar-width);
+  height: 100%;
+  background: var(--sidebar-bg);
+  border-right: 1px solid var(--sidebar-border-color);
+  transition: width 0.2s ease;
+
+  &[data-position='right'] {
+    border-right: none;
+    border-left: 1px solid var(--sidebar-border-color);
+  }
+
+  &[data-collapsed='true'] {
+    width: 48px;
+  }
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--sidebar-padding);
+  border-bottom: 1px solid var(--sidebar-border-color);
+  background: var(--sidebar-header-bg);
+}
+
+.headerContent {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 0;
+    font-size: var(--font-size-base, 1rem);
+    font-weight: var(--font-weight-semibold, 600);
+  }
+}
+
+.collapseButton {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  background: none;
+  border: none;
+  border-radius: var(--radius-sm, 4px);
+  color: var(--theme-text-secondary, #666666);
+  cursor: pointer;
+  transition: background-color 0.15s ease;
+
+  &:hover {
+    background: var(--theme-interactive-hover, rgba(0, 0, 0, 0.04));
+  }
+
+  &:focus-visible {
+    outline: 2px solid var(--theme-primary, #2563eb);
+    outline-offset: -2px;
+  }
+
+  .filterSidebar[data-collapsed='true'] & {
+    transform: rotate(180deg);
+  }
+}
+
+.activeFiltersContainer {
+  padding: var(--spacing-sm, 8px) var(--sidebar-padding);
+  border-bottom: 1px solid var(--sidebar-border-color);
+}
+
+.content {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--spacing-sm, 8px);
+  padding: var(--sidebar-padding);
+  border-top: 1px solid var(--sidebar-border-color);
+}
+
+.footer {
+  padding: var(--sidebar-padding);
+  border-top: 1px solid var(--sidebar-border-color);
+}

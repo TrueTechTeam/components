@@ -89,7 +89,7 @@ export const Positions: Story = {
             position ? (
               <Tooltip
                 key={position}
-                content={`Tooltip ${position}`}
+                content={`Tooltip positioned in the ${position}`}
                 position={position}
               >
                 <Button size="sm" variant="outline" fullWidth>
@@ -244,3 +244,4 @@ export const InteractiveContent: Story = {
     </div>
   ),
 };
+

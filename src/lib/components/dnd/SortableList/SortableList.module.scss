@@ -1,0 +1,86 @@
+@use '../../../styles/mixins/component' as *;
+@use '../../../styles/mixins/spacing' as *;
+
+.sortableList {
+  --sortable-gap: var(--spacing-md);
+
+  display: flex;
+  flex-direction: column;
+  gap: var(--sortable-gap);
+
+  &[data-direction='horizontal'] {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+
+  &[data-disabled='true'] {
+    opacity: 0.6;
+    pointer-events: none;
+  }
+}
+
+.sortableItem {
+  position: relative;
+  transition:
+    transform 200ms ease,
+    opacity 200ms ease,
+    box-shadow 200ms ease;
+  user-select: none;
+
+  &[data-dragging='true'] {
+    opacity: 0.5;
+    z-index: 1;
+    box-shadow: var(--shadow-md);
+  }
+
+  &[data-over='true'] {
+    // Visual indicator when item is being dragged over
+    &::before {
+      content: '';
+      position: absolute;
+      top: -2px;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background-color: var(--theme-primary);
+      border-radius: 2px;
+      animation: pulse 1s ease-in-out infinite;
+    }
+
+    [data-direction='horizontal'] & {
+      &::before {
+        top: 0;
+        bottom: 0;
+        left: -2px;
+        right: auto;
+        width: 4px;
+        height: auto;
+      }
+    }
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+
+  // When the whole item is draggable (no drag handle)
+  &[draggable='true'] {
+    cursor: grab;
+
+    &:active {
+      cursor: grabbing;
+    }
+  }
+}
+
+@keyframes pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.5;
+  }
+}
+

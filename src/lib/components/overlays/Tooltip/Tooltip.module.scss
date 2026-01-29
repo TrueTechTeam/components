@@ -4,11 +4,13 @@
 .tooltipTrigger {
   display: inline-flex;
   align-items: center;
+  max-width: 100%;
+  min-width: 0;
 }
 
 .tooltipContent {
   // Override popover variables - use dark background for tooltips
-  --popover-bg: var(--theme-neutral-800, #1f2937);
+  --popover-bg: var(--theme-surface-elevated, #1f2937);
   --popover-border: var(--theme-neutral-700, #374151);
   --popover-shadow: var(--theme-shadow-md);
   --popover-radius: var(--radius-sm);
@@ -19,7 +21,7 @@
   @include px(3);
   @include py(2);
 
-  color: var(--theme-neutral-50, #f9fafb);
+  color: var(--theme-text-primary, #f9fafb);
   font-size: var(--font-size-sm);
   max-width: 300px;
   position: relative;
@@ -34,69 +36,69 @@
 
   // Top edge (arrow points up from bottom of tooltip)
   &[data-position='top'] {
-    top: -12px;
+    top: -6px;
     left: 50%;
     transform: translateX(-50%);
-    border-bottom-color: var(--theme-neutral-800, #1f2937);
+    border-bottom-color: var(--popover-bg);
     border-top: none;
   }
 
   // Top-left corner (arrow points up-left from bottom-left)
   &[data-position='top-left'] {
-    top: -12px;
-    left: 12px;
-    border-bottom-color: var(--theme-neutral-800, #1f2937);
+    top: -6px;
+    left: 6px;
+    border-bottom-color: var(--popover-bg);
     border-top: none;
   }
 
   // Top-right corner (arrow points up-right from bottom-right)
   &[data-position='top-right'] {
-    top: -12px;
-    right: 12px;
-    border-bottom-color: var(--theme-neutral-800, #1f2937);
+    top: -6px;
+    right: 6px;
+    border-bottom-color: var(--popover-bg);
     border-top: none;
   }
 
   // Bottom edge (arrow points down from top of tooltip)
   &[data-position='bottom'] {
-    bottom: -12px;
+    bottom: -6px;
     left: 50%;
     transform: translateX(-50%);
-    border-top-color: var(--theme-neutral-800, #1f2937);
+    border-top-color: var(--popover-bg);
     border-bottom: none;
   }
 
   // Bottom-left corner (arrow points down-left from top-left)
   &[data-position='bottom-left'] {
-    bottom: -12px;
-    left: 12px;
-    border-top-color: var(--theme-neutral-800, #1f2937);
+    bottom: -6px;
+    left: 6px;
+    border-top-color: var(--popover-bg);
     border-bottom: none;
   }
 
   // Bottom-right corner (arrow points down-right from top-right)
   &[data-position='bottom-right'] {
-    bottom: -12px;
-    right: 12px;
-    border-top-color: var(--theme-neutral-800, #1f2937);
+    bottom: -6px;
+    right: 6px;
+    border-top-color: var(--popover-bg);
     border-bottom: none;
   }
 
   // Left edge (arrow points left from right of tooltip)
   &[data-position='left'] {
-    left: -12px;
+    left: -6px;
     top: 50%;
     transform: translateY(-50%);
-    border-right-color: var(--theme-neutral-800, #1f2937);
+    border-right-color: var(--popover-bg);
     border-left: none;
   }
 
   // Right edge (arrow points right from left of tooltip)
   &[data-position='right'] {
-    right: -12px;
+    right: -6px;
     top: 50%;
     transform: translateY(-50%);
-    border-left-color: var(--theme-neutral-800, #1f2937);
+    border-left-color: var(--popover-bg);
     border-right: none;
   }
 }

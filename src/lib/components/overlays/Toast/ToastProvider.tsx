@@ -113,6 +113,31 @@ export function ToastProvider({
   const [toasts, setToasts] = useState<InternalToast[]>([]);
   const exitingToastsRef = useRef<Set<string>>(new Set());
 
+  // Remove a toast by ID
+  const removeToast = useCallback(
+    (id: string) => {
+      if (exitingToastsRef.current.has(id)) {
+        return;
+      }
+
+      exitingToastsRef.current.add(id);
+
+      // Start exit animation
+      setToasts((prev) =>
+        prev.map((t) =>
+          t.id === id ? { ...t, animationState: 'exiting' as ToastAnimationState } : t
+        )
+      );
+
+      // Remove after animation completes
+      setTimeout(() => {
+        setToasts((prev) => prev.filter((t) => t.id !== id));
+        exitingToastsRef.current.delete(id);
+      }, animationDuration);
+    },
+    [animationDuration]
+  );
+
   // Add a new toast
   const addToast = useCallback(
     (data: ToastData): string => {
@@ -159,39 +184,14 @@ export function ToastProvider({
       setTimeout(() => {
         setToasts((prev) =>
           prev.map((t) =>
-            t.id === id && t.animationState === 'entering'
-              ? { ...t, animationState: 'entered' }
-              : t
+            t.id === id && t.animationState === 'entering' ? { ...t, animationState: 'entered' } : t
           )
         );
       }, animationDuration);
 
       return id;
     },
-    [defaultToastProps, defaultDuration, position, animationDuration, maxVisible]
-  );
-
-  // Remove a toast by ID
-  const removeToast = useCallback(
-    (id: string) => {
-      if (exitingToastsRef.current.has(id)) return;
-
-      exitingToastsRef.current.add(id);
-
-      // Start exit animation
-      setToasts((prev) =>
-        prev.map((t) =>
-          t.id === id ? { ...t, animationState: 'exiting' as ToastAnimationState } : t
-        )
-      );
-
-      // Remove after animation completes
-      setTimeout(() => {
-        setToasts((prev) => prev.filter((t) => t.id !== id));
-        exitingToastsRef.current.delete(id);
-      }, animationDuration);
-    },
-    [animationDuration]
+    [defaultToastProps, defaultDuration, position, animationDuration, removeToast, maxVisible]
   );
 
   // Update a toast
@@ -203,9 +203,10 @@ export function ToastProvider({
               ...t,
               ...data,
               // Reset duration if updating variant from loading
-              ...(t.variant === 'loading' && data.variant !== 'loading' && {
-                createdAt: Date.now(),
-              }),
+              ...(t.variant === 'loading' &&
+                data.variant !== 'loading' && {
+                  createdAt: Date.now(),
+                }),
             }
           : t
       )
@@ -227,35 +228,33 @@ export function ToastProvider({
   // Pause a toast's timer
   const pauseToast = useCallback((id: string) => {
     setToasts((prev) =>
-      prev.map((t) =>
-        t.id === id && !t.pausedAt
-          ? { ...t, pausedAt: Date.now() }
-          : t
-      )
+      prev.map((t) => (t.id === id && !t.pausedAt ? { ...t, pausedAt: Date.now() } : t))
     );
   }, []);
 
   // Resume a toast's timer
-  const resumeToast = useCallback((id: string) => {
-    setToasts((prev) =>
-      prev.map((t) => {
-        if (t.id === id && t.pausedAt) {
-          const pausedDuration = Date.now() - t.pausedAt;
-          return {
-            ...t,
-            pausedAt: undefined,
-            remainingDuration: (t.remainingDuration ?? t.duration ?? defaultDuration) - pausedDuration,
-          };
-        }
-        return t;
-      })
-    );
-  }, [defaultDuration]);
+  const resumeToast = useCallback(
+    (id: string) => {
+      setToasts((prev) =>
+        prev.map((t) => {
+          if (t.id === id && t.pausedAt) {
+            const pausedDuration = Date.now() - t.pausedAt;
+            return {
+              ...t,
+              pausedAt: undefined,
+              remainingDuration:
+                (t.remainingDuration ?? t.duration ?? defaultDuration) - pausedDuration,
+            };
+          }
+          return t;
+        })
+      );
+    },
+    [defaultDuration]
+  );
 
   // Helper to normalize toast data
-  const normalizeToastData = (
-    input: string | Partial<ToastData>
-  ): Partial<ToastData> => {
+  const normalizeToastData = (input: string | Partial<ToastData>): Partial<ToastData> => {
     return typeof input === 'string' ? { message: input } : input;
   };
 
@@ -297,10 +296,7 @@ export function ToastProvider({
 
   // Promise-based toast
   const promiseToast = useCallback(
-    async <T,>(
-      promise: Promise<T>,
-      options: PromiseToastOptions<T>
-    ): Promise<T> => {
+    async <T,>(promise: Promise<T>, options: PromiseToastOptions<T>): Promise<T> => {
       const loadingData = normalizeToastData(options.loading);
       const toastId = addToast({
         ...loadingData,
@@ -313,9 +309,7 @@ export function ToastProvider({
 
         // Resolve success config
         const successInput =
-          typeof options.success === 'function'
-            ? options.success(result)
-            : options.success;
+          typeof options.success === 'function' ? options.success(result) : options.success;
         const successData = normalizeToastData(successInput);
 
         // Update toast to success
@@ -329,9 +323,7 @@ export function ToastProvider({
       } catch (err) {
         // Resolve error config
         const errorInput =
-          typeof options.error === 'function'
-            ? options.error(err as Error)
-            : options.error;
+          typeof options.error === 'function' ? options.error(err as Error) : options.error;
         const errorData = normalizeToastData(errorInput);
 
         // Update toast to error
@@ -386,23 +378,15 @@ export function ToastProvider({
   );
 
   // Get visible toasts (up to maxVisible, accounting for exiting toasts)
-  const visibleToasts = toasts.slice(0, maxVisible + exitingToastsRef.current.size);
+  const exitingCount = toasts.filter((t) => t.animationState === 'exiting').length;
+  const visibleToasts = toasts.slice(0, maxVisible + exitingCount);
 
   return (
     <ToastContext.Provider value={contextValue}>
       {children}
-      <ToastContainer
-        position={position}
-        gap={gap}
-        offset={offset}
-        zIndex={zIndex}
-      >
+      <ToastContainer position={position} gap={gap} offset={offset} zIndex={zIndex}>
         {visibleToasts.map((toast) => (
-          <Toast
-            key={toast.id}
-            {...toast}
-            position={position}
-          />
+          <Toast key={toast.id} {...toast} position={position} />
         ))}
       </ToastContainer>
     </ToastContext.Provider>
@@ -410,3 +394,4 @@ export function ToastProvider({
 }
 
 ToastProvider.displayName = 'ToastProvider';
+

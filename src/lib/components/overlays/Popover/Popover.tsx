@@ -159,7 +159,16 @@ export const Popover: React.FC<PopoverProps> = ({
   // Escape key handling
   useEscapeKey(handleClose, isOpen && closeOnEscape);
 
-  // Render trigger with ref - wrapped in useMemo to avoid unnecessary re-renders
+  // Handle trigger click to toggle popover
+  const handleTriggerClick = useCallback(
+    (event: React.MouseEvent) => {
+      event.stopPropagation();
+      handleOpenChange(!isOpen);
+    },
+    [handleOpenChange, isOpen]
+  );
+
+  // Render trigger with ref and click handler - wrapped in useMemo to avoid unnecessary re-renders
   // triggerRef is not included in deps because the ref object itself never changes
   const triggerElement = useMemo(
     () =>
@@ -170,13 +179,19 @@ export const Popover: React.FC<PopoverProps> = ({
           trigger as ReactElement,
           {
             ref: triggerRef,
+            onClick: (event: React.MouseEvent) => {
+              // Call original onClick if it exists
+              const originalOnClick = (trigger as ReactElement).props?.onClick;
+              originalOnClick?.(event);
+              handleTriggerClick(event);
+            },
           } as any
         )
       ) : (
-        <span ref={triggerRef as any}>{trigger}</span>
+        <span ref={triggerRef as any} onClick={handleTriggerClick}>{trigger}</span>
       ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [trigger]
+    [trigger, handleTriggerClick]
   );
 
   // Combine styles

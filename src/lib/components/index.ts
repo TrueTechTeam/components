@@ -85,7 +85,6 @@ export type { CardProps, CardVariant, CardPadding } from './display/Card';
 export { FlipCard } from './display/FlipCard';
 export type { FlipCardProps, FlipDirection, FlipTrigger } from './display/FlipCard';
 
-
 export { CountUp } from './display/CountUp';
 export type { CountUpProps, EasingFunction } from './display/CountUp';
 
@@ -125,6 +124,91 @@ export type {
   LoadingStateConfig,
 } from './display/PageMessages';
 export { getActiveState } from './display/PageMessages';
+
+export {
+  Table,
+  TableHeader,
+  TableBody,
+  TableRow,
+  TableCell,
+  TableContext,
+  useTableContext,
+  useTableContextStrict,
+  autoGenerateColumns,
+  getCellValue,
+  sortData,
+  formatCellValue,
+  useTableSelection,
+  useTableSort,
+  useTableExpand,
+  useInfiniteScroll,
+} from './display/Table';
+export type {
+  TableProps,
+  TableContextValue,
+  ColumnConfig,
+  ColumnAlign,
+  SortState,
+  SortDirection,
+  SelectionMode as TableSelectionMode,
+  TablePaginationConfig,
+  TableInfiniteScrollConfig,
+  UseTableSelectionOptions,
+  UseTableSelectionReturn,
+  UseTableSortOptions,
+  UseTableSortReturn,
+  UseTableExpandOptions,
+  UseTableExpandReturn,
+  UseInfiniteScrollOptions,
+  UseInfiniteScrollReturn,
+} from './display/Table';
+
+export {
+  List,
+  ListItem,
+  ListHeader,
+  ListGroup,
+  ListSearch,
+  ListSkeleton,
+  ListEmpty,
+  ListContext,
+  useListContext,
+  useListContextStrict,
+  useListSelection,
+  useListExpand,
+  useListFilter,
+  useListKeyboardNav,
+  useListGroups,
+  getNestedValue,
+  formatValue,
+  generateItemKey,
+  searchItems,
+  groupItems,
+  sortItems,
+} from './display/List';
+export type {
+  ListProps,
+  ListItemRenderContext,
+  ListContextValue,
+  SelectionMode as ListSelectionMode,
+  SelectionState,
+  BulkAction,
+  ItemAction,
+  ListInfiniteScrollConfig,
+  ListSkeletonConfig,
+  ResponsiveColumns,
+  UseListSelectionOptions,
+  UseListSelectionReturn,
+  UseListExpandOptions,
+  UseListExpandReturn,
+  UseListFilterOptions,
+  UseListFilterReturn,
+  UseListKeyboardNavOptions,
+  UseListKeyboardNavReturn,
+  UseListGroupsOptions,
+  UseListGroupsReturn,
+  ListGroup as ListGroupType,
+} from './display/List';
 
 // Overlays
 export { Portal } from './overlays/Portal';
@@ -414,4 +498,191 @@ export type {
   FormContext,
   UseFormStateOptions,
 } from './forms/FormBuilder';
+
+// Drag and Drop
+export {
+  // Provider
+  DndProvider,
+  DndContext,
+  useDndContext,
+  useDndContextOptional,
+  // Hooks
+  useDraggable,
+  useDroppable,
+  useSortable,
+  // Primitives
+  DragHandle,
+  DragOverlay,
+  // SortableList
+  SortableList,
+  SortableItem,
+  SortableListContext,
+  useSortableListContext,
+  useSortableListContextOptional,
+  // KanbanBoard
+  KanbanBoard,
+  KanbanColumn,
+  KanbanCard,
+  KanbanBoardContext,
+  useKanbanBoardContext,
+  useKanbanBoardContextOptional,
+  // SortableGrid
+  SortableGrid,
+  SortableGridItemComponent,
+  // ResizablePanels
+  ResizablePanels,
+  ResizablePanel,
+  ResizeHandle,
+  ResizablePanelsContext,
+  useResizablePanelsContext,
+  useResizablePanelsContextOptional,
+} from './dnd';
+
+export type {
+  // Provider types
+  DndProviderProps,
+  DndContextValue,
+  ActiveDrag,
+  DragData,
+  DragEndEvent,
+  DragStartEvent,
+  DragOverEvent,
+  // Hook types
+  UseDraggableOptions,
+  UseDraggableReturn,
+  UseDroppableOptions,
+  UseDroppableReturn,
+  UseSortableOptions,
+  UseSortableReturn,
+  // Primitive types
+  DragHandleProps,
+  DragOverlayProps,
+  // SortableList types
+  SortableListProps,
+  SortableListItem,
+  SortableItemProps,
+  SortableItemRenderProps,
+  SortableListContextValue,
+  // KanbanBoard types
+  KanbanBoardProps,
+  KanbanCardData,
+  KanbanColumnData,
+  KanbanColumnProps,
+  KanbanCardProps,
+  KanbanCardRenderProps,
+  KanbanBoardContextValue,
+  CardMoveEvent,
+  // SortableGrid types
+  SortableGridProps,
+  SortableGridItemData,
+  SortableGridItemProps,
+  SortableGridItemRenderProps,
+  // ResizablePanels types
+  ResizablePanelsProps,
+  ResizablePanelProps,
+  ResizeHandleProps,
+  ResizablePanelsContextValue,
+} from './dnd';
+
+// Filters
+export {
+  // Context
+  FilterContext,
+  useFilterContext,
+  useFilterContextStrict,
+  // Hooks
+  useFilter,
+  useFilterDependencies,
+  useFilterOptions,
+  getDependencyValues,
+  clearOptionsCache,
+  // Core components
+  FilterProvider,
+  FilterField,
+  FilterSection,
+  ActiveFilters,
+  // Filter field components
+  SelectFilter,
+  MultiSelectFilter,
+  CheckboxFilter,
+  ToggleFilter,
+  TextFilter,
+  DateFilter,
+  DateRangeFilter,
+  NumberFilter,
+  NumberRangeFilter,
+  RatingFilter,
+  ListSelectFilter,
+  // Layout components
+  FilterSidebar,
+  FilterBar,
+  FilterPopover,
+  FilterModal,
+  FilterAccordion,
+} from './filters';
+
+export type {
+  // Core types
+  FilterType,
+  FilterValue,
+  FilterValueWithMeta,
+  FilterOption,
+  FilterOptionsLoader,
+  FilterOptionsLoaderParams,
+  FilterOptionsLoadResult,
+  FilterDependency,
+  FilterDependencyAction,
+  FilterDefinition,
+  FilterGroup,
+  FilterState,
+  FilterActions,
+  FilterContextValue,
+  FilterOptionsState,
+  NumberRangeValue,
+  DateRangeValue,
+  // Config types
+  SelectFilterConfig,
+  MultiSelectFilterConfig,
+  MultiSelectDisplayMode,
+  TextFilterConfig,
+  NumberFilterConfig,
+  NumberRangeFilterConfig,
+  NumberRangeDisplayMode,
+  DateFilterConfig,
+  DateRangeFilterConfig,
+  DateRangePreset as FilterDateRangePreset,
+  RatingFilterConfig,
+  ListSelectFilterConfig,
+  FilterTypeConfig,
+  // Component props
+  FilterProviderProps,
+  FilterFieldProps,
+  FilterSectionProps,
+  ActiveFiltersProps,
+  FilterLayoutProps,
+  FilterSidebarProps,
+  FilterBarProps,
+  FilterPopoverProps,
+  FilterModalProps,
+  FilterAccordionProps,
+  // Hook types
+  UseFilterOptions,
+  UseFilterReturn,
+  UseFilterDependenciesOptions,
+  UseFilterDependenciesReturn,
+  UseFilterOptionsOptions,
+  UseFilterOptionsReturn,
+  // Field component props
+  SelectFilterProps,
+  MultiSelectFilterProps,
+  CheckboxFilterProps,
+  ToggleFilterProps,
+  TextFilterProps,
+  DateFilterProps,
+  DateRangeFilterProps,
+  NumberFilterProps,
+  NumberRangeFilterProps,
+  RatingFilterProps,
+  ListSelectFilterProps,
+} from './filters';
 

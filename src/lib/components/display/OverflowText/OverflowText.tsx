@@ -1,4 +1,4 @@
-import React, { forwardRef, useState, useEffect, useRef, useCallback } from 'react';
+import React, { forwardRef, useRef, useCallback } from 'react';
 import { Tooltip } from '../../overlays/Tooltip';
 import type { PopoverPosition } from '../../../utils/positioning';
 import type { BaseComponentProps } from '../../../types';
@@ -94,7 +94,7 @@ export const OverflowText = forwardRef<HTMLElement, OverflowTextProps>(
     {
       children,
       lines = 1,
-      tooltipPosition = 'top',
+      tooltipPosition = 'bottom',
       tooltipDelay = 200,
       disableTooltip = false,
       tooltipContent,
@@ -110,7 +110,6 @@ export const OverflowText = forwardRef<HTMLElement, OverflowTextProps>(
     ref
   ) => {
     const textRef = useRef<HTMLElement>(null);
-    const [isOverflowing, setIsOverflowing] = useState(false);
 
     // Merge refs
     const setRefs = useCallback(
@@ -124,35 +123,6 @@ export const OverflowText = forwardRef<HTMLElement, OverflowTextProps>(
       },
       [ref]
     );
-
-    // Detect overflow using ResizeObserver
-    useEffect(() => {
-      const element = textRef.current;
-      if (!element || typeof window === 'undefined') return;
-
-      const checkOverflow = () => {
-        const isOverflow =
-          element.scrollHeight > element.clientHeight ||
-          element.scrollWidth > element.clientWidth;
-
-        setIsOverflowing((prev) => {
-          if (prev !== isOverflow) {
-            onOverflowChange?.(isOverflow);
-            return isOverflow;
-          }
-          return prev;
-        });
-      };
-
-      // Check initially
-      checkOverflow();
-
-      // Re-check on resize
-      const resizeObserver = new ResizeObserver(checkOverflow);
-      resizeObserver.observe(element);
-
-      return () => resizeObserver.disconnect();
-    }, [children, lines, onOverflowChange]);
 
     const componentClasses = [styles.overflowText, className].filter(Boolean).join(' ');
 
@@ -169,18 +139,17 @@ export const OverflowText = forwardRef<HTMLElement, OverflowTextProps>(
         style={cssVariables}
         data-component="overflow-text"
         data-lines={lines}
-        data-overflowing={isOverflowing || undefined}
         data-testid={testId}
-        aria-label={ariaLabel || (isOverflowing ? String(children) : undefined)}
-        title={disableTooltip && isOverflowing ? String(children) : undefined}
+        aria-label={ariaLabel || String(children)}
+        title={disableTooltip ? String(children) : undefined}
         {...restProps}
       >
         {children}
       </Component>
     );
 
-    // If not overflowing or tooltip disabled, just render the text
-    if (!isOverflowing || disableTooltip) {
+    // If tooltip disabled, just render the text
+    if (disableTooltip) {
       return textElement;
     }
 
@@ -188,10 +157,7 @@ export const OverflowText = forwardRef<HTMLElement, OverflowTextProps>(
     return (
       <Tooltip
         content={
-          <span
-            className={styles.tooltipContent}
-            style={{ maxWidth: tooltipMaxWidth }}
-          >
+          <span className={styles.tooltipContent} style={{ maxWidth: tooltipMaxWidth }}>
             {tooltipContent ?? children}
           </span>
         }
@@ -207,3 +173,4 @@ export const OverflowText = forwardRef<HTMLElement, OverflowTextProps>(
 OverflowText.displayName = 'OverflowText';
 
 export default OverflowText;
+

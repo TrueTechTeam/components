@@ -125,7 +125,7 @@ function TruncatedListInner<T>(
     direction = 'horizontal',
     showTooltip = true,
     tooltipContent,
-    tooltipPosition = 'top',
+    tooltipPosition = 'bottom',
     tooltipMaxWidth = 300,
     onMoreClick,
     keyExtractor = (_, index) => index,
@@ -150,9 +150,7 @@ function TruncatedListInner<T>(
     ...style,
   } as React.CSSProperties;
 
-  const defaultMoreIndicator = (
-    <span className={styles.moreIndicator}>+{hiddenCount} more</span>
-  );
+  const defaultMoreIndicator = <span className={styles.moreIndicator}>+{hiddenCount} more</span>;
 
   const moreElement = renderMore ? renderMore(hiddenCount, hiddenItems) : defaultMoreIndicator;
 
@@ -233,3 +231,4 @@ export const TruncatedList = forwardRef(TruncatedListInner) as <T>(
 (TruncatedList as React.FC).displayName = 'TruncatedList';
 
 export default TruncatedList;
+

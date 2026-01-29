@@ -19,11 +19,6 @@
     -webkit-line-clamp: unset;
     -webkit-box-orient: unset;
   }
-
-  // Visual indicator for overflowing state
-  &[data-overflowing='true'] {
-    cursor: help;
-  }
 }
 
 .tooltipContent {
@@ -31,3 +26,4 @@
   word-wrap: break-word;
   white-space: pre-wrap;
 }
+

@@ -63,26 +63,42 @@ export interface TooltipProps extends Omit<BaseComponentProps, 'children'> {
 /**
  * Check if device has coarse pointer (touch device)
  */
-const isTouchDevice = (): boolean => {
-  if (typeof window === 'undefined') {
-    return false;
-  }
-  return window.matchMedia('(pointer: coarse)').matches;
-};
+// const isTouchDevice = (): boolean => {
+//   if (typeof window === 'undefined') {
+//     return false;
+//   }
+//   return window.matchMedia('(pointer: coarse)').matches;
+// };
 
 /**
  * Get arrow position based on tooltip position
  */
 const getArrowPosition = (position: PopoverPosition): string => {
   // Return the exact position to handle corners properly
-  if (position === 'top') {return 'top';}
-  if (position === 'top-left') {return 'top-left';}
-  if (position === 'top-right') {return 'top-right';}
-  if (position === 'bottom') {return 'bottom';}
-  if (position === 'bottom-left') {return 'bottom-left';}
-  if (position === 'bottom-right') {return 'bottom-right';}
-  if (position === 'left') {return 'left';}
-  if (position === 'right') {return 'right';}
+  if (position === 'top') {
+    return 'bottom';
+  }
+  if (position === 'top-left') {
+    return 'bottom-left';
+  }
+  if (position === 'top-right') {
+    return 'bottom-right';
+  }
+  if (position === 'bottom') {
+    return 'top';
+  }
+  if (position === 'bottom-left') {
+    return 'top-left';
+  }
+  if (position === 'bottom-right') {
+    return 'top-right';
+  }
+  if (position === 'left') {
+    return 'right';
+  }
+  if (position === 'right') {
+    return 'left';
+  }
   return 'top';
 };
 
@@ -93,7 +109,7 @@ const getArrowPosition = (position: PopoverPosition): string => {
 export const Tooltip: React.FC<TooltipProps> = ({
   content,
   children,
-  position = 'top',
+  position = 'bottom',
   delayShow = 200,
   delayHide = 0,
   disabled = false,
@@ -104,8 +120,8 @@ export const Tooltip: React.FC<TooltipProps> = ({
   ...restProps
 }) => {
   // Disable on touch devices
-  const isTouch = isTouchDevice();
-  const effectivelyDisabled = disabled || isTouch;
+  // const isTouch = isTouchDevice();
+  const effectivelyDisabled = disabled;
 
   const { isHovered, hoverProps } = useHover({
     delayEnter: delayShow,
