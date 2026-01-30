@@ -22,9 +22,7 @@ export function TableCell<T extends Record<string, unknown>>({
   const value = getCellValue(row, String(column.key));
   const alignment = column.align || detectAlignment(value);
 
-  const content = column.render
-    ? column.render(value, row, rowIndex)
-    : formatCellValue(value);
+  const content = column.render ? column.render(value, row, rowIndex) : formatCellValue(value);
 
   return (
     <div

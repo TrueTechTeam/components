@@ -10,7 +10,9 @@ const renderIcon = (
   icon: React.ReactNode | IconName | undefined,
   size: ExtendedComponentSize = 'md'
 ): React.ReactNode => {
-  if (!icon) {return null;}
+  if (!icon) {
+    return null;
+  }
   if (typeof icon === 'string') {
     return <Icon name={icon as IconName} size={size} />;
   }
@@ -216,4 +218,3 @@ export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 Button.displayName = 'Button';
 
 export default Button;
-

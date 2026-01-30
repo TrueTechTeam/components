@@ -241,4 +241,3 @@ export const FilterAccordion = forwardRef<HTMLDivElement, FilterAccordionProps>(
 FilterAccordion.displayName = 'FilterAccordion';
 
 export default FilterAccordion;
-

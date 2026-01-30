@@ -38,13 +38,7 @@ export const RatingFilter = forwardRef<HTMLDivElement, RatingFilterProps>(
     },
     ref
   ) => {
-    const {
-      filter,
-      value,
-      setValue,
-      isEnabled,
-      error,
-    } = useFilter<number>({ filterId });
+    const { filter, value, setValue, isEnabled, error } = useFilter<number>({ filterId });
 
     if (!filter) {
       console.warn(`RatingFilter: Filter "${filterId}" not found`);
@@ -80,9 +74,7 @@ export const RatingFilter = forwardRef<HTMLDivElement, RatingFilterProps>(
           {...ratingProps}
         />
 
-        {filter.helperText && (
-          <span className={styles.helperText}>{filter.helperText}</span>
-        )}
+        {filter.helperText && <span className={styles.helperText}>{filter.helperText}</span>}
         {error && <span className={styles.errorMessage}>{error}</span>}
       </div>
     );

@@ -234,7 +234,9 @@ export const Panes = forwardRef<HTMLDivElement, PanesProps>(
     const updatePane = useCallback((id: string, updates: Partial<PaneConfig>) => {
       setPaneConfigs((prev) => {
         const existing = prev.get(id);
-        if (!existing) return prev;
+        if (!existing) {
+          return prev;
+        }
         const next = new Map(prev);
         next.set(id, { ...existing, ...updates });
         return next;

@@ -15,7 +15,8 @@ export interface Country {
   format?: string; // Phone number format mask (e.g., "(###) ###-####")
 }
 
-export interface PhoneInputProps extends Omit<InputBaseProps, 'value' | 'onChange' | 'type' | 'onBlur'> {
+export interface PhoneInputProps
+  extends Omit<InputBaseProps, 'value' | 'onChange' | 'type' | 'onBlur'> {
   /**
    * Controlled phone number value (full number with country code)
    */
@@ -118,7 +119,9 @@ const DEFAULT_COUNTRIES: Country[] = [
  * Format phone number based on country format mask
  */
 const formatPhoneNumber = (value: string, format?: string): string => {
-  if (!format) {return value;}
+  if (!format) {
+    return value;
+  }
 
   const digits = value.replace(/\D/g, '');
   let formatted = '';
@@ -231,7 +234,9 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
     const handleCountrySelect = useCallback(
       (countryCode: string) => {
         const country = countries.find((c) => c.code === countryCode);
-        if (!country) {return;}
+        if (!country) {
+          return;
+        }
 
         setSelectedCountry(country);
 
@@ -318,4 +323,3 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
 );
 
 PhoneInput.displayName = 'PhoneInput';
-

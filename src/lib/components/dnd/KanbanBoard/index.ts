@@ -1,4 +1,9 @@
-export { KanbanBoard, type KanbanBoardProps, type KanbanCardData, type KanbanColumnData } from './KanbanBoard';
+export {
+  KanbanBoard,
+  type KanbanBoardProps,
+  type KanbanCardData,
+  type KanbanColumnData,
+} from './KanbanBoard';
 export { KanbanColumn, type KanbanColumnProps } from './KanbanColumn';
 export { KanbanCard, type KanbanCardProps, type KanbanCardRenderProps } from './KanbanCard';
 export {

@@ -2,11 +2,7 @@ export default {
   displayName: 'ui-components',
   preset: '../../jest.preset.js',
   testEnvironment: 'jsdom',
-  testPathIgnorePatterns: [
-    '/node_modules/',
-    '/.claude/',
-    '\\.template\\.',
-  ],
+  testPathIgnorePatterns: ['/node_modules/', '/.claude/', '\\.template\\.'],
   transform: {
     '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': '@nx/react/plugins/jest',
     '^.+\\.[tj]sx?$': ['babel-jest', { presets: ['@nx/react/babel'] }],
@@ -16,7 +12,6 @@ export default {
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   moduleNameMapper: {
     '\\.(css|scss)$': 'identity-obj-proxy',
-    '\\.svg\\?react$': '<rootDir>/__mocks__/svgr.tsx',
   },
   collectCoverageFrom: [
     'src/**/*.{ts,tsx}',

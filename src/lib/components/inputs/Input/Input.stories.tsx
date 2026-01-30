@@ -100,7 +100,11 @@ export const Default: Story = {
 export const WithLabel: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', maxWidth: '400px' }}>
-      <Input label="Email" placeholder="Enter your email" helperText="We'll never share your email" />
+      <Input
+        label="Email"
+        placeholder="Enter your email"
+        helperText="We'll never share your email"
+      />
       <Input label="Name" placeholder="Enter your name" required />
       <Input
         label="Website"
@@ -632,13 +636,8 @@ export const DisabledReadonly: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px', maxWidth: '400px' }}>
       <Input label="Disabled" placeholder="Cannot edit" disabled />
-      <Input
-        label="Disabled with value"
-        value="Disabled value"
-        onChange={() => {}}
-        disabled
-      />
-      <Input label="Read-only" value="Read-only value" onChange={() => {}}readOnly />
+      <Input label="Disabled with value" value="Disabled value" onChange={() => {}} disabled />
+      <Input label="Read-only" value="Read-only value" onChange={() => {}} readOnly />
       <Input
         label="Read-only with icon"
         value="Read-only value"

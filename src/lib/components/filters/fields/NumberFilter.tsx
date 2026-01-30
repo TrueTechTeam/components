@@ -81,4 +81,3 @@ export const NumberFilter = forwardRef<HTMLDivElement, NumberFilterProps>(
 NumberFilter.displayName = 'NumberFilter';
 
 export default NumberFilter;
-

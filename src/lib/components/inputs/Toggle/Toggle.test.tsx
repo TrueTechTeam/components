@@ -32,14 +32,7 @@ describe('Toggle', () => {
     });
 
     it('should show error message instead of helper text when both provided', () => {
-      render(
-        <Toggle
-          label="Test"
-          helperText="Helper"
-          error
-          errorMessage="Error"
-        />
-      );
+      render(<Toggle label="Test" helperText="Helper" error errorMessage="Error" />);
       expect(screen.getByText('Error')).toBeInTheDocument();
       expect(screen.queryByText('Helper')).not.toBeInTheDocument();
     });
@@ -60,10 +53,7 @@ describe('Toggle', () => {
       fireEvent.click(toggle);
 
       expect(handleChange).toHaveBeenCalledTimes(1);
-      expect(handleChange).toHaveBeenCalledWith(
-        true,
-        expect.any(Object)
-      );
+      expect(handleChange).toHaveBeenCalledWith(true, expect.any(Object));
     });
 
     it('should not update checked state when controlled', () => {

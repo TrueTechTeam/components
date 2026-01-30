@@ -295,11 +295,7 @@ export const WithDayConstraints: Story = {
 
 export const CustomFormat: Story = {
   render: () => (
-    <DateRangePicker
-      label="Date Range"
-      format="DD/MM/YYYY"
-      placeholder="DD/MM/YYYY - DD/MM/YYYY"
-    />
+    <DateRangePicker label="Date Range" format="DD/MM/YYYY" placeholder="DD/MM/YYYY - DD/MM/YYYY" />
   ),
   parameters: {
     controls: { disable: true },
@@ -308,11 +304,7 @@ export const CustomFormat: Story = {
 
 export const CustomSeparator: Story = {
   render: () => (
-    <DateRangePicker
-      label="Date Range"
-      separator=" to "
-      placeholder="MM/DD/YYYY to MM/DD/YYYY"
-    />
+    <DateRangePicker label="Date Range" separator=" to " placeholder="MM/DD/YYYY to MM/DD/YYYY" />
   ),
   parameters: {
     controls: { disable: true },
@@ -335,10 +327,7 @@ export const NoCalendar: Story = {
 
 export const WithHelperText: Story = {
   render: () => (
-    <DateRangePicker
-      label="Booking Period"
-      helperText="Select your check-in and check-out dates"
-    />
+    <DateRangePicker label="Booking Period" helperText="Select your check-in and check-out dates" />
   ),
   parameters: {
     controls: { disable: true },
@@ -346,18 +335,14 @@ export const WithHelperText: Story = {
 };
 
 export const WithError: Story = {
-  render: () => (
-    <DateRangePicker label="Date Range" error errorMessage="Date range is required" />
-  ),
+  render: () => <DateRangePicker label="Date Range" error errorMessage="Date range is required" />,
   parameters: {
     controls: { disable: true },
   },
 };
 
 export const Required: Story = {
-  render: () => (
-    <DateRangePicker label="Date Range" required helperText="This field is required" />
-  ),
+  render: () => <DateRangePicker label="Date Range" required helperText="This field is required" />,
   parameters: {
     controls: { disable: true },
   },

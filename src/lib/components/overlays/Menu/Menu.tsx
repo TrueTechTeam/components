@@ -255,7 +255,9 @@ export const Menu: React.FC<MenuProps> = ({
         // Single character - cycle through matches
         const matches = items.filter(([_, label]) => label.toLowerCase().startsWith(searchLower));
 
-        if (matches.length === 0) {return -1;}
+        if (matches.length === 0) {
+          return -1;
+        }
 
         // Find next match after current index (wrap around)
         const currentMatchIndex = matches.findIndex(([index]) => index === currentIndex);
@@ -281,7 +283,9 @@ export const Menu: React.FC<MenuProps> = ({
         // Find all items starting with this character
         const matches = items.filter(([_, label]) => label.toLowerCase().startsWith(searchLower));
 
-        if (matches.length === 0) {return -1;}
+        if (matches.length === 0) {
+          return -1;
+        }
 
         // Find next match after current index (wrap around)
         const currentMatchIndex = matches.findIndex(([index]) => index === currentIndex);
@@ -375,7 +379,9 @@ export const Menu: React.FC<MenuProps> = ({
           event.preventDefault();
           setFocusedIndex((prev) => {
             // If nothing is focused, start at first item
-            if (prev === -1) {return 0;}
+            if (prev === -1) {
+              return 0;
+            }
             const next = (prev + 1) % itemsCount;
             focusedIndexRef.current = next;
             return next;
@@ -385,7 +391,9 @@ export const Menu: React.FC<MenuProps> = ({
           event.preventDefault();
           setFocusedIndex((prev) => {
             // If nothing is focused, start at last item
-            if (prev === -1) {return itemsCount - 1;}
+            if (prev === -1) {
+              return itemsCount - 1;
+            }
             const next = (prev - 1 + itemsCount) % itemsCount;
             focusedIndexRef.current = next;
             return next;
@@ -472,4 +480,3 @@ export const Menu: React.FC<MenuProps> = ({
 };
 
 Menu.displayName = 'Menu';
-

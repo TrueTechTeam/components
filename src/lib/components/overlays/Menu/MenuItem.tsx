@@ -2,7 +2,15 @@
  * MenuItem component - Individual menu item with selection and keyboard support
  */
 
-import { useEffect, useCallback, useRef, type ReactNode, type MouseEvent, useState, isValidElement } from 'react';
+import {
+  useEffect,
+  useCallback,
+  useRef,
+  type ReactNode,
+  type MouseEvent,
+  useState,
+  isValidElement,
+} from 'react';
 import { useMenuContext } from './MenuContext';
 import type { BaseComponentProps } from '../../../types';
 import { Icon, type IconProps } from '../../display/Icon';
@@ -13,9 +21,15 @@ import styles from './MenuItem.module.scss';
  * Extract text content from ReactNode for type-ahead search
  */
 function extractTextContent(node: ReactNode): string {
-  if (typeof node === 'string') {return node;}
-  if (typeof node === 'number') {return String(node);}
-  if (Array.isArray(node)) {return node.map(extractTextContent).join('');}
+  if (typeof node === 'string') {
+    return node;
+  }
+  if (typeof node === 'number') {
+    return String(node);
+  }
+  if (Array.isArray(node)) {
+    return node.map(extractTextContent).join('');
+  }
   if (isValidElement(node) && node.props.children) {
     return extractTextContent(node.props.children);
   }
@@ -79,8 +93,16 @@ export const MenuItem: React.FC<MenuItemProps> = ({
   'data-testid': testId,
   ...restProps
 }) => {
-  const { selectedKeys, toggleSelection, selectionMode, focusedIndex, registerItem, scrollToSelected, enableTypeAhead, registerItemLabel } =
-    useMenuContext();
+  const {
+    selectedKeys,
+    toggleSelection,
+    selectionMode,
+    focusedIndex,
+    registerItem,
+    scrollToSelected,
+    enableTypeAhead,
+    registerItemLabel,
+  } = useMenuContext();
 
   const isSelected = selectedKeys.has(itemKey);
   const itemRef = useRef<HTMLLIElement>(null);
@@ -162,18 +184,14 @@ export const MenuItem: React.FC<MenuItemProps> = ({
   const classes = [styles.menuItem, className].filter(Boolean).join(' ');
 
   // Render start icon
-  const startIconElement = startIcon && (
-    typeof startIcon === 'string'
-      ? <Icon name={startIcon as IconName} size={16} />
-      : startIcon
-  );
+  const startIconElement =
+    startIcon &&
+    (typeof startIcon === 'string' ? <Icon name={startIcon as IconName} size={16} /> : startIcon);
 
   // Render end icon
-  const endIconElement = endIcon && (
-    typeof endIcon === 'string'
-      ? <Icon name={endIcon as IconName} size={16} />
-      : endIcon
-  );
+  const endIconElement =
+    endIcon &&
+    (typeof endIcon === 'string' ? <Icon name={endIcon as IconName} size={16} /> : endIcon);
 
   // Show checkmark for selected items in single/multi mode
   const showCheckmark = selectionMode !== 'none' && isSelected;
@@ -210,4 +228,3 @@ export const MenuItem: React.FC<MenuItemProps> = ({
 };
 
 MenuItem.displayName = 'MenuItem';
-

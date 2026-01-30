@@ -3,10 +3,7 @@
  */
 
 import React, { useState, useCallback, useMemo, useRef } from 'react';
-import {
-  ResizablePanelsContext,
-  type ResizablePanelsContextValue,
-} from './ResizablePanelsContext';
+import { ResizablePanelsContext, type ResizablePanelsContextValue } from './ResizablePanelsContext';
 import type { BaseComponentProps } from '../../../types/component.types';
 import styles from './ResizablePanels.module.scss';
 
@@ -68,8 +65,11 @@ export const ResizablePanels: React.FC<ResizablePanelsProps> = ({
   const panelCount = useMemo(() => {
     let count = 0;
     React.Children.forEach(children, (child) => {
-      if (React.isValidElement(child) && child.type &&
-          (child.type as React.ComponentType).displayName === 'ResizablePanel') {
+      if (
+        React.isValidElement(child) &&
+        child.type &&
+        (child.type as React.ComponentType).displayName === 'ResizablePanel'
+      ) {
         count++;
       }
     });
@@ -87,7 +87,9 @@ export const ResizablePanels: React.FC<ResizablePanelsProps> = ({
 
   const [internalSizes, setInternalSizes] = useState<number[]>(initialSizes);
   const [activeHandle, setActiveHandle] = useState(-1);
-  const panelConfigsRef = useRef<Array<{ minSize: number; maxSize: number; collapsible: boolean }>>([]);
+  const panelConfigsRef = useRef<Array<{ minSize: number; maxSize: number; collapsible: boolean }>>(
+    []
+  );
   const panelCountRef = useRef(0);
 
   const sizes = controlledSizes ?? internalSizes;
@@ -127,16 +129,13 @@ export const ResizablePanels: React.FC<ResizablePanelsProps> = ({
   );
 
   // Get panel config
-  const getPanelConfig = useCallback(
-    (index: number) => panelConfigsRef.current[index],
-    []
-  );
+  const getPanelConfig = useCallback((index: number) => panelConfigsRef.current[index], []);
 
   // Reset panel counter on children change
   useMemo(() => {
     panelCountRef.current = 0;
     panelConfigsRef.current = [];
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [panelCount]);
 
   // Context value
@@ -152,7 +151,17 @@ export const ResizablePanels: React.FC<ResizablePanelsProps> = ({
       getPanelConfig,
       panelCount,
     }),
-    [direction, sizes, setSizes, startResize, stopResize, activeHandle, registerPanel, getPanelConfig, panelCount]
+    [
+      direction,
+      sizes,
+      setSizes,
+      startResize,
+      stopResize,
+      activeHandle,
+      registerPanel,
+      getPanelConfig,
+      panelCount,
+    ]
   );
 
   const containerClasses = [styles.resizablePanels, className].filter(Boolean).join(' ');

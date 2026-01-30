@@ -231,4 +231,3 @@ export const TruncatedList = forwardRef(TruncatedListInner) as <T>(
 (TruncatedList as React.FC).displayName = 'TruncatedList';
 
 export default TruncatedList;
-

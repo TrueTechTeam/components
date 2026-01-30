@@ -40,11 +40,7 @@ describe('Breadcrumbs', () => {
 
     it('should apply size data attribute', () => {
       render(
-        <Breadcrumbs
-          size="lg"
-          data-testid="breadcrumbs"
-          items={[{ label: 'Home', href: '/' }]}
-        />
+        <Breadcrumbs size="lg" data-testid="breadcrumbs" items={[{ label: 'Home', href: '/' }]} />
       );
 
       expect(screen.getByTestId('breadcrumbs')).toHaveAttribute('data-size', 'lg');
@@ -112,16 +108,15 @@ describe('Breadcrumbs', () => {
         </Breadcrumbs>
       );
 
-      const item = screen.getByText('Current Page').closest('span');
+      // The text is nested in an inner span, so we need to find the outer breadcrumb-item span
+      const item = screen.getByText('Current Page').closest('[data-component="breadcrumb-item"]');
       expect(item).toHaveAttribute('aria-current', 'page');
     });
   });
 
   describe('accessibility', () => {
     it('should have navigation role with aria-label', () => {
-      render(
-        <Breadcrumbs data-testid="breadcrumbs" items={[{ label: 'Home', href: '/' }]} />
-      );
+      render(<Breadcrumbs data-testid="breadcrumbs" items={[{ label: 'Home', href: '/' }]} />);
 
       expect(screen.getByTestId('breadcrumbs')).toHaveAttribute('aria-label', 'Breadcrumb');
     });

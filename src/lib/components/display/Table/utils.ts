@@ -28,11 +28,7 @@ const EXTRA_PADDING_PX = 16;
 /**
  * Calculate the maximum content width for a column based on data
  */
-function calculateMaxColumnWidth<T>(
-  data: T[],
-  columnKey: string,
-  headerText: string
-): number {
+function calculateMaxColumnWidth<T>(data: T[], columnKey: string, headerText: string): number {
   // Calculate header width
   const headerWidth = headerText.length * CHAR_WIDTH_PX + CELL_PADDING_PX;
 
@@ -92,7 +88,7 @@ function isDynamicWidth(width: string): boolean {
  */
 export function calculateColumnWidths<T extends Record<string, unknown>>(
   columns: Array<ColumnConfig<T>>,
-  data: T[],
+  data: T[]
 ): string[] {
   // First pass: identify columns with explicit widths and dynamic widths
   let dynamicColumnIndex = -1;
@@ -157,7 +153,7 @@ export function calculateColumnWidths<T extends Record<string, unknown>>(
  * Auto-generate columns from the first data item's keys
  */
 export function autoGenerateColumns<T extends Record<string, unknown>>(
-  data: T[],
+  data: T[]
 ): Array<ColumnConfig<T>> {
   if (data.length === 0) {
     return [];
@@ -174,14 +170,16 @@ export function autoGenerateColumns<T extends Record<string, unknown>>(
  * Format header text from key (camelCase/snake_case -> Title Case)
  */
 export function formatHeaderFromKey(key: string): string {
-  return key
-    // Handle camelCase
-    .replace(/([A-Z])/g, ' $1')
-    // Handle snake_case
-    .replace(/_/g, ' ')
-    // Capitalize first letter of each word
-    .replace(/\b\w/g, (char) => char.toUpperCase())
-    .trim();
+  return (
+    key
+      // Handle camelCase
+      .replace(/([A-Z])/g, ' $1')
+      // Handle snake_case
+      .replace(/_/g, ' ')
+      // Capitalize first letter of each word
+      .replace(/\b\w/g, (char) => char.toUpperCase())
+      .trim()
+  );
 }
 
 /**
@@ -218,12 +216,7 @@ export function getCellValue<T>(row: T, key: string): unknown {
 /**
  * Default sort comparison function
  */
-export function defaultSortFn<T>(
-  a: T,
-  b: T,
-  column: string,
-  direction: 'asc' | 'desc'
-): number {
+export function defaultSortFn<T>(a: T, b: T, column: string, direction: 'asc' | 'desc'): number {
   const aVal = getCellValue(a, column);
   const bVal = getCellValue(b, column);
 
@@ -258,11 +251,7 @@ export function defaultSortFn<T>(
 /**
  * Sort data by column
  */
-export function sortData<T>(
-  data: T[],
-  sort: SortState,
-  columns: Array<ColumnConfig<T>>,
-): T[] {
+export function sortData<T>(data: T[], sort: SortState, columns: Array<ColumnConfig<T>>): T[] {
   if (!sort.column || !sort.direction) {
     return data;
   }

@@ -126,10 +126,7 @@ export interface ToastContextValue {
    * Promise-based toast that shows loading, then success/error
    * @returns Original promise result
    */
-  promise: <T>(
-    promise: Promise<T>,
-    options: PromiseToastOptions<T>
-  ) => Promise<T>;
+  promise: <T>(promise: Promise<T>, options: PromiseToastOptions<T>) => Promise<T>;
 
   /**
    * Container position

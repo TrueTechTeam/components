@@ -373,4 +373,3 @@ export const CountUp = forwardRef<HTMLSpanElement, CountUpProps>(
 CountUp.displayName = 'CountUp';
 
 export default CountUp;
-

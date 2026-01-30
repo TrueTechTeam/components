@@ -4,7 +4,8 @@ import { Icon } from '../../display/Icon';
 import type { IconName } from '../../display/Icon/icons';
 import styles from './Rating.module.scss';
 
-export interface RatingProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange' | 'onBlur'> {
+export interface RatingProps
+  extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange' | 'onBlur'> {
   size?: ComponentSize;
   value?: number;
   defaultValue?: number;
@@ -57,7 +58,9 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
 
     const handleClick = useCallback(
       (newValue: number) => {
-        if (disabled || readOnly) {return;}
+        if (disabled || readOnly) {
+          return;
+        }
 
         if (controlledValue === undefined) {
           setInternalValue(newValue);
@@ -81,7 +84,8 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
     for (let i = 1; i <= max; i++) {
       const itemValue = i;
       const isFilled = displayValue >= itemValue;
-      const isHalfFilled = precision < 1 && displayValue > itemValue - 1 && displayValue < itemValue;
+      const isHalfFilled =
+        precision < 1 && displayValue > itemValue - 1 && displayValue < itemValue;
 
       items.push(
         <button
@@ -104,7 +108,10 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
     }
 
     return (
-      <div className={`${styles.container} ${className || ''}`} data-testid={dataTestId && `${dataTestId}-container`}>
+      <div
+        className={`${styles.container} ${className || ''}`}
+        data-testid={dataTestId && `${dataTestId}-container`}
+      >
         {label && (
           <label htmlFor={id} className={styles.label} data-required={required || undefined}>
             {label}
@@ -128,11 +135,7 @@ export const Rating = forwardRef<HTMLDivElement, RatingProps>(
           {items}
         </div>
 
-        {helperText && (
-          <div className={styles.helperText}>
-            {helperText}
-          </div>
-        )}
+        {helperText && <div className={styles.helperText}>{helperText}</div>}
       </div>
     );
   }

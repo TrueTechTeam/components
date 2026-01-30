@@ -19,9 +19,7 @@ import {
 import { Popover } from '../../overlays/Popover';
 import styles from './DateRangePicker.module.scss';
 import Button from '../../buttons/Button';
-import type {
-  BaseComponentProps,
-} from '../../../types/component.types';
+import type { BaseComponentProps } from '../../../types/component.types';
 
 export interface DateRangePreset {
   label: string;
@@ -278,74 +276,93 @@ export const DateRangePicker = forwardRef<HTMLInputElement, DateRangePickerProps
     }, [controlledStartDate, controlledEndDate, format, separator]);
 
     // Apply input mask based on format
-    const applyInputMask = useCallback((value: string) => {
-      // Remove all non-numeric characters
-      const digitsOnly = value.replace(/\D/g, '');
+    const applyInputMask = useCallback(
+      (value: string) => {
+        // Remove all non-numeric characters
+        const digitsOnly = value.replace(/\D/g, '');
 
-      // Determine mask based on format (MM/DD/YYYY or DD/MM/YYYY)
-      const maskPattern = format.replace(/M/g, '9').replace(/D/g, '9').replace(/Y/g, '9');
-      const fullMask = `${maskPattern}${separator}${maskPattern}`;
+        // Determine mask based on format (MM/DD/YYYY or DD/MM/YYYY)
+        const maskPattern = format.replace(/M/g, '9').replace(/D/g, '9').replace(/Y/g, '9');
+        const fullMask = `${maskPattern}${separator}${maskPattern}`;
 
-      let masked = '';
-      let digitIndex = 0;
+        let masked = '';
+        let digitIndex = 0;
 
-      for (let i = 0; i < fullMask.length && digitIndex < digitsOnly.length; i++) {
-        if (fullMask[i] === '9') {
-          masked += digitsOnly[digitIndex];
-          digitIndex++;
-        } else {
-          masked += fullMask[i];
-        }
-      }
-
-      return masked;
-    }, [format, separator]);
-
-    // Handle manual input change
-    const handleInputChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
-      const maskedValue = applyInputMask(e.target.value);
-      setInputValue(maskedValue);
-
-      // Try to parse the dates if input is complete
-      const expectedLength = format.length * 2 + separator.length;
-      if (maskedValue.length === expectedLength) {
-        // Parse dates from input
-        const parts = maskedValue.split(separator);
-        if (parts.length === 2) {
-          try {
-            const startDateStr = parts[0];
-            const endDateStr = parts[1];
-
-            // Simple date parsing based on format
-            let startDate: Date | null = null;
-            let endDate: Date | null = null;
-
-            if (format === 'MM/DD/YYYY') {
-              const [startMonth, startDay, startYear] = startDateStr.split('/');
-              const [endMonth, endDay, endYear] = endDateStr.split('/');
-              startDate = new Date(parseInt(startYear), parseInt(startMonth) - 1, parseInt(startDay));
-              endDate = new Date(parseInt(endYear), parseInt(endMonth) - 1, parseInt(endDay));
-            } else if (format === 'DD/MM/YYYY') {
-              const [startDay, startMonth, startYear] = startDateStr.split('/');
-              const [endDay, endMonth, endYear] = endDateStr.split('/');
-              startDate = new Date(parseInt(startYear), parseInt(startMonth) - 1, parseInt(startDay));
-              endDate = new Date(parseInt(endYear), parseInt(endMonth) - 1, parseInt(endDay));
-            }
-
-            // Validate dates
-            if (startDate && endDate && !isNaN(startDate.getTime()) && !isNaN(endDate.getTime())) {
-              if (controlledStartDate === undefined) {
-                setInternalStartDate(startDate);
-                setInternalEndDate(endDate);
-              }
-              onChange?.(startDate, endDate);
-            }
-          } catch (error) {
-            // Invalid date format, ignore
+        for (let i = 0; i < fullMask.length && digitIndex < digitsOnly.length; i++) {
+          if (fullMask[i] === '9') {
+            masked += digitsOnly[digitIndex];
+            digitIndex++;
+          } else {
+            masked += fullMask[i];
           }
         }
-      }
-    }, [applyInputMask, format, separator, controlledStartDate, onChange]);
+
+        return masked;
+      },
+      [format, separator]
+    );
+
+    // Handle manual input change
+    const handleInputChange = useCallback(
+      (e: React.ChangeEvent<HTMLInputElement>) => {
+        const maskedValue = applyInputMask(e.target.value);
+        setInputValue(maskedValue);
+
+        // Try to parse the dates if input is complete
+        const expectedLength = format.length * 2 + separator.length;
+        if (maskedValue.length === expectedLength) {
+          // Parse dates from input
+          const parts = maskedValue.split(separator);
+          if (parts.length === 2) {
+            try {
+              const startDateStr = parts[0];
+              const endDateStr = parts[1];
+
+              // Simple date parsing based on format
+              let startDate: Date | null = null;
+              let endDate: Date | null = null;
+
+              if (format === 'MM/DD/YYYY') {
+                const [startMonth, startDay, startYear] = startDateStr.split('/');
+                const [endMonth, endDay, endYear] = endDateStr.split('/');
+                startDate = new Date(
+                  parseInt(startYear),
+                  parseInt(startMonth) - 1,
+                  parseInt(startDay)
+                );
+                endDate = new Date(parseInt(endYear), parseInt(endMonth) - 1, parseInt(endDay));
+              } else if (format === 'DD/MM/YYYY') {
+                const [startDay, startMonth, startYear] = startDateStr.split('/');
+                const [endDay, endMonth, endYear] = endDateStr.split('/');
+                startDate = new Date(
+                  parseInt(startYear),
+                  parseInt(startMonth) - 1,
+                  parseInt(startDay)
+                );
+                endDate = new Date(parseInt(endYear), parseInt(endMonth) - 1, parseInt(endDay));
+              }
+
+              // Validate dates
+              if (
+                startDate &&
+                endDate &&
+                !isNaN(startDate.getTime()) &&
+                !isNaN(endDate.getTime())
+              ) {
+                if (controlledStartDate === undefined) {
+                  setInternalStartDate(startDate);
+                  setInternalEndDate(endDate);
+                }
+                onChange?.(startDate, endDate);
+              }
+            } catch (error) {
+              // Invalid date format, ignore
+            }
+          }
+        }
+      },
+      [applyInputMask, format, separator, controlledStartDate, onChange]
+    );
 
     // Handle date selection
     const handleDateSelect = useCallback(
@@ -642,4 +659,3 @@ export const DateRangePicker = forwardRef<HTMLInputElement, DateRangePickerProps
 );
 
 DateRangePicker.displayName = 'DateRangePicker';
-

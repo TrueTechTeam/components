@@ -56,14 +56,18 @@ export function useListFilter<T extends Record<string, unknown>>({
   // Default filter function
   const defaultFilterFn = useCallback(
     (item: T, query: string): boolean => {
-      if (!query.trim()) {return true;}
+      if (!query.trim()) {
+        return true;
+      }
 
       const lowerQuery = query.toLowerCase();
       const fieldsToSearch = searchFields || (Object.keys(item) as Array<keyof T>);
 
       return fieldsToSearch.some((field) => {
         const value = item[field];
-        if (value === null || value === undefined) {return false;}
+        if (value === null || value === undefined) {
+          return false;
+        }
         return String(value).toLowerCase().includes(lowerQuery);
       });
     },
@@ -73,7 +77,9 @@ export function useListFilter<T extends Record<string, unknown>>({
   const filterFn = searchFn || defaultFilterFn;
 
   const filteredData = useMemo(() => {
-    if (!debouncedQuery.trim()) {return data;}
+    if (!debouncedQuery.trim()) {
+      return data;
+    }
     return data.filter((item) => filterFn(item, debouncedQuery));
   }, [data, debouncedQuery, filterFn]);
 

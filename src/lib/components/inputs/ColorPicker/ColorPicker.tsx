@@ -1,7 +1,5 @@
 import React, { forwardRef, useState, useCallback, useRef, useEffect, useId, useMemo } from 'react';
-import type {
-  BaseComponentProps,
-} from '../../../types/component.types';
+import type { BaseComponentProps } from '../../../types/component.types';
 import { Button } from '../../buttons/Button';
 import { Input } from '../Input';
 import { Slider } from '../Slider';
@@ -260,10 +258,14 @@ export const ColorPicker = forwardRef<HTMLInputElement, ColorPickerProps>(
     // Update canvas when hue changes
     useEffect(() => {
       const canvas = canvasRef.current;
-      if (!canvas) {return;}
+      if (!canvas) {
+        return;
+      }
 
       const ctx = canvas.getContext('2d');
-      if (!ctx) {return;}
+      if (!ctx) {
+        return;
+      }
 
       const width = canvas.width;
       const height = canvas.height;
@@ -326,7 +328,9 @@ export const ColorPicker = forwardRef<HTMLInputElement, ColorPickerProps>(
     const handleCanvasInteraction = useCallback(
       (clientX: number, clientY: number) => {
         const canvas = canvasRef.current;
-        if (!canvas) {return;}
+        if (!canvas) {
+          return;
+        }
 
         const rect = canvas.getBoundingClientRect();
         const rawX = clientX - rect.left;
@@ -740,4 +744,3 @@ export const ColorPicker = forwardRef<HTMLInputElement, ColorPickerProps>(
 );
 
 ColorPicker.displayName = 'ColorPicker';
-

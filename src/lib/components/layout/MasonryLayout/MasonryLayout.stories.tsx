@@ -446,4 +446,3 @@ export const ManyItems: Story = {
     );
   },
 };
-

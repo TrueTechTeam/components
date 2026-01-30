@@ -311,4 +311,3 @@ export const Reveal = forwardRef<HTMLDivElement, RevealProps>(
 Reveal.displayName = 'Reveal';
 
 export default Reveal;
-

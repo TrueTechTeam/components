@@ -118,31 +118,11 @@ export const WithValue: Story = {
 export const DifferentCountries: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      <PhoneInput
-        label="United States"
-        defaultCountry="US"
-        onChange={action('onChange - US')}
-      />
-      <PhoneInput
-        label="United Kingdom"
-        defaultCountry="GB"
-        onChange={action('onChange - GB')}
-      />
-      <PhoneInput
-        label="Germany"
-        defaultCountry="DE"
-        onChange={action('onChange - DE')}
-      />
-      <PhoneInput
-        label="Japan"
-        defaultCountry="JP"
-        onChange={action('onChange - JP')}
-      />
-      <PhoneInput
-        label="Australia"
-        defaultCountry="AU"
-        onChange={action('onChange - AU')}
-      />
+      <PhoneInput label="United States" defaultCountry="US" onChange={action('onChange - US')} />
+      <PhoneInput label="United Kingdom" defaultCountry="GB" onChange={action('onChange - GB')} />
+      <PhoneInput label="Germany" defaultCountry="DE" onChange={action('onChange - DE')} />
+      <PhoneInput label="Japan" defaultCountry="JP" onChange={action('onChange - JP')} />
+      <PhoneInput label="Australia" defaultCountry="AU" onChange={action('onChange - AU')} />
     </div>
   ),
   parameters: {

@@ -36,9 +36,7 @@ const DefaultComponent = () => {
     <div style={{ padding: '100px', display: 'flex', justifyContent: 'center' }}>
       <Menu
         trigger={
-          <Button onClick={() => setIsOpen(!isOpen)}>
-            {isOpen ? 'Close' : 'Open'} Menu
-          </Button>
+          <Button onClick={() => setIsOpen(!isOpen)}>{isOpen ? 'Close' : 'Open'} Menu</Button>
         }
         isOpen={isOpen}
         onOpenChange={setIsOpen}

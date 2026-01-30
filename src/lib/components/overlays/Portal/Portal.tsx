@@ -31,11 +31,7 @@ export interface PortalProps {
  * Portal component
  * Renders children into a portal container outside the DOM hierarchy
  */
-export const Portal: React.FC<PortalProps> = ({
-  children,
-  containerId,
-  zIndex,
-}) => {
+export const Portal: React.FC<PortalProps> = ({ children, containerId, zIndex }) => {
   const portalContainer = usePortal({ containerId, zIndex });
 
   return createPortal(children, portalContainer);

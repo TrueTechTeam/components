@@ -412,4 +412,3 @@ export const Playground: Story = {
     );
   },
 };
-

@@ -141,12 +141,16 @@ export const Card = forwardRef<HTMLDivElement, CardProps>(
     const componentClasses = [styles.card, className].filter(Boolean).join(' ');
 
     const handleClick = (event: MouseEvent<HTMLDivElement>) => {
-      if (disabled || !interactive) {return;}
+      if (disabled || !interactive) {
+        return;
+      }
       onClick?.(event);
     };
 
     const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-      if (disabled || !interactive) {return;}
+      if (disabled || !interactive) {
+        return;
+      }
       if (event.key === 'Enter' || event.key === ' ') {
         event.preventDefault();
         onClick?.(event as unknown as MouseEvent<HTMLDivElement>);

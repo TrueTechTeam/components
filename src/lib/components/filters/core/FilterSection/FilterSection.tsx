@@ -57,7 +57,9 @@ export const FilterSection = forwardRef<HTMLDivElement, FilterSectionProps>(
 
     // Calculate active filter count for this section
     const activeCount = useMemo(() => {
-      if (!ctx || !showActiveCount || !id) {return 0;}
+      if (!ctx || !showActiveCount || !id) {
+        return 0;
+      }
 
       const sectionFilters = ctx.getFiltersByGroup(id);
       return sectionFilters.filter((filter) => ctx.isFilterActive(filter.id)).length;
@@ -106,24 +108,16 @@ export const FilterSection = forwardRef<HTMLDivElement, FilterSectionProps>(
           </button>
         )}
 
-        {description && !isCollapsed && (
-          <p className={styles.description}>{description}</p>
-        )}
+        {description && !isCollapsed && <p className={styles.description}>{description}</p>}
 
         {collapsible ? (
           <Collapse isOpen={!isCollapsed}>
-            <div
-              id={id ? `filter-section-${id}` : undefined}
-              className={styles.content}
-            >
+            <div id={id ? `filter-section-${id}` : undefined} className={styles.content}>
               {children}
             </div>
           </Collapse>
         ) : (
-          <div
-            id={id ? `filter-section-${id}` : undefined}
-            className={styles.content}
-          >
+          <div id={id ? `filter-section-${id}` : undefined} className={styles.content}>
             {children}
           </div>
         )}

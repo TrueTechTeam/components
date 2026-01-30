@@ -185,4 +185,3 @@ export const ListSelectFilter = forwardRef<HTMLDivElement, ListSelectFilterProps
 ListSelectFilter.displayName = 'ListSelectFilter';
 
 export default ListSelectFilter;
-

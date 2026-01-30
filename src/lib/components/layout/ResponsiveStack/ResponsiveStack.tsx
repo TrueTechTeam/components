@@ -176,9 +176,14 @@ export const ResponsiveStack = forwardRef<HTMLDivElement, ResponsiveStackProps>(
         ({
           '--stack-direction': currentDirection,
           '--stack-gap': `${currentGap}px`,
-          '--stack-align': currentAlign === 'start' || currentAlign === 'end' ? `flex-${currentAlign}` : currentAlign,
+          '--stack-align':
+            currentAlign === 'start' || currentAlign === 'end'
+              ? `flex-${currentAlign}`
+              : currentAlign,
           '--stack-justify':
-            currentJustify === 'start' || currentJustify === 'end' ? `flex-${currentJustify}` : currentJustify,
+            currentJustify === 'start' || currentJustify === 'end'
+              ? `flex-${currentJustify}`
+              : currentJustify,
           '--stack-wrap': wrap ? 'wrap' : 'nowrap',
           ...style,
         }) as React.CSSProperties,

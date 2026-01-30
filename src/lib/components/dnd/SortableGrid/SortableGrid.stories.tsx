@@ -182,4 +182,3 @@ function AutoColumnsStory() {
 export const AutoColumns: Story = {
   render: () => <AutoColumnsStory />,
 };
-

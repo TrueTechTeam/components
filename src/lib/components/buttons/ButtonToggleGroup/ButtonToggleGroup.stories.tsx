@@ -117,7 +117,9 @@ export const Sizes: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
       <div>
-        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>Small</p>
+        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>
+          Small
+        </p>
         <ButtonToggleGroup defaultValue="a" size="sm" aria-label="Size small">
           <ButtonToggleGroupItem value="a">Option A</ButtonToggleGroupItem>
           <ButtonToggleGroupItem value="b">Option B</ButtonToggleGroupItem>
@@ -125,7 +127,9 @@ export const Sizes: Story = {
         </ButtonToggleGroup>
       </div>
       <div>
-        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>Medium</p>
+        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>
+          Medium
+        </p>
         <ButtonToggleGroup defaultValue="a" size="md" aria-label="Size medium">
           <ButtonToggleGroupItem value="a">Option A</ButtonToggleGroupItem>
           <ButtonToggleGroupItem value="b">Option B</ButtonToggleGroupItem>
@@ -133,7 +137,9 @@ export const Sizes: Story = {
         </ButtonToggleGroup>
       </div>
       <div>
-        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>Large</p>
+        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>
+          Large
+        </p>
         <ButtonToggleGroup defaultValue="a" size="lg" aria-label="Size large">
           <ButtonToggleGroupItem value="a">Option A</ButtonToggleGroupItem>
           <ButtonToggleGroupItem value="b">Option B</ButtonToggleGroupItem>
@@ -154,35 +160,45 @@ export const Variants: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
       <div>
-        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>Primary</p>
+        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>
+          Primary
+        </p>
         <ButtonToggleGroup defaultValue="a" variant="primary" aria-label="Primary">
           <ButtonToggleGroupItem value="a">Option A</ButtonToggleGroupItem>
           <ButtonToggleGroupItem value="b">Option B</ButtonToggleGroupItem>
         </ButtonToggleGroup>
       </div>
       <div>
-        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>Secondary</p>
+        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>
+          Secondary
+        </p>
         <ButtonToggleGroup defaultValue="a" variant="secondary" aria-label="Secondary">
           <ButtonToggleGroupItem value="a">Option A</ButtonToggleGroupItem>
           <ButtonToggleGroupItem value="b">Option B</ButtonToggleGroupItem>
         </ButtonToggleGroup>
       </div>
       <div>
-        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>Outline</p>
+        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>
+          Outline
+        </p>
         <ButtonToggleGroup defaultValue="a" variant="outline" aria-label="Outline">
           <ButtonToggleGroupItem value="a">Option A</ButtonToggleGroupItem>
           <ButtonToggleGroupItem value="b">Option B</ButtonToggleGroupItem>
         </ButtonToggleGroup>
       </div>
       <div>
-        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>Ghost</p>
+        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>
+          Ghost
+        </p>
         <ButtonToggleGroup defaultValue="a" variant="ghost" aria-label="Ghost">
           <ButtonToggleGroupItem value="a">Option A</ButtonToggleGroupItem>
           <ButtonToggleGroupItem value="b">Option B</ButtonToggleGroupItem>
         </ButtonToggleGroup>
       </div>
       <div>
-        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>Success</p>
+        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>
+          Success
+        </p>
         <ButtonToggleGroup defaultValue="a" variant="success" aria-label="Success">
           <ButtonToggleGroupItem value="a">Option A</ButtonToggleGroupItem>
           <ButtonToggleGroupItem value="b">Option B</ButtonToggleGroupItem>
@@ -292,7 +308,9 @@ const ControlledExample = () => {
           Calendar
         </ButtonToggleGroupItem>
       </ButtonToggleGroup>
-      <p style={{ fontSize: '14px', color: 'var(--theme-text-secondary)' }}>Selected view: {view}</p>
+      <p style={{ fontSize: '14px', color: 'var(--theme-text-secondary)' }}>
+        Selected view: {view}
+      </p>
     </div>
   );
 };
@@ -364,4 +382,3 @@ export const Playground: Story = {
     'aria-label': 'Button toggle group',
   },
 };
-

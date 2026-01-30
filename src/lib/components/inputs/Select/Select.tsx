@@ -276,12 +276,16 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
     );
 
     const handleTriggerClick = useCallback(() => {
-      if (disabled || readOnly) {return;}
+      if (disabled || readOnly) {
+        return;
+      }
       setIsOpen((prev) => !prev);
     }, [disabled, readOnly]);
 
     const renderIcon = (icon: React.ReactNode | IconName | undefined) => {
-      if (!icon) {return null;}
+      if (!icon) {
+        return null;
+      }
 
       if (typeof icon === 'string') {
         return <Icon name={icon as IconName} className={styles.icon} />;
@@ -305,14 +309,17 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
 
     // Group options by group property
     const groupedOptions = useMemo(() => {
-      return filteredOptions.reduce((acc, option) => {
-        const groupName = option.group || '__ungrouped__';
-        if (!acc[groupName]) {
-          acc[groupName] = [];
-        }
-        acc[groupName].push(option);
-        return acc;
-      }, {} as Record<string, SelectOption[]>);
+      return filteredOptions.reduce(
+        (acc, option) => {
+          const groupName = option.group || '__ungrouped__';
+          if (!acc[groupName]) {
+            acc[groupName] = [];
+          }
+          acc[groupName].push(option);
+          return acc;
+        },
+        {} as Record<string, SelectOption[]>
+      );
     }, [filteredOptions]);
 
     const hasGroups = Object.keys(groupedOptions).length > 1 || !groupedOptions['__ungrouped__'];
@@ -471,4 +478,3 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
 );
 
 Select.displayName = 'Select';
-

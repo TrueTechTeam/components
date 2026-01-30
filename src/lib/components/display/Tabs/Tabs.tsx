@@ -144,9 +144,12 @@ export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
       [value, onChange]
     );
 
-    const markPanelActivated = useCallback((panelValue: string) => {
-      activatedPanels.add(panelValue);
-    }, [activatedPanels]);
+    const markPanelActivated = useCallback(
+      (panelValue: string) => {
+        activatedPanels.add(panelValue);
+      },
+      [activatedPanels]
+    );
 
     const contextValue: TabsContextValue = useMemo(
       () => ({

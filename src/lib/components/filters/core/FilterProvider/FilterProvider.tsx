@@ -2,13 +2,7 @@
  * FilterProvider - Main provider component for filter state management
  */
 
-import React, {
-  useState,
-  useCallback,
-  useMemo,
-  useEffect,
-  useRef,
-} from 'react';
+import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { FilterContext } from '../../FilterContext';
 import type {
   FilterProviderProps,
@@ -67,26 +61,24 @@ function isValueEmpty(value: FilterValue, filter: FilterDefinition): boolean {
     return filter.isEmpty(value);
   }
 
-  if (value === undefined || value === null) {return true;}
-  if (value === '') {return true;}
-  if (Array.isArray(value) && value.length === 0) {return true;}
+  if (value === undefined || value === null) {
+    return true;
+  }
+  if (value === '') {
+    return true;
+  }
+  if (Array.isArray(value) && value.length === 0) {
+    return true;
+  }
 
   // Check number range
-  if (
-    typeof value === 'object' &&
-    'min' in value &&
-    'max' in value
-  ) {
+  if (typeof value === 'object' && 'min' in value && 'max' in value) {
     const rangeValue = value as NumberRangeValue;
     return rangeValue.min === undefined && rangeValue.max === undefined;
   }
 
   // Check date range
-  if (
-    typeof value === 'object' &&
-    'startDate' in value &&
-    'endDate' in value
-  ) {
+  if (typeof value === 'object' && 'startDate' in value && 'endDate' in value) {
     const dateValue = value as DateRangeValue;
     return dateValue.startDate === null && dateValue.endDate === null;
   }
@@ -125,7 +117,9 @@ function getDisplayValue(
     case 'multi-select':
     case 'list-select': {
       const values = value as string[];
-      if (values.length === 0) {return '';}
+      if (values.length === 0) {
+        return '';
+      }
       if (values.length === 1) {
         const option = options?.find((o) => o.value === values[0]);
         return option ? String(option.label) : values[0];
@@ -140,8 +134,12 @@ function getDisplayValue(
     case 'date-range': {
       const dateRange = value as DateRangeValue;
       const parts: string[] = [];
-      if (dateRange.startDate) {parts.push(dateRange.startDate.toLocaleDateString());}
-      if (dateRange.endDate) {parts.push(dateRange.endDate.toLocaleDateString());}
+      if (dateRange.startDate) {
+        parts.push(dateRange.startDate.toLocaleDateString());
+      }
+      if (dateRange.endDate) {
+        parts.push(dateRange.endDate.toLocaleDateString());
+      }
       return parts.join(' - ');
     }
     case 'number-range': {
@@ -149,8 +147,12 @@ function getDisplayValue(
       if (numRange.min !== undefined && numRange.max !== undefined) {
         return `${numRange.min} - ${numRange.max}`;
       }
-      if (numRange.min !== undefined) {return `>= ${numRange.min}`;}
-      if (numRange.max !== undefined) {return `<= ${numRange.max}`;}
+      if (numRange.min !== undefined) {
+        return `>= ${numRange.min}`;
+      }
+      if (numRange.max !== undefined) {
+        return `<= ${numRange.max}`;
+      }
       return '';
     }
     case 'rating':
@@ -164,7 +166,9 @@ function getDisplayValue(
  * Serialize filter value to URL parameter
  */
 function serializeValue(value: FilterValue, filter: FilterDefinition): string {
-  if (value === null || value === undefined) {return '';}
+  if (value === null || value === undefined) {
+    return '';
+  }
 
   switch (filter.type) {
     case 'multi-select':
@@ -194,7 +198,9 @@ function serializeValue(value: FilterValue, filter: FilterDefinition): string {
  * Deserialize filter value from URL parameter
  */
 function deserializeValue(param: string, filter: FilterDefinition): FilterValue {
-  if (!param) {return getDefaultValue(filter);}
+  if (!param) {
+    return getDefaultValue(filter);
+  }
 
   switch (filter.type) {
     case 'multi-select':
@@ -277,7 +283,9 @@ function useOptionsManager({ filters, values: _values }: OptionsManagerProps) {
 
       // Check if we have cached options state
       const cached = optionsStateRef.current.get(filterId);
-      if (cached) {return cached;}
+      if (cached) {
+        return cached;
+      }
 
       // Static options
       if (filter.options) {
@@ -342,25 +350,23 @@ export const FilterProvider: React.FC<FilterProviderProps> = ({
   }, [filters, defaultValues]);
 
   // State
-  const [internalValues, setInternalValues] = useState<Record<string, FilterValue>>(
-    () => {
-      // Load from URL if syncWithUrl is enabled
-      if (syncWithUrl && typeof window !== 'undefined') {
-        const params = new URLSearchParams(window.location.search);
-        const urlValues: Record<string, FilterValue> = { ...initialValues };
+  const [internalValues, setInternalValues] = useState<Record<string, FilterValue>>(() => {
+    // Load from URL if syncWithUrl is enabled
+    if (syncWithUrl && typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const urlValues: Record<string, FilterValue> = { ...initialValues };
 
-        for (const filter of filters) {
-          const paramValue = params.get(`${urlParamPrefix}${filter.id}`);
-          if (paramValue) {
-            urlValues[filter.id] = deserializeValue(paramValue, filter);
-          }
+      for (const filter of filters) {
+        const paramValue = params.get(`${urlParamPrefix}${filter.id}`);
+        if (paramValue) {
+          urlValues[filter.id] = deserializeValue(paramValue, filter);
         }
-
-        return urlValues;
       }
-      return initialValues;
+
+      return urlValues;
     }
-  );
+    return initialValues;
+  });
   const [pendingValues, setPendingValues] = useState<Record<string, FilterValue> | null>(null);
   const [loadingFilters, _setLoadingFilters] = useState<Set<string>>(new Set());
   const [errors, setErrors] = useState<Record<string, string>>({});
@@ -594,7 +600,9 @@ export const FilterProvider: React.FC<FilterProviderProps> = ({
   const getFilterMeta = useCallback(
     (filterId: string): FilterValueWithMeta | undefined => {
       const filter = filters.find((f) => f.id === filterId);
-      if (!filter) {return undefined;}
+      if (!filter) {
+        return undefined;
+      }
 
       const value = displayValues[filterId];
       const optionsState = getFilterOptions(filterId);
@@ -612,7 +620,9 @@ export const FilterProvider: React.FC<FilterProviderProps> = ({
   const isFilterActive = useCallback(
     (filterId: string): boolean => {
       const filter = filters.find((f) => f.id === filterId);
-      if (!filter) {return false;}
+      if (!filter) {
+        return false;
+      }
       return !isValueEmpty(displayValues[filterId], filter);
     },
     [filters, displayValues]
@@ -678,23 +688,23 @@ export const FilterProvider: React.FC<FilterProviderProps> = ({
   );
 
   const getUngroupedFilters = useCallback((): FilterDefinition[] => {
-    return filters
-      .filter((f) => !f.group)
-      .sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
+    return filters.filter((f) => !f.group).sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
   }, [filters]);
 
   const isFilterVisible = useCallback(
     (filterId: string): boolean => {
       const filter = filters.find((f) => f.id === filterId);
-      if (!filter) {return false;}
-      if (filter.hidden) {return false;}
+      if (!filter) {
+        return false;
+      }
+      if (filter.hidden) {
+        return false;
+      }
 
       // Check dependencies
       if (filter.dependencies) {
         for (const dep of filter.dependencies) {
-          const dependsOnFields = Array.isArray(dep.dependsOn)
-            ? dep.dependsOn
-            : [dep.dependsOn];
+          const dependsOnFields = Array.isArray(dep.dependsOn) ? dep.dependsOn : [dep.dependsOn];
 
           const dependencyValues: Record<string, FilterValue> = {};
           for (const field of dependsOnFields) {
@@ -705,15 +715,16 @@ export const FilterProvider: React.FC<FilterProviderProps> = ({
             ? dep.condition(dependencyValues)
             : Object.values(dependencyValues).every(
                 (v) =>
-                  v !== undefined &&
-                  v !== null &&
-                  v !== '' &&
-                  !(Array.isArray(v) && v.length === 0)
+                  v !== undefined && v !== null && v !== '' && !(Array.isArray(v) && v.length === 0)
               );
 
           const action = dep.action ?? 'show';
-          if (action === 'show' && !conditionMet) {return false;}
-          if (action === 'hide' && conditionMet) {return false;}
+          if (action === 'show' && !conditionMet) {
+            return false;
+          }
+          if (action === 'hide' && conditionMet) {
+            return false;
+          }
         }
       }
 
@@ -725,15 +736,17 @@ export const FilterProvider: React.FC<FilterProviderProps> = ({
   const isFilterEnabled = useCallback(
     (filterId: string): boolean => {
       const filter = filters.find((f) => f.id === filterId);
-      if (!filter) {return false;}
-      if (filter.disabled) {return false;}
+      if (!filter) {
+        return false;
+      }
+      if (filter.disabled) {
+        return false;
+      }
 
       // Check dependencies
       if (filter.dependencies) {
         for (const dep of filter.dependencies) {
-          const dependsOnFields = Array.isArray(dep.dependsOn)
-            ? dep.dependsOn
-            : [dep.dependsOn];
+          const dependsOnFields = Array.isArray(dep.dependsOn) ? dep.dependsOn : [dep.dependsOn];
 
           const dependencyValues: Record<string, FilterValue> = {};
           for (const field of dependsOnFields) {
@@ -744,15 +757,16 @@ export const FilterProvider: React.FC<FilterProviderProps> = ({
             ? dep.condition(dependencyValues)
             : Object.values(dependencyValues).every(
                 (v) =>
-                  v !== undefined &&
-                  v !== null &&
-                  v !== '' &&
-                  !(Array.isArray(v) && v.length === 0)
+                  v !== undefined && v !== null && v !== '' && !(Array.isArray(v) && v.length === 0)
               );
 
           const action = dep.action ?? 'show';
-          if (action === 'enable' && !conditionMet) {return false;}
-          if (action === 'disable' && conditionMet) {return false;}
+          if (action === 'enable' && !conditionMet) {
+            return false;
+          }
+          if (action === 'disable' && conditionMet) {
+            return false;
+          }
         }
       }
 
@@ -848,9 +862,7 @@ export const FilterProvider: React.FC<FilterProviderProps> = ({
     };
   }, []);
 
-  return (
-    <FilterContext.Provider value={contextValue}>{children}</FilterContext.Provider>
-  );
+  return <FilterContext.Provider value={contextValue}>{children}</FilterContext.Provider>;
 };
 
 FilterProvider.displayName = 'FilterProvider';

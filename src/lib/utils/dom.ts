@@ -85,4 +85,3 @@ export function isElementInViewport(element: HTMLElement): boolean {
     bounds.right > 0
   );
 }
-

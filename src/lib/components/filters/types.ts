@@ -1181,4 +1181,3 @@ export interface FilterAccordionProps extends Omit<FilterLayoutProps, 'children'
    */
   showGroupCounts?: boolean;
 }
-

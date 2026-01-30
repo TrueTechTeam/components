@@ -235,20 +235,30 @@ export const LoadingState: Story = {
 
 // All Variants
 const AllVariantsExample = () => {
-  const [variant, setVariant] = useState<'info' | 'success' | 'warning' | 'error' | 'confirm' | null>(null);
+  const [variant, setVariant] = useState<
+    'info' | 'success' | 'warning' | 'error' | 'confirm' | null
+  >(null);
 
   return (
     <>
       <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
         <Button onClick={() => setVariant('info')}>Info</Button>
-        <Button variant="success" onClick={() => setVariant('success')}>Success</Button>
-        <Button variant="warning" onClick={() => setVariant('warning')}>Warning</Button>
-        <Button variant="danger" onClick={() => setVariant('error')}>Error</Button>
-        <Button variant="secondary" onClick={() => setVariant('confirm')}>Confirm</Button>
+        <Button variant="success" onClick={() => setVariant('success')}>
+          Success
+        </Button>
+        <Button variant="warning" onClick={() => setVariant('warning')}>
+          Warning
+        </Button>
+        <Button variant="danger" onClick={() => setVariant('error')}>
+          Error
+        </Button>
+        <Button variant="secondary" onClick={() => setVariant('confirm')}>
+          Confirm
+        </Button>
       </div>
       {variant && (
         <Alert
-          isOpen={true}
+          isOpen
           onClose={() => setVariant(null)}
           variant={variant}
           title={`${variant.charAt(0).toUpperCase() + variant.slice(1)} Alert`}
@@ -270,7 +280,9 @@ export const AllVariants: Story = {
 const ProgrammaticAlertContent = () => {
   const alert = useAlertContext();
 
-  if (!alert) return <p>Alert provider not found</p>;
+  if (!alert) {
+    return <p>Alert provider not found</p>;
+  }
 
   const handleInfo = () => alert.info('Information', 'This is an info message.');
   const handleSuccess = () => alert.success('Success', 'Operation completed successfully.');
@@ -278,21 +290,17 @@ const ProgrammaticAlertContent = () => {
   const handleError = () => alert.error('Error', 'Something went wrong.');
 
   const handleConfirm = async () => {
-    const result = await alert.confirm(
-      'Confirm Action',
-      'Do you want to proceed?'
-    );
+    const result = await alert.confirm('Confirm Action', 'Do you want to proceed?');
     if (result) {
       alert.success('Confirmed', 'You confirmed the action.');
     }
   };
 
   const handleDelete = async () => {
-    const result = await alert.confirm(
-      'Delete Item',
-      'This action cannot be undone.',
-      { confirmVariant: 'danger', confirmText: 'Delete' }
-    );
+    const result = await alert.confirm('Delete Item', 'This action cannot be undone.', {
+      confirmVariant: 'danger',
+      confirmText: 'Delete',
+    });
     if (result) {
       alert.success('Deleted', 'Item has been deleted.');
     }
@@ -301,11 +309,21 @@ const ProgrammaticAlertContent = () => {
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
       <Button onClick={handleInfo}>Info Alert</Button>
-      <Button variant="success" onClick={handleSuccess}>Success Alert</Button>
-      <Button variant="warning" onClick={handleWarning}>Warning Alert</Button>
-      <Button variant="danger" onClick={handleError}>Error Alert</Button>
-      <Button variant="secondary" onClick={handleConfirm}>Confirm Dialog</Button>
-      <Button variant="danger" onClick={handleDelete}>Delete Confirmation</Button>
+      <Button variant="success" onClick={handleSuccess}>
+        Success Alert
+      </Button>
+      <Button variant="warning" onClick={handleWarning}>
+        Warning Alert
+      </Button>
+      <Button variant="danger" onClick={handleError}>
+        Error Alert
+      </Button>
+      <Button variant="secondary" onClick={handleConfirm}>
+        Confirm Dialog
+      </Button>
+      <Button variant="danger" onClick={handleDelete}>
+        Delete Confirmation
+      </Button>
     </div>
   );
 };
@@ -337,15 +355,17 @@ const CustomContentExample = () => {
         description="You can add any custom content below:"
         onConfirm={() => setIsOpen(false)}
       >
-        <div style={{
-          marginTop: '16px',
-          padding: '16px',
-          background: 'var(--theme-surface)',
-          borderRadius: '8px'
-        }}>
+        <div
+          style={{
+            marginTop: '16px',
+            padding: '16px',
+            background: 'var(--theme-surface)',
+            borderRadius: '8px',
+          }}
+        >
           <p style={{ margin: 0, fontSize: '14px' }}>
-            This is custom content rendered inside the alert body.
-            You can add forms, lists, or any other React components here.
+            This is custom content rendered inside the alert body. You can add forms, lists, or any
+            other React components here.
           </p>
         </div>
       </Alert>

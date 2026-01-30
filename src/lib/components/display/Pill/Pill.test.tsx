@@ -238,9 +238,7 @@ describe('Pill', () => {
   // 7. Icon tests
   describe('icons', () => {
     it('renders start icon when provided', () => {
-      render(
-        <Pill startIcon={<span data-testid="start-icon">→</span>}>Test</Pill>
-      );
+      render(<Pill startIcon={<span data-testid="start-icon">→</span>}>Test</Pill>);
 
       expect(screen.getByTestId('start-icon')).toBeInTheDocument();
     });
@@ -267,10 +265,7 @@ describe('Pill', () => {
 
     it('does not render end icon when onRemove is provided', () => {
       render(
-        <Pill
-          endIcon={<span data-testid="end-icon">←</span>}
-          onRemove={() => {}}
-        >
+        <Pill endIcon={<span data-testid="end-icon">←</span>} onRemove={() => {}}>
           Test
         </Pill>
       );

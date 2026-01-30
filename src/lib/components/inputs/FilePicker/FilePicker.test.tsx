@@ -1,12 +1,20 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { FilePicker } from './FilePicker';
 
+// Mock URL.createObjectURL and revokeObjectURL for file preview tests
+beforeAll(() => {
+  Object.defineProperty(global.URL, 'createObjectURL', {
+    writable: true,
+    value: jest.fn(() => 'blob:mock-url'),
+  });
+  Object.defineProperty(global.URL, 'revokeObjectURL', {
+    writable: true,
+    value: jest.fn(),
+  });
+});
+
 // Mock File objects for testing
-const createMockFile = (
-  name: string,
-  size: number,
-  type: string
-): File => {
+const createMockFile = (name: string, size: number, type: string): File => {
   const blob = new Blob(['a'.repeat(size)], { type });
   return new File([blob], name, { type });
 };
@@ -55,13 +63,7 @@ describe('FilePicker', () => {
     const handleError = jest.fn();
     const maxSize = 1000; // 1KB
 
-    render(
-      <FilePicker
-        maxSize={maxSize}
-        onChange={handleChange}
-        onError={handleError}
-      />
-    );
+    render(<FilePicker maxSize={maxSize} onChange={handleChange} onError={handleError} />);
 
     const file = createMockFile('large.txt', 2000, 'text/plain'); // 2KB
     const input = screen.getByLabelText(/file picker/i) as HTMLInputElement;
@@ -81,13 +83,7 @@ describe('FilePicker', () => {
     const handleChange = jest.fn();
     const handleError = jest.fn();
 
-    render(
-      <FilePicker
-        accept="image/*"
-        onChange={handleChange}
-        onError={handleError}
-      />
-    );
+    render(<FilePicker accept="image/*" onChange={handleChange} onError={handleError} />);
 
     const file = createMockFile('document.pdf', 1000, 'application/pdf');
     const input = screen.getByLabelText(/file picker/i) as HTMLInputElement;
@@ -186,13 +182,7 @@ describe('FilePicker', () => {
   });
 
   it('should show error state', () => {
-    render(
-      <FilePicker
-        label="Upload Files"
-        error
-        errorMessage="Upload failed"
-      />
-    );
+    render(<FilePicker label="Upload Files" error errorMessage="Upload failed" />);
 
     expect(screen.getByText('Upload failed')).toBeInTheDocument();
   });
@@ -231,14 +221,7 @@ describe('FilePicker', () => {
     const handleChange = jest.fn();
     const handleError = jest.fn();
 
-    render(
-      <FilePicker
-        multiple
-        maxFiles={2}
-        onChange={handleChange}
-        onError={handleError}
-      />
-    );
+    render(<FilePicker multiple maxFiles={2} onChange={handleChange} onError={handleError} />);
 
     const file1 = createMockFile('test1.txt', 1000, 'text/plain');
     const file2 = createMockFile('test2.txt', 1000, 'text/plain');

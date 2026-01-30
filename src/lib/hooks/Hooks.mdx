@@ -1,0 +1,356 @@
+import { Meta } from '@storybook/blocks';
+
+<Meta title="Hooks/Overview" />
+
+# Hooks
+
+Custom React hooks for common UI patterns and functionality. All hooks are fully typed, SSR-safe, and follow React best practices.
+
+## Installation
+
+All hooks are exported from the main package:
+
+```tsx
+import {
+  useUrlState,
+  useIntersectionObserver,
+  useLocalStorage,
+  useMediaQuery,
+  usePrevious,
+  useClipboard,
+  useTimeout,
+  useInterval,
+  useResizeObserver,
+  useDebounce,
+  useClickOutside,
+  useHover,
+  useFocusTrap,
+  useEscapeKey,
+} from '@true-tech-team/ui-components';
+```
+
+---
+
+## State Management
+
+### useUrlState
+
+Synchronizes React state with URL search parameters, providing a typed `useState`-like API.
+
+```tsx
+const [search, setSearch, clear] = useUrlState('q', { defaultValue: '' });
+const [page, setPage] = useUrlState('page', {
+  defaultValue: 1,
+  serializer: urlStateSerializers.number,
+  debounce: 300,
+});
+```
+
+**Features:**
+
+- Built-in serializers for `string`, `number`, `boolean`, `array`, `json`
+- Automatic type inference from default value
+- Debounce support for URL updates
+- History integration (push/replace)
+- Popstate event handling for browser navigation
+
+[View useUrlState Stories →](?path=/docs/hooks-useurlstate--docs)
+
+---
+
+### useLocalStorage
+
+Persists state to localStorage with automatic serialization and cross-tab sync.
+
+```tsx
+const [theme, setTheme] = useLocalStorage('theme', 'light');
+const [user, setUser, clearUser] = useLocalStorage<User | null>('user', null);
+```
+
+**Features:**
+
+- Cross-tab synchronization via storage events
+- Custom serializer support
+- SSR-safe
+- Graceful error handling
+
+[View useLocalStorage Stories →](?path=/docs/hooks-uselocalstorage--docs)
+
+---
+
+### usePrevious
+
+Tracks the previous value of a state or prop across renders.
+
+```tsx
+const prevCount = usePrevious(count);
+
+useEffect(() => {
+  if (prevCount !== undefined && count > prevCount) {
+    console.log('Count increased!');
+  }
+}, [count, prevCount]);
+```
+
+[View usePrevious Stories →](?path=/docs/hooks-useprevious--docs)
+
+---
+
+## DOM Observers
+
+### useIntersectionObserver
+
+Detects when elements enter or leave the viewport using the Intersection Observer API.
+
+```tsx
+const { ref, isIntersecting } = useIntersectionObserver({
+  threshold: 0.5,
+  triggerOnce: true,
+});
+
+return <div ref={ref}>{isIntersecting ? <img src={src} /> : <Skeleton />}</div>;
+```
+
+**Features:**
+
+- Simple ref-based API
+- `triggerOnce` option for lazy loading
+- Multiple threshold support
+- Full IntersectionObserver options
+
+[View useIntersectionObserver Stories →](?path=/docs/hooks-useintersectionobserver--docs)
+
+---
+
+### useResizeObserver
+
+Observes element size changes using the ResizeObserver API.
+
+```tsx
+const { ref, width, height } = useResizeObserver();
+
+return (
+  <div ref={ref}>
+    Size: {width} x {height}
+  </div>
+);
+```
+
+**Features:**
+
+- Automatic cleanup
+- Debounce support
+- Border-box and content-box modes
+
+[View useResizeObserver Stories →](?path=/docs/hooks-useresizeobserver--docs)
+
+---
+
+## UI Interactions
+
+### useClipboard
+
+Copies text to clipboard with success/error feedback.
+
+```tsx
+const { copy, copied, error } = useClipboard();
+
+return <Button onClick={() => copy(text)}>{copied ? 'Copied!' : 'Copy'}</Button>;
+```
+
+**Features:**
+
+- Modern Clipboard API with fallback
+- Auto-reset after configurable duration
+- Success/error callbacks
+
+[View useClipboard Stories →](?path=/docs/hooks-useclipboard--docs)
+
+---
+
+### useMediaQuery
+
+Reacts to CSS media query changes for responsive behavior in JavaScript.
+
+```tsx
+const { matches: isMobile } = useMediaQuery('(max-width: 768px)');
+const { matches: prefersDark } = useMediaQuery('(prefers-color-scheme: dark)');
+```
+
+**Features:**
+
+- SSR-safe with default value
+- Change callback support
+- Supports all CSS media queries
+
+[View useMediaQuery Stories →](?path=/docs/hooks-usemediaquery--docs)
+
+---
+
+### useHover
+
+Tracks hover state with optional enter/leave delays.
+
+```tsx
+const { ref, isHovered } = useHover({ enterDelay: 200 });
+
+return <div ref={ref}>{isHovered ? 'Hovering!' : 'Hover me'}</div>;
+```
+
+[View useHover Stories →](?path=/docs/hooks-usehover--docs)
+
+---
+
+### useClickOutside
+
+Detects clicks outside an element.
+
+```tsx
+const ref = useRef(null);
+useClickOutside(ref, () => setOpen(false));
+
+return <div ref={ref}>Dropdown content</div>;
+```
+
+---
+
+### useFocusTrap
+
+Traps focus within an element (useful for modals).
+
+```tsx
+const { ref } = useFocusTrap({ enabled: isOpen });
+
+return (
+  <div ref={ref}>
+    <input />
+    <button>Submit</button>
+  </div>
+);
+```
+
+---
+
+### useEscapeKey
+
+Handles Escape key press.
+
+```tsx
+useEscapeKey(() => setOpen(false), { enabled: isOpen });
+```
+
+---
+
+## Utilities
+
+### useDebounce
+
+Debounces a value.
+
+```tsx
+const [searchTerm, setSearchTerm] = useState('');
+const debouncedSearch = useDebounce(searchTerm, 300);
+
+useEffect(() => {
+  search(debouncedSearch);
+}, [debouncedSearch]);
+```
+
+---
+
+### useTimeout
+
+Declarative timeout with controls.
+
+```tsx
+const { reset, clear } = useTimeout({
+  callback: () => setIdle(true),
+  delay: 30000,
+});
+
+// Reset on activity
+useEffect(() => {
+  window.addEventListener('mousemove', reset);
+  return () => window.removeEventListener('mousemove', reset);
+}, [reset]);
+```
+
+**Features:**
+
+- `null` delay to pause/disable
+- Reset and clear controls
+- Automatic cleanup
+
+[View useTimeout Stories →](?path=/docs/hooks-usetimeout--docs)
+
+---
+
+### useInterval
+
+Declarative interval with controls.
+
+```tsx
+const [count, setCount] = useState(0);
+
+useInterval({
+  callback: () => setCount((c) => c + 1),
+  delay: 1000,
+  immediate: true, // Run immediately on mount
+});
+```
+
+**Features:**
+
+- `null` delay to pause/disable
+- `immediate` option to run on mount
+- Reset and clear controls
+
+[View useInterval Stories →](?path=/docs/hooks-useinterval--docs)
+
+---
+
+## Notification Hooks
+
+### useToast
+
+Programmatic toast notifications.
+
+```tsx
+const { showToast } = useToast();
+
+showToast({
+  message: 'File saved successfully',
+  variant: 'success',
+});
+```
+
+---
+
+### useDialog / useAlert
+
+Programmatic dialog and alert controls.
+
+```tsx
+const { openDialog, closeDialog } = useDialog();
+const { openAlert } = useAlert();
+
+openAlert({
+  title: 'Confirm',
+  message: 'Are you sure?',
+  onConfirm: () => deleteItem(),
+});
+```
+
+---
+
+## Theme Hooks
+
+### useTheme
+
+Access and modify the current theme.
+
+```tsx
+const { theme, setTheme, toggleTheme } = useTheme();
+
+return <Button onClick={toggleTheme}>Current: {theme}</Button>;
+```

@@ -89,10 +89,14 @@ const ControlledComponent = () => {
   const [value, setValue] = useState('medium');
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-      <RadioGroup label="Select size" value={value} onChange={(newValue) => {
-        setValue(newValue);
-        action('onChange')(newValue);
-      }}>
+      <RadioGroup
+        label="Select size"
+        value={value}
+        onChange={(newValue) => {
+          setValue(newValue);
+          action('onChange')(newValue);
+        }}
+      >
         <Radio value="small" label="Small" />
         <Radio value="medium" label="Medium" />
         <Radio value="large" label="Large" />

@@ -38,10 +38,14 @@ export function useInfiniteScroll({
   );
 
   useEffect(() => {
-    if (!hasMore || loading) {return;}
+    if (!hasMore || loading) {
+      return;
+    }
 
     const sentinel = sentinelRef.current;
-    if (!sentinel) {return;}
+    if (!sentinel) {
+      return;
+    }
 
     const observer = new IntersectionObserver(handleIntersection, {
       threshold,

@@ -150,4 +150,3 @@ export const NumberRangeFilter = forwardRef<HTMLDivElement, NumberRangeFilterPro
 NumberRangeFilter.displayName = 'NumberRangeFilter';
 
 export default NumberRangeFilter;
-

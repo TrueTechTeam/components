@@ -176,7 +176,9 @@ export const SortableItem = forwardRef<HTMLElement, SortableItemProps>(
     };
 
     const content =
-      typeof children === 'function' ? (children as (props: SortableItemRenderProps) => ReactNode)(renderProps) : children;
+      typeof children === 'function'
+        ? (children as (props: SortableItemRenderProps) => ReactNode)(renderProps)
+        : children;
 
     const containerClasses = [styles.sortableItem, className].filter(Boolean).join(' ');
 

@@ -1,4 +1,12 @@
-import React, { forwardRef, createContext, useContext, useCallback, isValidElement, Children, cloneElement } from 'react';
+import React, {
+  forwardRef,
+  createContext,
+  useContext,
+  useCallback,
+  isValidElement,
+  Children,
+  cloneElement,
+} from 'react';
 import type { ComponentVariant, ComponentSize, BaseComponentProps } from '../../../types';
 import type { FormFieldConfig, FormContext as FormContextType, UseFormStateOptions } from './types';
 import { useFormState } from './hooks/useFormState';
@@ -211,11 +219,7 @@ const renderField = (
 
     case 'radio':
       return (
-        <RadioGroup
-          {...commonProps}
-          value={value}
-          onChange={(val) => handleChange(val)}
-        >
+        <RadioGroup {...commonProps} value={value} onChange={(val) => handleChange(val)}>
           {props.options?.map((option: any) => (
             <Radio key={option.value} value={option.value} label={option.label} />
           ))}
@@ -235,30 +239,14 @@ const renderField = (
 
     case 'slider':
       return (
-        <Slider
-          {...commonProps}
-          value={value ?? props.defaultValue ?? 0}
-          onChange={handleChange}
-        />
+        <Slider {...commonProps} value={value ?? props.defaultValue ?? 0} onChange={handleChange} />
       );
 
     case 'rating':
-      return (
-        <Rating
-          {...commonProps}
-          value={value ?? 0}
-          onChange={handleChange}
-        />
-      );
+      return <Rating {...commonProps} value={value ?? 0} onChange={handleChange} />;
 
     case 'number':
-      return (
-        <NumberInput
-          {...commonProps}
-          value={value}
-          onChange={handleChange}
-        />
-      );
+      return <NumberInput {...commonProps} value={value} onChange={handleChange} />;
 
     case 'phone':
       return (
@@ -270,39 +258,16 @@ const renderField = (
       );
 
     case 'tag':
-      return (
-        <TagInput
-          {...commonProps}
-          value={value || []}
-          onChange={handleChange}
-        />
-      );
+      return <TagInput {...commonProps} value={value || []} onChange={handleChange} />;
 
     case 'file':
-      return (
-        <FilePicker
-          {...commonProps}
-          onChange={handleChange}
-        />
-      );
+      return <FilePicker {...commonProps} onChange={handleChange} />;
 
     case 'color':
-      return (
-        <ColorPicker
-          {...commonProps}
-          value={value || '#000000'}
-          onChange={handleChange}
-        />
-      );
+      return <ColorPicker {...commonProps} value={value || '#000000'} onChange={handleChange} />;
 
     case 'date':
-      return (
-        <DatePicker
-          {...commonProps}
-          value={value}
-          onChange={handleChange}
-        />
-      );
+      return <DatePicker {...commonProps} value={value} onChange={handleChange} />;
 
     case 'daterange':
       return (
@@ -395,7 +360,9 @@ export const FormBuilder = forwardRef<HTMLFormElement, FormBuilderProps>(
     // Wrap children with form context (for children mode)
     const enhancedChildren = children
       ? Children.map(children, (child) => {
-          if (!isValidElement(child)) {return child;}
+          if (!isValidElement(child)) {
+            return child;
+          }
 
           const childProps = child.props as any;
           const name = childProps.name;
@@ -460,11 +427,12 @@ export const FormBuilder = forwardRef<HTMLFormElement, FormBuilderProps>(
           data-testid={dataTestId}
         >
           {/* Config mode: render fields from config */}
-          {fields && fields.map((field) => (
-            <div key={field.name} className={styles.field}>
-              {renderField(field, formContext, variant, size, disabled || loading)}
-            </div>
-          ))}
+          {fields &&
+            fields.map((field) => (
+              <div key={field.name} className={styles.field}>
+                {renderField(field, formContext, variant, size, disabled || loading)}
+              </div>
+            ))}
 
           {/* Children mode: render enhanced children */}
           {enhancedChildren}

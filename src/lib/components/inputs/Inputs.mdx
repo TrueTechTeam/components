@@ -53,23 +53,12 @@ All input components share these features:
 ## Usage Example
 
 ```tsx
-import {
-  Input,
-  Select,
-  Checkbox,
-  DatePicker,
-  Slider
-} from '@true-tech-team/ui-components';
+import { Input, Select, Checkbox, DatePicker, Slider } from '@true-tech-team/ui-components';
 
 function MyForm() {
   return (
     <form>
-      <Input
-        label="Email"
-        type="email"
-        placeholder="you@example.com"
-        required
-      />
+      <Input label="Email" type="email" placeholder="you@example.com" required />
 
       <Select
         label="Country"
@@ -81,17 +70,9 @@ function MyForm() {
 
       <Checkbox label="Subscribe to newsletter" />
 
-      <DatePicker
-        label="Birth Date"
-        placeholder="Select date"
-      />
+      <DatePicker label="Birth Date" placeholder="Select date" />
 
-      <Slider
-        label="Volume"
-        min={0}
-        max={100}
-        value={50}
-      />
+      <Slider label="Volume" min={0} max={100} value={50} />
     </form>
   );
 }
@@ -110,14 +91,7 @@ function ValidatedInput() {
     return { valid: true };
   };
 
-  return (
-    <Input
-      label="Email"
-      type="email"
-      validation={validateEmail}
-      required
-    />
-  );
+  return <Input label="Email" type="email" validation={validateEmail} required />;
 }
 ```
 
@@ -125,24 +99,24 @@ function ValidatedInput() {
 
 ### When to Use Each Input
 
-| Component | Use When |
-|-----------|----------|
-| **Input** | Collecting short text (name, email, URL) |
-| **Textarea** | Collecting long-form text (comments, descriptions) |
-| **NumberInput** | Collecting numeric values with increment controls |
-| **PhoneInput** | Collecting phone numbers with international support |
-| **TagInput** | Collecting multiple items (tags, keywords, emails) |
-| **Select** | Choosing from a predefined list (5+ options) |
-| **Autocomplete** | Choosing from a large list with search |
-| **Checkbox** | Multiple selections or single on/off |
-| **Radio** | Single selection from 2-5 options |
-| **Toggle** | Binary choice with clear on/off state |
-| **Slider** | Selecting from a continuous range |
-| **Rating** | Collecting user ratings or feedback |
-| **ColorPicker** | Selecting colors |
-| **DatePicker** | Selecting single dates |
-| **DateRangePicker** | Selecting date ranges |
-| **FilePicker** | Uploading files |
+| Component           | Use When                                            |
+| ------------------- | --------------------------------------------------- |
+| **Input**           | Collecting short text (name, email, URL)            |
+| **Textarea**        | Collecting long-form text (comments, descriptions)  |
+| **NumberInput**     | Collecting numeric values with increment controls   |
+| **PhoneInput**      | Collecting phone numbers with international support |
+| **TagInput**        | Collecting multiple items (tags, keywords, emails)  |
+| **Select**          | Choosing from a predefined list (5+ options)        |
+| **Autocomplete**    | Choosing from a large list with search              |
+| **Checkbox**        | Multiple selections or single on/off                |
+| **Radio**           | Single selection from 2-5 options                   |
+| **Toggle**          | Binary choice with clear on/off state               |
+| **Slider**          | Selecting from a continuous range                   |
+| **Rating**          | Collecting user ratings or feedback                 |
+| **ColorPicker**     | Selecting colors                                    |
+| **DatePicker**      | Selecting single dates                              |
+| **DateRangePicker** | Selecting date ranges                               |
+| **FilePicker**      | Uploading files                                     |
 
 ### Best Practices
 

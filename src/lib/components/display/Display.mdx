@@ -9,9 +9,11 @@ Components for presenting visual content and elements.
 ## Components in this Category
 
 ### Icon
+
 SVG-based icon system with 21+ built-in icons.
 
 **Features:**
+
 - 21 built-in icons covering common use cases
 - Customizable size and color
 - Supports custom SVG icons
@@ -19,6 +21,7 @@ SVG-based icon system with 21+ built-in icons.
 - Accessibility support
 
 **Available Icons:**
+
 - **Navigation:** chevron-down, chevron-up, chevron-left, chevron-right
 - **Status:** check, close, error, warning, info, help
 - **Visibility:** eye, eye-off
@@ -41,18 +44,10 @@ function MyComponent() {
       <Icon name="check" size={24} />
 
       {/* Colored icon */}
-      <Icon
-        name="warning"
-        size={32}
-        color="var(--theme-warning)"
-      />
+      <Icon name="warning" size={32} color="var(--theme-warning)" />
 
       {/* Icon with custom styling */}
-      <Icon
-        name="settings"
-        size={20}
-        className="custom-icon"
-      />
+      <Icon name="settings" size={20} className="custom-icon" />
     </div>
   );
 }
@@ -69,14 +64,10 @@ function MyComponent() {
   return (
     <div>
       {/* Icon in button (using icon name) */}
-      <Button iconLeft="check">
-        Save
-      </Button>
+      <Button iconLeft="check">Save</Button>
 
       {/* Icon in button (using Icon component) */}
-      <Button iconLeft={<Icon name="settings" />}>
-        Settings
-      </Button>
+      <Button iconLeft={<Icon name="settings" />}>Settings</Button>
     </div>
   );
 }
@@ -113,16 +104,17 @@ const iconNames = Object.keys(iconRegistry);
 
 // Use in a select or autocomplete
 <Select
-  options={iconNames.map(name => ({
+  options={iconNames.map((name) => ({
     value: name,
-    label: name
+    label: name,
   }))}
-/>
+/>;
 ```
 
 ## Design Guidelines
 
 ### Size Guidelines
+
 - **16px** - Small icons in dense layouts, inline text
 - **20px** - Default for buttons and input fields
 - **24px** - Standard icon size for most UI elements
@@ -130,12 +122,14 @@ const iconNames = Object.keys(iconRegistry);
 - **48px+** - Hero icons or large empty states
 
 ### Color Guidelines
+
 - Use theme colors for consistency: `var(--theme-primary)`, `var(--theme-error)`, etc.
 - Icons should match surrounding text color in most cases
 - Use semantic colors (success, warning, error) when indicating status
 - Ensure sufficient contrast for accessibility (4.5:1 ratio minimum)
 
 ### Accessibility
+
 - Icons used for actions should have labels or tooltips
 - Decorative icons should have `aria-hidden="true"`
 - Icon-only buttons should have accessible labels

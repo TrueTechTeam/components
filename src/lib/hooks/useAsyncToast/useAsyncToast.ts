@@ -126,7 +126,7 @@ export function useAsyncToast(): UseAsyncToastReturn {
       config: AsyncToastConfig<TData, TError>
     ): Promise<TData> => {
       const loadingData = normalizeToastData(config.loading);
-      const toastId = toastMethods.loading(loadingData.message as string || 'Loading...', {
+      const toastId = toastMethods.loading((loadingData.message as string) || 'Loading...', {
         ...loadingData,
         duration: 0, // Loading toasts persist until updated
       });
@@ -136,9 +136,7 @@ export function useAsyncToast(): UseAsyncToastReturn {
 
         // Resolve success config
         const successInput =
-          typeof config.success === 'function'
-            ? config.success(result)
-            : config.success;
+          typeof config.success === 'function' ? config.success(result) : config.success;
         const successData = normalizeToastData(successInput);
 
         // Update toast to success
@@ -152,9 +150,7 @@ export function useAsyncToast(): UseAsyncToastReturn {
       } catch (error) {
         // Resolve error config
         const errorInput =
-          typeof config.error === 'function'
-            ? config.error(error as TError)
-            : config.error;
+          typeof config.error === 'function' ? config.error(error as TError) : config.error;
         const errorData = normalizeToastData(errorInput);
 
         // Update toast to error

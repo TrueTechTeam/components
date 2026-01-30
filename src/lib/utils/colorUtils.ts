@@ -35,7 +35,9 @@ export const hexToRgb = (hex: string): RGB | null => {
       ? cleanHex.match(/^([a-f\d])([a-f\d])([a-f\d])$/i)
       : cleanHex.match(/^([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i);
 
-  if (!match) {return null;}
+  if (!match) {
+    return null;
+  }
 
   const [, r, g, b] = match;
 
@@ -52,7 +54,7 @@ export const hexToRgb = (hex: string): RGB | null => {
 export const rgbToHex = (rgb: RGB): string => {
   const toHex = (n: number) => {
     const hex = Math.round(n).toString(16);
-    return hex.length === 1 ? `0${  hex}` : hex;
+    return hex.length === 1 ? `0${hex}` : hex;
   };
 
   return `#${toHex(rgb.r)}${toHex(rgb.g)}${toHex(rgb.b)}`;
@@ -111,11 +113,21 @@ export const hslToRgb = (hsl: HSL): RGB => {
     r = g = b = l; // achromatic
   } else {
     const hue2rgb = (p: number, q: number, t: number) => {
-      if (t < 0) {t += 1;}
-      if (t > 1) {t -= 1;}
-      if (t < 1 / 6) {return p + (q - p) * 6 * t;}
-      if (t < 1 / 2) {return q;}
-      if (t < 2 / 3) {return p + (q - p) * (2 / 3 - t) * 6;}
+      if (t < 0) {
+        t += 1;
+      }
+      if (t > 1) {
+        t -= 1;
+      }
+      if (t < 1 / 6) {
+        return p + (q - p) * 6 * t;
+      }
+      if (t < 1 / 2) {
+        return q;
+      }
+      if (t < 2 / 3) {
+        return p + (q - p) * (2 / 3 - t) * 6;
+      }
       return p;
     };
 
@@ -139,7 +151,9 @@ export const hslToRgb = (hsl: HSL): RGB => {
  */
 export const hexToHsl = (hex: string): HSL | null => {
   const rgb = hexToRgb(hex);
-  if (!rgb) {return null;}
+  if (!rgb) {
+    return null;
+  }
   return rgbToHsl(rgb);
 };
 
@@ -181,9 +195,7 @@ export const parseColorToRgb = (color: string): RGB | null => {
   }
 
   // Try RGB
-  const rgbMatch = color.match(
-    /rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/
-  );
+  const rgbMatch = color.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
   if (rgbMatch) {
     return {
       r: parseInt(rgbMatch[1], 10),
@@ -193,9 +205,7 @@ export const parseColorToRgb = (color: string): RGB | null => {
   }
 
   // Try HSL
-  const hslMatch = color.match(
-    /hsla?\((\d+),\s*(\d+)%,\s*(\d+)%(?:,\s*([\d.]+))?\)/
-  );
+  const hslMatch = color.match(/hsla?\((\d+),\s*(\d+)%,\s*(\d+)%(?:,\s*([\d.]+))?\)/);
   if (hslMatch) {
     const hsl: HSL = {
       h: parseInt(hslMatch[1], 10),

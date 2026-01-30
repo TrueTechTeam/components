@@ -180,7 +180,9 @@ export const TagInput = forwardRef<HTMLInputElement, TagInputProps>(
         // Transform tag if needed
         const transformedTag = transformTag ? transformTag(tag) : tag.trim();
 
-        if (!transformedTag) {return;}
+        if (!transformedTag) {
+          return;
+        }
 
         // Check max tags
         if (maxTags && tags.length >= maxTags) {
@@ -294,20 +296,23 @@ export const TagInput = forwardRef<HTMLInputElement, TagInputProps>(
     );
 
     // Handle blur
-    const handleBlur = useCallback((event: React.FocusEvent<HTMLInputElement>) => {
-      if (addOnBlur && inputValue) {
-        addTag(inputValue);
-      } else if (clearOnBlur) {
-        setInputValue('');
-      }
+    const handleBlur = useCallback(
+      (event: React.FocusEvent<HTMLInputElement>) => {
+        if (addOnBlur && inputValue) {
+          addTag(inputValue);
+        } else if (clearOnBlur) {
+          setInputValue('');
+        }
 
-      setTimeout(() => {
-        setShowSuggestionsDropdown(false);
-        setSelectedSuggestionIndex(-1);
-      }, 200);
+        setTimeout(() => {
+          setShowSuggestionsDropdown(false);
+          setSelectedSuggestionIndex(-1);
+        }, 200);
 
-      onBlurProp?.(event);
-    }, [addOnBlur, clearOnBlur, inputValue, addTag, onBlurProp]);
+        onBlurProp?.(event);
+      },
+      [addOnBlur, clearOnBlur, inputValue, addTag, onBlurProp]
+    );
 
     // Handle suggestion click
     const handleSuggestionClick = useCallback(
@@ -464,4 +469,3 @@ export const TagInput = forwardRef<HTMLInputElement, TagInputProps>(
 );
 
 TagInput.displayName = 'TagInput';
-

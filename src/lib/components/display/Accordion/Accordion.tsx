@@ -118,11 +118,10 @@ export interface AccordionProps extends BaseComponentProps {
 /**
  * Helper to render an icon (IconName or ReactNode)
  */
-function renderIcon(
-  icon: IconName | ReactNode | undefined,
-  size: number
-): ReactNode {
-  if (!icon) {return null;}
+function renderIcon(icon: IconName | ReactNode | undefined, size: number): ReactNode {
+  if (!icon) {
+    return null;
+  }
   if (typeof icon === 'string') {
     return <Icon name={icon as IconName} size={size} />;
   }
@@ -229,7 +228,9 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
 
     // Handle toggle
     const handleToggle = useCallback(() => {
-      if (isDisabled) {return;}
+      if (isDisabled) {
+        return;
+      }
 
       if (containerContext) {
         // Let container handle state
@@ -314,9 +315,7 @@ export const Accordion = forwardRef<HTMLDivElement, AccordionProps>(
 
           {/* Header icon (optional) */}
           {headerIcon && (
-            <span className={styles.accordionHeaderIcon}>
-              {renderIcon(headerIcon, iconSize)}
-            </span>
+            <span className={styles.accordionHeaderIcon}>{renderIcon(headerIcon, iconSize)}</span>
           )}
 
           {/* Header content */}

@@ -269,7 +269,11 @@ export const CustomRenderer: Story = {
     errorConfig: {
       render: () => (
         <Card variant="elevated" padding="lg" style={{ textAlign: 'center', maxWidth: '400px' }}>
-          <Icon name="settings" size={64} style={{ color: 'var(--theme-warning)', marginBottom: '16px' }} />
+          <Icon
+            name="settings"
+            size={64}
+            style={{ color: 'var(--theme-warning)', marginBottom: '16px' }}
+          />
           <h2 style={{ margin: '0 0 8px 0' }}>Custom Error Display</h2>
           <p style={{ color: 'var(--theme-text-secondary)', marginBottom: '16px' }}>
             This is a completely custom renderer using the Card and Icon components.
@@ -471,20 +475,29 @@ export const GlobalProviderConfiguration: Story = {
           <h3 style={{ margin: '0 0 12px 0' }}>GlobalProvider Configuration</h3>
           <p style={{ margin: '0 0 16px 0', color: 'var(--theme-text-secondary)' }}>
             Configure PageMessages defaults at the app level using the GlobalProvider&apos;s
-            <code style={{ background: 'var(--theme-background-secondary)', padding: '2px 6px', borderRadius: '4px', margin: '0 4px' }}>
+            <code
+              style={{
+                background: 'var(--theme-background-secondary)',
+                padding: '2px 6px',
+                borderRadius: '4px',
+                margin: '0 4px',
+              }}
+            >
               pageMessagesConfig
             </code>
             prop. All PageMessages components within this provider will inherit these defaults.
           </p>
-          <pre style={{
-            background: 'var(--theme-background-secondary)',
-            padding: '16px',
-            borderRadius: '8px',
-            overflow: 'auto',
-            fontSize: '12px',
-            margin: 0,
-          }}>
-{`<GlobalProvider
+          <pre
+            style={{
+              background: 'var(--theme-background-secondary)',
+              padding: '16px',
+              borderRadius: '8px',
+              overflow: 'auto',
+              fontSize: '12px',
+              margin: 0,
+            }}
+          >
+            {`<GlobalProvider
   pageMessagesConfig={{
     defaults: {
       error: {
@@ -508,7 +521,13 @@ export const GlobalProviderConfiguration: Story = {
 
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '16px' }}>
           <Card variant="outlined" padding="none" style={{ overflow: 'hidden' }}>
-            <div style={{ padding: '8px 16px', background: 'var(--theme-background-secondary)', fontWeight: 600 }}>
+            <div
+              style={{
+                padding: '8px 16px',
+                background: 'var(--theme-background-secondary)',
+                fontWeight: 600,
+              }}
+            >
               Error State
             </div>
             <div style={{ minHeight: '200px' }}>
@@ -519,7 +538,13 @@ export const GlobalProviderConfiguration: Story = {
           </Card>
 
           <Card variant="outlined" padding="none" style={{ overflow: 'hidden' }}>
-            <div style={{ padding: '8px 16px', background: 'var(--theme-background-secondary)', fontWeight: 600 }}>
+            <div
+              style={{
+                padding: '8px 16px',
+                background: 'var(--theme-background-secondary)',
+                fontWeight: 600,
+              }}
+            >
               Loading State
             </div>
             <div style={{ minHeight: '200px' }}>
@@ -530,7 +555,13 @@ export const GlobalProviderConfiguration: Story = {
           </Card>
 
           <Card variant="outlined" padding="none" style={{ overflow: 'hidden' }}>
-            <div style={{ padding: '8px 16px', background: 'var(--theme-background-secondary)', fontWeight: 600 }}>
+            <div
+              style={{
+                padding: '8px 16px',
+                background: 'var(--theme-background-secondary)',
+                fontWeight: 600,
+              }}
+            >
               Unauthorized State
             </div>
             <div style={{ minHeight: '200px' }}>
@@ -541,7 +572,13 @@ export const GlobalProviderConfiguration: Story = {
           </Card>
 
           <Card variant="outlined" padding="none" style={{ overflow: 'hidden' }}>
-            <div style={{ padding: '8px 16px', background: 'var(--theme-background-secondary)', fontWeight: 600 }}>
+            <div
+              style={{
+                padding: '8px 16px',
+                background: 'var(--theme-background-secondary)',
+                fontWeight: 600,
+              }}
+            >
               Empty State
             </div>
             <div style={{ minHeight: '200px' }}>

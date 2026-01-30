@@ -5,4 +5,3 @@ export {
   type SortableGridItemRenderProps,
 } from './SortableGridItem';
 export { default } from './SortableGrid';
-

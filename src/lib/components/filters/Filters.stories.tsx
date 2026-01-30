@@ -503,4 +503,3 @@ export const Minimal: Story = {
     },
   },
 };
-

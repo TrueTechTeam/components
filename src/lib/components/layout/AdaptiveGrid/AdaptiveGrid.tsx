@@ -143,13 +143,17 @@ export const AdaptiveGrid = forwardRef<HTMLDivElement, AdaptiveGridProps>(
 
     // Calculate column count
     useEffect(() => {
-      if (width <= 0) return;
+      if (width <= 0) {
+        return;
+      }
 
       const effectiveColumnGap = columnGap ?? gap;
       // Calculate how many columns can fit
       // Formula: width >= n * minItemWidth + (n-1) * gap
       // Solving for n: n <= (width + gap) / (minItemWidth + gap)
-      let calculatedColumns = Math.floor((width + effectiveColumnGap) / (minItemWidth + effectiveColumnGap));
+      let calculatedColumns = Math.floor(
+        (width + effectiveColumnGap) / (minItemWidth + effectiveColumnGap)
+      );
 
       // Apply min/max constraints
       calculatedColumns = Math.max(minColumns, calculatedColumns);

@@ -132,7 +132,9 @@ export function useFilterOptions<T = string>(
 
   // Generate cache key (used for cache invalidation)
   const _cacheKey = useMemo(() => {
-    if (!loader) {return '';}
+    if (!loader) {
+      return '';
+    }
     return `${filterId}:${JSON.stringify({
       search: debouncedSearchQuery,
       deps: dependencyValues,
@@ -143,7 +145,9 @@ export function useFilterOptions<T = string>(
   // Load options function
   const loadOptions = useCallback(
     async (isLoadMore = false) => {
-      if (!loader) {return;}
+      if (!loader) {
+        return;
+      }
 
       // Cancel previous request
       if (abortControllerRef.current) {
@@ -185,9 +189,7 @@ export function useFilterOptions<T = string>(
           return;
         }
 
-        const newOptions = isLoadMore
-          ? [...asyncOptions, ...result.options]
-          : result.options;
+        const newOptions = isLoadMore ? [...asyncOptions, ...result.options] : result.options;
 
         setAsyncOptions(newOptions as Array<FilterOption<T>>);
         setHasMore(result.hasMore ?? false);

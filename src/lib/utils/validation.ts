@@ -40,7 +40,9 @@ export const validators = {
   email:
     (message = 'Please enter a valid email address'): Validator =>
     (value: string): string | null => {
-      if (!value) {return null;} // Use required() for required validation
+      if (!value) {
+        return null;
+      } // Use required() for required validation
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
       return emailRegex.test(value) ? null : message;
     },
@@ -53,7 +55,9 @@ export const validators = {
   minLength:
     (min: number, message?: string): Validator =>
     (value: string): string | null => {
-      if (!value) {return null;} // Use required() for required validation
+      if (!value) {
+        return null;
+      } // Use required() for required validation
       const errorMessage = message || `Minimum ${min} characters required`;
       return value.length >= min ? null : errorMessage;
     },
@@ -66,7 +70,9 @@ export const validators = {
   maxLength:
     (max: number, message?: string): Validator =>
     (value: string): string | null => {
-      if (!value) {return null;}
+      if (!value) {
+        return null;
+      }
       const errorMessage = message || `Maximum ${max} characters allowed`;
       return value.length <= max ? null : errorMessage;
     },
@@ -79,7 +85,9 @@ export const validators = {
   pattern:
     (regex: RegExp, message = 'Invalid format'): Validator =>
     (value: string): string | null => {
-      if (!value) {return null;} // Use required() for required validation
+      if (!value) {
+        return null;
+      } // Use required() for required validation
       return regex.test(value) ? null : message;
     },
 
@@ -91,7 +99,9 @@ export const validators = {
   min:
     (min: number, message?: string): Validator =>
     (value: number): string | null => {
-      if (value === null || value === undefined) {return null;}
+      if (value === null || value === undefined) {
+        return null;
+      }
       const errorMessage = message || `Value must be at least ${min}`;
       return value >= min ? null : errorMessage;
     },
@@ -104,7 +114,9 @@ export const validators = {
   max:
     (max: number, message?: string): Validator =>
     (value: number): string | null => {
-      if (value === null || value === undefined) {return null;}
+      if (value === null || value === undefined) {
+        return null;
+      }
       const errorMessage = message || `Value must be at most ${max}`;
       return value <= max ? null : errorMessage;
     },
@@ -118,7 +130,9 @@ export const validators = {
   range:
     (min: number, max: number, message?: string): Validator =>
     (value: number): string | null => {
-      if (value === null || value === undefined) {return null;}
+      if (value === null || value === undefined) {
+        return null;
+      }
       const errorMessage = message || `Value must be between ${min} and ${max}`;
       return value >= min && value <= max ? null : errorMessage;
     },
@@ -130,7 +144,9 @@ export const validators = {
   url:
     (message = 'Please enter a valid URL'): Validator =>
     (value: string): string | null => {
-      if (!value) {return null;}
+      if (!value) {
+        return null;
+      }
       try {
         new URL(value);
         return null;
@@ -146,7 +162,9 @@ export const validators = {
   phone:
     (message = 'Please enter a valid phone number'): Validator =>
     (value: string): string | null => {
-      if (!value) {return null;}
+      if (!value) {
+        return null;
+      }
       // Basic phone validation - accepts various formats
       const phoneRegex = /^[\d\s\-()+.]+$/;
       const digitsOnly = value.replace(/\D/g, '');
@@ -175,9 +193,10 @@ export const validators = {
   fileSize:
     (maxSize: number, message?: string): Validator =>
     (file: File): string | null => {
-      if (!file) {return null;}
-      const errorMessage =
-        message || `File size must be less than ${formatBytes(maxSize)}`;
+      if (!file) {
+        return null;
+      }
+      const errorMessage = message || `File size must be less than ${formatBytes(maxSize)}`;
       return file.size <= maxSize ? null : errorMessage;
     },
 
@@ -189,9 +208,10 @@ export const validators = {
   fileType:
     (allowedTypes: string[], message?: string): Validator =>
     (file: File): string | null => {
-      if (!file) {return null;}
-      const errorMessage =
-        message || `File type must be one of: ${allowedTypes.join(', ')}`;
+      if (!file) {
+        return null;
+      }
+      const errorMessage = message || `File type must be one of: ${allowedTypes.join(', ')}`;
 
       const isAllowed = allowedTypes.some((type) => {
         if (type.startsWith('.')) {
@@ -199,7 +219,7 @@ export const validators = {
           return file.name.toLowerCase().endsWith(type.toLowerCase());
         } else {
           // MIME type check
-          return file.type === type || file.type.startsWith(`${type  }/`);
+          return file.type === type || file.type.startsWith(`${type}/`);
         }
       });
 
@@ -217,7 +237,9 @@ export const combineValidators =
   (value: any): string | null => {
     for (const validator of validators) {
       const error = validator(value);
-      if (error) {return error;}
+      if (error) {
+        return error;
+      }
     }
     return null;
   };
@@ -228,13 +250,8 @@ export const combineValidators =
  * @param validator Single validator or array of validators
  * @returns ValidationResult object
  */
-export const validate = (
-  value: any,
-  validator: Validator | Validator[]
-): ValidationResult => {
-  const validatorFn = Array.isArray(validator)
-    ? combineValidators(...validator)
-    : validator;
+export const validate = (value: any, validator: Validator | Validator[]): ValidationResult => {
+  const validatorFn = Array.isArray(validator) ? combineValidators(...validator) : validator;
 
   const errorMessage = validatorFn(value);
 
@@ -267,9 +284,7 @@ export const validateForm = (
  * Checks if all validation results are valid
  * @param results Validation results object
  */
-export const isFormValid = (
-  results: Record<string, ValidationResult>
-): boolean => {
+export const isFormValid = (results: Record<string, ValidationResult>): boolean => {
   return Object.values(results).every((result) => result.isValid);
 };
 
@@ -298,7 +313,9 @@ export const getErrorMessages = (
  * @param decimals Number of decimal places
  */
 function formatBytes(bytes: number, decimals = 2): string {
-  if (bytes === 0) {return '0 Bytes';}
+  if (bytes === 0) {
+    return '0 Bytes';
+  }
 
   const k = 1024;
   const dm = decimals < 0 ? 0 : decimals;
@@ -306,5 +323,5 @@ function formatBytes(bytes: number, decimals = 2): string {
 
   const i = Math.floor(Math.log(bytes) / Math.log(k));
 
-  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))  } ${  sizes[i]}`;
+  return `${parseFloat((bytes / Math.pow(k, i)).toFixed(dm))} ${sizes[i]}`;
 }

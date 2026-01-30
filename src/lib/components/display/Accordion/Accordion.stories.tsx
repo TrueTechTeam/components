@@ -64,10 +64,12 @@ type Story = StoryObj<typeof Accordion>;
 const SampleContent = () => (
   <div>
     <p style={{ margin: '0 0 12px 0' }}>
-      This is the accordion content. It can contain any React nodes including text, images, forms, or other components.
+      This is the accordion content. It can contain any React nodes including text, images, forms,
+      or other components.
     </p>
     <p style={{ margin: 0 }}>
-      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut
+      labore et dolore magna aliqua.
     </p>
   </div>
 );
@@ -99,11 +101,7 @@ const ControlledComponent = () => {
         </Button>
         <span>State: {isOpen ? 'Open' : 'Closed'}</span>
       </div>
-      <Accordion
-        header="Controlled Accordion"
-        isOpen={isOpen}
-        onOpenChange={setIsOpen}
-      >
+      <Accordion header="Controlled Accordion" isOpen={isOpen} onOpenChange={setIsOpen}>
         <SampleContent />
       </Accordion>
     </div>
@@ -344,16 +342,16 @@ export const CustomStyling: Story = {
   render: () => (
     <Accordion
       header="Custom Styled Accordion"
-      style={{
-        '--accordion-border-color': '#6366f1',
-        '--accordion-header-bg-hover': 'rgba(99, 102, 241, 0.1)',
-        '--accordion-icon-color': '#6366f1',
-      } as React.CSSProperties}
+      style={
+        {
+          '--accordion-border-color': '#6366f1',
+          '--accordion-header-bg-hover': 'rgba(99, 102, 241, 0.1)',
+          '--accordion-icon-color': '#6366f1',
+        } as React.CSSProperties
+      }
       defaultOpen
     >
-      <p style={{ margin: 0 }}>
-        This accordion uses CSS custom properties for custom styling.
-      </p>
+      <p style={{ margin: 0 }}>This accordion uses CSS custom properties for custom styling.</p>
     </Accordion>
   ),
   parameters: {

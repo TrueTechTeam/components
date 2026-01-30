@@ -51,7 +51,9 @@ export interface AlertContextValue {
   confirm: (
     title: string,
     description?: string,
-    options?: Partial<Omit<AlertProps, 'isOpen' | 'onConfirm' | 'onCancel' | 'title' | 'description'>>
+    options?: Partial<
+      Omit<AlertProps, 'isOpen' | 'onConfirm' | 'onCancel' | 'title' | 'description'>
+    >
   ) => Promise<boolean>;
 
   /**
@@ -64,7 +66,9 @@ export interface AlertContextValue {
   error: (
     title: string,
     description?: string,
-    options?: Partial<Omit<AlertProps, 'isOpen' | 'onConfirm' | 'onCancel' | 'title' | 'description'>>
+    options?: Partial<
+      Omit<AlertProps, 'isOpen' | 'onConfirm' | 'onCancel' | 'title' | 'description'>
+    >
   ) => Promise<boolean>;
 
   /**
@@ -77,7 +81,9 @@ export interface AlertContextValue {
   success: (
     title: string,
     description?: string,
-    options?: Partial<Omit<AlertProps, 'isOpen' | 'onConfirm' | 'onCancel' | 'title' | 'description'>>
+    options?: Partial<
+      Omit<AlertProps, 'isOpen' | 'onConfirm' | 'onCancel' | 'title' | 'description'>
+    >
   ) => Promise<boolean>;
 
   /**
@@ -90,7 +96,9 @@ export interface AlertContextValue {
   warning: (
     title: string,
     description?: string,
-    options?: Partial<Omit<AlertProps, 'isOpen' | 'onConfirm' | 'onCancel' | 'title' | 'description'>>
+    options?: Partial<
+      Omit<AlertProps, 'isOpen' | 'onConfirm' | 'onCancel' | 'title' | 'description'>
+    >
   ) => Promise<boolean>;
 
   /**
@@ -103,7 +111,9 @@ export interface AlertContextValue {
   info: (
     title: string,
     description?: string,
-    options?: Partial<Omit<AlertProps, 'isOpen' | 'onConfirm' | 'onCancel' | 'title' | 'description'>>
+    options?: Partial<
+      Omit<AlertProps, 'isOpen' | 'onConfirm' | 'onCancel' | 'title' | 'description'>
+    >
   ) => Promise<boolean>;
 
   /**

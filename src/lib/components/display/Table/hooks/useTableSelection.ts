@@ -47,7 +47,9 @@ export function useTableSelection({
 
       if (selectionMode === 'single') {
         newKeys.clear();
-        if (selected) {newKeys.add(key);}
+        if (selected) {
+          newKeys.add(key);
+        }
       } else if (selectionMode === 'multiple') {
         if (selected) {
           newKeys.add(key);
@@ -63,7 +65,9 @@ export function useTableSelection({
 
   const onSelectAll = useCallback(
     (selected: boolean) => {
-      if (selectionMode !== 'multiple') {return;}
+      if (selectionMode !== 'multiple') {
+        return;
+      }
 
       const newKeys = selected ? new Set(allRowKeys) : new Set<string>();
       updateSelection(newKeys);

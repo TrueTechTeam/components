@@ -2,14 +2,7 @@
  * Dialog component - Modal dialog for user interactions
  */
 
-import React, {
-  forwardRef,
-  useState,
-  useCallback,
-  useEffect,
-  useRef,
-  type ReactNode,
-} from 'react';
+import React, { forwardRef, useState, useCallback, useEffect, useRef, type ReactNode } from 'react';
 import { Portal } from '../Portal';
 import { useEscapeKey, useFocusTrap } from '../../../hooks';
 import { IconButton } from '../../buttons/IconButton';
@@ -494,12 +487,16 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(
       '--dialog-animation-duration': `${animationDuration}ms`,
       '--dialog-backdrop-opacity': backdropOpacity,
       ...(width && { '--dialog-width': typeof width === 'number' ? `${width}px` : width }),
-      ...(maxHeight && { '--dialog-max-height': typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight }),
+      ...(maxHeight && {
+        '--dialog-max-height': typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight,
+      }),
       ...(zIndex && { '--dialog-z-index': zIndex }),
     } as React.CSSProperties;
 
     const backdropClasses = [styles.dialogBackdrop, backdropClassName].filter(Boolean).join(' ');
-    const contentClasses = [styles.dialogContent, contentClassName, className].filter(Boolean).join(' ');
+    const contentClasses = [styles.dialogContent, contentClassName, className]
+      .filter(Boolean)
+      .join(' ');
 
     // Render header
     const headerContent = renderHeader ? (

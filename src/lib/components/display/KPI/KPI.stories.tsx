@@ -20,7 +20,13 @@ export const Default: Story = {
 
 export const WithChange: Story = {
   render: () => (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+        gap: '16px',
+      }}
+    >
       <KPI
         title="Total Revenue"
         value="$54,239"
@@ -52,7 +58,13 @@ export const WithChange: Story = {
 
 export const WithDescription: Story = {
   render: () => (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+        gap: '16px',
+      }}
+    >
       <KPI
         title="Conversion Rate"
         subtitle="E-commerce"
@@ -74,7 +86,13 @@ export const WithDescription: Story = {
 
 export const WithFooter: Story = {
   render: () => (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+        gap: '16px',
+      }}
+    >
       <KPI
         title="Page Views"
         value="45,678"
@@ -97,7 +115,13 @@ export const WithFooter: Story = {
 
 export const Dashboard: Story = {
   render: () => (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '16px' }}>
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+        gap: '16px',
+      }}
+    >
       <KPI
         title="Total Revenue"
         subtitle="Sales"
@@ -150,27 +174,9 @@ export const Dashboard: Story = {
 export const Sizes: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '16px' }}>
-      <KPI
-        title="Small KPI"
-        value="123"
-        size="sm"
-        change="+5%"
-        changeType="increase"
-      />
-      <KPI
-        title="Medium KPI"
-        value="456"
-        size="md"
-        change="+5%"
-        changeType="increase"
-      />
-      <KPI
-        title="Large KPI"
-        value="789"
-        size="lg"
-        change="+5%"
-        changeType="increase"
-      />
+      <KPI title="Small KPI" value="123" size="sm" change="+5%" changeType="increase" />
+      <KPI title="Medium KPI" value="456" size="md" change="+5%" changeType="increase" />
+      <KPI title="Large KPI" value="789" size="lg" change="+5%" changeType="increase" />
     </div>
   ),
   parameters: { controls: { disable: true } },

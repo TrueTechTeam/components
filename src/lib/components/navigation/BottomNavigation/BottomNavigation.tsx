@@ -1,6 +1,9 @@
 import React, { forwardRef, useState, useCallback, useMemo } from 'react';
 import type { BaseComponentProps } from '../../../types';
-import { BottomNavigationContext, type BottomNavigationContextValue } from './BottomNavigationContext';
+import {
+  BottomNavigationContext,
+  type BottomNavigationContextValue,
+} from './BottomNavigationContext';
 import styles from './BottomNavigation.module.scss';
 
 export interface BottomNavigationProps extends BaseComponentProps {

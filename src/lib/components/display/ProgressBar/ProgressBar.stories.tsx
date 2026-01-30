@@ -180,10 +180,7 @@ const FileUploadExampleComponent = () => {
         showValue
         animated
       />
-      <Button
-        onClick={() => setProgress(0)}
-        style={{ marginTop: '16px' }}
-      >
+      <Button onClick={() => setProgress(0)} style={{ marginTop: '16px' }}>
         Reset
       </Button>
     </div>
@@ -287,7 +284,13 @@ export const BufferProgress: Story = {
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px', width: '100%' }}>
       <ProgressBar value={30} bufferValue={60} label="Video loading (buffering)" showValue />
       <ProgressBar value={45} bufferValue={80} variant="info" label="Streaming..." showValue />
-      <ProgressBar value={10} bufferValue={50} variant="success" label="Download progress" showValue />
+      <ProgressBar
+        value={10}
+        bufferValue={50}
+        variant="success"
+        label="Download progress"
+        showValue
+      />
     </div>
   ),
   parameters: {
@@ -350,4 +353,3 @@ export const Playground: Story = {
     },
   },
 };
-

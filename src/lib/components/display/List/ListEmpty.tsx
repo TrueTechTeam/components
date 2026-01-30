@@ -38,16 +38,8 @@ export function ListEmpty({
 
   return (
     <div className={styles.emptyState}>
-      <Icon
-        name={isNoResults ? 'search' : 'inbox'}
-        size="lg"
-        style={{ opacity: 0.5 }}
-      />
-      <span>
-        {isNoResults && searchQuery
-          ? `No results found for "${searchQuery}"`
-          : content}
-      </span>
+      <Icon name={isNoResults ? 'search' : 'inbox'} size="lg" style={{ opacity: 0.5 }} />
+      <span>{isNoResults && searchQuery ? `No results found for "${searchQuery}"` : content}</span>
     </div>
   );
 }

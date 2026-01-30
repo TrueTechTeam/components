@@ -308,11 +308,7 @@ export const Disabled: Story = {
  */
 export const HorizontalLabel: Story = {
   render: () => (
-    <TagInput
-      label="Tags"
-      labelPlacement="left"
-      defaultValue={['React', 'TypeScript']}
-    />
+    <TagInput label="Tags" labelPlacement="left" defaultValue={['React', 'TypeScript']} />
   ),
   parameters: {
     controls: { disable: true },

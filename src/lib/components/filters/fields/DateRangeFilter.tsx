@@ -81,4 +81,3 @@ export const DateRangeFilter = forwardRef<HTMLDivElement, DateRangeFilterProps>(
 DateRangeFilter.displayName = 'DateRangeFilter';
 
 export default DateRangeFilter;
-

@@ -46,7 +46,9 @@ export interface ResizablePanelsContextValue {
   /**
    * Get panel config by index
    */
-  getPanelConfig: (index: number) => { minSize: number; maxSize: number; collapsible: boolean } | undefined;
+  getPanelConfig: (
+    index: number
+  ) => { minSize: number; maxSize: number; collapsible: boolean } | undefined;
 
   /**
    * Total number of panels

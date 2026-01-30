@@ -1,4 +1,12 @@
-import React, { forwardRef, useCallback, useMemo, useRef, type MouseEvent, type KeyboardEvent, type ReactNode } from 'react';
+import React, {
+  forwardRef,
+  useCallback,
+  useMemo,
+  useRef,
+  type MouseEvent,
+  type KeyboardEvent,
+  type ReactNode,
+} from 'react';
 import { useListContextStrict } from './ListContext';
 import { Checkbox } from '../../inputs/Checkbox';
 import { Dropdown } from '../../overlays/Dropdown';
@@ -6,6 +14,7 @@ import { Icon } from '../Icon';
 import { Avatar } from '../Avatar';
 import { Collapse } from '../Collapse';
 import type { ListItemRenderContext } from './types';
+import styles from './List.module.scss';
 
 // Local type matching Dropdown's item interface
 interface DropdownItemLocal {
@@ -16,7 +25,6 @@ interface DropdownItemLocal {
   divider?: boolean;
   onClick?: () => void;
 }
-import styles from './List.module.scss';
 
 export interface ListItemProps<T extends Record<string, unknown> = Record<string, unknown>> {
   /**
@@ -93,7 +101,9 @@ function ListItemInner<T extends Record<string, unknown>>(
   // Handle item click
   const handleClick = useCallback(
     (event: MouseEvent) => {
-      if (isDisabled) {return;}
+      if (isDisabled) {
+        return;
+      }
 
       // Set focus
       setFocusedIndex(filteredIndex);
@@ -130,7 +140,9 @@ function ListItemInner<T extends Record<string, unknown>>(
   // Handle keyboard events
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
-      if (isDisabled) {return;}
+      if (isDisabled) {
+        return;
+      }
 
       if (event.key === 'Enter' || event.key === ' ') {
         event.preventDefault();
@@ -159,16 +171,15 @@ function ListItemInner<T extends Record<string, unknown>>(
 
   // Convert item actions to dropdown items
   const dropdownItems = useMemo<DropdownItemLocal[]>(() => {
-    if (!itemActions) {return [];}
+    if (!itemActions) {
+      return [];
+    }
 
     return itemActions.map((action) => ({
       itemKey: action.id,
       label: action.label,
       icon: action.icon,
-      disabled:
-        typeof action.disabled === 'function'
-          ? action.disabled(item)
-          : action.disabled,
+      disabled: typeof action.disabled === 'function' ? action.disabled(item) : action.disabled,
       divider: action.divider,
       onClick: () => action.onAction(item, index),
     }));
@@ -176,7 +187,9 @@ function ListItemInner<T extends Record<string, unknown>>(
 
   // Render selection control
   const renderSelectionControl = () => {
-    if (selectionMode === 'none' || !showSelectionControls) {return null;}
+    if (selectionMode === 'none' || !showSelectionControls) {
+      return null;
+    }
 
     if (selectionMode === 'single') {
       return (
@@ -191,20 +204,14 @@ function ListItemInner<T extends Record<string, unknown>>(
             disabled={isDisabled}
             aria-pressed={isSelected}
           >
-            <span
-              className={styles.radioIndicator}
-              data-selected={isSelected || undefined}
-            />
+            <span className={styles.radioIndicator} data-selected={isSelected || undefined} />
           </button>
         </div>
       );
     }
 
     return (
-      <div
-        className={styles.selectionControl}
-        onClick={(e) => e.stopPropagation()}
-      >
+      <div className={styles.selectionControl} onClick={(e) => e.stopPropagation()}>
         <Checkbox
           checked={isSelected}
           onChange={handleSelectionChange}
@@ -218,7 +225,9 @@ function ListItemInner<T extends Record<string, unknown>>(
 
   // Render expand control
   const renderExpandControl = () => {
-    if (!hasExpandedContent || expandTrigger !== 'icon') {return null;}
+    if (!hasExpandedContent || expandTrigger !== 'icon') {
+      return null;
+    }
 
     return (
       <div className={styles.expandControl}>
@@ -239,7 +248,9 @@ function ListItemInner<T extends Record<string, unknown>>(
 
   // Render item actions
   const renderItemActions = () => {
-    if (!itemActions || itemActions.length === 0) {return null;}
+    if (!itemActions || itemActions.length === 0) {
+      return null;
+    }
 
     return (
       <div className={styles.itemActions}>
@@ -272,31 +283,23 @@ function ListItemInner<T extends Record<string, unknown>>(
                 <Avatar initials={avatarValue as string} size={size} />
               )
             ) : (
-              avatarValue as ReactNode
+              (avatarValue as ReactNode)
             )}
           </div>
         )}
         <div className={styles.itemContent}>
-          {primaryValue && (
-            <span className={styles.itemPrimaryText}>{primaryValue}</span>
-          )}
-          {secondaryValue && (
-            <span className={styles.itemSecondaryText}>{secondaryValue}</span>
-          )}
+          {primaryValue && <span className={styles.itemPrimaryText}>{primaryValue}</span>}
+          {secondaryValue && <span className={styles.itemSecondaryText}>{secondaryValue}</span>}
         </div>
       </>
     );
   };
 
   // Determine what to render for the item content
-  const itemContent = renderItem
-    ? renderItem(item, index, renderContext)
-    : renderDefaultContent();
+  const itemContent = renderItem ? renderItem(item, index, renderContext) : renderDefaultContent();
 
   const isClickable =
-    !!onItemClick ||
-    selectionMode !== 'none' ||
-    (expandTrigger === 'click' && hasExpandedContent);
+    !!onItemClick || selectionMode !== 'none' || (expandTrigger === 'click' && hasExpandedContent);
 
   return (
     <>
@@ -330,9 +333,7 @@ function ListItemInner<T extends Record<string, unknown>>(
       {/* Expanded content */}
       {hasExpandedContent && (
         <Collapse isOpen={isExpanded}>
-          <div className={styles.expandedContent}>
-            {renderExpandedContent(item, index)}
-          </div>
+          <div className={styles.expandedContent}>{renderExpandedContent(item, index)}</div>
         </Collapse>
       )}
     </>
@@ -340,7 +341,7 @@ function ListItemInner<T extends Record<string, unknown>>(
 }
 
 export const ListItem = forwardRef(ListItemInner) as <
-  T extends Record<string, unknown> = Record<string, unknown>
+  T extends Record<string, unknown> = Record<string, unknown>,
 >(
   props: ListItemProps<T> & { ref?: React.ForwardedRef<HTMLDivElement> }
 ) => React.ReactElement;

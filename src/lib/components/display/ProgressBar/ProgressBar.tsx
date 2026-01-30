@@ -115,7 +115,7 @@ export const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
 
     // Calculate buffer percentage if provided
     const bufferPercentage =
-      bufferValue !== undefined ? Math.min(Math.max(bufferValue, 0), max) / max * 100 : undefined;
+      bufferValue !== undefined ? (Math.min(Math.max(bufferValue, 0), max) / max) * 100 : undefined;
 
     // Format the display value
     const displayValue = formatValue
@@ -151,10 +151,7 @@ export const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
         <div className={styles.progressBarTrack}>
           {/* Buffer track (behind main fill) */}
           {bufferPercentage !== undefined && !indeterminate && (
-            <div
-              className={styles.progressBarBuffer}
-              style={{ width: `${bufferPercentage}%` }}
-            />
+            <div className={styles.progressBarBuffer} style={{ width: `${bufferPercentage}%` }} />
           )}
           {/* Main progress fill */}
           <div

@@ -101,10 +101,7 @@ export const FilterSidebar = forwardRef<HTMLDivElement, FilterSidebarProps>(
                 onClick={handleToggleCollapse}
                 aria-label={isCollapsed ? 'Expand filters' : 'Collapse filters'}
               >
-                <Icon
-                  name={position === 'left' ? 'chevron-left' : 'chevron-right'}
-                  size="1.25em"
-                />
+                <Icon name={position === 'left' ? 'chevron-left' : 'chevron-right'} size="1.25em" />
               </button>
             )}
           </div>
@@ -118,11 +115,7 @@ export const FilterSidebar = forwardRef<HTMLDivElement, FilterSidebarProps>(
         )}
 
         {/* Scrollable content */}
-        {!isCollapsed && (
-          <ScrollArea className={styles.content}>
-            {children}
-          </ScrollArea>
-        )}
+        {!isCollapsed && <ScrollArea className={styles.content}>{children}</ScrollArea>}
 
         {/* Active filters at bottom */}
         {showActiveFilters && activeFiltersPosition === 'bottom' && !isCollapsed && (
@@ -153,9 +146,7 @@ export const FilterSidebar = forwardRef<HTMLDivElement, FilterSidebarProps>(
         )}
 
         {/* Footer */}
-        {footer && !isCollapsed && (
-          <div className={styles.footer}>{footer}</div>
-        )}
+        {footer && !isCollapsed && <div className={styles.footer}>{footer}</div>}
       </aside>
     );
   }

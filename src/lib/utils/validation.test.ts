@@ -43,9 +43,7 @@ describe('validators', () => {
       expect(validator('user.name@example.co.uk')).toBeNull();
       expect(validator('invalid')).toBe('Please enter a valid email address');
       expect(validator('invalid@')).toBe('Please enter a valid email address');
-      expect(validator('@example.com')).toBe(
-        'Please enter a valid email address'
-      );
+      expect(validator('@example.com')).toBe('Please enter a valid email address');
     });
 
     it('should return null for empty value', () => {
@@ -212,10 +210,7 @@ describe('validate', () => {
   });
 
   it('should validate with array of validators', () => {
-    const result = validate('test', [
-      validators.required(),
-      validators.minLength(5),
-    ]);
+    const result = validate('test', [validators.required(), validators.minLength(5)]);
     expect(result).toEqual({
       isValid: false,
       errorMessage: 'Minimum 5 characters required',

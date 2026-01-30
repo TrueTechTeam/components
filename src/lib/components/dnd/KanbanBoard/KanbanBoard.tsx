@@ -239,8 +239,7 @@ function KanbanBoardInner<T extends KanbanCardData>({
   // Calculate gap values
   const columnGapValue =
     typeof columnGap === 'number' ? `${columnGap}px` : `var(--spacing-${columnGap})`;
-  const cardGapValue =
-    typeof cardGap === 'number' ? `${cardGap}px` : `var(--spacing-${cardGap})`;
+  const cardGapValue = typeof cardGap === 'number' ? `${cardGap}px` : `var(--spacing-${cardGap})`;
 
   const containerClasses = [styles.kanbanBoard, className].filter(Boolean).join(' ');
 

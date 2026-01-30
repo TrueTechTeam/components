@@ -64,7 +64,6 @@ describe('Input', () => {
     });
   });
 
-
   describe('icons', () => {
     it('should render with start icon', () => {
       render(<Input startIcon="check" />);
@@ -219,13 +218,7 @@ describe('Input', () => {
       const user = userEvent.setup();
       const handleValidate = jest.fn();
 
-      render(
-        <Input
-          validationRegex={/^[a-z]+$/}
-          validateOn="blur"
-          onValidate={handleValidate}
-        />
-      );
+      render(<Input validationRegex={/^[a-z]+$/} validateOn="blur" onValidate={handleValidate} />);
 
       const input = screen.getByTestId('input');
       await user.type(input, 'ABC');
@@ -244,11 +237,7 @@ describe('Input', () => {
       const handleValidate = jest.fn();
 
       render(
-        <Input
-          validationRegex={/^[a-z]+$/}
-          validateOn="change"
-          onValidate={handleValidate}
-        />
+        <Input validationRegex={/^[a-z]+$/} validateOn="change" onValidate={handleValidate} />
       );
 
       const input = screen.getByTestId('input');
@@ -498,12 +487,7 @@ describe('Input', () => {
       const user = userEvent.setup();
       const TestComponent = () => {
         const [value, setValue] = React.useState('');
-        return (
-          <Input
-            value={value}
-            onChange={(e) => setValue(e.target.value)}
-          />
-        );
+        return <Input value={value} onChange={(e) => setValue(e.target.value)} />;
       };
 
       render(<TestComponent />);

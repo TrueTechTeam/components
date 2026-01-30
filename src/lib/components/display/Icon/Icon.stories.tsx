@@ -207,4 +207,3 @@ export const Playground: Story = {
     color: 'var(--theme-primary)',
   },
 };
-

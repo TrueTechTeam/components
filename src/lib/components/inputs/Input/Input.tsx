@@ -217,11 +217,10 @@ export interface InputProps extends Omit<InputBaseProps, 'children'> {
 }
 
 // Helper to render icon from IconName or ReactNode
-const renderIcon = (
-  icon: React.ReactNode | IconName | undefined,
-  size = 16
-): React.ReactNode => {
-  if (!icon) {return null;}
+const renderIcon = (icon: React.ReactNode | IconName | undefined, size = 16): React.ReactNode => {
+  if (!icon) {
+    return null;
+  }
   if (typeof icon === 'string') {
     return <Icon name={icon as IconName} size={size} />;
   }
@@ -320,7 +319,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
      */
     const applyInputFilter = useCallback(
       (newValue: string): string => {
-        if (!inputFilter) {return newValue;}
+        if (!inputFilter) {
+          return newValue;
+        }
         if (!inputFilter.test(newValue)) {
           return value?.toString() || '';
         }
@@ -334,7 +335,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
      */
     const applyFormatMask = useCallback(
       (rawValue: string): string => {
-        if (!formatMask) {return rawValue;}
+        if (!formatMask) {
+          return rawValue;
+        }
 
         const pattern = typeof formatMask === 'string' ? formatMask : formatMask.pattern;
         const placeholderChar =
@@ -366,7 +369,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
      */
     const performValidation = useCallback(
       (valueToValidate: string): boolean => {
-        if (!validationRegex) {return true;}
+        if (!validationRegex) {
+          return true;
+        }
 
         const isValid = validationRegex.test(valueToValidate);
         setIsInvalid(!isValid);
@@ -399,7 +404,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         // 2. Apply input filter (character restriction)
         if (inputFilter) {
           newValue = applyInputFilter(newValue);
-          if (newValue === value) {return;} // No change, don't update
+          if (newValue === value) {
+            return;
+          } // No change, don't update
         }
 
         // 3. Apply format mask (auto-formatting)
@@ -531,7 +538,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
      * Check if near limit (>= 90%)
      */
     const isNearLimit = (): boolean => {
-      if (!maxLength) {return false;}
+      if (!maxLength) {
+        return false;
+      }
       return characterCount >= maxLength * 0.9;
     };
 
@@ -539,7 +548,9 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
      * Check if at limit
      */
     const isAtLimit = (): boolean => {
-      if (!maxLength) {return false;}
+      if (!maxLength) {
+        return false;
+      }
       return characterCount >= maxLength;
     };
 
@@ -547,10 +558,18 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
      * Determine input state for styling
      */
     const getInputState = (): string => {
-      if (disabled) {return 'disabled';}
-      if (readOnly) {return 'readonly';}
-      if (error || isInvalid || errorMessage) {return 'error';}
-      if (isFocused) {return 'focused';}
+      if (disabled) {
+        return 'disabled';
+      }
+      if (readOnly) {
+        return 'readonly';
+      }
+      if (error || isInvalid || errorMessage) {
+        return 'error';
+      }
+      if (isFocused) {
+        return 'focused';
+      }
       return 'default';
     };
 
@@ -589,10 +608,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
         )}
 
         {/* Input Container */}
-        <div
-          className={styles.inputContainer}
-          data-state={getInputState()}
-        >
+        <div className={styles.inputContainer} data-state={getInputState()}>
           {/* Start Icon / Prefix */}
           {(startIcon || prefix) && (
             <div className={styles.inputPrefix}>
@@ -632,9 +648,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             <div className={styles.inputSuffix}>
               {loading && <Spinner size={16} />}
               {suffix && !loading && <span className={styles.suffixText}>{suffix}</span>}
-              {endIcon &&
-                !loading &&
-                renderIcon(endIcon, 16)}
+              {endIcon && !loading && renderIcon(endIcon, 16)}
               {showClearBtn && (
                 <IconButton
                   icon="close"
@@ -701,4 +715,3 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
 Input.displayName = 'Input';
 
 export default Input;
-

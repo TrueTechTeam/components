@@ -89,11 +89,7 @@ export function PageMessageContent({
     // Check if icon is a ReactNode or IconName
     if (isValidElement(icon) || typeof icon !== 'string') {
       return (
-        <div
-          className={styles.pageMessagesIcon}
-          data-state={state}
-          data-size={size}
-        >
+        <div className={styles.pageMessagesIcon} data-state={state} data-size={size}>
           {icon as ReactNode}
         </div>
       );
@@ -114,11 +110,11 @@ export function PageMessageContent({
   // Render action button
   const renderAction = (action: PageMessageAction, isPrimary: boolean) => {
     const iconElement =
-      action.icon && typeof action.icon === 'string' ? (
-        action.icon
-      ) : isValidElement(action.icon) ? (
-        action.icon
-      ) : undefined;
+      action.icon && typeof action.icon === 'string'
+        ? action.icon
+        : isValidElement(action.icon)
+          ? action.icon
+          : undefined;
 
     return (
       <Button
@@ -215,11 +211,7 @@ export function PageMessageContent({
       {renderVisual()}
 
       {showText && config.title && (
-        <h2
-          className={styles.pageMessagesTitle}
-          data-size={size}
-          data-testid="page-messages-title"
-        >
+        <h2 className={styles.pageMessagesTitle} data-size={size} data-testid="page-messages-title">
           {config.title}
         </h2>
       )}

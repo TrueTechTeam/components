@@ -119,9 +119,7 @@ export const FilterModal = forwardRef<HTMLDivElement, FilterModalProps>(
     return (
       <div ref={ref} className={componentClasses} {...restProps}>
         {/* Trigger */}
-        {renderTrigger
-          ? renderTrigger({ onClick: handleOpen, activeCount })
-          : defaultTrigger}
+        {renderTrigger ? renderTrigger({ onClick: handleOpen, activeCount }) : defaultTrigger}
 
         {/* Dialog */}
         <Dialog

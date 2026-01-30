@@ -48,13 +48,17 @@ export const TabList = forwardRef<HTMLDivElement, TabListProps>(
           event.preventDefault();
 
           const container = listRef.current;
-          if (!container) return;
+          if (!container) {
+            return;
+          }
 
           const tabs = Array.from(
             container.querySelectorAll<HTMLButtonElement>('[role="tab"]:not(:disabled)')
           );
 
-          if (tabs.length === 0) return;
+          if (tabs.length === 0) {
+            return;
+          }
 
           const currentIndex = tabs.findIndex((tab) => tab === document.activeElement);
 

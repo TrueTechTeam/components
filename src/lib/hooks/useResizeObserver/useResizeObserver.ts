@@ -75,9 +75,7 @@ export interface UseResizeObserverReturn {
  * });
  * ```
  */
-export function useResizeObserver(
-  options: UseResizeObserverOptions = {}
-): UseResizeObserverReturn {
+export function useResizeObserver(options: UseResizeObserverOptions = {}): UseResizeObserverReturn {
   const { onResize, debounce = 0, box = 'border-box', disabled = false } = options;
 
   const [size, setSize] = useState<{ width: number; height: number }>({
@@ -117,8 +115,7 @@ export function useResizeObserver(
         let newHeight: number;
 
         // ResizeObserverSize uses inlineSize/blockSize, not width/height
-        const boxSize =
-          box === 'border-box' ? entry.borderBoxSize?.[0] : entry.contentBoxSize?.[0];
+        const boxSize = box === 'border-box' ? entry.borderBoxSize?.[0] : entry.contentBoxSize?.[0];
 
         if (boxSize) {
           // Use inlineSize/blockSize from ResizeObserverSize

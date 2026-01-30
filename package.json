@@ -1,6 +1,6 @@
 {
   "name": "@true-tech-team/react-components",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "React TypeScript component library",
   "main": "./index.js",
   "types": "./index.d.ts",
@@ -52,4 +52,3 @@
   ],
   "license": "MIT"
 }
-

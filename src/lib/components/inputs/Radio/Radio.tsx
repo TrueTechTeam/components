@@ -102,7 +102,9 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
     );
 
     const renderIcon = (icon: React.ReactNode | IconName | undefined) => {
-      if (!icon) {return null;}
+      if (!icon) {
+        return null;
+      }
 
       if (typeof icon === 'string') {
         return <Icon name={icon as IconName} className={styles.icon} />;
@@ -147,7 +149,10 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
 
     if (!label) {
       return (
-        <div className={`${styles.container} ${className || ''}`} data-testid={dataTestId && `${dataTestId}-container`}>
+        <div
+          className={`${styles.container} ${className || ''}`}
+          data-testid={dataTestId && `${dataTestId}-container`}
+        >
           {radioInput}
           {helperText && <div className={styles.helperText}>{helperText}</div>}
         </div>
@@ -177,4 +182,3 @@ export const Radio = forwardRef<HTMLInputElement, RadioProps>(
 );
 
 Radio.displayName = 'Radio';
-

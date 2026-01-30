@@ -23,10 +23,18 @@ export function getNestedValue<T>(obj: T, path: string): unknown {
  * @returns A string representation of the value
  */
 export function formatValue(value: unknown): string {
-  if (value === null || value === undefined) {return '';}
-  if (typeof value === 'boolean') {return value ? 'Yes' : 'No';}
-  if (value instanceof Date) {return value.toLocaleDateString();}
-  if (typeof value === 'object') {return JSON.stringify(value);}
+  if (value === null || value === undefined) {
+    return '';
+  }
+  if (typeof value === 'boolean') {
+    return value ? 'Yes' : 'No';
+  }
+  if (value instanceof Date) {
+    return value.toLocaleDateString();
+  }
+  if (typeof value === 'object') {
+    return JSON.stringify(value);
+  }
   return String(value);
 }
 
@@ -70,7 +78,9 @@ export function searchItems<T extends Record<string, unknown>>(
   query: string,
   fields?: Array<keyof T>
 ): T[] {
-  if (!query.trim()) {return items;}
+  if (!query.trim()) {
+    return items;
+  }
 
   const lowerQuery = query.toLowerCase();
   const searchFields = fields || (Object.keys(items[0] || {}) as Array<keyof T>);
@@ -78,7 +88,9 @@ export function searchItems<T extends Record<string, unknown>>(
   return items.filter((item) =>
     searchFields.some((field) => {
       const value = item[field];
-      if (value === null || value === undefined) {return false;}
+      if (value === null || value === undefined) {
+        return false;
+      }
       return String(value).toLowerCase().includes(lowerQuery);
     })
   );
@@ -98,9 +110,7 @@ export function groupItems<T extends Record<string, unknown>>(
 
   items.forEach((item) => {
     const groupKey =
-      typeof groupBy === 'function'
-        ? groupBy(item)
-        : String(item[groupBy] ?? 'Other');
+      typeof groupBy === 'function' ? groupBy(item) : String(item[groupBy] ?? 'Other');
 
     if (!groups.has(groupKey)) {
       groups.set(groupKey, []);
@@ -127,9 +137,15 @@ export function sortItems<T extends Record<string, unknown>>(
     const aValue = a[sortKey];
     const bValue = b[sortKey];
 
-    if (aValue === bValue) {return 0;}
-    if (aValue === null || aValue === undefined) {return 1;}
-    if (bValue === null || bValue === undefined) {return -1;}
+    if (aValue === bValue) {
+      return 0;
+    }
+    if (aValue === null || aValue === undefined) {
+      return 1;
+    }
+    if (bValue === null || bValue === undefined) {
+      return -1;
+    }
 
     let comparison = 0;
     if (typeof aValue === 'string' && typeof bValue === 'string') {

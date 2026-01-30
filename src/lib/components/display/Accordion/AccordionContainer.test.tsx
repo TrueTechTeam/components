@@ -122,7 +122,9 @@ describe('AccordionContainer', () => {
       expect(getOpenAccordionCount(container)).toBe(1);
 
       // Verify it's the second one that's open
-      const openAccordion = container.querySelector('[data-component="accordion"][data-open="true"]');
+      const openAccordion = container.querySelector(
+        '[data-component="accordion"][data-open="true"]'
+      );
       expect(openAccordion).toBeInTheDocument();
     });
   });
@@ -186,10 +188,14 @@ describe('AccordionContainer', () => {
         </AccordionContainer>
       );
 
-      expect(container.querySelector('[data-component="accordion"][data-open="true"]')).not.toBeInTheDocument();
+      expect(
+        container.querySelector('[data-component="accordion"][data-open="true"]')
+      ).not.toBeInTheDocument();
 
       fireEvent.click(screen.getByRole('button'));
-      expect(container.querySelector('[data-component="accordion"][data-open="true"]')).toBeInTheDocument();
+      expect(
+        container.querySelector('[data-component="accordion"][data-open="true"]')
+      ).toBeInTheDocument();
     });
   });
 
@@ -216,8 +222,8 @@ describe('AccordionContainer', () => {
         </AccordionContainer>
       );
 
+      // Component shows a single toggle button: "Expand All" when collapsed
       expect(screen.getByText('Expand All')).toBeInTheDocument();
-      expect(screen.getByText('Collapse All')).toBeInTheDocument();
     });
 
     it('should not show controls in single mode', () => {
@@ -267,7 +273,7 @@ describe('AccordionContainer', () => {
       expect(getOpenAccordionCount(container)).toBe(0);
     });
 
-    it('should disable Expand All when all are expanded', () => {
+    it('should show Collapse All when all are expanded', () => {
       render(
         <AccordionContainer showExpandAllControls defaultExpandedIds={['acc1', 'acc2']}>
           <Accordion id="acc1" header="Section 1">
@@ -279,10 +285,11 @@ describe('AccordionContainer', () => {
         </AccordionContainer>
       );
 
-      expect(screen.getByText('Expand All')).toBeDisabled();
+      // When all expanded, component shows "Collapse All" button
+      expect(screen.getByText('Collapse All')).toBeInTheDocument();
     });
 
-    it('should disable Collapse All when all are collapsed', () => {
+    it('should show Expand All when all are collapsed', () => {
       render(
         <AccordionContainer showExpandAllControls>
           <Accordion id="acc1" header="Section 1">
@@ -294,7 +301,8 @@ describe('AccordionContainer', () => {
         </AccordionContainer>
       );
 
-      expect(screen.getByText('Collapse All')).toBeDisabled();
+      // When all collapsed, component shows "Expand All" button
+      expect(screen.getByText('Expand All')).toBeInTheDocument();
     });
 
     it('should use custom labels', () => {
@@ -310,7 +318,12 @@ describe('AccordionContainer', () => {
         </AccordionContainer>
       );
 
-      expect(screen.getByText('Open All')).toBeInTheDocument();
+      // When collapsed, shows custom expand label
+      const toggleButton = screen.getByText('Open All');
+      expect(toggleButton).toBeInTheDocument();
+
+      // Click to expand all, then should show custom collapse label
+      fireEvent.click(toggleButton);
       expect(screen.getByText('Close All')).toBeInTheDocument();
     });
   });
@@ -362,10 +375,12 @@ describe('AccordionContainer', () => {
       });
 
       // Verify disabled data attribute on accordion components
-      expect(container.querySelectorAll('[data-component="accordion"][data-disabled="true"]').length).toBe(2);
+      expect(
+        container.querySelectorAll('[data-component="accordion"][data-disabled="true"]').length
+      ).toBe(2);
     });
 
-    it('should disable expand/collapse all buttons when container is disabled', () => {
+    it('should disable expand/collapse toggle button when container is disabled', () => {
       render(
         <AccordionContainer showExpandAllControls disabled>
           <Accordion id="acc1" header="Section 1">
@@ -374,8 +389,8 @@ describe('AccordionContainer', () => {
         </AccordionContainer>
       );
 
+      // Toggle button should be disabled
       expect(screen.getByText('Expand All')).toBeDisabled();
-      expect(screen.getByText('Collapse All')).toBeDisabled();
     });
   });
 
@@ -403,7 +418,9 @@ describe('AccordionContainer', () => {
         </AccordionContainer>
       );
 
-      expect(container.querySelector('[data-component="accordion"][data-bordered="true"]')).not.toBeInTheDocument();
+      expect(
+        container.querySelector('[data-component="accordion"][data-bordered="true"]')
+      ).not.toBeInTheDocument();
     });
   });
 

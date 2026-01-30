@@ -93,7 +93,7 @@ export const ResizablePanel = forwardRef<HTMLDivElement, ResizablePanelProps>(
         registeredRef.current = true;
       }
     }, [context, minSize, maxSize, collapsible]);
-    const size = context.sizes[panelIndex] ?? defaultSize ?? (100 / context.panelCount);
+    const size = context.sizes[panelIndex] ?? defaultSize ?? 100 / context.panelCount;
 
     const containerClasses = [styles.resizablePanel, className].filter(Boolean).join(' ');
 

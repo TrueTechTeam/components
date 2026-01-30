@@ -17,9 +17,7 @@ export function useListGroups<T extends Record<string, unknown>>({
   );
 
   const isControlled = controlledCollapsed !== undefined;
-  const collapsedSet = isControlled
-    ? new Set(controlledCollapsed)
-    : uncontrolledCollapsed;
+  const collapsedSet = isControlled ? new Set(controlledCollapsed) : uncontrolledCollapsed;
 
   // Group items by the specified key or function
   const groups = useMemo<Array<ListGroup<T>>>(() => {

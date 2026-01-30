@@ -270,4 +270,3 @@ function MinimalStory() {
 export const Minimal: Story = {
   render: () => <MinimalStory />,
 };
-

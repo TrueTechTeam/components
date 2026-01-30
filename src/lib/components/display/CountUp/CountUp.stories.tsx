@@ -26,7 +26,15 @@ const meta: Meta<typeof CountUp> = {
     },
     easing: {
       control: 'select',
-      options: ['linear', 'easeOut', 'easeIn', 'easeInOut', 'easeOutCubic', 'easeInCubic', 'easeOutExpo'],
+      options: [
+        'linear',
+        'easeOut',
+        'easeIn',
+        'easeInOut',
+        'easeOutCubic',
+        'easeInCubic',
+        'easeOutExpo',
+      ],
       description: 'Easing function for animation',
     },
     size: {
@@ -123,12 +131,7 @@ export const EasingFunctions: Story = {
         (easing) => (
           <div key={easing} style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
             <span style={{ width: 120, fontSize: '14px' }}>{easing}:</span>
-            <CountUp
-              value={1000}
-              easing={easing}
-              duration={2000}
-              triggerOnVisible={false}
-            />
+            <CountUp value={1000} easing={easing} duration={2000} triggerOnVisible={false} />
           </div>
         )
       )}
@@ -247,7 +250,12 @@ export const KPIDashboard: Story = {
           prefix="$"
           size="lg"
           triggerOnVisible={false}
-          style={{ '--countup-color': 'white', '--countup-prefix-color': 'rgba(255,255,255,0.8)' } as React.CSSProperties}
+          style={
+            {
+              '--countup-color': 'white',
+              '--countup-prefix-color': 'rgba(255,255,255,0.8)',
+            } as React.CSSProperties
+          }
         />
       </div>
       <div
@@ -283,7 +291,12 @@ export const KPIDashboard: Story = {
           decimals={1}
           size="lg"
           triggerOnVisible={false}
-          style={{ '--countup-color': 'white', '--countup-suffix-color': 'rgba(255,255,255,0.8)' } as React.CSSProperties}
+          style={
+            {
+              '--countup-color': 'white',
+              '--countup-suffix-color': 'rgba(255,255,255,0.8)',
+            } as React.CSSProperties
+          }
         />
       </div>
     </div>
@@ -384,18 +397,14 @@ export const TriggerOnVisible: Story = {
       <p style={{ marginBottom: '16px', fontSize: '14px', color: '#666' }}>
         Scroll down to see the animation trigger when the number becomes visible:
       </p>
-      <div style={{ height: '300px', overflow: 'auto', border: '1px solid #ddd', borderRadius: '8px' }}>
+      <div
+        style={{ height: '300px', overflow: 'auto', border: '1px solid #ddd', borderRadius: '8px' }}
+      >
         <div style={{ height: '400px', padding: '16px' }}>
           <p>Scroll down...</p>
         </div>
         <div style={{ padding: '16px', textAlign: 'center' }}>
-          <CountUp
-            value={9999}
-            prefix="$"
-            size="lg"
-            triggerOnVisible
-            duration={2000}
-          />
+          <CountUp value={9999} prefix="$" size="lg" triggerOnVisible duration={2000} />
           <p style={{ marginTop: '8px', fontSize: '14px', color: '#666' }}>
             Animation starts when visible
           </p>

@@ -35,10 +35,7 @@ export function useListExpand({
     [expandedSet, isControlled, onExpandChange]
   );
 
-  const isExpanded = useCallback(
-    (key: string) => expandedSet.has(key),
-    [expandedSet]
-  );
+  const isExpanded = useCallback((key: string) => expandedSet.has(key), [expandedSet]);
 
   return {
     expandedKeys: expandedSet,

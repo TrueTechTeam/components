@@ -268,4 +268,3 @@ function ControlledStory() {
 export const Controlled: Story = {
   render: () => <ControlledStory />,
 };
-

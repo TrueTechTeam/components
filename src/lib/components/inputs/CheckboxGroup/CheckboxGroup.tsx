@@ -1,9 +1,6 @@
 import React, { forwardRef, useState, useCallback, useId } from 'react';
 import type { BaseComponentProps, ComponentSize, ComponentVariant } from '../../../types';
-import {
-  CheckboxGroupContext,
-  type CheckboxGroupContextValue,
-} from './CheckboxGroupContext';
+import { CheckboxGroupContext, type CheckboxGroupContextValue } from './CheckboxGroupContext';
 import styles from './CheckboxGroup.module.scss';
 
 export interface CheckboxGroupProps extends Omit<BaseComponentProps, 'onChange'> {

@@ -9,9 +9,11 @@ Advanced form composition and state management utilities.
 ## Components in this Category
 
 ### FormBuilder
+
 A powerful form builder component with built-in validation, state management, and dynamic field rendering.
 
 **Features:**
+
 - 🔄 **Dynamic Field Rendering** - Automatically renders form fields from configuration
 - ✅ **Built-in Validation** - Comprehensive validation system with custom rules
 - 📊 **State Management** - Manages form state, errors, and touched fields
@@ -37,9 +39,9 @@ function MyForm() {
       validation: {
         pattern: {
           value: /^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i,
-          message: 'Invalid email address'
-        }
-      }
+          message: 'Invalid email address',
+        },
+      },
     },
     {
       name: 'password',
@@ -49,28 +51,22 @@ function MyForm() {
       validation: {
         minLength: {
           value: 8,
-          message: 'Password must be at least 8 characters'
-        }
-      }
+          message: 'Password must be at least 8 characters',
+        },
+      },
     },
     {
       name: 'subscribe',
       label: 'Subscribe to newsletter',
-      type: 'checkbox'
-    }
+      type: 'checkbox',
+    },
   ];
 
   const handleSubmit = (values: any) => {
     console.log('Form submitted:', values);
   };
 
-  return (
-    <FormBuilder
-      fields={fields}
-      onSubmit={handleSubmit}
-      submitLabel="Sign Up"
-    />
-  );
+  return <FormBuilder fields={fields} onSubmit={handleSubmit} submitLabel="Sign Up" />;
 }
 ```
 
@@ -88,8 +84,8 @@ function ConditionalForm() {
       type: 'radio-group',
       options: [
         { value: 'yes', label: 'Yes' },
-        { value: 'no', label: 'No' }
-      ]
+        { value: 'no', label: 'No' },
+      ],
     },
     {
       name: 'email',
@@ -100,9 +96,9 @@ function ConditionalForm() {
       dependencies: [
         {
           field: 'hasAccount',
-          condition: (value) => value === 'yes'
-        }
-      ]
+          condition: (value) => value === 'yes',
+        },
+      ],
     },
     {
       name: 'username',
@@ -113,18 +109,13 @@ function ConditionalForm() {
       dependencies: [
         {
           field: 'hasAccount',
-          condition: (value) => value === 'no'
-        }
-      ]
-    }
+          condition: (value) => value === 'no',
+        },
+      ],
+    },
   ];
 
-  return (
-    <FormBuilder
-      fields={fields}
-      onSubmit={(values) => console.log(values)}
-    />
-  );
+  return <FormBuilder fields={fields} onSubmit={(values) => console.log(values)} />;
 }
 ```
 
@@ -144,28 +135,21 @@ function CustomForm() {
     handleBlur,
     handleSubmit,
     setFieldValue,
-    resetForm
+    resetForm,
   } = useFormState({
     initialValues: {
       name: '',
-      email: ''
+      email: '',
     },
     onSubmit: (values) => {
       console.log('Submitted:', values);
-    }
+    },
   });
 
   return (
     <form onSubmit={handleSubmit}>
-      <input
-        name="name"
-        value={values.name}
-        onChange={handleChange}
-        onBlur={handleBlur}
-      />
-      {touched.name && errors.name && (
-        <span className="error">{errors.name}</span>
-      )}
+      <input name="name" value={values.name} onChange={handleChange} onBlur={handleBlur} />
+      {touched.name && errors.name && <span className="error">{errors.name}</span>}
       {/* More fields... */}
     </form>
   );
@@ -187,17 +171,17 @@ const field: FormFieldConfig = {
     required: 'Username is required',
     minLength: {
       value: 3,
-      message: 'Username must be at least 3 characters'
+      message: 'Username must be at least 3 characters',
     },
     maxLength: {
       value: 20,
-      message: 'Username must be no more than 20 characters'
+      message: 'Username must be no more than 20 characters',
     },
     pattern: {
       value: /^[a-zA-Z0-9_]+$/,
-      message: 'Username can only contain letters, numbers, and underscores'
-    }
-  }
+      message: 'Username can only contain letters, numbers, and underscores',
+    },
+  },
 };
 ```
 
@@ -214,8 +198,8 @@ const field: FormFieldConfig = {
         return 'Must use company email address';
       }
       return true;
-    }
-  }
+    },
+  },
 };
 ```
 
@@ -235,8 +219,8 @@ const field: FormFieldConfig = {
         return 'Username is already taken';
       }
       return true;
-    }
-  }
+    },
+  },
 };
 ```
 
@@ -244,38 +228,32 @@ const field: FormFieldConfig = {
 
 FormBuilder supports all input component types:
 
-| Type | Component | Description |
-|------|-----------|-------------|
-| `text` | Input | Standard text input |
-| `email` | Input | Email input with validation |
-| `password` | Input | Password input (masked) |
-| `number` | NumberInput | Numeric input with controls |
-| `tel` | PhoneInput | Phone number input |
-| `textarea` | Textarea | Multi-line text |
-| `select` | Select | Dropdown selection |
-| `checkbox` | Checkbox | Single checkbox |
-| `radio-group` | RadioGroup | Radio button group |
-| `toggle` | Toggle | Boolean switch |
-| `slider` | Slider | Range slider |
-| `rating` | Rating | Star rating |
-| `color` | ColorPicker | Color selection |
-| `date` | DatePicker | Date selection |
-| `date-range` | DateRangePicker | Date range selection |
-| `file` | FilePicker | File upload |
-| `tags` | TagInput | Multiple tags |
+| Type          | Component       | Description                 |
+| ------------- | --------------- | --------------------------- |
+| `text`        | Input           | Standard text input         |
+| `email`       | Input           | Email input with validation |
+| `password`    | Input           | Password input (masked)     |
+| `number`      | NumberInput     | Numeric input with controls |
+| `tel`         | PhoneInput      | Phone number input          |
+| `textarea`    | Textarea        | Multi-line text             |
+| `select`      | Select          | Dropdown selection          |
+| `checkbox`    | Checkbox        | Single checkbox             |
+| `radio-group` | RadioGroup      | Radio button group          |
+| `toggle`      | Toggle          | Boolean switch              |
+| `slider`      | Slider          | Range slider                |
+| `rating`      | Rating          | Star rating                 |
+| `color`       | ColorPicker     | Color selection             |
+| `date`        | DatePicker      | Date selection              |
+| `date-range`  | DateRangePicker | Date range selection        |
+| `file`        | FilePicker      | File upload                 |
+| `tags`        | TagInput        | Multiple tags               |
 
 ## Layout Customization
 
 FormBuilder supports custom layouts:
 
 ```tsx
-<FormBuilder
-  fields={fields}
-  layout="grid"
-  columns={2}
-  gap="md"
-  onSubmit={handleSubmit}
-/>
+<FormBuilder fields={fields} layout="grid" columns={2} gap="md" onSubmit={handleSubmit} />
 ```
 
 ## Design Guidelines
@@ -283,6 +261,7 @@ FormBuilder supports custom layouts:
 ### When to Use FormBuilder
 
 **Use FormBuilder when:**
+
 - Building forms with 3+ fields
 - Need validation and error handling
 - Want consistent form layout
@@ -290,6 +269,7 @@ FormBuilder supports custom layouts:
 - Need field dependencies or conditional logic
 
 **Don't use FormBuilder when:**
+
 - Simple 1-2 field forms (use individual inputs)
 - Need highly custom layout (build manually with input components)
 - Performance is critical and you need fine-grained control

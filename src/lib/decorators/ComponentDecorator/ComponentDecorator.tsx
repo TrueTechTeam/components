@@ -81,11 +81,14 @@ export function withComponentDecorator<P extends object>(
 
     // Generate CSS variable styles
     const cssVarStyles = cssVariables
-      ? Object.entries(cssVariables).reduce((acc, [key, value]) => {
-          const varName = `--${componentName}-${key.replace(/([A-Z])/g, '-$1').toLowerCase()}`;
-          acc[varName] = typeof value === 'number' ? `${value}px` : value;
-          return acc;
-        }, {} as Record<string, string>)
+      ? Object.entries(cssVariables).reduce(
+          (acc, [key, value]) => {
+            const varName = `--${componentName}-${key.replace(/([A-Z])/g, '-$1').toLowerCase()}`;
+            acc[varName] = typeof value === 'number' ? `${value}px` : value;
+            return acc;
+          },
+          {} as Record<string, string>
+        )
       : undefined;
 
     // Combine classnames
@@ -111,4 +114,3 @@ export function withComponentDecorator<P extends object>(
 }
 
 export default withComponentDecorator;
-

@@ -5,7 +5,7 @@ import React, {
   useCallback,
   useEffect,
   useRef,
-  ReactNode,
+  type ReactNode,
 } from 'react';
 import type { ComponentSize, ComponentVariant, InputBaseProps } from '../../../types';
 import { Icon } from '../../display/Icon';
@@ -232,7 +232,7 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
           required={required}
           className={styles.input}
           data-testid={dataTestId}
-          aria-label={ariaLabel}
+          aria-label={ariaLabel || (typeof label === 'string' ? label : undefined)}
           aria-checked={indeterminate ? 'mixed' : isChecked}
           aria-disabled={disabled}
           aria-readonly={readOnly}
@@ -298,4 +298,3 @@ export const Checkbox = forwardRef<HTMLInputElement, CheckboxProps>(
 );
 
 Checkbox.displayName = 'Checkbox';
-

@@ -49,10 +49,7 @@ export interface AlertProviderProps {
  * };
  * ```
  */
-export function AlertProvider({
-  children,
-  defaultAlertProps,
-}: AlertProviderProps) {
+export function AlertProvider({ children, defaultAlertProps }: AlertProviderProps) {
   const [alerts, setAlerts] = useState<AlertQueueItem[]>([]);
 
   // Show an alert and wait for response
@@ -81,7 +78,9 @@ export function AlertProvider({
       (
         title: string,
         description?: string,
-        options?: Partial<Omit<AlertProps, 'isOpen' | 'onConfirm' | 'onCancel' | 'title' | 'description'>>
+        options?: Partial<
+          Omit<AlertProps, 'isOpen' | 'onConfirm' | 'onCancel' | 'title' | 'description'>
+        >
       ): Promise<boolean> => {
         return showAlert({
           variant,
@@ -103,7 +102,9 @@ export function AlertProvider({
   // Dismiss current alert
   const dismiss = useCallback(() => {
     setAlerts((prev) => {
-      if (prev.length === 0) return prev;
+      if (prev.length === 0) {
+        return prev;
+      }
       const [current, ...rest] = prev;
       current.resolve(false);
       return rest;
@@ -156,7 +157,7 @@ export function AlertProvider({
         <Alert
           key={currentAlert.id}
           {...currentAlert.props}
-          isOpen={true}
+          isOpen
           onConfirm={() => handleConfirm(currentAlert)}
           onCancel={() => handleCancel(currentAlert)}
           onClose={() => handleCancel(currentAlert)}

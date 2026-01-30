@@ -11,6 +11,7 @@ Welcome to the **True Tech Team UI Components** library! This library provides a
 Components are organized into **5 logical categories** based on their purpose:
 
 ### 🔘 Buttons
+
 Action and trigger components for user interactions.
 
 - **Button** - Primary call-to-action component with multiple variants (primary, secondary, outline, ghost, success, warning, danger)
@@ -20,6 +21,7 @@ Action and trigger components for user interactions.
 ---
 
 ### 🎨 Display
+
 Components for presenting content and visual elements.
 
 - **Icon** - SVG-based icon system with 21+ icons
@@ -29,6 +31,7 @@ Components for presenting content and visual elements.
 ---
 
 ### 🎭 Overlays
+
 Floating UI elements that appear above other content.
 
 - **Popover** - Contextual floating content container
@@ -42,9 +45,11 @@ Floating UI elements that appear above other content.
 ---
 
 ### 📝 Inputs
+
 Form input components for collecting user data.
 
 #### Basic Text Inputs
+
 - **Input** - Standard text input with validation and masking
 - **Textarea** - Multi-line text input
 - **NumberInput** - Numeric-only input with increment/decrement
@@ -52,6 +57,7 @@ Form input components for collecting user data.
 - **TagInput** - Multiple tag entry
 
 #### Selection Inputs
+
 - **Select** - Dropdown selection with options
 - **Autocomplete** - Searchable dropdown with filtering
 - **Checkbox** - Multi-select boolean input
@@ -59,6 +65,7 @@ Form input components for collecting user data.
 - **Toggle** - Boolean switch
 
 #### Specialized Inputs
+
 - **Slider** - Range selection with marks
 - **Rating** - Star/numeric rating input
 - **ColorPicker** - Color selection with format options (hex, rgb, hsl)
@@ -71,6 +78,7 @@ Form input components for collecting user data.
 ---
 
 ### 📋 Forms
+
 Form composition and state management utilities.
 
 - **FormBuilder** - Advanced form composition with validation, state management, and dynamic field rendering
@@ -82,23 +90,29 @@ Form composition and state management utilities.
 ## 🎯 Key Features
 
 ### Theme Support
+
 All components support **light and dark themes** via the theme toggle in the toolbar above.
 
 ### Accessibility
+
 Components are built with accessibility in mind:
+
 - Semantic HTML
 - ARIA attributes
 - Keyboard navigation
 - Focus management
 
 ### Customization
+
 - CSS custom properties for theming
 - SCSS variables and mixins
 - 500+ utility classes
 - 37 color families with 10 shades each
 
 ### Type Safety
+
 Full TypeScript support with:
+
 - Comprehensive prop interfaces
 - Type exports for all components
 - Strict type checking
@@ -137,11 +151,7 @@ Wrap your app with `GlobalProvider` to enable theming:
 import { GlobalProvider } from '@true-tech-team/ui-components';
 
 function App() {
-  return (
-    <GlobalProvider themeConfig={{ mode: 'dark' }}>
-      {/* Your app */}
-    </GlobalProvider>
-  );
+  return <GlobalProvider themeConfig={{ mode: 'dark' }}>{/* Your app */}</GlobalProvider>;
 }
 ```
 
@@ -158,18 +168,16 @@ import { Tooltip } from '@true-tech-team/ui-components/overlays';
 ## 🎨 Styling System
 
 ### 4px Grid System
+
 All spacing uses a 4px base unit for consistency:
 
 ```scss
---spacing-xs: 4px
---spacing-sm: 8px
---spacing-md: 16px
---spacing-lg: 24px
---spacing-xl: 32px
---spacing-xxl: 48px
+--spacing-xs: 4px --spacing-sm: 8px --spacing-md: 16px --spacing-lg: 24px --spacing-xl: 32px
+  --spacing-xxl: 48px;
 ```
 
 ### Utility Classes
+
 Over 500 utility classes available:
 
 ```tsx
@@ -179,6 +187,7 @@ Over 500 utility classes available:
 ```
 
 ### Theme Colors
+
 Access theme colors via CSS custom properties:
 
 ```scss
@@ -190,6 +199,7 @@ border-color: var(--theme-border-primary);
 ## 🔍 Finding Components
 
 Use the sidebar to browse components by category:
+
 - **Buttons/** - Action components
 - **Display/** - Visual content
 - **Overlays/** - Floating UI

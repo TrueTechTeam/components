@@ -222,12 +222,7 @@ export const AsyncLoading: Story = {
 export const WithIcons: Story = {
   render: () => (
     <div style={{ padding: '100px', maxWidth: '400px', margin: '0 auto' }}>
-      <Autocomplete
-        label="Search"
-        placeholder="Search..."
-        options={countries}
-        startIcon="search"
-      />
+      <Autocomplete label="Search" placeholder="Search..." options={countries} startIcon="search" />
     </div>
   ),
   parameters: { controls: { disable: true } },
@@ -239,12 +234,7 @@ export const WithIcons: Story = {
 export const Disabled: Story = {
   render: () => (
     <div style={{ padding: '100px', maxWidth: '400px', margin: '0 auto' }}>
-      <Autocomplete
-        label="Country"
-        placeholder="Cannot edit..."
-        options={countries}
-        disabled
-      />
+      <Autocomplete label="Country" placeholder="Cannot edit..." options={countries} disabled />
     </div>
   ),
   parameters: { controls: { disable: true } },

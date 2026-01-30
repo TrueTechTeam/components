@@ -113,14 +113,21 @@ describe('Menu', () => {
     it('should have proper role attributes', () => {
       render(<TestMenu />);
 
-      expect(screen.getByRole('menu')).toBeInTheDocument();
-      expect(screen.getAllByRole('menuitem')).toHaveLength(3);
+      // Menu is rendered in a portal, use testid to find it
+      const menu = screen.getByTestId('menu-list');
+      expect(menu).toHaveAttribute('role', 'menu');
+
+      // Menu items should have menuitem role
+      const menuItems = screen.getAllByRole('menuitem', { hidden: true });
+      expect(menuItems).toHaveLength(3);
     });
 
     it('should have disabled attribute on disabled items', () => {
       render(<TestMenu />);
 
-      const disabledItem = screen.getByText('Item 3 (Disabled)');
+      const disabledItem = screen
+        .getByText('Item 3 (Disabled)')
+        .closest('[data-component="menu-item"]');
       expect(disabledItem).toHaveAttribute('data-disabled', 'true');
     });
   });

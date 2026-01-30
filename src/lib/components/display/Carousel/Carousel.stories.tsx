@@ -99,10 +99,18 @@ const DemoSlide = ({
 export const Default: Story = {
   args: {
     children: [
-      <DemoSlide key={1} color="#667eea">Slide 1</DemoSlide>,
-      <DemoSlide key={2} color="#764ba2">Slide 2</DemoSlide>,
-      <DemoSlide key={3} color="#f093fb">Slide 3</DemoSlide>,
-      <DemoSlide key={4} color="#11998e">Slide 4</DemoSlide>,
+      <DemoSlide key={1} color="#667eea">
+        Slide 1
+      </DemoSlide>,
+      <DemoSlide key={2} color="#764ba2">
+        Slide 2
+      </DemoSlide>,
+      <DemoSlide key={3} color="#f093fb">
+        Slide 3
+      </DemoSlide>,
+      <DemoSlide key={4} color="#11998e">
+        Slide 4
+      </DemoSlide>,
     ],
   },
 };
@@ -113,10 +121,18 @@ export const AutoPlay: Story = {
     autoPlay: true,
     autoPlayInterval: 3000,
     children: [
-      <DemoSlide key={1} color="#667eea">Slide 1</DemoSlide>,
-      <DemoSlide key={2} color="#764ba2">Slide 2</DemoSlide>,
-      <DemoSlide key={3} color="#f093fb">Slide 3</DemoSlide>,
-      <DemoSlide key={4} color="#11998e">Slide 4</DemoSlide>,
+      <DemoSlide key={1} color="#667eea">
+        Slide 1
+      </DemoSlide>,
+      <DemoSlide key={2} color="#764ba2">
+        Slide 2
+      </DemoSlide>,
+      <DemoSlide key={3} color="#f093fb">
+        Slide 3
+      </DemoSlide>,
+      <DemoSlide key={4} color="#11998e">
+        Slide 4
+      </DemoSlide>,
     ],
   },
   parameters: {
@@ -134,12 +150,24 @@ export const MultipleSlides: Story = {
     slidesToShow: 3,
     gap: '16px',
     children: [
-      <DemoSlide key={1} color="#667eea" height={150}>1</DemoSlide>,
-      <DemoSlide key={2} color="#764ba2" height={150}>2</DemoSlide>,
-      <DemoSlide key={3} color="#f093fb" height={150}>3</DemoSlide>,
-      <DemoSlide key={4} color="#11998e" height={150}>4</DemoSlide>,
-      <DemoSlide key={5} color="#f5576c" height={150}>5</DemoSlide>,
-      <DemoSlide key={6} color="#4facfe" height={150}>6</DemoSlide>,
+      <DemoSlide key={1} color="#667eea" height={150}>
+        1
+      </DemoSlide>,
+      <DemoSlide key={2} color="#764ba2" height={150}>
+        2
+      </DemoSlide>,
+      <DemoSlide key={3} color="#f093fb" height={150}>
+        3
+      </DemoSlide>,
+      <DemoSlide key={4} color="#11998e" height={150}>
+        4
+      </DemoSlide>,
+      <DemoSlide key={5} color="#f5576c" height={150}>
+        5
+      </DemoSlide>,
+      <DemoSlide key={6} color="#4facfe" height={150}>
+        6
+      </DemoSlide>,
     ],
   },
   parameters: {
@@ -156,9 +184,15 @@ export const NoInfinite: Story = {
   args: {
     infinite: false,
     children: [
-      <DemoSlide key={1} color="#667eea">Slide 1</DemoSlide>,
-      <DemoSlide key={2} color="#764ba2">Slide 2</DemoSlide>,
-      <DemoSlide key={3} color="#f093fb">Slide 3</DemoSlide>,
+      <DemoSlide key={1} color="#667eea">
+        Slide 1
+      </DemoSlide>,
+      <DemoSlide key={2} color="#764ba2">
+        Slide 2
+      </DemoSlide>,
+      <DemoSlide key={3} color="#f093fb">
+        Slide 3
+      </DemoSlide>,
     ],
   },
   parameters: {
@@ -175,9 +209,15 @@ export const ArrowsOutside: Story = {
   args: {
     arrowsOutside: true,
     children: [
-      <DemoSlide key={1} color="#667eea">Slide 1</DemoSlide>,
-      <DemoSlide key={2} color="#764ba2">Slide 2</DemoSlide>,
-      <DemoSlide key={3} color="#f093fb">Slide 3</DemoSlide>,
+      <DemoSlide key={1} color="#667eea">
+        Slide 1
+      </DemoSlide>,
+      <DemoSlide key={2} color="#764ba2">
+        Slide 2
+      </DemoSlide>,
+      <DemoSlide key={3} color="#f093fb">
+        Slide 3
+      </DemoSlide>,
     ],
   },
   parameters: {
@@ -194,9 +234,15 @@ export const DotsOnTop: Story = {
   args: {
     dotsPosition: 'top',
     children: [
-      <DemoSlide key={1} color="#667eea">Slide 1</DemoSlide>,
-      <DemoSlide key={2} color="#764ba2">Slide 2</DemoSlide>,
-      <DemoSlide key={3} color="#f093fb">Slide 3</DemoSlide>,
+      <DemoSlide key={1} color="#667eea">
+        Slide 1
+      </DemoSlide>,
+      <DemoSlide key={2} color="#764ba2">
+        Slide 2
+      </DemoSlide>,
+      <DemoSlide key={3} color="#f093fb">
+        Slide 3
+      </DemoSlide>,
     ],
   },
   parameters: {
@@ -216,9 +262,15 @@ export const NoNavigation: Story = {
     autoPlay: true,
     autoPlayInterval: 2000,
     children: [
-      <DemoSlide key={1} color="#667eea">Slide 1</DemoSlide>,
-      <DemoSlide key={2} color="#764ba2">Slide 2</DemoSlide>,
-      <DemoSlide key={3} color="#f093fb">Slide 3</DemoSlide>,
+      <DemoSlide key={1} color="#667eea">
+        Slide 1
+      </DemoSlide>,
+      <DemoSlide key={2} color="#764ba2">
+        Slide 2
+      </DemoSlide>,
+      <DemoSlide key={3} color="#f093fb">
+        Slide 3
+      </DemoSlide>,
     ],
   },
   parameters: {
@@ -245,15 +297,9 @@ const ControlledCarousel = () => {
         <Button variant="outline" size="sm" onClick={() => setActiveIndex(2)}>
           Go to 3
         </Button>
-        <span style={{ marginLeft: '8px', color: '#666' }}>
-          Current: {activeIndex + 1}
-        </span>
+        <span style={{ marginLeft: '8px', color: '#666' }}>Current: {activeIndex + 1}</span>
       </div>
-      <Carousel
-        activeIndex={activeIndex}
-        onChange={setActiveIndex}
-        infinite={false}
-      >
+      <Carousel activeIndex={activeIndex} onChange={setActiveIndex} infinite={false}>
         <DemoSlide color="#667eea">Slide 1</DemoSlide>
         <DemoSlide color="#764ba2">Slide 2</DemoSlide>
         <DemoSlide color="#f093fb">Slide 3</DemoSlide>
@@ -276,13 +322,12 @@ export const Controlled: Story = {
 // 10. Image Gallery
 export const ImageGallery: Story = {
   render: () => (
-    <Carousel
-      style={{ maxWidth: 600 }}
-    >
+    <Carousel style={{ maxWidth: 600 }}>
       <div
         style={{
           height: 300,
-          backgroundImage: 'url(https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800)',
+          backgroundImage:
+            'url(https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           borderRadius: '12px',
@@ -291,7 +336,8 @@ export const ImageGallery: Story = {
       <div
         style={{
           height: 300,
-          backgroundImage: 'url(https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=800)',
+          backgroundImage:
+            'url(https://images.unsplash.com/photo-1454496522488-7a8e488e8606?w=800)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           borderRadius: '12px',
@@ -300,7 +346,8 @@ export const ImageGallery: Story = {
       <div
         style={{
           height: 300,
-          backgroundImage: 'url(https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800)',
+          backgroundImage:
+            'url(https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=800)',
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           borderRadius: '12px',
@@ -321,11 +368,7 @@ export const ImageGallery: Story = {
 // 11. Product Cards
 export const ProductCards: Story = {
   render: () => (
-    <Carousel
-      slidesToShow={3}
-      gap="24px"
-      style={{ maxWidth: 800 }}
-    >
+    <Carousel slidesToShow={3} gap="24px" style={{ maxWidth: 800 }}>
       {[
         { name: 'Laptop', price: '$999', emoji: '💻' },
         { name: 'Headphones', price: '$299', emoji: '🎧' },
@@ -346,7 +389,9 @@ export const ProductCards: Story = {
         >
           <div style={{ fontSize: '48px', marginBottom: '16px' }}>{product.emoji}</div>
           <h3 style={{ margin: '0 0 8px', color: 'var(--theme-text-primary)' }}>{product.name}</h3>
-          <p style={{ margin: 0, color: 'var(--theme-primary)', fontWeight: 'bold' }}>{product.price}</p>
+          <p style={{ margin: 0, color: 'var(--theme-primary)', fontWeight: 'bold' }}>
+            {product.price}
+          </p>
         </div>
       ))}
     </Carousel>
@@ -364,11 +409,7 @@ export const ProductCards: Story = {
 // 12. Testimonials
 export const Testimonials: Story = {
   render: () => (
-    <Carousel
-      autoPlay
-      autoPlayInterval={5000}
-      style={{ maxWidth: 600, margin: '0 auto' }}
-    >
+    <Carousel autoPlay autoPlayInterval={5000} style={{ maxWidth: 600, margin: '0 auto' }}>
       {[
         {
           quote: 'This product changed my life! Absolutely amazing experience.',
@@ -424,25 +465,43 @@ export const CustomTransition: Story = {
       <div>
         <p style={{ margin: '0 0 8px', fontSize: '14px', color: '#666' }}>Fast (100ms):</p>
         <Carousel transitionDuration={100}>
-          <DemoSlide color="#667eea" height={120}>Slide 1</DemoSlide>
-          <DemoSlide color="#764ba2" height={120}>Slide 2</DemoSlide>
-          <DemoSlide color="#f093fb" height={120}>Slide 3</DemoSlide>
+          <DemoSlide color="#667eea" height={120}>
+            Slide 1
+          </DemoSlide>
+          <DemoSlide color="#764ba2" height={120}>
+            Slide 2
+          </DemoSlide>
+          <DemoSlide color="#f093fb" height={120}>
+            Slide 3
+          </DemoSlide>
         </Carousel>
       </div>
       <div>
         <p style={{ margin: '0 0 8px', fontSize: '14px', color: '#666' }}>Normal (300ms):</p>
         <Carousel transitionDuration={300}>
-          <DemoSlide color="#667eea" height={120}>Slide 1</DemoSlide>
-          <DemoSlide color="#764ba2" height={120}>Slide 2</DemoSlide>
-          <DemoSlide color="#f093fb" height={120}>Slide 3</DemoSlide>
+          <DemoSlide color="#667eea" height={120}>
+            Slide 1
+          </DemoSlide>
+          <DemoSlide color="#764ba2" height={120}>
+            Slide 2
+          </DemoSlide>
+          <DemoSlide color="#f093fb" height={120}>
+            Slide 3
+          </DemoSlide>
         </Carousel>
       </div>
       <div>
         <p style={{ margin: '0 0 8px', fontSize: '14px', color: '#666' }}>Slow (800ms):</p>
         <Carousel transitionDuration={800}>
-          <DemoSlide color="#667eea" height={120}>Slide 1</DemoSlide>
-          <DemoSlide color="#764ba2" height={120}>Slide 2</DemoSlide>
-          <DemoSlide color="#f093fb" height={120}>Slide 3</DemoSlide>
+          <DemoSlide color="#667eea" height={120}>
+            Slide 1
+          </DemoSlide>
+          <DemoSlide color="#764ba2" height={120}>
+            Slide 2
+          </DemoSlide>
+          <DemoSlide color="#f093fb" height={120}>
+            Slide 3
+          </DemoSlide>
         </Carousel>
       </div>
     </div>
@@ -473,11 +532,21 @@ export const Playground: Story = {
     arrowsOutside: false,
     dotsPosition: 'bottom',
     children: [
-      <DemoSlide key={1} color="#667eea">Slide 1</DemoSlide>,
-      <DemoSlide key={2} color="#764ba2">Slide 2</DemoSlide>,
-      <DemoSlide key={3} color="#f093fb">Slide 3</DemoSlide>,
-      <DemoSlide key={4} color="#11998e">Slide 4</DemoSlide>,
-      <DemoSlide key={5} color="#f5576c">Slide 5</DemoSlide>,
+      <DemoSlide key={1} color="#667eea">
+        Slide 1
+      </DemoSlide>,
+      <DemoSlide key={2} color="#764ba2">
+        Slide 2
+      </DemoSlide>,
+      <DemoSlide key={3} color="#f093fb">
+        Slide 3
+      </DemoSlide>,
+      <DemoSlide key={4} color="#11998e">
+        Slide 4
+      </DemoSlide>,
+      <DemoSlide key={5} color="#f5576c">
+        Slide 5
+      </DemoSlide>,
     ],
   },
   parameters: {

@@ -1,7 +1,16 @@
 import React from 'react';
 
 const WifiOff = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
     <line x1="1" y1="1" x2="23" y2="23" />
     <path d="M16.72 11.06A10.94 10.94 0 0 1 19 12.55" />
     <path d="M5 12.55a10.94 10.94 0 0 1 5.17-2.39" />

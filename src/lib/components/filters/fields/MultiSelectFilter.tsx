@@ -39,14 +39,9 @@ export const MultiSelectFilter = forwardRef<HTMLDivElement, MultiSelectFilterPro
     },
     ref
   ) => {
-    const {
-      filter,
-      value,
-      setValue,
-      isEnabled,
-      options,
-      error,
-    } = useFilter<string[]>({ filterId });
+    const { filter, value, setValue, isEnabled, options, error } = useFilter<string[]>({
+      filterId,
+    });
 
     const handleChange = useCallback(
       (newValues: string[]) => {
@@ -83,12 +78,7 @@ export const MultiSelectFilter = forwardRef<HTMLDivElement, MultiSelectFilterPro
 
     if (displayMode === 'checkbox-group') {
       return (
-        <div
-          ref={ref}
-          className={componentClasses}
-          data-orientation={orientation}
-          {...restProps}
-        >
+        <div ref={ref} className={componentClasses} data-orientation={orientation} {...restProps}>
           {showLabel && <label className={styles.label}>{label}</label>}
 
           {config?.showSelectAll && (
@@ -177,9 +167,7 @@ export const MultiSelectFilter = forwardRef<HTMLDivElement, MultiSelectFilterPro
           })}
         </div>
 
-        {filter.helperText && (
-          <span className={styles.helperText}>{filter.helperText}</span>
-        )}
+        {filter.helperText && <span className={styles.helperText}>{filter.helperText}</span>}
         {error && <span className={styles.errorMessage}>{error}</span>}
       </div>
     );

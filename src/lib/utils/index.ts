@@ -9,18 +9,10 @@ export {
   getThemeMode,
 } from './theme-utils';
 
-export {
-  getElementBounds,
-  getViewportSize,
-  getScrollPosition,
-  isElementInViewport,
-} from './dom';
+export { getElementBounds, getViewportSize, getScrollPosition, isElementInViewport } from './dom';
 export type { ElementBounds, ViewportSize, ScrollPosition } from './dom';
 
-export {
-  calculatePopoverPosition,
-  findBestPosition,
-} from './positioning';
+export { calculatePopoverPosition, findBestPosition } from './positioning';
 export type {
   PopoverPosition,
   PositionCoordinates,

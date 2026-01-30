@@ -22,7 +22,10 @@ export interface NavbarToggleProps extends BaseComponentProps {
  * ```
  */
 export const NavbarToggle = forwardRef<HTMLButtonElement, NavbarToggleProps>(
-  ({ icon, className, 'data-testid': testId, 'aria-label': ariaLabel, style, ...restProps }, ref) => {
+  (
+    { icon, className, 'data-testid': testId, 'aria-label': ariaLabel, style, ...restProps },
+    ref
+  ) => {
     const { navbarId, isExpanded, toggle } = useNavbarContextStrict();
 
     const componentClasses = [styles.toggle, className].filter(Boolean).join(' ');

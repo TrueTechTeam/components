@@ -119,7 +119,9 @@ export const IconVariants: Story = {
           activeColor="var(--theme-error)"
           defaultActive
         />
-        <p style={{ fontSize: '12px', marginTop: '8px', color: 'var(--theme-text-secondary)' }}>Like</p>
+        <p style={{ fontSize: '12px', marginTop: '8px', color: 'var(--theme-text-secondary)' }}>
+          Like
+        </p>
       </div>
       <div style={{ textAlign: 'center' }}>
         <ToggleButton
@@ -129,7 +131,9 @@ export const IconVariants: Story = {
           activeColor="var(--theme-warning)"
           defaultActive
         />
-        <p style={{ fontSize: '12px', marginTop: '8px', color: 'var(--theme-text-secondary)' }}>Favorite</p>
+        <p style={{ fontSize: '12px', marginTop: '8px', color: 'var(--theme-text-secondary)' }}>
+          Favorite
+        </p>
       </div>
       <div style={{ textAlign: 'center' }}>
         <ToggleButton
@@ -139,7 +143,9 @@ export const IconVariants: Story = {
           activeColor="var(--theme-primary)"
           defaultActive
         />
-        <p style={{ fontSize: '12px', marginTop: '8px', color: 'var(--theme-text-secondary)' }}>Bookmark</p>
+        <p style={{ fontSize: '12px', marginTop: '8px', color: 'var(--theme-text-secondary)' }}>
+          Bookmark
+        </p>
       </div>
       <div style={{ textAlign: 'center' }}>
         <ToggleButton
@@ -149,7 +155,9 @@ export const IconVariants: Story = {
           activeColor="var(--theme-success)"
           defaultActive
         />
-        <p style={{ fontSize: '12px', marginTop: '8px', color: 'var(--theme-text-secondary)' }}>Thumbs Up</p>
+        <p style={{ fontSize: '12px', marginTop: '8px', color: 'var(--theme-text-secondary)' }}>
+          Thumbs Up
+        </p>
       </div>
     </div>
   ),
@@ -166,11 +174,15 @@ export const ActiveStates: Story = {
     <div style={{ display: 'flex', gap: '32px', alignItems: 'center' }}>
       <div style={{ textAlign: 'center' }}>
         <ToggleButton aria-label="Inactive like" defaultActive={false} />
-        <p style={{ fontSize: '12px', marginTop: '8px', color: 'var(--theme-text-secondary)' }}>Inactive</p>
+        <p style={{ fontSize: '12px', marginTop: '8px', color: 'var(--theme-text-secondary)' }}>
+          Inactive
+        </p>
       </div>
       <div style={{ textAlign: 'center' }}>
         <ToggleButton aria-label="Active like" defaultActive />
-        <p style={{ fontSize: '12px', marginTop: '8px', color: 'var(--theme-text-secondary)' }}>Active</p>
+        <p style={{ fontSize: '12px', marginTop: '8px', color: 'var(--theme-text-secondary)' }}>
+          Active
+        </p>
       </div>
     </div>
   ),
@@ -245,11 +257,15 @@ export const Animation: Story = {
     <div style={{ display: 'flex', gap: '32px', alignItems: 'center' }}>
       <div style={{ textAlign: 'center' }}>
         <ToggleButton aria-label="With animation" animated />
-        <p style={{ fontSize: '12px', marginTop: '8px', color: 'var(--theme-text-secondary)' }}>With Animation</p>
+        <p style={{ fontSize: '12px', marginTop: '8px', color: 'var(--theme-text-secondary)' }}>
+          With Animation
+        </p>
       </div>
       <div style={{ textAlign: 'center' }}>
         <ToggleButton aria-label="Without animation" animated={false} />
-        <p style={{ fontSize: '12px', marginTop: '8px', color: 'var(--theme-text-secondary)' }}>No Animation</p>
+        <p style={{ fontSize: '12px', marginTop: '8px', color: 'var(--theme-text-secondary)' }}>
+          No Animation
+        </p>
       </div>
     </div>
   ),
@@ -272,12 +288,13 @@ const ControlledExample = () => {
 
   return (
     <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-      <ToggleButton
-        aria-label={liked ? 'Unlike' : 'Like'}
-        active={liked}
-        onChange={handleChange}
-      />
-      <span style={{ fontSize: '14px', color: liked ? 'var(--theme-error)' : 'var(--theme-text-secondary)' }}>
+      <ToggleButton aria-label={liked ? 'Unlike' : 'Like'} active={liked} onChange={handleChange} />
+      <span
+        style={{
+          fontSize: '14px',
+          color: liked ? 'var(--theme-error)' : 'var(--theme-text-secondary)',
+        }}
+      >
         {likeCount} likes
       </span>
     </div>

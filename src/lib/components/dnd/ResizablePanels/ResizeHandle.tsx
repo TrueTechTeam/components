@@ -81,9 +81,10 @@ export const ResizeHandle = forwardRef<HTMLDivElement, ResizeHandleProps>(
           }
 
           const rect = parent.getBoundingClientRect();
-          const delta = context.direction === 'horizontal'
-            ? e.clientX - startPosRef.current.x
-            : e.clientY - startPosRef.current.y;
+          const delta =
+            context.direction === 'horizontal'
+              ? e.clientX - startPosRef.current.x
+              : e.clientY - startPosRef.current.y;
 
           const containerSize = context.direction === 'horizontal' ? rect.width : rect.height;
           const deltaPercent = (delta / containerSize) * 100;
@@ -107,7 +108,8 @@ export const ResizeHandle = forwardRef<HTMLDivElement, ResizeHandleProps>(
           }
 
           // Recalculate based on constraints
-          const totalSize = startSizesRef.current[leftPanelIndex] + startSizesRef.current[rightPanelIndex];
+          const totalSize =
+            startSizesRef.current[leftPanelIndex] + startSizesRef.current[rightPanelIndex];
           const actualLeftSize = Math.min(newLeftSize, totalSize - (rightConfig?.minSize ?? 10));
           const actualRightSize = totalSize - actualLeftSize;
 
@@ -136,8 +138,10 @@ export const ResizeHandle = forwardRef<HTMLDivElement, ResizeHandleProps>(
         const step = event.shiftKey ? 10 : 2; // Larger steps with shift
 
         if (
-          (context.direction === 'horizontal' && (event.key === 'ArrowLeft' || event.key === 'ArrowRight')) ||
-          (context.direction === 'vertical' && (event.key === 'ArrowUp' || event.key === 'ArrowDown'))
+          (context.direction === 'horizontal' &&
+            (event.key === 'ArrowLeft' || event.key === 'ArrowRight')) ||
+          (context.direction === 'vertical' &&
+            (event.key === 'ArrowUp' || event.key === 'ArrowDown'))
         ) {
           event.preventDefault();
 
@@ -149,8 +153,7 @@ export const ResizeHandle = forwardRef<HTMLDivElement, ResizeHandleProps>(
             return;
           }
 
-          const direction =
-            event.key === 'ArrowLeft' || event.key === 'ArrowUp' ? -1 : 1;
+          const direction = event.key === 'ArrowLeft' || event.key === 'ArrowUp' ? -1 : 1;
           const deltaPercent = step * direction;
 
           const leftConfig = context.getPanelConfig(leftPanelIndex);

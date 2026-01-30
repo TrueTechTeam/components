@@ -47,9 +47,7 @@ export interface UseBreadcrumbsFromPathOptions {
  * Default label transform: capitalize and replace hyphens/underscores
  */
 const defaultLabelTransform = (segment: string): string => {
-  return segment
-    .replace(/[-_]/g, ' ')
-    .replace(/\b\w/g, (char) => char.toUpperCase());
+  return segment.replace(/[-_]/g, ' ').replace(/\b\w/g, (char) => char.toUpperCase());
 };
 
 /**

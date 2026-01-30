@@ -17,7 +17,8 @@
   height: 100%;
   background: var(--sidebar-bg);
   border-right: 1px solid var(--sidebar-border-color);
-  transition: width var(--sidebar-animation-duration) var(--sidebar-animation-easing),
+  transition:
+    width var(--sidebar-animation-duration) var(--sidebar-animation-easing),
     min-width var(--sidebar-animation-duration) var(--sidebar-animation-easing),
     max-width var(--sidebar-animation-duration) var(--sidebar-animation-easing);
   // Use clip-path instead of overflow:hidden to allow toggle button to be visible
@@ -76,7 +77,9 @@
   align-items: center;
   justify-content: center;
   color: var(--theme-text-secondary, #666);
-  transition: background-color 0.15s ease, color 0.15s ease;
+  transition:
+    background-color 0.15s ease,
+    color 0.15s ease;
   z-index: 10;
 
   &:hover {

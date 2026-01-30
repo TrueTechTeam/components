@@ -175,4 +175,3 @@ export const FilterPopover = forwardRef<HTMLDivElement, FilterPopoverProps>(
 FilterPopover.displayName = 'FilterPopover';
 
 export default FilterPopover;
-

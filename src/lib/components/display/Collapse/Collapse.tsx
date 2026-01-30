@@ -146,7 +146,15 @@ export const Collapse = forwardRef<HTMLDivElement, CollapseProps>(
         }, duration);
         return () => clearTimeout(timer);
       }
-    }, [isOpen, duration, onExpandStart, onExpandEnd, onCollapseStart, onCollapseEnd, unmountOnCollapse]);
+    }, [
+      isOpen,
+      duration,
+      onExpandStart,
+      onExpandEnd,
+      onCollapseStart,
+      onCollapseEnd,
+      unmountOnCollapse,
+    ]);
 
     const classes = [styles.collapse, className].filter(Boolean).join(' ');
 

@@ -70,13 +70,17 @@ export const Tab = forwardRef<HTMLButtonElement, TabProps>(
     const isDisabled = tabDisabled || context.disabled;
 
     const handleClick = useCallback(() => {
-      if (isDisabled) return;
+      if (isDisabled) {
+        return;
+      }
       context.onChange(value);
     }, [context, value, isDisabled]);
 
     const handleKeyDown = useCallback(
       (event: React.KeyboardEvent<HTMLButtonElement>) => {
-        if (isDisabled) return;
+        if (isDisabled) {
+          return;
+        }
 
         const isHorizontal = context.orientation === 'horizontal';
         const prevKey = isHorizontal ? 'ArrowLeft' : 'ArrowUp';
@@ -124,4 +128,3 @@ export const Tab = forwardRef<HTMLButtonElement, TabProps>(
 Tab.displayName = 'Tab';
 
 export default Tab;
-

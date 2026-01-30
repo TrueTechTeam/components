@@ -2,13 +2,7 @@
  * Toast component - Notification toast for temporary messages
  */
 
-import React, {
-  useState,
-  useEffect,
-  useCallback,
-  useRef,
-  type ReactNode,
-} from 'react';
+import React, { useState, useEffect, useCallback, useRef, type ReactNode } from 'react';
 import { Icon } from '../../display/Icon';
 import { IconButton } from '../../buttons/IconButton';
 import { Spinner } from '../../display/Spinner';
@@ -247,12 +241,30 @@ export const Toast: React.FC<ToastProps> = ({
 
   // Custom render
   if (render) {
-    return render({ toast: { id, variant, title, message, icon, hideIcon, duration, dismissible, action, onDismiss, showProgress, pauseOnHover }, dismiss: handleDismiss });
+    return render({
+      toast: {
+        id,
+        variant,
+        title,
+        message,
+        icon,
+        hideIcon,
+        duration,
+        dismissible,
+        action,
+        onDismiss,
+        showProgress,
+        pauseOnHover,
+      },
+      dismiss: handleDismiss,
+    });
   }
 
   // Render icon
   const renderIcon = () => {
-    if (hideIcon) return null;
+    if (hideIcon) {
+      return null;
+    }
 
     if (variant === 'loading') {
       return (
@@ -311,11 +323,7 @@ export const Toast: React.FC<ToastProps> = ({
 
       <div className={styles.toastActions}>
         {action && (
-          <button
-            type="button"
-            className={styles.toastAction}
-            onClick={action.onClick}
-          >
+          <button type="button" className={styles.toastAction} onClick={action.onClick}>
             {action.label}
           </button>
         )}
@@ -333,10 +341,7 @@ export const Toast: React.FC<ToastProps> = ({
       </div>
 
       {showProgress && duration > 0 && variant !== 'loading' && (
-        <div
-          className={styles.toastProgress}
-          data-paused={isPaused || undefined}
-        />
+        <div className={styles.toastProgress} data-paused={isPaused || undefined} />
       )}
     </div>
   );

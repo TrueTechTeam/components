@@ -99,19 +99,29 @@ export function useFilterDependencies(
 
       switch (action) {
         case 'show':
-          if (!conditionMet) {isVisible = false;}
+          if (!conditionMet) {
+            isVisible = false;
+          }
           break;
         case 'hide':
-          if (conditionMet) {isVisible = false;}
+          if (conditionMet) {
+            isVisible = false;
+          }
           break;
         case 'enable':
-          if (!conditionMet) {isEnabled = false;}
+          if (!conditionMet) {
+            isEnabled = false;
+          }
           break;
         case 'disable':
-          if (conditionMet) {isEnabled = false;}
+          if (conditionMet) {
+            isEnabled = false;
+          }
           break;
         case 'reload-options':
-          if (conditionMet) {shouldReloadOptions = true;}
+          if (conditionMet) {
+            shouldReloadOptions = true;
+          }
           break;
       }
     }
@@ -121,7 +131,9 @@ export function useFilterDependencies(
 
   // Track dependency value changes for reset and reload
   useEffect(() => {
-    if (!filter.dependencies) {return;}
+    if (!filter.dependencies) {
+      return;
+    }
 
     for (const dep of filter.dependencies) {
       const dependsOnFields = Array.isArray(dep.dependsOn) ? dep.dependsOn : [dep.dependsOn];
@@ -132,8 +144,7 @@ export function useFilterDependencies(
 
         // Check if value has actually changed (handle reference equality for objects)
         const hasChanged =
-          prevValue !== currentValue &&
-          JSON.stringify(prevValue) !== JSON.stringify(currentValue);
+          prevValue !== currentValue && JSON.stringify(prevValue) !== JSON.stringify(currentValue);
 
         if (hasChanged && prevDependencyValuesRef.current[field] !== undefined) {
           // Dependency value changed (not initial mount)

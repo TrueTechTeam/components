@@ -38,10 +38,7 @@ export interface DialogProviderProps {
  * </DialogProvider>
  * ```
  */
-export function DialogProvider({
-  children,
-  defaultDialogProps,
-}: DialogProviderProps) {
+export function DialogProvider({ children, defaultDialogProps }: DialogProviderProps) {
   const [dialogs, setDialogs] = useState<DialogStackItem[]>([]);
 
   // Open a new dialog
@@ -76,19 +73,18 @@ export function DialogProvider({
   }, []);
 
   // Close the topmost dialog
-  const closeTopDialog = useCallback(
-    (result?: unknown) => {
-      setDialogs((prev) => {
-        if (prev.length === 0) return prev;
-        const topDialog = prev[prev.length - 1];
-        if (topDialog.resolve) {
-          topDialog.resolve(result);
-        }
-        return prev.slice(0, -1);
-      });
-    },
-    []
-  );
+  const closeTopDialog = useCallback((result?: unknown) => {
+    setDialogs((prev) => {
+      if (prev.length === 0) {
+        return prev;
+      }
+      const topDialog = prev[prev.length - 1];
+      if (topDialog.resolve) {
+        topDialog.resolve(result);
+      }
+      return prev.slice(0, -1);
+    });
+  }, []);
 
   // Close all dialogs
   const closeAllDialogs = useCallback(() => {
@@ -106,18 +102,13 @@ export function DialogProvider({
   const updateDialog = useCallback((id: string, props: Partial<DialogProps>) => {
     setDialogs((prev) =>
       prev.map((dialog) =>
-        dialog.id === id
-          ? { ...dialog, props: { ...dialog.props, ...props } }
-          : dialog
+        dialog.id === id ? { ...dialog, props: { ...dialog.props, ...props } } : dialog
       )
     );
   }, []);
 
   // Check if a dialog is open
-  const isDialogOpen = useCallback(
-    (id: string) => dialogs.some((d) => d.id === id),
-    [dialogs]
-  );
+  const isDialogOpen = useCallback((id: string) => dialogs.some((d) => d.id === id), [dialogs]);
 
   // Memoize context value
   const contextValue = useMemo<DialogContextValue>(
@@ -131,15 +122,7 @@ export function DialogProvider({
       isDialogOpen,
       dialogCount: dialogs.length,
     }),
-    [
-      dialogs,
-      openDialog,
-      closeDialog,
-      closeTopDialog,
-      closeAllDialogs,
-      updateDialog,
-      isDialogOpen,
-    ]
+    [dialogs, openDialog, closeDialog, closeTopDialog, closeAllDialogs, updateDialog, isDialogOpen]
   );
 
   // Handle dialog close
@@ -158,7 +141,7 @@ export function DialogProvider({
         <Dialog
           key={dialog.id}
           {...dialog.props}
-          isOpen={true}
+          isOpen
           onClose={() => handleDialogClose(dialog)}
           onOpenChange={(isOpen) => {
             if (!isOpen) {

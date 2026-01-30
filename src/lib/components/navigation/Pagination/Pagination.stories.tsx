@@ -81,7 +81,9 @@ export const Variants: Story = {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
         <div>
-          <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>
+          <p
+            style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}
+          >
             Default
           </p>
           <Pagination
@@ -92,7 +94,9 @@ export const Variants: Story = {
           />
         </div>
         <div>
-          <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>
+          <p
+            style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}
+          >
             Outlined
           </p>
           <Pagination
@@ -103,7 +107,9 @@ export const Variants: Story = {
           />
         </div>
         <div>
-          <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>
+          <p
+            style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}
+          >
             Minimal
           </p>
           <Pagination
@@ -127,18 +133,17 @@ export const Shapes: Story = {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
         <div>
-          <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>
+          <p
+            style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}
+          >
             Rounded (default)
           </p>
-          <Pagination
-            totalPages={10}
-            currentPage={page1}
-            onPageChange={setPage1}
-            shape="rounded"
-          />
+          <Pagination totalPages={10} currentPage={page1} onPageChange={setPage1} shape="rounded" />
         </div>
         <div>
-          <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>
+          <p
+            style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}
+          >
             Circular
           </p>
           <Pagination
@@ -149,15 +154,12 @@ export const Shapes: Story = {
           />
         </div>
         <div>
-          <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>
+          <p
+            style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}
+          >
             Square
           </p>
-          <Pagination
-            totalPages={10}
-            currentPage={page3}
-            onPageChange={setPage3}
-            shape="square"
-          />
+          <Pagination totalPages={10} currentPage={page3} onPageChange={setPage3} shape="square" />
         </div>
       </div>
     );
@@ -173,19 +175,25 @@ export const Sizes: Story = {
     return (
       <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
         <div>
-          <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>
+          <p
+            style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}
+          >
             Small
           </p>
           <Pagination totalPages={10} currentPage={page1} onPageChange={setPage1} size="sm" />
         </div>
         <div>
-          <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>
+          <p
+            style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}
+          >
             Medium (default)
           </p>
           <Pagination totalPages={10} currentPage={page2} onPageChange={setPage2} size="md" />
         </div>
         <div>
-          <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>
+          <p
+            style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}
+          >
             Large
           </p>
           <Pagination totalPages={10} currentPage={page3} onPageChange={setPage3} size="lg" />
@@ -228,14 +236,7 @@ export const ManyPages: Story = {
 };
 
 export const Disabled: Story = {
-  render: () => (
-    <Pagination
-      totalPages={10}
-      currentPage={5}
-      onPageChange={() => {}}
-      disabled
-    />
-  ),
+  render: () => <Pagination totalPages={10} currentPage={5} onPageChange={() => {}} disabled />,
 };
 
 export const CircularOutlined: Story = {

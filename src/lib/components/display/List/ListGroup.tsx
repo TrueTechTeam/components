@@ -84,17 +84,14 @@ export function ListGroup({
           renderHeader(groupKey, itemCount, isCollapsed)
         ) : (
           <div className={styles.groupHeaderContent}>
-              {collapsible && (
-                <span
-                  className={styles.groupCollapseIcon}
-                  data-collapsed={isCollapsed || undefined}
-                >
-                  <Icon name="chevron-down" size="sm" />
-                </span>
-              )}
-              <span>{groupKey}</span>
-              <span className={styles.groupHeaderCount}>({itemCount})</span>
-            </div>
+            {collapsible && (
+              <span className={styles.groupCollapseIcon} data-collapsed={isCollapsed || undefined}>
+                <Icon name="chevron-down" size="sm" />
+              </span>
+            )}
+            <span>{groupKey}</span>
+            <span className={styles.groupHeaderCount}>({itemCount})</span>
+          </div>
         )}
       </div>
 

@@ -44,7 +44,17 @@ export interface AvatarProps extends Omit<BaseComponentProps, 'children'> {
   /**
    * Status indicator
    */
-  status?: 'online' | 'offline' | 'away' | 'busy' | 'success' | 'warning' | 'error' | 'info' | 'neutral' | 'processing';
+  status?:
+    | 'online'
+    | 'offline'
+    | 'away'
+    | 'busy'
+    | 'success'
+    | 'warning'
+    | 'error'
+    | 'info'
+    | 'neutral'
+    | 'processing';
 }
 
 /**
@@ -121,4 +131,3 @@ export const Avatar = forwardRef<HTMLDivElement, AvatarProps>(
 );
 
 Avatar.displayName = 'Avatar';
-

@@ -92,10 +92,7 @@ export const Default: Story = {
 
     return (
       <div style={{ maxWidth: '500px' }}>
-        <FormBuilder
-          fields={fields}
-          onSubmit={action('form-submitted')}
-        />
+        <FormBuilder fields={fields} onSubmit={action('form-submitted')} />
       </div>
     );
   },
@@ -814,11 +811,7 @@ export const WithoutButtons: Story = {
 
     return (
       <div style={{ maxWidth: '500px' }}>
-        <FormBuilder
-          fields={fields}
-          showSubmitButton={false}
-          onChange={action('form-changed')}
-        />
+        <FormBuilder fields={fields} showSubmitButton={false} onChange={action('form-changed')} />
       </div>
     );
   },
@@ -856,7 +849,7 @@ const AsyncSubmissionForm = () => {
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
     action('form-submitted')({ status: 'success', data: values });
-    // eslint-disable-next-line no-alert
+
     alert('Login successful!');
     setIsSubmitting(false);
   };

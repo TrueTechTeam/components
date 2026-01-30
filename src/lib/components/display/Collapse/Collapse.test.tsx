@@ -145,7 +145,9 @@ describe('Collapse', () => {
         </Collapse>
       );
       const element = container.firstChild as HTMLElement;
-      expect(element.style.getPropertyValue('--collapse-easing')).toBe('cubic-bezier(0.4, 0, 0.2, 1)');
+      expect(element.style.getPropertyValue('--collapse-easing')).toBe(
+        'cubic-bezier(0.4, 0, 0.2, 1)'
+      );
     });
   });
 

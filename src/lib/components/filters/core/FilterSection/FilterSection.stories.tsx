@@ -229,10 +229,7 @@ export const WithIcon: Story = {
   render: () => (
     <FilterProvider filters={productFilters} groups={filterGroups} onChange={action('onChange')}>
       <div style={{ maxWidth: '300px' }}>
-        <FilterSection
-          title="Product Filters"
-          icon={<Icon name="filter" size="1em" />}
-        >
+        <FilterSection title="Product Filters" icon={<Icon name="filter" size="1em" />}>
           <FilterField filterId="category" />
           <FilterField filterId="brand" />
         </FilterSection>

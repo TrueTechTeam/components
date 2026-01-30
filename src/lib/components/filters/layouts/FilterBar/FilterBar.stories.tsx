@@ -214,11 +214,7 @@ export const WithActionButtons: Story = {
       onClear={action('onClear')}
       onReset={action('onReset')}
     >
-      <FilterBar
-        visibleFilters={['search', 'status', 'category']}
-        showClearButton
-        showResetButton
-      >
+      <FilterBar visibleFilters={['search', 'status', 'category']} showClearButton showResetButton>
         <FilterField filterId="search" showLabel={false} />
         <FilterField filterId="status" showLabel={false} />
         <FilterField filterId="category" showLabel={false} />

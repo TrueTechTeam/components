@@ -197,7 +197,9 @@ export const FlipCard = forwardRef<HTMLDivElement, FlipCardProps>(
 
     // Handle flip action
     const handleFlip = useCallback(() => {
-      if (disabled || isAnimating) {return;}
+      if (disabled || isAnimating) {
+        return;
+      }
 
       const newIsFlipped = !isFlipped;
 
@@ -218,7 +220,16 @@ export const FlipCard = forwardRef<HTMLDivElement, FlipCardProps>(
         setIsAnimating(false);
         onFlipEnd?.(newIsFlipped);
       }, duration);
-    }, [disabled, isAnimating, isFlipped, isControlled, onFlipChange, onFlipStart, onFlipEnd, duration]);
+    }, [
+      disabled,
+      isAnimating,
+      isFlipped,
+      isControlled,
+      onFlipChange,
+      onFlipStart,
+      onFlipEnd,
+      duration,
+    ]);
 
     // Click handler
     const handleClick = useCallback(
@@ -233,7 +244,9 @@ export const FlipCard = forwardRef<HTMLDivElement, FlipCardProps>(
     // Keyboard handler (accessibility)
     const handleKeyDown = useCallback(
       (event: KeyboardEvent<HTMLDivElement>) => {
-        if (flipTrigger === 'manual') {return;}
+        if (flipTrigger === 'manual') {
+          return;
+        }
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault();
           handleFlip();

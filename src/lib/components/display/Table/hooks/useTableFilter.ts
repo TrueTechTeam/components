@@ -75,7 +75,9 @@ export function useTableFilter<T extends Record<string, unknown>>({
   // Default filter function - searches through specified fields or all column keys
   const defaultFilterFn = useCallback(
     (item: T, query: string): boolean => {
-      if (!query.trim()) {return true;}
+      if (!query.trim()) {
+        return true;
+      }
 
       const lowerQuery = query.toLowerCase();
 
@@ -84,7 +86,9 @@ export function useTableFilter<T extends Record<string, unknown>>({
 
       return fieldsToSearch.some((field) => {
         const value = item[field];
-        if (value === null || value === undefined) {return false;}
+        if (value === null || value === undefined) {
+          return false;
+        }
         return String(value).toLowerCase().includes(lowerQuery);
       });
     },
@@ -94,7 +98,9 @@ export function useTableFilter<T extends Record<string, unknown>>({
   const filterFn = searchFn || defaultFilterFn;
 
   const filteredData = useMemo(() => {
-    if (!debouncedQuery.trim()) {return data;}
+    if (!debouncedQuery.trim()) {
+      return data;
+    }
     return data.filter((item) => filterFn(item, debouncedQuery));
   }, [data, debouncedQuery, filterFn]);
 

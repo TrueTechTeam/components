@@ -115,7 +115,9 @@ function extractMenuItems(children: ReactNode): Map<string, ReactNode> {
   const itemsMap = new Map<string, ReactNode>();
 
   const processChild = (child: ReactNode): void => {
-    if (!child) {return;}
+    if (!child) {
+      return;
+    }
 
     if (Array.isArray(child)) {
       child.forEach(processChild);
@@ -177,9 +179,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
       return label;
     }
 
-    const selectedLabels = selectedKeys
-      .map((key) => itemsMap.get(key))
-      .filter(Boolean);
+    const selectedLabels = selectedKeys.map((key) => itemsMap.get(key)).filter(Boolean);
 
     if (selectedLabels.length === 0) {
       return label;
@@ -229,8 +229,7 @@ export const Dropdown: React.FC<DropdownProps> = ({
     onOpenChange?.(newIsOpen);
   };
 
-  const iconElement =
-    typeof icon === 'string' ? <Icon name={icon as IconName} size={20} /> : icon;
+  const iconElement = typeof icon === 'string' ? <Icon name={icon as IconName} size={20} /> : icon;
 
   return (
     <Menu

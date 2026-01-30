@@ -8,7 +8,10 @@ export interface Mark {
 }
 
 export interface SliderProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'value' | 'onChange' | 'size' | 'defaultValue'> {
+  extends Omit<
+    React.InputHTMLAttributes<HTMLInputElement>,
+    'value' | 'onChange' | 'size' | 'defaultValue'
+  > {
   variant?: ComponentVariant;
   size?: ComponentSize;
   value?: number | number[];
@@ -89,8 +92,12 @@ export const Slider = forwardRef<HTMLInputElement, SliderProps>(
     };
 
     const generateMarks = (): Mark[] => {
-      if (!marks) {return [];}
-      if (Array.isArray(marks)) {return marks;}
+      if (!marks) {
+        return [];
+      }
+      if (Array.isArray(marks)) {
+        return marks;
+      }
 
       const marksArray: Mark[] = [];
       for (let i = min; i <= max; i += step) {
@@ -110,11 +117,15 @@ export const Slider = forwardRef<HTMLInputElement, SliderProps>(
 
     const getClickPosition = (e: React.MouseEvent<HTMLInputElement>): number => {
       // Use the slider container, not the input element, for accurate positioning
-      if (!sliderRef.current) {return min;}
+      if (!sliderRef.current) {
+        return min;
+      }
       const sliderElement = sliderRef.current.querySelector(
         '[data-component="slider"]'
       ) as HTMLElement;
-      if (!sliderElement) {return min;}
+      if (!sliderElement) {
+        return min;
+      }
 
       const rect = sliderElement.getBoundingClientRect();
 
@@ -131,11 +142,15 @@ export const Slider = forwardRef<HTMLInputElement, SliderProps>(
 
     const isClickNearThumb = (clickValue: number, thumbValue: number): boolean => {
       // Calculate pixel threshold (approximately 30 pixels worth of value range for easier clicking)
-      if (!sliderRef.current) {return false;}
+      if (!sliderRef.current) {
+        return false;
+      }
       const sliderElement = sliderRef.current.querySelector(
         '[data-component="slider"]'
       ) as HTMLElement;
-      if (!sliderElement) {return false;}
+      if (!sliderElement) {
+        return false;
+      }
 
       const rect = sliderElement.getBoundingClientRect();
       const sliderSize = orientation === 'horizontal' ? rect.width : rect.height;
@@ -150,12 +165,16 @@ export const Slider = forwardRef<HTMLInputElement, SliderProps>(
       }
 
       const handleMouseMove = (e: MouseEvent) => {
-        if (!sliderRef.current) {return;}
+        if (!sliderRef.current) {
+          return;
+        }
 
         const sliderElement = sliderRef.current.querySelector(
           '[data-component="slider"]'
         ) as HTMLElement;
-        if (!sliderElement) {return;}
+        if (!sliderElement) {
+          return;
+        }
 
         const rect = sliderElement.getBoundingClientRect();
         let newValue: number;
@@ -238,7 +257,9 @@ export const Slider = forwardRef<HTMLInputElement, SliderProps>(
             <div
               className={styles.track}
               onMouseDown={(e) => {
-                if (!isRange || disabled) {return;}
+                if (!isRange || disabled) {
+                  return;
+                }
 
                 const clickValue = getClickPosition(e as any);
                 // Round to nearest step
@@ -392,4 +413,3 @@ export const Slider = forwardRef<HTMLInputElement, SliderProps>(
 );
 
 Slider.displayName = 'Slider';
-

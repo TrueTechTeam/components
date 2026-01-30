@@ -188,7 +188,9 @@ export const Popover: React.FC<PopoverProps> = ({
           } as any
         )
       ) : (
-        <span ref={triggerRef as any} onClick={handleTriggerClick}>{trigger}</span>
+        <span ref={triggerRef as any} onClick={handleTriggerClick}>
+          {trigger}
+        </span>
       ),
     // eslint-disable-next-line react-hooks/exhaustive-deps
     [trigger, handleTriggerClick]
@@ -227,4 +229,3 @@ export const Popover: React.FC<PopoverProps> = ({
 };
 
 Popover.displayName = 'Popover';
-

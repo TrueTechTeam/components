@@ -7,9 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.10] - 2026-01-29
+
+### Changed
+
+- Comprehensive component library update with improved styling and accessibility
+- Updated Button, IconButton, and ToggleButton components with refined styling
+- Enhanced display components (Accordion, Avatar, Badge, Card, Carousel, Chip, etc.)
+- Improved drag-and-drop components (DndProvider, SortableList, SortableGrid, KanbanBoard)
+- Updated filter components with better state management and styling
+- Enhanced form components (FormBuilder) with improved validation
+- Updated input components (Autocomplete, Checkbox, DatePicker, Input, Select, etc.)
+- Refined Icon component and added new icon variants
+- Improved Storybook configuration and stories
+- Updated test configurations and improved test coverage
+- Enhanced SCSS modules across all components for better theming consistency
+
 ## [0.0.6] - 2026-01-29
 
 ### Added
+
 - New display components:
   - List - Comprehensive list component with selection, virtualization, and keyboard navigation
   - ListItem - Individual list items with icons, actions, and selection states
@@ -40,6 +57,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - Filter hooks for state management and persistence
 
 ### Changed
+
 - Improved Collapse component animations and transitions
 - Enhanced OverflowText with better tooltip integration
 - Updated TruncatedList with smoother expand/collapse behavior
@@ -52,6 +70,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.0.5] - 2026-01-25
 
 ### Added
+
 - New navigation components:
   - Stepper - Multi-step progress indicator with customizable steps
   - Breadcrumbs - Navigation breadcrumb trail with path utilities
@@ -84,6 +103,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - useResizeObserver - Hook for observing element resize events
 
 ### Changed
+
 - Updated Card component styles
 - Updated Tooltip styles
 - Enhanced useAlert and useDialog hooks
@@ -91,6 +111,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.0.4] - 2026-01-19
 
 ### Added
+
 - New display components:
   - Accordion - Collapsible content sections
   - Card - Content container with various styles
@@ -106,12 +127,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Added aria-label to StatusIndicator for accessibility
 
 ### Changed
+
 - Updated StatusIndicator to support user presence status types
 - Improved test coverage and fixed failing tests
 - Updated ESLint configuration to ignore template files
 - Updated Jest configuration to exclude template test files
 
 ### Fixed
+
 - Fixed React hooks rule violations in Storybook stories
 - Fixed Button component ref forwarding type casting
 - Fixed Pill component test queries to use correct selectors
@@ -120,6 +143,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.0.3] - 2026-01-17
 
 ### Changed
+
 - Migrated icon system from individual SVG files to React component-based icons
 - Updated Icon component to use new icon component architecture
 - Updated Button component with improved icon integration
@@ -129,12 +153,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated overlay components (Dropdown, Menu) with new icon integration
 
 ### Removed
+
 - Removed individual SVG icon files in favor of React icon components
 - Removed legacy icon index exports
 
 ## [0.0.2] - 2026-01-14
 
 ### Added
+
 - New display components now exported:
   - Badge - Notification badges with count display
   - Chip - Interactive chips for tags and selections
@@ -153,6 +179,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - chart-line, chart-bar, trending-down
 
 ### Changed
+
 - Updated Storybook preview decorator with improved centering and flexbox layout
 - Refined theme color variables for better consistency:
   - Updated success, warning, and error colors in both light and dark themes
@@ -161,11 +188,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Improved component exports in display/index.ts for better tree-shaking
 
 ### Fixed
+
 - Fixed Jest configuration: changed `coverageThresholds` to `coverageThreshold`
 - Updated SVG mock in test-setup.ts to properly return React elements
 - Added .claude directory to lint ignore patterns
 
 ### Removed
+
 - Removed documentation markdown files (moved to dedicated docs):
   - COMPONENT_ORGANIZATION.md
   - COMPONENT_STYLE_GUIDE.md
@@ -176,6 +205,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [0.0.1] - 2026-01-14
 
 ### Added
+
 - Initial release of @true-tech-team/react-components
 - Display components:
   - Avatar - User profile avatars with image, initials, and icon variants
@@ -196,12 +226,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - ESLint and Prettier configuration
 
 ### Infrastructure
+
 - NX monorepo setup
 - Build scripts for ESM and CJS outputs
 - Test coverage configuration
 - Storybook integration
 
-[Unreleased]: https://github.com/your-org/true-tech-team/compare/v0.0.6...HEAD
+[Unreleased]: https://github.com/your-org/true-tech-team/compare/v0.0.10...HEAD
+[0.0.10]: https://github.com/your-org/true-tech-team/compare/v0.0.6...v0.0.10
 [0.0.6]: https://github.com/your-org/true-tech-team/compare/v0.0.5...v0.0.6
 [0.0.5]: https://github.com/your-org/true-tech-team/compare/v0.0.4...v0.0.5
 [0.0.4]: https://github.com/your-org/true-tech-team/compare/v0.0.3...v0.0.4

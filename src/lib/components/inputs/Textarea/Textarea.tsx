@@ -2,7 +2,8 @@ import React, { forwardRef, useState, useId, useCallback, useEffect, useRef } fr
 import type { ValidationResult, ValidationTiming } from '../Input/Input';
 import styles from './Textarea.module.scss';
 
-export interface TextareaProps extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'size'> {
+export interface TextareaProps
+  extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'size'> {
   /**
    * Label text to display above textarea
    */
@@ -181,19 +182,24 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
       }
     }, [value, autoResize, minRows, maxRows]);
 
-    const validate = useCallback((valueToValidate: string) => {
-      if (!validationRegex) {return;}
+    const validate = useCallback(
+      (valueToValidate: string) => {
+        if (!validationRegex) {
+          return;
+        }
 
-      const isValid = validationRegex.test(valueToValidate);
-      const result: ValidationResult = {
-        isValid,
-        value: valueToValidate,
-        pattern: validationRegex,
-      };
+        const isValid = validationRegex.test(valueToValidate);
+        const result: ValidationResult = {
+          isValid,
+          value: valueToValidate,
+          pattern: validationRegex,
+        };
 
-      setValidationError(isValid ? null : 'Invalid input');
-      onValidate?.(result);
-    }, [validationRegex, onValidate]);
+        setValidationError(isValid ? null : 'Invalid input');
+        onValidate?.(result);
+      },
+      [validationRegex, onValidate]
+    );
 
     const handleChange = useCallback(
       (event: React.ChangeEvent<HTMLTextAreaElement>) => {
@@ -229,7 +235,10 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
     const isAtLimit = maxLength && characterCount >= maxLength;
 
     return (
-      <div className={`${styles.container} ${className || ''}`} data-testid={dataTestId && `${dataTestId}-container`}>
+      <div
+        className={`${styles.container} ${className || ''}`}
+        data-testid={dataTestId && `${dataTestId}-container`}
+      >
         {label && (
           <label htmlFor={id} className={styles.label} data-required={required || undefined}>
             {label}
@@ -255,9 +264,7 @@ export const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
             maxLength={maxLength}
             aria-label={ariaLabel || label}
             aria-invalid={hasError}
-            aria-describedby={
-              (helperText || displayError) ? `${id}-helper-text` : undefined
-            }
+            aria-describedby={helperText || displayError ? `${id}-helper-text` : undefined}
             {...rest}
           />
 

@@ -85,11 +85,7 @@ export type {
 // Context
 // =============================================================================
 
-export {
-  FilterContext,
-  useFilterContext,
-  useFilterContextStrict,
-} from './FilterContext';
+export { FilterContext, useFilterContext, useFilterContextStrict } from './FilterContext';
 
 // =============================================================================
 // Hooks
@@ -157,10 +153,4 @@ export type {
 // Layout Components
 // =============================================================================
 
-export {
-  FilterSidebar,
-  FilterBar,
-  FilterPopover,
-  FilterModal,
-  FilterAccordion,
-} from './layouts';
+export { FilterSidebar, FilterBar, FilterPopover, FilterModal, FilterAccordion } from './layouts';

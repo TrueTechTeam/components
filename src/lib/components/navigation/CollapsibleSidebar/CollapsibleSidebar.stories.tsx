@@ -492,4 +492,3 @@ export const AnimationDurations: Story = {
     </div>
   ),
 };
-

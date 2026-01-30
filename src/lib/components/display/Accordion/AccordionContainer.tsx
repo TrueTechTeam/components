@@ -14,7 +14,11 @@ import {
 } from 'react';
 import type { BaseComponentProps, ComponentSize } from '../../../types';
 import { Button } from '../../buttons/Button';
-import { AccordionContext, type AccordionMode, type AccordionContextValue } from './AccordionContext';
+import {
+  AccordionContext,
+  type AccordionMode,
+  type AccordionContextValue,
+} from './AccordionContext';
 import type { AccordionProps } from './Accordion';
 import styles from './AccordionContainer.module.scss';
 
@@ -177,10 +181,7 @@ export const AccordionContainer: React.FC<AccordionContainerProps> = ({
 
   // Get current expanded IDs
   const expandedIds = useMemo(
-    () =>
-      isControlled
-        ? new Set(controlledExpandedIds)
-        : uncontrolledExpandedIds,
+    () => (isControlled ? new Set(controlledExpandedIds) : uncontrolledExpandedIds),
     [isControlled, controlledExpandedIds, uncontrolledExpandedIds]
   );
 
@@ -265,7 +266,8 @@ export const AccordionContainer: React.FC<AccordionContainerProps> = ({
   }, [children]);
 
   // Determine if all are expanded
-  const allExpanded = allAccordionIds.length > 0 && allAccordionIds.every((id) => expandedIds.has(id));
+  const allExpanded =
+    allAccordionIds.length > 0 && allAccordionIds.every((id) => expandedIds.has(id));
 
   // Build class names
   const classes = [styles.accordionContainer, className].filter(Boolean).join(' ');
@@ -278,22 +280,16 @@ export const AccordionContainer: React.FC<AccordionContainerProps> = ({
 
   // Render controls
   const renderControls = () => {
-    if (!showExpandAllControls || mode === 'single') {return null;}
+    if (!showExpandAllControls || mode === 'single') {
+      return null;
+    }
 
     const label = allExpanded ? collapseAllLabel : expandAllLabel;
     const handler = allExpanded ? handleCollapseAll : handleExpandAll;
 
     return (
-      <div
-        className={styles.accordionContainerControls}
-        data-position={controlsPosition}
-      >
-        <Button
-          variant="ghost"
-          size="sm"
-          onClick={handler}
-          disabled={disabled}
-        >
+      <div className={styles.accordionContainerControls} data-position={controlsPosition}>
+        <Button variant="ghost" size="sm" onClick={handler} disabled={disabled}>
           {label}
         </Button>
       </div>

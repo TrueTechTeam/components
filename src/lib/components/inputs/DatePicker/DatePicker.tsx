@@ -1,7 +1,5 @@
-import React, { forwardRef, useState, useCallback, useRef, useId } from 'react';
-import type {
-  BaseComponentProps,
-} from '../../../types/component.types';
+import React, { forwardRef, useState, useCallback, useRef, useId, useEffect } from 'react';
+import type { BaseComponentProps } from '../../../types/component.types';
 import { IconButton } from '../../buttons/IconButton';
 import { Select } from '../Select';
 import { Input } from '../Input';
@@ -158,6 +156,14 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
     // Get current date
     const currentDate = controlledValue !== undefined ? controlledValue : internalValue;
 
+    // Sync inputValue with controlledValue when it changes
+    useEffect(() => {
+      if (controlledValue !== undefined) {
+        setInputValue(controlledValue ? formatDate(controlledValue, format) : '');
+        setViewDate(controlledValue || new Date());
+      }
+    }, [controlledValue, format]);
+
     // Handle input change
     const handleInputChange = useCallback(
       (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -255,10 +261,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
     const displayHelperText = error && errorMessage ? errorMessage : helperText;
 
     // Convert date format to input mask format
-    const formatMask = format
-      .replace(/M/g, '#')
-      .replace(/D/g, '#')
-      .replace(/Y/g, '#');
+    const formatMask = format.replace(/M/g, '#').replace(/D/g, '#').replace(/Y/g, '#');
 
     return (
       <div className={containerClasses} style={style} data-testid={dataTestId}>
@@ -308,10 +311,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
             closeOnClickOutside
             closeOnEscape
           >
-            <div
-              className={styles.calendar}
-              onMouseDown={(e) => e.stopPropagation()}
-            >
+            <div className={styles.calendar} onMouseDown={(e) => e.stopPropagation()}>
               {/* Calendar header */}
               <div className={styles.calendarHeader}>
                 <IconButton
@@ -437,4 +437,3 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
 );
 
 DatePicker.displayName = 'DatePicker';
-

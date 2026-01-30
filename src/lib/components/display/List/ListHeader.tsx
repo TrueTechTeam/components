@@ -98,10 +98,7 @@ export function ListHeader<T extends Record<string, unknown>>({
   // If custom render is provided, use it
   if (hasSelectedItems && renderBulkActions && bulkActions) {
     return (
-      <div
-        className={styles.listHeader}
-        data-sticky={isSticky || undefined}
-      >
+      <div className={styles.listHeader} data-sticky={isSticky || undefined}>
         {renderBulkActions(selectedItems, selectedKeys, bulkActions)}
       </div>
     );
@@ -113,10 +110,7 @@ export function ListHeader<T extends Record<string, unknown>>({
   }
 
   return (
-    <div
-      className={styles.listHeader}
-      data-sticky={isSticky || undefined}
-    >
+    <div className={styles.listHeader} data-sticky={isSticky || undefined}>
       <div className={styles.listHeaderLeft}>
         {showSelectAll && (
           <Checkbox
@@ -146,7 +140,13 @@ export function ListHeader<T extends Record<string, unknown>>({
                 <Button
                   key={action.id}
                   size="sm"
-                  variant={action.variant === 'danger' ? 'danger' : action.variant === 'primary' ? 'primary' : 'outline'}
+                  variant={
+                    action.variant === 'danger'
+                      ? 'danger'
+                      : action.variant === 'primary'
+                        ? 'primary'
+                        : 'outline'
+                  }
                   onClick={() => action.onAction(selectedItems, selectedKeys)}
                   disabled={isDisabled}
                   startIcon={action.icon}
@@ -159,11 +159,7 @@ export function ListHeader<T extends Record<string, unknown>>({
         )}
       </div>
 
-      {searchComponent && (
-        <div className={styles.listHeaderRight}>
-          {searchComponent}
-        </div>
-      )}
+      {searchComponent && <div className={styles.listHeaderRight}>{searchComponent}</div>}
     </div>
   );
 }

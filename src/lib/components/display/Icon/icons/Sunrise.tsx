@@ -1,7 +1,16 @@
 import React from 'react';
 
 const Sunrise = (props: React.SVGProps<SVGSVGElement>) => (
-  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" {...props}>
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
+    strokeLinejoin="round"
+    {...props}
+  >
     <path d="M17 18a5 5 0 0 0-10 0" />
     <line x1="12" y1="2" x2="12" y2="9" />
     <line x1="4.22" y1="10.22" x2="5.64" y2="11.64" />

@@ -26,11 +26,7 @@ export function TableHeader() {
   };
 
   return (
-    <div
-      className={styles.tableHeader}
-      role="rowgroup"
-      data-sticky={stickyHeader || undefined}
-    >
+    <div className={styles.tableHeader} role="rowgroup" data-sticky={stickyHeader || undefined}>
       <div className={styles.tableRow} role="row">
         {/* Expand column header */}
         {hasExpandableRows && (
@@ -44,11 +40,7 @@ export function TableHeader() {
 
         {/* Selection column header */}
         {selectionMode === 'multiple' && showSelectionControls && (
-          <div
-            className={styles.tableCell}
-            data-type="selection"
-            role="columnheader"
-          >
+          <div className={styles.tableCell} data-type="selection" role="columnheader">
             <Checkbox
               checked={isAllSelected}
               indeterminate={isIndeterminate}
@@ -84,11 +76,7 @@ export function TableHeader() {
               data-sticky={(stickyFirstColumn && isFirstColumn) || undefined}
               role="columnheader"
               aria-sort={
-                isSorted
-                  ? sort.direction === 'asc'
-                    ? 'ascending'
-                    : 'descending'
-                  : undefined
+                isSorted ? (sort.direction === 'asc' ? 'ascending' : 'descending') : undefined
               }
               onClick={column.sortable ? () => onSort(String(column.key)) : undefined}
               tabIndex={column.sortable ? 0 : undefined}
@@ -109,11 +97,7 @@ export function TableHeader() {
                 <span className={styles.sortIcon} data-unsorted={!isSorted || undefined}>
                   <Icon
                     name={
-                      isSorted
-                        ? sort.direction === 'asc'
-                          ? 'arrow-up'
-                          : 'arrow-down'
-                        : 'arrow-up'
+                      isSorted ? (sort.direction === 'asc' ? 'arrow-up' : 'arrow-down') : 'arrow-up'
                     }
                     size={14}
                   />

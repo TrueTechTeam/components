@@ -122,11 +122,7 @@ export const WithDefaultValues: Story = {
  */
 export const Horizontal: Story = {
   render: () => (
-    <CheckboxGroup
-      orientation="horizontal"
-      label="Select colors"
-      onChange={action('onChange')}
-    >
+    <CheckboxGroup orientation="horizontal" label="Select colors" onChange={action('onChange')}>
       <CheckboxGroupItem value="red" label="Red" />
       <CheckboxGroupItem value="green" label="Green" />
       <CheckboxGroupItem value="blue" label="Blue" />
@@ -251,11 +247,7 @@ export const ErrorState: Story = {
 export const Disabled: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
-      <CheckboxGroup
-        label="All disabled"
-        disabled
-        defaultValue={['option1']}
-      >
+      <CheckboxGroup label="All disabled" disabled defaultValue={['option1']}>
         <CheckboxGroupItem value="option1" label="Option 1" />
         <CheckboxGroupItem value="option2" label="Option 2" />
         <CheckboxGroupItem value="option3" label="Option 3" />
@@ -348,16 +340,8 @@ export const Controlled: Story = {
 export const WithItemHelperText: Story = {
   render: () => (
     <CheckboxGroup label="Subscription options" onChange={action('onChange')}>
-      <CheckboxGroupItem
-        value="basic"
-        label="Basic Plan"
-        helperText="Free, limited features"
-      />
-      <CheckboxGroupItem
-        value="pro"
-        label="Pro Plan"
-        helperText="$9.99/month, all features"
-      />
+      <CheckboxGroupItem value="basic" label="Basic Plan" helperText="Free, limited features" />
+      <CheckboxGroupItem value="pro" label="Pro Plan" helperText="$9.99/month, all features" />
       <CheckboxGroupItem
         value="enterprise"
         label="Enterprise Plan"

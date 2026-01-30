@@ -14,17 +14,3 @@ Object.defineProperty(window, 'matchMedia', {
     dispatchEvent: jest.fn(),
   })),
 });
-
-// Mock SVG imports
-jest.mock('*.svg?react', () => ({
-  __esModule: true,
-  default: (props: unknown) => {
-    return {
-      $$typeof: Symbol.for('react.element'),
-      type: 'svg',
-      props: { 'data-testid': 'mock-svg', ...props },
-      key: null,
-      ref: null,
-    };
-  },
-}));

@@ -439,7 +439,14 @@ export const AllFilters: StoryObj = {
 
     return (
       <FilterProvider filters={allFilters} onChange={action('onChange')}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '2rem', maxWidth: '700px' }}>
+        <div
+          style={{
+            display: 'grid',
+            gridTemplateColumns: 'repeat(2, 1fr)',
+            gap: '2rem',
+            maxWidth: '700px',
+          }}
+        >
           <div>
             <h4 style={{ marginBottom: '0.5rem' }}>Select</h4>
             <SelectFilter filterId="status" />

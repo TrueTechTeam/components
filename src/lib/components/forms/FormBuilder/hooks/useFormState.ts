@@ -38,24 +38,25 @@ export const useFormState = (options: UseFormStateOptions = {}): FormContext => 
   });
 
   // Check if form is dirty
-  const isDirty = Object.keys(values).some(
-    (key) => values[key] !== initialValuesRef.current[key]
-  );
+  const isDirty = Object.keys(values).some((key) => values[key] !== initialValuesRef.current[key]);
 
   // Check if form is valid
   const isValid = Object.keys(errors).length === 0;
 
   // Register a field
-  const registerField = useCallback((name: string, config?: FormFieldConfig) => {
-    if (config) {
-      fieldsRef.current.set(name, config);
+  const registerField = useCallback(
+    (name: string, config?: FormFieldConfig) => {
+      if (config) {
+        fieldsRef.current.set(name, config);
 
-      // Set initial value if provided
-      if (config.defaultValue !== undefined && values[name] === undefined) {
-        setValues((prev) => ({ ...prev, [name]: config.defaultValue }));
+        // Set initial value if provided
+        if (config.defaultValue !== undefined && values[name] === undefined) {
+          setValues((prev) => ({ ...prev, [name]: config.defaultValue }));
+        }
       }
-    }
-  }, [values]);
+    },
+    [values]
+  );
 
   // Unregister a field
   const unregisterField = useCallback((name: string) => {
@@ -84,13 +85,11 @@ export const useFormState = (options: UseFormStateOptions = {}): FormContext => 
   const validateField = useCallback(
     (name: string): string | null => {
       const fieldConfig = fieldsRef.current.get(name);
-      if (!fieldConfig?.validation) {return null;}
+      if (!fieldConfig?.validation) {
+        return null;
+      }
 
-      const error = validateFieldUtil(
-        values[name],
-        fieldConfig.validation,
-        values
-      );
+      const error = validateFieldUtil(values[name], fieldConfig.validation, values);
 
       setErrors((prev) => {
         const newErrors = { ...prev };
@@ -113,11 +112,7 @@ export const useFormState = (options: UseFormStateOptions = {}): FormContext => 
 
     fieldsRef.current.forEach((fieldConfig, name) => {
       if (fieldConfig.validation) {
-        const error = validateFieldUtil(
-          values[name],
-          fieldConfig.validation,
-          values
-        );
+        const error = validateFieldUtil(values[name], fieldConfig.validation, values);
         if (error) {
           newErrors[name] = error;
         }

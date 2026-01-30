@@ -210,9 +210,7 @@ const MultipleSelectionDemo = () => {
 
   return (
     <div>
-      <p style={{ marginBottom: 16 }}>
-        Selected: {selectedKeys.length} item(s)
-      </p>
+      <p style={{ marginBottom: 16 }}>Selected: {selectedKeys.length} item(s)</p>
       <List
         data={sampleUsers.slice(0, 5)}
         primaryTextField="name"

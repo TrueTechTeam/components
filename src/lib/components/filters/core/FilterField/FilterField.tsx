@@ -33,15 +33,7 @@ import styles from './FilterField.module.scss';
  */
 export const FilterField = forwardRef<HTMLDivElement, FilterFieldProps>(
   (
-    {
-      filterId,
-      label,
-      placeholder,
-      showLabel = true,
-      componentProps,
-      className,
-      ...restProps
-    },
+    { filterId, label, placeholder, showLabel = true, componentProps, className, ...restProps },
     ref
   ) => {
     const ctx = useFilterContextStrict();

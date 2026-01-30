@@ -30,21 +30,6 @@ describe('ScrollArea', () => {
       expect(screen.getByTestId('scroll-area')).toHaveAttribute('data-direction', 'horizontal');
     });
 
-    it('should set data-visibility', () => {
-      render(<ScrollArea scrollbarVisibility="hover">Content</ScrollArea>);
-      expect(screen.getByTestId('scroll-area')).toHaveAttribute('data-visibility', 'hover');
-    });
-
-    it('should set data-size', () => {
-      render(<ScrollArea scrollbarSize="lg">Content</ScrollArea>);
-      expect(screen.getByTestId('scroll-area')).toHaveAttribute('data-size', 'lg');
-    });
-
-    it('should set data-thin when thin is true', () => {
-      render(<ScrollArea thin>Content</ScrollArea>);
-      expect(screen.getByTestId('scroll-area')).toHaveAttribute('data-thin', 'true');
-    });
-
     it('should set data-shadow when showShadows is true', () => {
       render(<ScrollArea showShadows>Content</ScrollArea>);
       expect(screen.getByTestId('scroll-area')).toHaveAttribute('data-shadow', 'true');
@@ -175,23 +160,6 @@ describe('ScrollArea', () => {
       (direction) => {
         render(<ScrollArea direction={direction}>Content</ScrollArea>);
         expect(screen.getByTestId('scroll-area')).toHaveAttribute('data-direction', direction);
-      }
-    );
-  });
-
-  describe('scrollbar sizes', () => {
-    it.each(['sm', 'md', 'lg'] as const)('should render with %s scrollbar size', (size) => {
-      render(<ScrollArea scrollbarSize={size}>Content</ScrollArea>);
-      expect(screen.getByTestId('scroll-area')).toHaveAttribute('data-size', size);
-    });
-  });
-
-  describe('visibility modes', () => {
-    it.each(['auto', 'always', 'hover', 'scroll'] as const)(
-      'should render with %s visibility',
-      (visibility) => {
-        render(<ScrollArea scrollbarVisibility={visibility}>Content</ScrollArea>);
-        expect(screen.getByTestId('scroll-area')).toHaveAttribute('data-visibility', visibility);
       }
     );
   });

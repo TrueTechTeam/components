@@ -2,14 +2,7 @@
  * Autocomplete component - Filterable input with menu dropdown
  */
 
-import {
-  useState,
-  useCallback,
-  useMemo,
-  useEffect,
-  type ReactNode,
-  type ChangeEvent,
-} from 'react';
+import { useState, useCallback, useMemo, useEffect, type ReactNode, type ChangeEvent } from 'react';
 import { Menu, MenuList, MenuItem } from '../../overlays/Menu';
 import { Input } from '../Input';
 import { useDebounce } from '../../../hooks';
@@ -142,10 +135,7 @@ export interface AutocompleteProps extends Omit<BaseComponentProps, 'children'> 
 /**
  * Default filter function
  */
-const defaultFilterFunction = (
-  option: AutocompleteOption,
-  inputValue: string
-): boolean => {
+const defaultFilterFunction = (option: AutocompleteOption, inputValue: string): boolean => {
   return option.label.toLowerCase().includes(inputValue.toLowerCase());
 };
 
@@ -194,7 +184,9 @@ export const Autocomplete: React.FC<AutocompleteProps> = ({
     let cancelled = false;
 
     const loadOptions = async () => {
-      if (cancelled) {return;}
+      if (cancelled) {
+        return;
+      }
       setAsyncLoading(true);
 
       try {
@@ -258,9 +250,7 @@ export const Autocomplete: React.FC<AutocompleteProps> = ({
     setIsOpen(true);
   }, []);
 
-  const wrapperClasses = [styles.autocompleteWrapper, className]
-    .filter(Boolean)
-    .join(' ');
+  const wrapperClasses = [styles.autocompleteWrapper, className].filter(Boolean).join(' ');
 
   return (
     <div
@@ -306,11 +296,7 @@ export const Autocomplete: React.FC<AutocompleteProps> = ({
           )}
           {!loading &&
             filteredOptions.map((option) => (
-              <MenuItem
-                key={option.key}
-                itemKey={option.key}
-                disabled={option.disabled}
-              >
+              <MenuItem key={option.key} itemKey={option.key} disabled={option.disabled}>
                 {highlightMatch && inputValue ? (
                   <HighlightedText text={option.label} highlight={inputValue} />
                 ) : (
@@ -329,10 +315,7 @@ Autocomplete.displayName = 'Autocomplete';
 /**
  * Highlighted text component
  */
-const HighlightedText: React.FC<{ text: string; highlight: string }> = ({
-  text,
-  highlight,
-}) => {
+const HighlightedText: React.FC<{ text: string; highlight: string }> = ({ text, highlight }) => {
   if (!highlight) {
     return <>{text}</>;
   }

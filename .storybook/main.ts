@@ -19,7 +19,7 @@ const config: StorybookConfig = {
     autodocs: 'tag',
   },
   staticDirs: ['../src/lib/assets'],
-  async viteFinal(config) {
+  viteFinal(config) {
     return mergeConfig(config, {
       plugins: [svgr()],
       css: {
@@ -38,4 +38,3 @@ export default config;
 function getAbsolutePath(value: string): any {
   return dirname(require.resolve(join(value, 'package.json')));
 }
-

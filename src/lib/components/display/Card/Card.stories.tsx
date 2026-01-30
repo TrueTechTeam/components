@@ -326,13 +326,19 @@ export const ComplexCard: Story = {
       header={
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <h3 style={{ margin: 0 }}>User Profile</h3>
-          <Badge variant="success" size="sm">Active</Badge>
+          <Badge variant="success" size="sm">
+            Active
+          </Badge>
         </div>
       }
       footer={
         <div style={{ display: 'flex', gap: '8px' }}>
-          <Button variant="secondary" fullWidth>Message</Button>
-          <Button variant="primary" fullWidth>Follow</Button>
+          <Button variant="secondary" fullWidth>
+            Message
+          </Button>
+          <Button variant="primary" fullWidth>
+            Follow
+          </Button>
         </div>
       }
       style={{ width: 320 }}
@@ -342,7 +348,9 @@ export const ComplexCard: Story = {
         <div>
           <h4 style={{ margin: '0 0 4px' }}>John Doe</h4>
           <p style={{ margin: 0, color: '#666', fontSize: '14px' }}>Software Engineer</p>
-          <Chip variant="neutral" size="sm">San Francisco, CA</Chip>
+          <Chip variant="neutral" size="sm">
+            San Francisco, CA
+          </Chip>
         </div>
       </div>
     </Card>

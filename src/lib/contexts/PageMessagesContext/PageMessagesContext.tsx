@@ -137,6 +137,12 @@ export function usePageMessagesConfig(
       },
       defaultProps: context?.defaultProps,
     }),
-    [context, componentProps.onRetry, componentProps.onGoBack, componentProps.onGoHome, componentProps.onLogin]
+    [
+      context,
+      componentProps.onRetry,
+      componentProps.onGoBack,
+      componentProps.onGoHome,
+      componentProps.onLogin,
+    ]
   );
 }

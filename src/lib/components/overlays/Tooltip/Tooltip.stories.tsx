@@ -244,4 +244,3 @@ export const InteractiveContent: Story = {
     </div>
   ),
 };
-

@@ -10,11 +10,7 @@ export type { TabProps } from './Tab';
 export { TabPanel } from './TabPanel';
 export type { TabPanelProps } from './TabPanel';
 
-export {
-  TabsContext,
-  useTabsContext,
-  useTabsContextStrict,
-} from './TabsContext';
+export { TabsContext, useTabsContext, useTabsContextStrict } from './TabsContext';
 export type { TabsContextValue, TabsVariant } from './TabsContext';
 
 export { default } from './Tabs';

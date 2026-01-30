@@ -117,9 +117,7 @@ export const Horizontal: Story = {
 export const BothDirections: Story = {
   render: () => (
     <ScrollArea direction="both" maxHeight={300} maxWidth={400}>
-      <div style={{ width: '800px', padding: '16px' }}>
-        {generateParagraphs(15)}
-      </div>
+      <div style={{ width: '800px', padding: '16px' }}>{generateParagraphs(15)}</div>
     </ScrollArea>
   ),
   parameters: {
@@ -134,13 +132,17 @@ export const WithShadows: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '24px' }}>
       <div>
-        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>Vertical shadows</p>
+        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>
+          Vertical shadows
+        </p>
         <ScrollArea maxHeight={200} showShadows style={{ width: '250px' }}>
           {generateItems(20)}
         </ScrollArea>
       </div>
       <div>
-        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>Horizontal shadows</p>
+        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>
+          Horizontal shadows
+        </p>
         <ScrollArea direction="horizontal" maxWidth={300} showShadows>
           <div style={{ display: 'flex', gap: '16px', padding: '16px', width: 'max-content' }}>
             {Array.from({ length: 15 }, (_, i) => (
@@ -249,7 +251,9 @@ const InfiniteScrollExample = () => {
   const [loading, setLoading] = useState(false);
 
   const loadMore = () => {
-    if (loading) return;
+    if (loading) {
+      return;
+    }
     setLoading(true);
     setTimeout(() => {
       setItems((prev) => [...prev, ...Array.from({ length: 10 }, (_, i) => prev.length + i + 1)]);
@@ -275,7 +279,11 @@ const InfiniteScrollExample = () => {
           </div>
         ))}
         {loading && (
-          <div style={{ padding: '16px', textAlign: 'center', color: 'var(--theme-text-secondary)' }}>Loading...</div>
+          <div
+            style={{ padding: '16px', textAlign: 'center', color: 'var(--theme-text-secondary)' }}
+          >
+            Loading...
+          </div>
         )}
       </ScrollArea>
     </div>
@@ -298,7 +306,11 @@ export const ChatExample: Story = {
       { id: 1, sender: 'user', text: 'Hello!' },
       { id: 2, sender: 'bot', text: 'Hi there! How can I help you today?' },
       { id: 3, sender: 'user', text: 'I have a question about the product.' },
-      { id: 4, sender: 'bot', text: 'Sure, I would be happy to help! What would you like to know?' },
+      {
+        id: 4,
+        sender: 'bot',
+        text: 'Sure, I would be happy to help! What would you like to know?',
+      },
       { id: 5, sender: 'user', text: 'What are the key features?' },
       {
         id: 6,

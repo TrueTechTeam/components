@@ -175,4 +175,3 @@ export function usePopoverPosition(options: UsePopoverPositionOptions): UsePopov
     actualPosition: positionState.actualPosition,
   };
 }
-

@@ -154,25 +154,31 @@ export const CustomStyling: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '16px', flexDirection: 'column' }}>
       <Badge
-        style={{
-          '--badge-bg': '#ff6b6b',
-          '--badge-color': '#ffffff',
-        } as React.CSSProperties}
+        style={
+          {
+            '--badge-bg': '#ff6b6b',
+            '--badge-color': '#ffffff',
+          } as React.CSSProperties
+        }
       >
         Custom Colors
       </Badge>
       <Badge
-        style={{
-          '--badge-padding': '12px 24px',
-          '--badge-border-radius': '20px',
-        } as React.CSSProperties}
+        style={
+          {
+            '--badge-padding': '12px 24px',
+            '--badge-border-radius': '20px',
+          } as React.CSSProperties
+        }
       >
         Custom Spacing
       </Badge>
       <Badge
-        style={{
-          '--badge-font-size': '18px',
-        } as React.CSSProperties}
+        style={
+          {
+            '--badge-font-size': '18px',
+          } as React.CSSProperties
+        }
       >
         Custom Font Size
       </Badge>

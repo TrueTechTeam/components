@@ -20,7 +20,10 @@
   background-color: var(--theme-surface-primary);
   border-radius: var(--radius-md);
   overflow: hidden;
-  transition: transform 200ms ease, opacity 200ms ease, box-shadow 200ms ease;
+  transition:
+    transform 200ms ease,
+    opacity 200ms ease,
+    box-shadow 200ms ease;
   user-select: none;
   aspect-ratio: 1;
 

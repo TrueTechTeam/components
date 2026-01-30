@@ -1,7 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { useState } from 'react';
-import { FilterProvider, FilterModal, FilterSection, FilterField, FilterAccordion } from '../../index';
+import {
+  FilterProvider,
+  FilterModal,
+  FilterSection,
+  FilterField,
+  FilterAccordion,
+} from '../../index';
 import { Button } from '../../../buttons/Button';
 import { Icon } from '../../../display/Icon';
 import { Accordion } from '../../../display/Accordion';
@@ -192,11 +198,7 @@ export const WithActiveFilters: Story = {
       onChange={action('onChange')}
     >
       <div style={{ padding: '2rem' }}>
-        <FilterModal
-          title="Advanced Filters"
-          showActiveFilters
-          activeFiltersPosition="top"
-        >
+        <FilterModal title="Advanced Filters" showActiveFilters activeFiltersPosition="top">
           <FilterSection title="Filters">
             <FilterField filterId="search" />
             <FilterField filterId="status" />
@@ -223,7 +225,11 @@ export const CustomTrigger: Story = {
         <FilterModal
           title="Filters"
           renderTrigger={({ onClick, activeCount }) => (
-            <Button variant="primary" onClick={onClick} startIcon={<Icon name="filter" size="1em" />}>
+            <Button
+              variant="primary"
+              onClick={onClick}
+              startIcon={<Icon name="filter" size="1em" />}
+            >
               Advanced Filters
               {activeCount > 0 && ` (${activeCount})`}
             </Button>
@@ -256,7 +262,9 @@ export const DifferentSizes: Story = {
           title="Small Modal"
           size="sm"
           renderTrigger={({ onClick }) => (
-            <Button variant="outline" onClick={onClick}>Small</Button>
+            <Button variant="outline" onClick={onClick}>
+              Small
+            </Button>
           )}
         >
           <FilterSection title="Filters" collapsible={false}>
@@ -267,7 +275,9 @@ export const DifferentSizes: Story = {
           title="Medium Modal"
           size="md"
           renderTrigger={({ onClick }) => (
-            <Button variant="outline" onClick={onClick}>Medium</Button>
+            <Button variant="outline" onClick={onClick}>
+              Medium
+            </Button>
           )}
         >
           <FilterSection title="Filters" collapsible={false}>
@@ -279,7 +289,9 @@ export const DifferentSizes: Story = {
           title="Large Modal"
           size="lg"
           renderTrigger={({ onClick }) => (
-            <Button variant="outline" onClick={onClick}>Large</Button>
+            <Button variant="outline" onClick={onClick}>
+              Large
+            </Button>
           )}
         >
           <FilterSection title="Filters" collapsible={false}>
@@ -292,7 +304,9 @@ export const DifferentSizes: Story = {
           title="Extra Large Modal"
           size="xl"
           renderTrigger={({ onClick }) => (
-            <Button variant="outline" onClick={onClick}>Extra Large</Button>
+            <Button variant="outline" onClick={onClick}>
+              Extra Large
+            </Button>
           )}
         >
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '1.5rem' }}>
@@ -323,11 +337,7 @@ export const WithAccordion: Story = {
     <FilterProvider filters={sampleFilters} groups={filterGroups} onChange={action('onChange')}>
       <div style={{ padding: '2rem' }}>
         <FilterModal title="Advanced Filters" size="md">
-          <FilterAccordion
-            mode="multiple"
-            defaultExpandedGroups={['product']}
-            showGroupCounts
-          >
+          <FilterAccordion mode="multiple" defaultExpandedGroups={['product']} showGroupCounts>
             <Accordion id="product" header="Product Filters" defaultOpen>
               <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
                 <FilterField filterId="category" />
@@ -369,11 +379,7 @@ const ControlledModal = () => {
             Toggle Modal (External)
           </Button>
         </div>
-        <FilterModal
-          title="Filters"
-          isOpen={isOpen}
-          onOpenChange={setIsOpen}
-        >
+        <FilterModal title="Filters" isOpen={isOpen} onOpenChange={setIsOpen}>
           <FilterSection title="Filters" collapsible={false}>
             <FilterField filterId="search" />
             <FilterField filterId="status" />

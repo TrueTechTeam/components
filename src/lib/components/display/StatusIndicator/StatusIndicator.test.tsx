@@ -131,7 +131,11 @@ describe('StatusIndicator', () => {
     });
 
     it('adds with-text attribute when withText is true', () => {
-      render(<StatusIndicator withText data-testid="indicator">Text</StatusIndicator>);
+      render(
+        <StatusIndicator withText data-testid="indicator">
+          Text
+        </StatusIndicator>
+      );
       const element = screen.getByTestId('indicator');
       expect(element).toHaveAttribute('data-with-text', 'true');
     });
@@ -174,9 +178,7 @@ describe('StatusIndicator', () => {
   // 6. Accessibility tests
   describe('accessibility', () => {
     it('has correct ARIA label when provided', () => {
-      render(
-        <StatusIndicator aria-label="Status indicator" data-testid="indicator" />
-      );
+      render(<StatusIndicator aria-label="Status indicator" data-testid="indicator" />);
       expect(screen.getByLabelText('Status indicator')).toBeInTheDocument();
     });
 

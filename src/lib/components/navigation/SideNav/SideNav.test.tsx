@@ -21,7 +21,10 @@ describe('SideNav', () => {
 
     it('should render header and footer', () => {
       render(
-        <SideNav header={<div data-testid="header">Header</div>} footer={<div data-testid="footer">Footer</div>}>
+        <SideNav
+          header={<div data-testid="header">Header</div>}
+          footer={<div data-testid="footer">Footer</div>}
+        >
           <SideNavItem value="home" icon="Home" label="Home" />
         </SideNav>
       );

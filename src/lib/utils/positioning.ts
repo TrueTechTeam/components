@@ -276,7 +276,13 @@ export function findBestPosition(
     const adjacentPositions = getAdjacentPositions(preferredPosition);
 
     for (const position of adjacentPositions) {
-      const coords = getCoordinatesForPosition(triggerBounds, popoverSize, position, offset, viewportSize);
+      const coords = getCoordinatesForPosition(
+        triggerBounds,
+        popoverSize,
+        position,
+        offset,
+        viewportSize
+      );
       const overflow = calculateOverflow(coords, popoverSize, viewportSize);
 
       if (overflow.total < minOverflow) {
@@ -350,7 +356,13 @@ export function calculatePopoverPosition(
     : preferredPosition;
 
   // Calculate coordinates for the chosen position
-  const coordinates = getCoordinatesForPosition(triggerBounds, popoverSize, actualPosition, offset, viewportSize);
+  const coordinates = getCoordinatesForPosition(
+    triggerBounds,
+    popoverSize,
+    actualPosition,
+    offset,
+    viewportSize
+  );
 
   return {
     top: coordinates.top,
@@ -360,4 +372,3 @@ export function calculatePopoverPosition(
     widthValue,
   };
 }
-

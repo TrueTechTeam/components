@@ -154,9 +154,7 @@ export const CircularProgress = forwardRef<HTMLDivElement, CircularProgressProps
           />
         </svg>
         {(showValue || label) && (
-          <div className={styles.circularProgressLabel}>
-            {label || (showValue && displayValue)}
-          </div>
+          <div className={styles.circularProgressLabel}>{label || (showValue && displayValue)}</div>
         )}
       </div>
     );

@@ -33,9 +33,7 @@ export function ThemeProvider({
   themeConfig,
 }: ThemeProviderProps) {
   const [mode, setMode] = useState<ThemeMode>(themeConfig?.mode || defaultMode);
-  const [themeOverride, setThemeOverride] = useState<ThemeOverride | undefined>(
-    themeConfig?.theme
-  );
+  const [themeOverride, setThemeOverride] = useState<ThemeOverride | undefined>(themeConfig?.theme);
 
   // Apply theme mode to document root
   useEffect(() => {

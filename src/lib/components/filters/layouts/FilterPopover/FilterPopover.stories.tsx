@@ -30,7 +30,16 @@ Shows a badge with active filter count on the trigger button.
     },
     position: {
       control: 'select',
-      options: ['bottom-left', 'bottom-right', 'bottom', 'top-left', 'top-right', 'top', 'left', 'right'],
+      options: [
+        'bottom-left',
+        'bottom-right',
+        'bottom',
+        'top-left',
+        'top-right',
+        'top',
+        'left',
+        'right',
+      ],
       description: 'Popover position',
     },
     width: {
@@ -324,4 +333,3 @@ export const Playground: Story = {
     </FilterProvider>
   ),
 };
-

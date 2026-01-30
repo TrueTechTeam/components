@@ -90,13 +90,11 @@ const SizesExample = () => {
       </div>
       {size && (
         <Dialog
-          isOpen={true}
+          isOpen
           onClose={() => setSize(null)}
           title={`Size: ${size}`}
           size={size}
-          actions={
-            <Button onClick={() => setSize(null)}>Close</Button>
-          }
+          actions={<Button onClick={() => setSize(null)}>Close</Button>}
         >
           <p>This dialog is using the {size} size preset.</p>
         </Dialog>
@@ -156,29 +154,31 @@ const CustomLayoutExample = () => {
         onClose={() => setIsOpen(false)}
         showCloseButton={false}
         renderHeader={({ onClose }) => (
-          <div style={{
-            padding: '24px',
-            background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-            color: 'white',
-            textAlign: 'center'
-          }}>
+          <div
+            style={{
+              padding: '24px',
+              background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+              color: 'white',
+              textAlign: 'center',
+            }}
+          >
             <h2 style={{ margin: 0 }}>Custom Header</h2>
             <p style={{ margin: '8px 0 0', opacity: 0.9 }}>With custom styling</p>
           </div>
         )}
         renderFooter={({ onClose }) => (
-          <div style={{
-            padding: '16px 24px',
-            display: 'flex',
-            justifyContent: 'center',
-            gap: '12px'
-          }}>
+          <div
+            style={{
+              padding: '16px 24px',
+              display: 'flex',
+              justifyContent: 'center',
+              gap: '12px',
+            }}
+          >
             <Button variant="outline" onClick={onClose}>
               Maybe Later
             </Button>
-            <Button onClick={onClose}>
-              Get Started
-            </Button>
+            <Button onClick={onClose}>Get Started</Button>
           </div>
         )}
       >
@@ -207,9 +207,7 @@ const BackdropOptionsExample = () => {
         title="Blur Backdrop"
         blurBackdrop
         backdropOpacity={0.3}
-        actions={
-          <Button onClick={() => setIsOpen(false)}>Close</Button>
-        }
+        actions={<Button onClick={() => setIsOpen(false)}>Close</Button>}
       >
         <p>This dialog has a blurred backdrop with reduced opacity.</p>
       </Dialog>
@@ -238,9 +236,7 @@ const NestedDialogsExample = () => {
             <Button variant="ghost" onClick={() => setFirstOpen(false)}>
               Close
             </Button>
-            <Button onClick={() => setSecondOpen(true)}>
-              Open Second Dialog
-            </Button>
+            <Button onClick={() => setSecondOpen(true)}>Open Second Dialog</Button>
           </>
         }
       >
@@ -251,9 +247,7 @@ const NestedDialogsExample = () => {
         onClose={() => setSecondOpen(false)}
         title="Second Dialog (Nested)"
         size="sm"
-        actions={
-          <Button onClick={() => setSecondOpen(false)}>Close</Button>
-        }
+        actions={<Button onClick={() => setSecondOpen(false)}>Close</Button>}
       >
         <p>This is a nested dialog. Note that it appears on top with a higher z-index.</p>
       </Dialog>
@@ -270,7 +264,9 @@ const ProgrammaticDialogContent = () => {
   const dialog = useDialogContext();
 
   const handleOpenDialog = async () => {
-    if (!dialog) return;
+    if (!dialog) {
+      return;
+    }
 
     const result = await dialog.openDialog<boolean>({
       title: 'Confirm Action',
@@ -280,9 +276,7 @@ const ProgrammaticDialogContent = () => {
           <Button variant="ghost" onClick={() => dialog.closeTopDialog(false)}>
             Cancel
           </Button>
-          <Button onClick={() => dialog.closeTopDialog(true)}>
-            Confirm
-          </Button>
+          <Button onClick={() => dialog.closeTopDialog(true)}>Confirm</Button>
         </>
       ),
     });
@@ -294,9 +288,7 @@ const ProgrammaticDialogContent = () => {
     }
   };
 
-  return (
-    <Button onClick={handleOpenDialog}>Open Programmatic Dialog</Button>
-  );
+  return <Button onClick={handleOpenDialog}>Open Programmatic Dialog</Button>;
 };
 
 const ProgrammaticDialogExample = () => {
@@ -338,9 +330,7 @@ const AlertDialogExample = () => {
           </>
         }
       >
-        <p>
-          Are you sure you want to delete this item? This action cannot be undone.
-        </p>
+        <p>Are you sure you want to delete this item? This action cannot be undone.</p>
       </Dialog>
     </>
   );
@@ -374,9 +364,9 @@ const ScrollableContentExample = () => {
         <div>
           {Array.from({ length: 20 }, (_, i) => (
             <p key={i}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do
-              eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim
-              ad minim veniam, quis nostrud exercitation ullamco laboris.
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor
+              incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+              exercitation ullamco laboris.
             </p>
           ))}
         </div>

@@ -203,7 +203,12 @@ export const TagCollections: Story = {
         <h4 style={{ marginBottom: '12px' }}>Skills</h4>
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
           {['React', 'TypeScript', 'Node.js', 'GraphQL', 'MongoDB', 'Docker'].map((skill) => (
-            <Tag key={skill} variant="primary" removable onRemove={() => console.log(`removed ${skill}`)}>
+            <Tag
+              key={skill}
+              variant="primary"
+              removable
+              onRemove={() => console.log(`removed ${skill}`)}
+            >
               {skill}
             </Tag>
           ))}
@@ -213,7 +218,11 @@ export const TagCollections: Story = {
         <h4 style={{ marginBottom: '12px' }}>Categories</h4>
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
           {['Technology', 'Design', 'Business', 'Marketing'].map((category) => (
-            <Tag key={category} variant="secondary" onClick={() => console.log(`clicked ${category}`)}>
+            <Tag
+              key={category}
+              variant="secondary"
+              onClick={() => console.log(`clicked ${category}`)}
+            >
               {category}
             </Tag>
           ))}
@@ -246,34 +255,42 @@ export const CustomStyling: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '16px', flexDirection: 'column' }}>
       <Tag
-        style={{
-          '--tag-bg': '#ff6b6b',
-          '--tag-color': '#ffffff',
-        } as React.CSSProperties}
+        style={
+          {
+            '--tag-bg': '#ff6b6b',
+            '--tag-color': '#ffffff',
+          } as React.CSSProperties
+        }
       >
         Custom Colors
       </Tag>
       <Tag
-        style={{
-          '--tag-padding': '12px 24px',
-          '--tag-border-radius': '20px',
-        } as React.CSSProperties}
+        style={
+          {
+            '--tag-padding': '12px 24px',
+            '--tag-border-radius': '20px',
+          } as React.CSSProperties
+        }
       >
         Custom Spacing
       </Tag>
       <Tag
-        style={{
-          '--tag-font-size': '18px',
-          '--tag-height': '40px',
-        } as React.CSSProperties}
+        style={
+          {
+            '--tag-font-size': '18px',
+            '--tag-height': '40px',
+          } as React.CSSProperties
+        }
       >
         Custom Size
       </Tag>
       <Tag
-        style={{
-          '--tag-bg': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-          '--tag-color': '#ffffff',
-        } as React.CSSProperties}
+        style={
+          {
+            '--tag-bg': 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+            '--tag-color': '#ffffff',
+          } as React.CSSProperties
+        }
       >
         Gradient Background
       </Tag>

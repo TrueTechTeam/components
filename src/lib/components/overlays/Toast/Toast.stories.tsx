@@ -48,7 +48,9 @@ type Story = StoryObj<typeof Toast>;
 const ToastDemoContent = () => {
   const toast = useToastContext();
 
-  if (!toast) return <p>Toast provider not found</p>;
+  if (!toast) {
+    return <p>Toast provider not found</p>;
+  }
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -85,7 +87,9 @@ export const Basic: Story = {
 const ToastWithTitleContent = () => {
   const toast = useToastContext();
 
-  if (!toast) return null;
+  if (!toast) {
+    return null;
+  }
 
   const showToast = () => {
     toast.addToast({
@@ -115,7 +119,9 @@ export const WithTitle: Story = {
 const ToastWithActionContent = () => {
   const toast = useToastContext();
 
-  if (!toast) return null;
+  if (!toast) {
+    return null;
+  }
 
   const showToast = () => {
     toast.addToast({
@@ -149,7 +155,9 @@ export const WithAction: Story = {
 const ToastWithProgressContent = () => {
   const toast = useToastContext();
 
-  if (!toast) return null;
+  if (!toast) {
+    return null;
+  }
 
   const showToast = () => {
     toast.addToast({
@@ -179,7 +187,9 @@ export const WithProgress: Story = {
 const PositionDemoContent = () => {
   const toast = useToastContext();
 
-  if (!toast) return null;
+  if (!toast) {
+    return null;
+  }
 
   return (
     <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
@@ -240,7 +250,9 @@ export const BottomRight: Story = {
 const PromiseToastContent = () => {
   const toast = useToastContext();
 
-  if (!toast) return null;
+  if (!toast) {
+    return null;
+  }
 
   const simulateApiCall = () => {
     return new Promise<{ name: string }>((resolve, reject) => {
@@ -281,7 +293,9 @@ export const PromiseToast: Story = {
 const UpdateToastContent = () => {
   const toast = useToastContext();
 
-  if (!toast) return null;
+  if (!toast) {
+    return null;
+  }
 
   const handleClick = () => {
     const id = toast.loading('Processing...');
@@ -314,7 +328,9 @@ export const UpdateToast: Story = {
 const MaxVisibleContent = () => {
   const toast = useToastContext();
 
-  if (!toast) return null;
+  if (!toast) {
+    return null;
+  }
 
   const addMultiple = () => {
     for (let i = 1; i <= 7; i++) {
@@ -350,7 +366,9 @@ export const MaxVisibleToasts: Story = {
 const AllVariantsContent = () => {
   const toast = useToastContext();
 
-  if (!toast) return null;
+  if (!toast) {
+    return null;
+  }
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -434,7 +452,9 @@ export const AllVariants: Story = {
 const PersistentToastContent = () => {
   const toast = useToastContext();
 
-  if (!toast) return null;
+  if (!toast) {
+    return null;
+  }
 
   const showPersistent = () => {
     toast.addToast({
@@ -468,7 +488,9 @@ export const PersistentToast: Story = {
 const CustomDurationContent = () => {
   const toast = useToastContext();
 
-  if (!toast) return null;
+  if (!toast) {
+    return null;
+  }
 
   return (
     <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
@@ -523,4 +545,3 @@ const CustomDurationExample = () => {
 export const CustomDuration: Story = {
   render: () => <CustomDurationExample />,
 };
-

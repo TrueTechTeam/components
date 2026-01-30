@@ -110,9 +110,7 @@ describe('Icon', () => {
     it('should warn and return null for invalid icon name', () => {
       const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
       const { container } = render(<Icon name={'invalid' as any} />);
-      expect(consoleWarnSpy).toHaveBeenCalledWith(
-        'Icon "invalid" not found in registry'
-      );
+      expect(consoleWarnSpy).toHaveBeenCalledWith('Icon "invalid" not found in registry');
       expect(container.firstChild).toBeNull();
       consoleWarnSpy.mockRestore();
     });

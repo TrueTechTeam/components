@@ -81,7 +81,9 @@ function TableInner<T extends Record<string, unknown>>(
 
   // Row key getter
   const getRowKey = useMemo(() => {
-    if (typeof rowKey === 'function') {return rowKey;}
+    if (typeof rowKey === 'function') {
+      return rowKey;
+    }
     return (row: T, index: number) => String(row[rowKey] ?? index);
   }, [rowKey]);
 
@@ -109,19 +111,14 @@ function TableInner<T extends Record<string, unknown>>(
     onSortChange,
   });
 
-  const {
-    selectedKeys,
-    onSelectRow,
-    onSelectAll,
-    isAllSelected,
-    isIndeterminate,
-  } = useTableSelection({
-    selectionMode,
-    selectedKeys: controlledSelectedKeys,
-    defaultSelectedKeys,
-    onSelectionChange,
-    allRowKeys,
-  });
+  const { selectedKeys, onSelectRow, onSelectAll, isAllSelected, isIndeterminate } =
+    useTableSelection({
+      selectionMode,
+      selectedKeys: controlledSelectedKeys,
+      defaultSelectedKeys,
+      onSelectionChange,
+      allRowKeys,
+    });
 
   const { expandedKeys, onExpand } = useTableExpand({
     expandedKeys: controlledExpandedKeys,
@@ -220,14 +217,11 @@ function TableInner<T extends Record<string, unknown>>(
 
   const tableStyle = {
     '--table-grid-template-columns': gridTemplateColumns,
-    '--table-max-height':
-      typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight,
+    '--table-max-height': typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight,
     ...style,
   } as React.CSSProperties;
 
-  const totalPages = pagination
-    ? Math.ceil(pagination.totalItems / pagination.pageSize)
-    : 0;
+  const totalPages = pagination ? Math.ceil(pagination.totalItems / pagination.pageSize) : 0;
 
   return (
     <div className={tableClasses} style={tableStyle}>
@@ -256,10 +250,7 @@ function TableInner<T extends Record<string, unknown>>(
         {...restProps}
       >
         {caption && (
-          <div
-            className={styles.caption}
-            data-hidden={captionHidden || undefined}
-          >
+          <div className={styles.caption} data-hidden={captionHidden || undefined}>
             {caption}
           </div>
         )}
@@ -275,9 +266,7 @@ function TableInner<T extends Record<string, unknown>>(
               hasSelectionColumn={selectionMode !== 'none' && showSelectionControls}
             />
           ) : loading && !sortedData.length ? (
-            <div className={styles.loadingState}>
-              {loadingContent || <Spinner size="md" />}
-            </div>
+            <div className={styles.loadingState}>{loadingContent || <Spinner size="md" />}</div>
           ) : sortedData.length === 0 ? (
             <div className={styles.emptyState}>{emptyContent}</div>
           ) : (
@@ -287,11 +276,7 @@ function TableInner<T extends Record<string, unknown>>(
 
         {/* Infinite scroll sentinel */}
         {infiniteScroll && (
-          <div
-            ref={sentinelRef}
-            className={styles.infiniteScrollSentinel}
-            aria-hidden="true"
-          >
+          <div ref={sentinelRef} className={styles.infiniteScrollSentinel} aria-hidden="true">
             {infiniteScroll.loading && <Spinner size="sm" />}
           </div>
         )}
@@ -330,7 +315,7 @@ function TableInner<T extends Record<string, unknown>>(
 
 // Wrap with forwardRef while preserving generic type
 export const Table = forwardRef(TableInner) as <
-  T extends Record<string, unknown> = Record<string, unknown>
+  T extends Record<string, unknown> = Record<string, unknown>,
 >(
   props: TableProps<T> & { ref?: React.ForwardedRef<HTMLDivElement> }
 ) => React.ReactElement;

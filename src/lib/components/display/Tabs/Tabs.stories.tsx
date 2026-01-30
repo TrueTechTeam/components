@@ -96,7 +96,9 @@ export const Variants: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
       <div>
-        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>Line (default)</p>
+        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>
+          Line (default)
+        </p>
         <Tabs defaultValue="tab1" variant="line">
           <TabList>
             <Tab value="tab1">Tab 1</Tab>
@@ -110,7 +112,9 @@ export const Variants: Story = {
       </div>
 
       <div>
-        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>Enclosed</p>
+        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>
+          Enclosed
+        </p>
         <Tabs defaultValue="tab1" variant="enclosed">
           <TabList>
             <Tab value="tab1">Tab 1</Tab>
@@ -124,7 +128,9 @@ export const Variants: Story = {
       </div>
 
       <div>
-        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>Soft Rounded</p>
+        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>
+          Soft Rounded
+        </p>
         <Tabs defaultValue="tab1" variant="soft-rounded">
           <TabList>
             <Tab value="tab1">Tab 1</Tab>
@@ -138,7 +144,9 @@ export const Variants: Story = {
       </div>
 
       <div>
-        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>Solid Rounded</p>
+        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>
+          Solid Rounded
+        </p>
         <Tabs defaultValue="tab1" variant="solid-rounded">
           <TabList>
             <Tab value="tab1">Tab 1</Tab>
@@ -164,7 +172,9 @@ export const Sizes: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
       <div>
-        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>Small</p>
+        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>
+          Small
+        </p>
         <Tabs defaultValue="tab1" size="sm">
           <TabList>
             <Tab value="tab1">Tab 1</Tab>
@@ -178,7 +188,9 @@ export const Sizes: Story = {
       </div>
 
       <div>
-        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>Medium</p>
+        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>
+          Medium
+        </p>
         <Tabs defaultValue="tab1" size="md">
           <TabList>
             <Tab value="tab1">Tab 1</Tab>
@@ -192,7 +204,9 @@ export const Sizes: Story = {
       </div>
 
       <div>
-        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>Large</p>
+        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>
+          Large
+        </p>
         <Tabs defaultValue="tab1" size="lg">
           <TabList>
             <Tab value="tab1">Tab 1</Tab>
@@ -317,7 +331,9 @@ export const Disabled: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '32px' }}>
       <div>
-        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>All tabs disabled</p>
+        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>
+          All tabs disabled
+        </p>
         <Tabs defaultValue="tab1" disabled>
           <TabList>
             <Tab value="tab1">Tab 1</Tab>
@@ -372,7 +388,9 @@ const ControlledExample = () => {
         <TabPanel value="analytics">Analytics panel content</TabPanel>
         <TabPanel value="reports">Reports panel content</TabPanel>
       </Tabs>
-      <p style={{ marginTop: '16px', fontSize: '14px', color: 'var(--theme-text-secondary)' }}>Active tab: {activeTab}</p>
+      <p style={{ marginTop: '16px', fontSize: '14px', color: 'var(--theme-text-secondary)' }}>
+        Active tab: {activeTab}
+      </p>
     </div>
   );
 };
@@ -556,4 +574,3 @@ export const Playground: Story = {
     keepMounted: false,
   },
 };
-

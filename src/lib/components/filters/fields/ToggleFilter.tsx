@@ -22,24 +22,8 @@ export interface ToggleFilterProps extends BaseComponentProps {
  * ToggleFilter wraps the Toggle component for boolean switch filters
  */
 export const ToggleFilter = forwardRef<HTMLDivElement, ToggleFilterProps>(
-  (
-    {
-      filterId,
-      label: labelOverride,
-      size = 'md',
-      toggleProps,
-      className,
-      ...restProps
-    },
-    ref
-  ) => {
-    const {
-      filter,
-      value,
-      setValue,
-      isEnabled,
-      error,
-    } = useFilter<boolean>({ filterId });
+  ({ filterId, label: labelOverride, size = 'md', toggleProps, className, ...restProps }, ref) => {
+    const { filter, value, setValue, isEnabled, error } = useFilter<boolean>({ filterId });
 
     if (!filter) {
       console.warn(`ToggleFilter: Filter "${filterId}" not found`);

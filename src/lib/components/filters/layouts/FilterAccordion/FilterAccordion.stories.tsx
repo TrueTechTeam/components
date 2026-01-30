@@ -426,4 +426,3 @@ export const Playground: Story = {
     </FilterProvider>
   ),
 };
-

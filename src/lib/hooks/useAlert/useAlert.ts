@@ -23,9 +23,7 @@ export interface UseAlertReturn {
    * Show a custom alert
    * @returns Promise<boolean> - true if confirmed, false if cancelled
    */
-  alert: (
-    props: Omit<AlertProps, 'isOpen' | 'onConfirm' | 'onCancel'>
-  ) => Promise<boolean>;
+  alert: (props: Omit<AlertProps, 'isOpen' | 'onConfirm' | 'onCancel'>) => Promise<boolean>;
 
   /**
    * Show a confirmation dialog
@@ -34,11 +32,7 @@ export interface UseAlertReturn {
    * @param options - Additional alert options
    * @returns Promise<boolean> - true if confirmed, false if cancelled
    */
-  confirm: (
-    title: string,
-    description?: string,
-    options?: Partial<AlertProps>
-  ) => Promise<boolean>;
+  confirm: (title: string, description?: string, options?: Partial<AlertProps>) => Promise<boolean>;
 
   /**
    * Show an error alert
@@ -47,11 +41,7 @@ export interface UseAlertReturn {
    * @param options - Additional alert options
    * @returns Promise<boolean> - true when dismissed
    */
-  error: (
-    title: string,
-    description?: string,
-    options?: Partial<AlertProps>
-  ) => Promise<boolean>;
+  error: (title: string, description?: string, options?: Partial<AlertProps>) => Promise<boolean>;
 
   /**
    * Show a success alert
@@ -60,11 +50,7 @@ export interface UseAlertReturn {
    * @param options - Additional alert options
    * @returns Promise<boolean> - true when dismissed
    */
-  success: (
-    title: string,
-    description?: string,
-    options?: Partial<AlertProps>
-  ) => Promise<boolean>;
+  success: (title: string, description?: string, options?: Partial<AlertProps>) => Promise<boolean>;
 
   /**
    * Show a warning alert
@@ -73,11 +59,7 @@ export interface UseAlertReturn {
    * @param options - Additional alert options
    * @returns Promise<boolean> - true when dismissed
    */
-  warning: (
-    title: string,
-    description?: string,
-    options?: Partial<AlertProps>
-  ) => Promise<boolean>;
+  warning: (title: string, description?: string, options?: Partial<AlertProps>) => Promise<boolean>;
 
   /**
    * Show an info alert
@@ -86,11 +68,7 @@ export interface UseAlertReturn {
    * @param options - Additional alert options
    * @returns Promise<boolean> - true when dismissed
    */
-  info: (
-    title: string,
-    description?: string,
-    options?: Partial<AlertProps>
-  ) => Promise<boolean>;
+  info: (title: string, description?: string, options?: Partial<AlertProps>) => Promise<boolean>;
 
   /**
    * Dismiss current alert

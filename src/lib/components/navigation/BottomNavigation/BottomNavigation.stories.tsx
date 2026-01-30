@@ -55,13 +55,21 @@ export const WithBadges: Story = {
           value="notifications"
           label="Notifications"
           icon="Bell"
-          badge={<Badge size="sm" variant="danger">3</Badge>}
+          badge={
+            <Badge size="sm" variant="danger">
+              3
+            </Badge>
+          }
         />
         <BottomNavigationItem
           value="messages"
           label="Messages"
           icon="MessageCircle"
-          badge={<Badge size="sm" variant="primary">12</Badge>}
+          badge={
+            <Badge size="sm" variant="primary">
+              12
+            </Badge>
+          }
         />
         <BottomNavigationItem value="profile" label="Profile" icon="User" />
       </BottomNavigation>
@@ -74,7 +82,13 @@ export const ShowSelectedLabelOnly: Story = {
     const [selected, setSelected] = useState('home');
 
     return (
-      <BottomNavigation {...args} value={selected} onChange={setSelected} showLabels={false} showSelectedLabel>
+      <BottomNavigation
+        {...args}
+        value={selected}
+        onChange={setSelected}
+        showLabels={false}
+        showSelectedLabel
+      >
         <BottomNavigationItem value="home" label="Home" icon="Home" />
         <BottomNavigationItem value="search" label="Search" icon="Search" />
         <BottomNavigationItem value="favorites" label="Favorites" icon="Heart" />

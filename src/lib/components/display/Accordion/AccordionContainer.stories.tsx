@@ -62,8 +62,8 @@ const SampleAccordions = () => (
   <>
     <Accordion id="section1" header="Section 1: Getting Started">
       <p style={{ margin: 0 }}>
-        Welcome to the getting started guide. This section covers the basics of setting up
-        your environment and understanding the fundamental concepts.
+        Welcome to the getting started guide. This section covers the basics of setting up your
+        environment and understanding the fundamental concepts.
       </p>
     </Accordion>
     <Accordion id="section2" header="Section 2: Configuration">
@@ -97,8 +97,8 @@ export const WithExpandAllControls: Story = {
     <AccordionContainer showExpandAllControls onExpandedChange={action('onExpandedChange')}>
       <Accordion id="section1" header="Section 1: Getting Started">
         <p style={{ margin: 0 }}>
-          Welcome to the getting started guide. This section covers the basics of setting up
-          your environment and understanding the fundamental concepts.
+          Welcome to the getting started guide. This section covers the basics of setting up your
+          environment and understanding the fundamental concepts.
         </p>
       </Accordion>
       <Accordion id="section2" header="Section 2: Configuration">
@@ -130,7 +130,8 @@ export const SingleMode: Story = {
     controls: { disable: true },
     docs: {
       description: {
-        story: 'In single mode, only one accordion can be open at a time. Opening a new accordion automatically closes the previously open one.',
+        story:
+          'In single mode, only one accordion can be open at a time. Opening a new accordion automatically closes the previously open one.',
       },
     },
   },
@@ -146,7 +147,8 @@ export const MultipleMode: Story = {
     controls: { disable: true },
     docs: {
       description: {
-        story: 'In multiple mode (default), any number of accordions can be open simultaneously. Users can expand or collapse each accordion independently.',
+        story:
+          'In multiple mode (default), any number of accordions can be open simultaneously. Users can expand or collapse each accordion independently.',
       },
     },
   },
@@ -181,7 +183,11 @@ const ControlledComponent = () => {
         <Button variant="outline" size="sm" onClick={() => setExpandedIds(['section2'])}>
           Open Section 2
         </Button>
-        <Button variant="outline" size="sm" onClick={() => setExpandedIds(['section1', 'section2', 'section3'])}>
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => setExpandedIds(['section1', 'section2', 'section3'])}
+        >
           Open All
         </Button>
       </div>
@@ -408,8 +414,8 @@ export const FAQExample: Story = {
     <AccordionContainer mode="single" gap={8}>
       <Accordion id="faq1" header="What is your return policy?">
         <p style={{ margin: 0 }}>
-          We offer a 30-day money-back guarantee on all purchases. If you're not satisfied
-          with your purchase, you can return it within 30 days for a full refund.
+          We offer a 30-day money-back guarantee on all purchases. If you're not satisfied with your
+          purchase, you can return it within 30 days for a full refund.
         </p>
       </Accordion>
       <Accordion id="faq2" header="How long does shipping take?">
@@ -420,14 +426,14 @@ export const FAQExample: Story = {
       </Accordion>
       <Accordion id="faq3" header="Do you ship internationally?">
         <p style={{ margin: 0 }}>
-          Yes, we ship to over 100 countries worldwide. International shipping times vary
-          depending on the destination, typically ranging from 7-21 business days.
+          Yes, we ship to over 100 countries worldwide. International shipping times vary depending
+          on the destination, typically ranging from 7-21 business days.
         </p>
       </Accordion>
       <Accordion id="faq4" header="How can I track my order?">
         <p style={{ margin: 0 }}>
-          Once your order ships, you'll receive a confirmation email with a tracking number.
-          You can use this number to track your package on our website or the carrier's site.
+          Once your order ships, you'll receive a confirmation email with a tracking number. You can
+          use this number to track your package on our website or the carrier's site.
         </p>
       </Accordion>
     </AccordionContainer>
@@ -443,7 +449,12 @@ export const SettingsExample: Story = {
       <Accordion id="account" header="Account Settings" headerIcon="user">
         <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
           <Input label="Username" defaultValue="johndoe" style={{ width: '200px' }} />
-          <Input label="Email" type="email" defaultValue="john@example.com" style={{ width: '200px' }} />
+          <Input
+            label="Email"
+            type="email"
+            defaultValue="john@example.com"
+            style={{ width: '200px' }}
+          />
         </div>
       </Accordion>
       <Accordion id="notifications" header="Notification Preferences" headerIcon="bell">

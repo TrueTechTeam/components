@@ -4,7 +4,10 @@ import { Input } from '../Input';
 import styles from './NumberInput.module.scss';
 
 export interface NumberInputProps
-  extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'size' | 'type' | 'onChange' | 'onBlur' | 'width'> {
+  extends Omit<
+    React.InputHTMLAttributes<HTMLInputElement>,
+    'size' | 'type' | 'onChange' | 'onBlur' | 'width'
+  > {
   value?: number;
   defaultValue?: number;
   onChange?: (value: number) => void;
@@ -80,8 +83,12 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
     const handleChange = useCallback(
       (newValue: number) => {
         let clampedValue = newValue;
-        if (min !== undefined) {clampedValue = Math.max(min, clampedValue);}
-        if (max !== undefined) {clampedValue = Math.min(max, clampedValue);}
+        if (min !== undefined) {
+          clampedValue = Math.max(min, clampedValue);
+        }
+        if (max !== undefined) {
+          clampedValue = Math.min(max, clampedValue);
+        }
 
         if (controlledValue === undefined) {
           setInternalValue(clampedValue);
@@ -92,12 +99,16 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
     );
 
     const increment = () => {
-      if (disabled || readOnly) {return;}
+      if (disabled || readOnly) {
+        return;
+      }
       handleChange(value + step);
     };
 
     const decrement = () => {
-      if (disabled || readOnly) {return;}
+      if (disabled || readOnly) {
+        return;
+      }
       handleChange(value - step);
     };
 
@@ -171,4 +182,3 @@ export const NumberInput = forwardRef<HTMLInputElement, NumberInputProps>(
 );
 
 NumberInput.displayName = 'NumberInput';
-

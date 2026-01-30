@@ -82,7 +82,9 @@ export const CheckboxGroupItem = forwardRef<HTMLInputElement, CheckboxGroupItemP
 
     const handleChange = useCallback(
       (checked: boolean, event: React.ChangeEvent<HTMLInputElement>) => {
-        if (isDisabled || isReadOnly) return;
+        if (isDisabled || isReadOnly) {
+          return;
+        }
         context.onChange(value, checked, event);
       },
       [context, value, isDisabled, isReadOnly]

@@ -62,13 +62,7 @@ describe('TagInput', () => {
 
   it('should not add duplicate tags when allowDuplicates is false', () => {
     const handleChange = jest.fn();
-    render(
-      <TagInput
-        defaultValue={['React']}
-        allowDuplicates={false}
-        onChange={handleChange}
-      />
-    );
+    render(<TagInput defaultValue={['React']} allowDuplicates={false} onChange={handleChange} />);
 
     const input = screen.getByRole('textbox');
     fireEvent.change(input, { target: { value: 'React' } });
@@ -79,13 +73,7 @@ describe('TagInput', () => {
 
   it('should allow duplicate tags when allowDuplicates is true', () => {
     const handleChange = jest.fn();
-    render(
-      <TagInput
-        defaultValue={['React']}
-        allowDuplicates
-        onChange={handleChange}
-      />
-    );
+    render(<TagInput defaultValue={['React']} allowDuplicates onChange={handleChange} />);
 
     const input = screen.getByRole('textbox');
     fireEvent.change(input, { target: { value: 'React' } });
@@ -96,13 +84,7 @@ describe('TagInput', () => {
 
   it('should respect maxTags limit', () => {
     const handleChange = jest.fn();
-    render(
-      <TagInput
-        defaultValue={['Tag1', 'Tag2']}
-        maxTags={2}
-        onChange={handleChange}
-      />
-    );
+    render(<TagInput defaultValue={['Tag1', 'Tag2']} maxTags={2} onChange={handleChange} />);
 
     const input = screen.queryByRole('textbox');
     expect(input).not.toBeInTheDocument(); // Input should be hidden when max is reached
@@ -110,12 +92,7 @@ describe('TagInput', () => {
 
   it('should transform tags', () => {
     const handleChange = jest.fn();
-    render(
-      <TagInput
-        transformTag={(tag) => tag.toLowerCase()}
-        onChange={handleChange}
-      />
-    );
+    render(<TagInput transformTag={(tag) => tag.toLowerCase()} onChange={handleChange} />);
 
     const input = screen.getByRole('textbox');
     fireEvent.change(input, { target: { value: 'REACT' } });
@@ -126,12 +103,7 @@ describe('TagInput', () => {
 
   it('should validate tags', () => {
     const handleChange = jest.fn();
-    render(
-      <TagInput
-        validateTag={(tag) => tag.startsWith('#')}
-        onChange={handleChange}
-      />
-    );
+    render(<TagInput validateTag={(tag) => tag.startsWith('#')} onChange={handleChange} />);
 
     const input = screen.getByRole('textbox');
 
@@ -147,12 +119,7 @@ describe('TagInput', () => {
   });
 
   it('should show suggestions', () => {
-    render(
-      <TagInput
-        suggestions={['React', 'Vue', 'Angular']}
-        showSuggestions
-      />
-    );
+    render(<TagInput suggestions={['React', 'Vue', 'Angular']} showSuggestions />);
 
     const input = screen.getByRole('textbox');
     fireEvent.change(input, { target: { value: 'Re' } });
@@ -161,12 +128,7 @@ describe('TagInput', () => {
   });
 
   it('should filter suggestions based on input', () => {
-    render(
-      <TagInput
-        suggestions={['React', 'Vue', 'Angular']}
-        showSuggestions
-      />
-    );
+    render(<TagInput suggestions={['React', 'Vue', 'Angular']} showSuggestions />);
 
     const input = screen.getByRole('textbox');
     fireEvent.change(input, { target: { value: 'Vu' } });
@@ -177,13 +139,7 @@ describe('TagInput', () => {
 
   it('should add tag on suggestion click', () => {
     const handleChange = jest.fn();
-    render(
-      <TagInput
-        suggestions={['React', 'Vue']}
-        showSuggestions
-        onChange={handleChange}
-      />
-    );
+    render(<TagInput suggestions={['React', 'Vue']} showSuggestions onChange={handleChange} />);
 
     const input = screen.getByRole('textbox');
     fireEvent.change(input, { target: { value: 'Re' } });
@@ -195,13 +151,7 @@ describe('TagInput', () => {
   });
 
   it('should show error state', () => {
-    render(
-      <TagInput
-        label="Tags"
-        error
-        errorMessage="At least one tag is required"
-      />
-    );
+    render(<TagInput label="Tags" error errorMessage="At least one tag is required" />);
 
     expect(screen.getByText('At least one tag is required')).toBeInTheDocument();
   });
@@ -214,15 +164,17 @@ describe('TagInput', () => {
   it('should be disabled', () => {
     render(<TagInput disabled defaultValue={['React']} />);
 
+    // Tag should still be visible
+    expect(screen.getByText('React')).toBeInTheDocument();
+
     const input = screen.queryByRole('textbox');
     if (input) {
       expect(input).toBeDisabled();
     }
 
-    const removeButtons = screen.getAllByLabelText(/Remove/);
-    removeButtons.forEach((button) => {
-      expect(button).toBeDisabled();
-    });
+    // When disabled, remove buttons are not rendered at all
+    const removeButtons = screen.queryAllByLabelText(/Remove/);
+    expect(removeButtons).toHaveLength(0);
   });
 
   it('should work in controlled mode', () => {

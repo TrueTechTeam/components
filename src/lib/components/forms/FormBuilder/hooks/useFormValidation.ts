@@ -36,8 +36,7 @@ export const validateField = (
   if (validation.minLength !== undefined && typeof value === 'string') {
     if (value.length < validation.minLength) {
       return (
-        validation.messages?.minLength ||
-        `Minimum length is ${validation.minLength} characters`
+        validation.messages?.minLength || `Minimum length is ${validation.minLength} characters`
       );
     }
   }
@@ -46,8 +45,7 @@ export const validateField = (
   if (validation.maxLength !== undefined && typeof value === 'string') {
     if (value.length > validation.maxLength) {
       return (
-        validation.messages?.maxLength ||
-        `Maximum length is ${validation.maxLength} characters`
+        validation.messages?.maxLength || `Maximum length is ${validation.maxLength} characters`
       );
     }
   }
@@ -55,18 +53,14 @@ export const validateField = (
   // Min value validation
   if (validation.min !== undefined && typeof value === 'number') {
     if (value < validation.min) {
-      return (
-        validation.messages?.min || `Minimum value is ${validation.min}`
-      );
+      return validation.messages?.min || `Minimum value is ${validation.min}`;
     }
   }
 
   // Max value validation
   if (validation.max !== undefined && typeof value === 'number') {
     if (value > validation.max) {
-      return (
-        validation.messages?.max || `Maximum value is ${validation.max}`
-      );
+      return validation.messages?.max || `Maximum value is ${validation.max}`;
     }
   }
 

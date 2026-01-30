@@ -67,7 +67,9 @@ export const getCalendarDays = (
  * Check if two dates are the same day
  */
 export const isSameDay = (date1: Date | null, date2: Date | null): boolean => {
-  if (!date1 || !date2) {return false;}
+  if (!date1 || !date2) {
+    return false;
+  }
   return (
     date1.getFullYear() === date2.getFullYear() &&
     date1.getMonth() === date2.getMonth() &&
@@ -90,7 +92,9 @@ export const isDateInRange = (
   startDate: Date | null,
   endDate: Date | null
 ): boolean => {
-  if (!startDate || !endDate) {return false;}
+  if (!startDate || !endDate) {
+    return false;
+  }
   const time = date.getTime();
   return time >= startDate.getTime() && time <= endDate.getTime();
 };
@@ -112,11 +116,10 @@ export const isDateAfter = (date: Date, compareDate: Date): boolean => {
 /**
  * Format date to string
  */
-export const formatDate = (
-  date: Date | null,
-  format = 'MM/DD/YYYY'
-): string => {
-  if (!date) {return '';}
+export const formatDate = (date: Date | null, format = 'MM/DD/YYYY'): string => {
+  if (!date) {
+    return '';
+  }
 
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
@@ -136,24 +139,27 @@ export const formatDate = (
 /**
  * Parse date string to Date object
  */
-export const parseDate = (
-  dateString: string,
-  format = 'MM/DD/YYYY'
-): Date | null => {
-  if (!dateString) {return null;}
+export const parseDate = (dateString: string, format = 'MM/DD/YYYY'): Date | null => {
+  if (!dateString) {
+    return null;
+  }
 
   try {
     // Simple parser for MM/DD/YYYY format
     if (format === 'MM/DD/YYYY') {
       const parts = dateString.split('/');
-      if (parts.length !== 3) {return null;}
+      if (parts.length !== 3) {
+        return null;
+      }
 
       const month = parseInt(parts[0], 10) - 1;
       const day = parseInt(parts[1], 10);
       const year = parseInt(parts[2], 10);
 
       const date = new Date(year, month, day);
-      if (isNaN(date.getTime())) {return null;}
+      if (isNaN(date.getTime())) {
+        return null;
+      }
 
       return date;
     }
@@ -193,15 +199,7 @@ export const getMonthName = (month: number, short = false): string => {
  * Get day name
  */
 export const getDayName = (day: number, short = true): string => {
-  const days = [
-    'Sunday',
-    'Monday',
-    'Tuesday',
-    'Wednesday',
-    'Thursday',
-    'Friday',
-    'Saturday',
-  ];
+  const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
 
   const name = days[day];
   return short ? name.slice(0, 2) : name;
@@ -243,11 +241,7 @@ export const isLeapYear = (year: number): boolean => {
 /**
  * Clamp date between min and max
  */
-export const clampDate = (
-  date: Date,
-  minDate?: Date,
-  maxDate?: Date
-): Date => {
+export const clampDate = (date: Date, minDate?: Date, maxDate?: Date): Date => {
   let clampedDate = new Date(date);
 
   if (minDate && clampedDate < minDate) {
@@ -271,8 +265,12 @@ export const isDateDisabled = (
   disabledDates?: Date[]
 ): boolean => {
   // Check min/max constraints
-  if (minDate && isDateBefore(date, minDate)) {return true;}
-  if (maxDate && isDateAfter(date, maxDate)) {return true;}
+  if (minDate && isDateBefore(date, minDate)) {
+    return true;
+  }
+  if (maxDate && isDateAfter(date, maxDate)) {
+    return true;
+  }
 
   // Check disabled dates
   if (disabledDates) {
@@ -285,10 +283,7 @@ export const isDateDisabled = (
 /**
  * Get array of years for year selector
  */
-export const getYearRange = (
-  startYear?: number,
-  endYear?: number
-): number[] => {
+export const getYearRange = (startYear?: number, endYear?: number): number[] => {
   const currentYear = new Date().getFullYear();
   const start = startYear || currentYear - 100;
   const end = endYear || currentYear + 10;

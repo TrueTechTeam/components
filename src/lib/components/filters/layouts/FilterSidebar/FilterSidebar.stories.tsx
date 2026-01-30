@@ -1,7 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/react';
 import { action } from '@storybook/addon-actions';
 import { useState } from 'react';
-import { FilterProvider, FilterSidebar, FilterSection, FilterField, ActiveFilters } from '../../index';
+import {
+  FilterProvider,
+  FilterSidebar,
+  FilterSection,
+  FilterField,
+  ActiveFilters,
+} from '../../index';
 import type { FilterDefinition } from '../../types';
 
 const meta: Meta<typeof FilterSidebar> = {
@@ -169,7 +175,14 @@ export const Default: Story = {
           </FilterSection>
         </FilterSidebar>
 
-        <main style={{ flex: 1, padding: '1rem', background: 'var(--theme-surface-secondary)', borderRadius: '8px' }}>
+        <main
+          style={{
+            flex: 1,
+            padding: '1rem',
+            background: 'var(--theme-surface-secondary)',
+            borderRadius: '8px',
+          }}
+        >
           <h2>Content Area</h2>
           <p>Main content goes here. The sidebar provides filter controls.</p>
         </main>
@@ -192,11 +205,7 @@ export const WithHeader: Story = {
       <div style={{ display: 'flex', gap: '1.5rem', minHeight: '400px' }}>
         <FilterSidebar
           width={280}
-          header={
-            <h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 600 }}>
-              Filter Products
-            </h3>
-          }
+          header={<h3 style={{ margin: 0, fontSize: '1rem', fontWeight: 600 }}>Filter Products</h3>}
         >
           <FilterSection title="Filters">
             <FilterField filterId="search" />
@@ -205,7 +214,14 @@ export const WithHeader: Story = {
           </FilterSection>
         </FilterSidebar>
 
-        <main style={{ flex: 1, padding: '1rem', background: 'var(--theme-surface-secondary)', borderRadius: '8px' }}>
+        <main
+          style={{
+            flex: 1,
+            padding: '1rem',
+            background: 'var(--theme-surface-secondary)',
+            borderRadius: '8px',
+          }}
+        >
           <p>Content area</p>
         </main>
       </div>
@@ -240,7 +256,14 @@ export const WithFooter: Story = {
           </FilterSection>
         </FilterSidebar>
 
-        <main style={{ flex: 1, padding: '1rem', background: 'var(--theme-surface-secondary)', borderRadius: '8px' }}>
+        <main
+          style={{
+            flex: 1,
+            padding: '1rem',
+            background: 'var(--theme-surface-secondary)',
+            borderRadius: '8px',
+          }}
+        >
           <p>Content area</p>
         </main>
       </div>
@@ -276,7 +299,14 @@ const CollapsibleSidebar = () => {
           </FilterSection>
         </FilterSidebar>
 
-        <main style={{ flex: 1, padding: '1rem', background: 'var(--theme-surface-secondary)', borderRadius: '8px' }}>
+        <main
+          style={{
+            flex: 1,
+            padding: '1rem',
+            background: 'var(--theme-surface-secondary)',
+            borderRadius: '8px',
+          }}
+        >
           <p>Click the chevron in the sidebar header to collapse it.</p>
         </main>
       </div>
@@ -318,7 +348,14 @@ export const WithActiveFiltersTop: Story = {
           </FilterSection>
         </FilterSidebar>
 
-        <main style={{ flex: 1, padding: '1rem', background: 'var(--theme-surface-secondary)', borderRadius: '8px' }}>
+        <main
+          style={{
+            flex: 1,
+            padding: '1rem',
+            background: 'var(--theme-surface-secondary)',
+            borderRadius: '8px',
+          }}
+        >
           <p>Active filters are displayed at the top of the sidebar.</p>
         </main>
       </div>
@@ -356,7 +393,14 @@ export const WithActiveFiltersBottom: Story = {
           </FilterSection>
         </FilterSidebar>
 
-        <main style={{ flex: 1, padding: '1rem', background: 'var(--theme-surface-secondary)', borderRadius: '8px' }}>
+        <main
+          style={{
+            flex: 1,
+            padding: '1rem',
+            background: 'var(--theme-surface-secondary)',
+            borderRadius: '8px',
+          }}
+        >
           <p>Active filters are displayed at the bottom of the sidebar.</p>
         </main>
       </div>
@@ -376,7 +420,14 @@ export const RightPosition: Story = {
   render: () => (
     <FilterProvider filters={sampleFilters} groups={filterGroups} onChange={action('onChange')}>
       <div style={{ display: 'flex', gap: '1.5rem', minHeight: '400px' }}>
-        <main style={{ flex: 1, padding: '1rem', background: 'var(--theme-surface-secondary)', borderRadius: '8px' }}>
+        <main
+          style={{
+            flex: 1,
+            padding: '1rem',
+            background: 'var(--theme-surface-secondary)',
+            borderRadius: '8px',
+          }}
+        >
           <h2>Content Area</h2>
           <p>The sidebar is positioned on the right.</p>
         </main>
@@ -432,7 +483,14 @@ export const WithActionButtons: Story = {
           </FilterSection>
         </FilterSidebar>
 
-        <main style={{ flex: 1, padding: '1rem', background: 'var(--theme-surface-secondary)', borderRadius: '8px' }}>
+        <main
+          style={{
+            flex: 1,
+            padding: '1rem',
+            background: 'var(--theme-surface-secondary)',
+            borderRadius: '8px',
+          }}
+        >
           <p>The sidebar has Clear and Reset action buttons.</p>
         </main>
       </div>
@@ -476,7 +534,14 @@ export const WithExternalActiveFilters: Story = {
         <main style={{ flex: 1, padding: '1rem' }}>
           <h3 style={{ marginTop: 0 }}>Active Filters</h3>
           <ActiveFilters />
-          <div style={{ marginTop: '1.5rem', padding: '1rem', background: 'var(--theme-surface-secondary)', borderRadius: '8px' }}>
+          <div
+            style={{
+              marginTop: '1.5rem',
+              padding: '1rem',
+              background: 'var(--theme-surface-secondary)',
+              borderRadius: '8px',
+            }}
+          >
             <p>Active filters can be displayed in the main content area instead of the sidebar.</p>
           </div>
         </main>
@@ -511,10 +576,7 @@ export const Playground: Story = {
       onChange={action('onChange')}
     >
       <div style={{ display: 'flex', gap: '1.5rem', minHeight: '400px' }}>
-        <FilterSidebar
-          {...args}
-          header={<h3 style={{ margin: 0, fontSize: '1rem' }}>Filters</h3>}
-        >
+        <FilterSidebar {...args} header={<h3 style={{ margin: 0, fontSize: '1rem' }}>Filters</h3>}>
           <FilterSection title="Filters">
             <FilterField filterId="search" />
             <FilterField filterId="status" />
@@ -522,7 +584,14 @@ export const Playground: Story = {
           </FilterSection>
         </FilterSidebar>
 
-        <main style={{ flex: 1, padding: '1rem', background: 'var(--theme-surface-secondary)', borderRadius: '8px' }}>
+        <main
+          style={{
+            flex: 1,
+            padding: '1rem',
+            background: 'var(--theme-surface-secondary)',
+            borderRadius: '8px',
+          }}
+        >
           <p>Use the controls to customize the sidebar.</p>
         </main>
       </div>

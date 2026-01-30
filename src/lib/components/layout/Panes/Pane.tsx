@@ -147,7 +147,17 @@ export const Pane = forwardRef<HTMLDivElement, PaneProps & PaneInternalProps>(
         priority: effectivePriority,
         index: _index,
       });
-    }, [id, minWidth, maxWidth, preferredWidth, grow, shrink, effectivePriority, _index, updatePane]);
+    }, [
+      id,
+      minWidth,
+      maxWidth,
+      preferredWidth,
+      grow,
+      shrink,
+      effectivePriority,
+      _index,
+      updatePane,
+    ]);
 
     const isVisible = visiblePanes.has(id);
     const isEntering = enteringPanes.has(id);
@@ -160,7 +170,11 @@ export const Pane = forwardRef<HTMLDivElement, PaneProps & PaneInternalProps>(
       () =>
         ({
           '--pane-min-width': typeof minWidth === 'number' ? `${minWidth}px` : minWidth,
-          '--pane-max-width': maxWidth ? (typeof maxWidth === 'number' ? `${maxWidth}px` : maxWidth) : 'none',
+          '--pane-max-width': maxWidth
+            ? typeof maxWidth === 'number'
+              ? `${maxWidth}px`
+              : maxWidth
+            : 'none',
           '--pane-preferred-width':
             typeof preferredWidth === 'number' ? `${preferredWidth}px` : preferredWidth,
           '--pane-grow': grow,

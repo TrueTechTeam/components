@@ -51,14 +51,7 @@ export interface BadgeProps extends BaseComponentProps {
  */
 export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
   (
-    {
-      variant = 'primary',
-      size = 'md',
-      disabled = false,
-      className,
-      children,
-      ...restProps
-    },
+    { variant = 'primary', size = 'md', disabled = false, className, children, ...restProps },
     ref
   ) => {
     // Merge className with component styles

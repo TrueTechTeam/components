@@ -166,16 +166,13 @@ export function useDroppable(options: UseDroppableOptions): UseDroppableReturn {
     [active, canAccept]
   );
 
-  const handleDrop = useCallback(
-    (event: DragEvent<HTMLElement>) => {
-      event.preventDefault();
-      dragEnterCountRef.current = 0;
+  const handleDrop = useCallback((event: DragEvent<HTMLElement>) => {
+    event.preventDefault();
+    dragEnterCountRef.current = 0;
 
-      // The actual drop handling is done by the DndProvider's onDragEnd
-      // which is triggered when setActive(null) is called
-    },
-    []
-  );
+    // The actual drop handling is done by the DndProvider's onDragEnd
+    // which is triggered when setActive(null) is called
+  }, []);
 
   const attributes = {
     'aria-dropeffect': (active && canAccept(active.data) ? 'move' : 'none') as 'move' | 'none',

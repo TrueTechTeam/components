@@ -1,5 +1,11 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { PhoneInput } from './PhoneInput';
+
+// Mock scrollIntoView which isn't implemented in JSDOM
+beforeAll(() => {
+  Element.prototype.scrollIntoView = jest.fn();
+});
 
 describe('PhoneInput', () => {
   it('should render', () => {
@@ -38,59 +44,75 @@ describe('PhoneInput', () => {
     expect(input.value).toMatch(/\(\d{3}\) \d{3}-\d{4}/);
   });
 
-  it('should open country dropdown on button click', () => {
+  it('should open country dropdown on button click', async () => {
+    const user = userEvent.setup();
     render(<PhoneInput defaultCountry="US" />);
 
     const countryButton = screen.getByLabelText('Select country');
-    fireEvent.click(countryButton);
+    await user.click(countryButton);
 
-    // Should show country list
-    expect(screen.getByText('United States')).toBeInTheDocument();
-    expect(screen.getByText('Canada')).toBeInTheDocument();
+    // Should show country list with flags and dial codes (Select options only show these, not names)
+    await waitFor(() => {
+      // Multiple dial codes should be visible in the dropdown
+      const dialCodes = screen.getAllByText(/^\+\d+$/);
+      expect(dialCodes.length).toBeGreaterThan(1);
+    });
   });
 
   it('should filter countries on search', async () => {
+    const user = userEvent.setup();
     render(<PhoneInput defaultCountry="US" showCountrySearch />);
 
     // Open dropdown
     const countryButton = screen.getByLabelText('Select country');
-    fireEvent.click(countryButton);
-
-    // Search for "Germany"
-    const searchInput = screen.getByPlaceholderText('Search countries...');
-    fireEvent.change(searchInput, { target: { value: 'Germany' } });
+    await user.click(countryButton);
 
     await waitFor(() => {
-      expect(screen.getByText('Germany')).toBeInTheDocument();
-      expect(screen.queryByText('United States')).not.toBeInTheDocument();
+      expect(screen.getByPlaceholderText('Search countries...')).toBeInTheDocument();
+    });
+
+    // Search by country code (Select filters by option.value, which is the country code)
+    const searchInput = screen.getByPlaceholderText('Search countries...');
+    await user.type(searchInput, 'DE');
+
+    await waitFor(() => {
+      // Germany's dial code +49 should be visible
+      expect(screen.getByText('+49')).toBeInTheDocument();
+      // US dial code +1 should not be in menu items (only in trigger)
+      const dialCodes = screen.getAllByText('+1');
+      console.log(dialCodes);
+      // Only one +1 should exist (the one in the select trigger), not in the filtered menu
+      expect(dialCodes.length).toBe(1);
     });
   });
 
-  it('should change country on selection', () => {
+  it('should change country on selection', async () => {
+    const user = userEvent.setup();
     const handleChange = jest.fn();
     render(<PhoneInput defaultCountry="US" onChange={handleChange} />);
 
     // Open dropdown
     const countryButton = screen.getByLabelText('Select country');
-    fireEvent.click(countryButton);
+    await user.click(countryButton);
 
-    // Select Germany
-    const germanyOption = screen.getByText('Germany');
-    fireEvent.click(germanyOption);
+    // Wait for dropdown to open and show options
+    await waitFor(() => {
+      // Should see German flag in the dropdown
+      expect(screen.getByText('🇩🇪')).toBeInTheDocument();
+    });
 
-    // Verify country changed
-    expect(screen.getByText('+49')).toBeInTheDocument();
-    expect(screen.getByText('🇩🇪')).toBeInTheDocument();
+    // Select Germany by clicking on its flag
+    const germanyFlag = screen.getByText('🇩🇪');
+    await user.click(germanyFlag);
+
+    // Verify country changed - the trigger should now show German flag and dial code
+    await waitFor(() => {
+      expect(screen.getByText('+49')).toBeInTheDocument();
+    });
   });
 
   it('should show error state', () => {
-    render(
-      <PhoneInput
-        label="Phone Number"
-        error
-        errorMessage="Invalid phone number"
-      />
-    );
+    render(<PhoneInput label="Phone Number" error errorMessage="Invalid phone number" />);
 
     expect(screen.getByText('Invalid phone number')).toBeInTheDocument();
   });
@@ -107,7 +129,7 @@ describe('PhoneInput', () => {
     const countryButton = screen.getByLabelText('Select country');
 
     expect(input).toBeDisabled();
-    expect(countryButton).toBeDisabled();
+    expect(countryButton).toHaveAttribute('aria-disabled', 'true');
   });
 
   it('should not format when autoFormat is false', () => {

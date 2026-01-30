@@ -1,9 +1,7 @@
 import React, { forwardRef, useState, useCallback, useRef, type DragEvent } from 'react';
 import { IconButton } from '../../buttons/IconButton';
 import styles from './FilePicker.module.scss';
-import type {
-  BaseComponentProps,
-} from '../../../types/component.types';
+import type { BaseComponentProps } from '../../../types/component.types';
 import Button from '../../buttons/Button';
 
 export interface FileError {
@@ -113,11 +111,13 @@ export interface FilePickerProps extends Omit<BaseComponentProps, 'children'> {
  * Format file size to human-readable string
  */
 const formatFileSize = (bytes: number): string => {
-  if (bytes === 0) {return '0 Bytes';}
+  if (bytes === 0) {
+    return '0 Bytes';
+  }
   const k = 1024;
   const sizes = ['Bytes', 'KB', 'MB', 'GB'];
   const i = Math.floor(Math.log(bytes) / Math.log(k));
-  return `${Math.round((bytes / Math.pow(k, i)) * 100) / 100  } ${  sizes[i]}`;
+  return `${Math.round((bytes / Math.pow(k, i)) * 100) / 100} ${sizes[i]}`;
 };
 
 /**
@@ -221,7 +221,7 @@ export const FilePicker = forwardRef<HTMLInputElement, FilePickerProps>(
               }
               if (type.endsWith('/*')) {
                 const category = type.split('/')[0];
-                return file.type.startsWith(`${category  }/`);
+                return file.type.startsWith(`${category}/`);
               }
               return file.type === type;
             });
@@ -247,7 +247,9 @@ export const FilePicker = forwardRef<HTMLInputElement, FilePickerProps>(
     // Handle file selection
     const handleFiles = useCallback(
       (files: FileList | null) => {
-        if (!files || files.length === 0) {return;}
+        if (!files || files.length === 0) {
+          return;
+        }
 
         const fileArray = Array.from(files);
         const { valid, errors } = validateFiles(fileArray);
@@ -466,4 +468,3 @@ export const FilePicker = forwardRef<HTMLInputElement, FilePickerProps>(
 );
 
 FilePicker.displayName = 'FilePicker';
-

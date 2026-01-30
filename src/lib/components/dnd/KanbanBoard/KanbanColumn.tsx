@@ -168,4 +168,3 @@ export const KanbanColumn = forwardRef<HTMLDivElement, KanbanColumnProps>(
 KanbanColumn.displayName = 'KanbanColumn';
 
 export default KanbanColumn;
-

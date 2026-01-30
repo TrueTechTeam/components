@@ -170,7 +170,8 @@ export const StatusIndicators: Story = {
     controls: { disable: true },
     docs: {
       description: {
-        story: 'Avatars with different status indicators: success, warning, error, info, neutral, and processing.',
+        story:
+          'Avatars with different status indicators: success, warning, error, info, neutral, and processing.',
       },
     },
   },
@@ -249,31 +250,39 @@ export const CustomStyling: Story = {
     <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center' }}>
       <Avatar
         initials="AB"
-        style={{
-          '--avatar-bg': '#ff6b6b',
-          '--avatar-color': '#ffffff',
-        } as React.CSSProperties}
+        style={
+          {
+            '--avatar-bg': '#ff6b6b',
+            '--avatar-color': '#ffffff',
+          } as React.CSSProperties
+        }
       />
       <Avatar
         initials="CD"
-        style={{
-          '--avatar-bg': '#4ecdc4',
-          '--avatar-color': '#ffffff',
-        } as React.CSSProperties}
+        style={
+          {
+            '--avatar-bg': '#4ecdc4',
+            '--avatar-color': '#ffffff',
+          } as React.CSSProperties
+        }
       />
       <Avatar
         initials="EF"
-        style={{
-          '--avatar-bg': '#ffe66d',
-          '--avatar-color': '#2d3436',
-        } as React.CSSProperties}
+        style={
+          {
+            '--avatar-bg': '#ffe66d',
+            '--avatar-color': '#2d3436',
+          } as React.CSSProperties
+        }
       />
       <Avatar
         initials="GH"
-        style={{
-          '--avatar-bg': '#a8e6cf',
-          '--avatar-color': '#2d3436',
-        } as React.CSSProperties}
+        style={
+          {
+            '--avatar-bg': '#a8e6cf',
+            '--avatar-color': '#2d3436',
+          } as React.CSSProperties
+        }
       />
     </div>
   ),
@@ -281,7 +290,8 @@ export const CustomStyling: Story = {
     controls: { disable: true },
     docs: {
       description: {
-        story: 'Examples of customizing the avatar using CSS variables for background and text colors.',
+        story:
+          'Examples of customizing the avatar using CSS variables for background and text colors.',
       },
     },
   },
@@ -292,13 +302,28 @@ export const AvatarGroup: Story = {
   render: () => (
     <div style={{ display: 'flex', alignItems: 'center' }}>
       <div style={{ marginLeft: '-8px' }}>
-        <Avatar src="https://i.pravatar.cc/150?img=1" alt="User 1" size="md" style={{ marginLeft: '-8px' } as React.CSSProperties} />
+        <Avatar
+          src="https://i.pravatar.cc/150?img=1"
+          alt="User 1"
+          size="md"
+          style={{ marginLeft: '-8px' } as React.CSSProperties}
+        />
       </div>
       <div style={{ marginLeft: '-8px' }}>
-        <Avatar src="https://i.pravatar.cc/150?img=2" alt="User 2" size="md" style={{ marginLeft: '-8px' } as React.CSSProperties} />
+        <Avatar
+          src="https://i.pravatar.cc/150?img=2"
+          alt="User 2"
+          size="md"
+          style={{ marginLeft: '-8px' } as React.CSSProperties}
+        />
       </div>
       <div style={{ marginLeft: '-8px' }}>
-        <Avatar src="https://i.pravatar.cc/150?img=3" alt="User 3" size="md" style={{ marginLeft: '-8px' } as React.CSSProperties} />
+        <Avatar
+          src="https://i.pravatar.cc/150?img=3"
+          alt="User 3"
+          size="md"
+          style={{ marginLeft: '-8px' } as React.CSSProperties}
+        />
       </div>
       <div style={{ marginLeft: '-8px' }}>
         <Avatar initials="+3" size="md" style={{ marginLeft: '-8px' } as React.CSSProperties} />

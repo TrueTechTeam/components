@@ -89,7 +89,7 @@ function usePaginationRange(
   currentPage: number,
   siblingCount: number,
   boundaryCount: number
-): (number | 'ellipsis')[] {
+): Array<number | 'ellipsis'> {
   return useMemo(() => {
     const totalNumbers = siblingCount * 2 + 3 + boundaryCount * 2;
 
@@ -104,7 +104,7 @@ function usePaginationRange(
     const shouldShowLeftEllipsis = leftSiblingIndex > boundaryCount + 2;
     const shouldShowRightEllipsis = rightSiblingIndex < totalPages - boundaryCount - 1;
 
-    const range: (number | 'ellipsis')[] = [];
+    const range: Array<number | 'ellipsis'> = [];
 
     // Left boundary
     for (let i = 1; i <= boundaryCount; i++) {

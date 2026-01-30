@@ -45,23 +45,11 @@ export function ListSkeleton({
   return (
     <>
       {Array.from({ length: rows }).map((_, index) => (
-        <div
-          key={index}
-          className={styles.skeletonItem}
-          aria-hidden="true"
-        >
-          {showAvatar && (
-            <Skeleton
-              variant="circular"
-              width={avatarSize}
-              height={avatarSize}
-            />
-          )}
+        <div key={index} className={styles.skeletonItem} aria-hidden="true">
+          {showAvatar && <Skeleton variant="circular" width={avatarSize} height={avatarSize} />}
           <div className={styles.skeletonContent}>
             <Skeleton variant="text" width="75%" />
-            {showSecondaryText && (
-              <Skeleton variant="text" width="50%" />
-            )}
+            {showSecondaryText && <Skeleton variant="text" width="50%" />}
           </div>
         </div>
       ))}

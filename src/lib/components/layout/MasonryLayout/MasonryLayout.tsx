@@ -142,7 +142,9 @@ export const MasonryLayout = forwardRef<HTMLDivElement, MasonryLayoutProps>(
 
     // Calculate column count based on container width
     useEffect(() => {
-      if (containerWidth <= 0) return;
+      if (containerWidth <= 0) {
+        return;
+      }
 
       // Calculate how many columns fit
       // Formula: width >= n * columnWidth + (n-1) * gap
@@ -163,7 +165,9 @@ export const MasonryLayout = forwardRef<HTMLDivElement, MasonryLayoutProps>(
 
     // Calculate item positions
     useEffect(() => {
-      if (containerWidth <= 0 || columnCount <= 0) return;
+      if (containerWidth <= 0 || columnCount <= 0) {
+        return;
+      }
 
       const childArray = Children.toArray(children);
       const actualColumnWidth = (containerWidth - (columnCount - 1) * gap) / columnCount;
@@ -197,7 +201,9 @@ export const MasonryLayout = forwardRef<HTMLDivElement, MasonryLayoutProps>(
 
     // Re-calculate positions when items resize
     useEffect(() => {
-      if (typeof window === 'undefined') return;
+      if (typeof window === 'undefined') {
+        return;
+      }
 
       const observers: ResizeObserver[] = [];
 
@@ -205,7 +211,9 @@ export const MasonryLayout = forwardRef<HTMLDivElement, MasonryLayoutProps>(
         const observer = new ResizeObserver(() => {
           // Trigger recalculation
           const childArray = Children.toArray(children);
-          if (containerWidth <= 0 || columnCount <= 0) return;
+          if (containerWidth <= 0 || columnCount <= 0) {
+            return;
+          }
 
           const actualColumnWidth = (containerWidth - (columnCount - 1) * gap) / columnCount;
           const columnHeights = new Array(columnCount).fill(0);
@@ -272,7 +280,9 @@ export const MasonryLayout = forwardRef<HTMLDivElement, MasonryLayoutProps>(
         {...restProps}
       >
         {Children.map(children, (child, index) => {
-          if (!isValidElement(child)) return child;
+          if (!isValidElement(child)) {
+            return child;
+          }
 
           const position = positions.get(index);
           const itemStyle: React.CSSProperties = position

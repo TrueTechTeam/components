@@ -9,10 +9,7 @@ import { useEffect } from 'react';
  * @param handler - Callback to execute when Escape is pressed
  * @param enabled - Whether the hook is active
  */
-export function useEscapeKey(
-  handler: (event: KeyboardEvent) => void,
-  enabled = true
-): void {
+export function useEscapeKey(handler: (event: KeyboardEvent) => void, enabled = true): void {
   useEffect(() => {
     if (!enabled) {
       return;

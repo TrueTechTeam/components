@@ -132,10 +132,7 @@ function SortableListInner<T extends SortableListItem>({
   );
 
   // Calculate gap value
-  const gapValue =
-    typeof gap === 'number'
-      ? `${gap}px`
-      : `var(--spacing-${gap})`;
+  const gapValue = typeof gap === 'number' ? `${gap}px` : `var(--spacing-${gap})`;
 
   const containerClasses = [styles.sortableList, className].filter(Boolean).join(' ');
 
@@ -156,13 +153,7 @@ function SortableListInner<T extends SortableListItem>({
         aria-label={ariaLabel || 'Sortable list'}
       >
         {items.map((item, index) => (
-          <SortableItem
-            key={item.id}
-            id={item.id}
-            index={index}
-            disabled={disabled}
-            data={item}
-          >
+          <SortableItem key={item.id} id={item.id} index={index} disabled={disabled} data={item}>
             {(renderProps) => renderItem(item, renderProps)}
           </SortableItem>
         ))}

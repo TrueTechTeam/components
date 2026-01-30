@@ -143,8 +143,7 @@ export const LoadingOverlay = forwardRef<HTMLDivElement, LoadingOverlayProps>(
     },
     ref
   ) => {
-    const borderRadiusValue =
-      typeof borderRadius === 'number' ? `${borderRadius}px` : borderRadius;
+    const borderRadiusValue = typeof borderRadius === 'number' ? `${borderRadius}px` : borderRadius;
     const componentClasses = [styles.loadingOverlay, className].filter(Boolean).join(' ');
 
     const spinnerElement = customSpinner || (
@@ -222,4 +221,3 @@ export const LoadingOverlay = forwardRef<HTMLDivElement, LoadingOverlayProps>(
 LoadingOverlay.displayName = 'LoadingOverlay';
 
 export default LoadingOverlay;
-

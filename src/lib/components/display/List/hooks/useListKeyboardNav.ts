@@ -18,7 +18,9 @@ export function useListKeyboardNav({
 
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
-      if (disabled || itemCount === 0) {return;}
+      if (disabled || itemCount === 0) {
+        return;
+      }
 
       const { key } = event;
       let newIndex = focusedIndex;
@@ -114,7 +116,9 @@ export function useListKeyboardNav({
   const getItemTabIndex = useCallback(
     (index: number): 0 | -1 => {
       // If no item is focused, make the first item tabbable
-      if (focusedIndex === -1 && index === 0) {return 0;}
+      if (focusedIndex === -1 && index === 0) {
+        return 0;
+      }
       return index === focusedIndex ? 0 : -1;
     },
     [focusedIndex]

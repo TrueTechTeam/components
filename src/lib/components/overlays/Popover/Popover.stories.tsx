@@ -75,9 +75,7 @@ const DefaultComponent = () => {
     <div style={{ padding: '100px', display: 'flex', justifyContent: 'center' }}>
       <Popover
         trigger={
-          <Button onClick={() => setIsOpen(!isOpen)}>
-            {isOpen ? 'Close' : 'Open'} Popover
-          </Button>
+          <Button onClick={() => setIsOpen(!isOpen)}>{isOpen ? 'Close' : 'Open'} Popover</Button>
         }
         isOpen={isOpen}
         onOpenChange={setIsOpen}
@@ -122,9 +120,7 @@ const PositionsComponent = () => {
               <Button
                 size="sm"
                 variant="outline"
-                onClick={() =>
-                  setOpenPosition(openPosition === position ? null : position)
-                }
+                onClick={() => setOpenPosition(openPosition === position ? null : position)}
               >
                 {position}
               </Button>
@@ -133,9 +129,7 @@ const PositionsComponent = () => {
             onOpenChange={(open) => setOpenPosition(open ? position : null)}
             position={position}
           >
-            <div style={{ padding: '12px', minWidth: '150px' }}>
-              Position: {position}
-            </div>
+            <div style={{ padding: '12px', minWidth: '150px' }}>Position: {position}</div>
           </Popover>
         ))}
       </div>
@@ -153,11 +147,7 @@ const WithOffsetComponent = () => {
   return (
     <div style={{ padding: '100px', display: 'flex', justifyContent: 'center' }}>
       <Popover
-        trigger={
-          <Button onClick={() => setIsOpen(!isOpen)}>
-            Popover with 24px offset
-          </Button>
-        }
+        trigger={<Button onClick={() => setIsOpen(!isOpen)}>Popover with 24px offset</Button>}
         isOpen={isOpen}
         onOpenChange={setIsOpen}
         offset={24}
@@ -179,9 +169,7 @@ const NoFlipComponent = () => {
     <div style={{ padding: '20px', display: 'flex', justifyContent: 'flex-start' }}>
       <Popover
         trigger={
-          <Button onClick={() => setIsOpen(!isOpen)}>
-            No flip (stays top even if overflow)
-          </Button>
+          <Button onClick={() => setIsOpen(!isOpen)}>No flip (stays top even if overflow)</Button>
         }
         isOpen={isOpen}
         onOpenChange={setIsOpen}
@@ -207,14 +195,14 @@ const CustomStylingComponent = () => {
         trigger={<Button onClick={() => setIsOpen(!isOpen)}>Custom Styled</Button>}
         isOpen={isOpen}
         onOpenChange={setIsOpen}
-        style={{
-          '--popover-bg': 'var(--theme-primary)',
-          '--popover-border': 'var(--theme-primary)',
-        } as any}
+        style={
+          {
+            '--popover-bg': 'var(--theme-primary)',
+            '--popover-border': 'var(--theme-primary)',
+          } as any
+        }
       >
-        <div style={{ padding: '16px', color: 'white' }}>
-          Custom styled popover content
-        </div>
+        <div style={{ padding: '16px', color: 'white' }}>Custom styled popover content</div>
       </Popover>
     </div>
   );
@@ -259,11 +247,7 @@ const RenderPropTriggerComponent = () => {
     <div style={{ padding: '100px', display: 'flex', justifyContent: 'center' }}>
       <Popover
         trigger={({ ref }) => (
-          <Button
-            ref={ref}
-            variant="secondary"
-            onClick={() => setIsOpen(!isOpen)}
-          >
+          <Button ref={ref} variant="secondary" onClick={() => setIsOpen(!isOpen)}>
             Render Prop Trigger
           </Button>
         )}

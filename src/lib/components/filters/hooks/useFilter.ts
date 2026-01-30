@@ -116,7 +116,9 @@ export function useFilter<T extends FilterValue = FilterValue>(
   }, [ctx, filterId]);
 
   const validate = useCallback(() => {
-    if (!filter?.validate) {return true;}
+    if (!filter?.validate) {
+      return true;
+    }
     const validationError = filter.validate(value as T);
     ctx.setFilterError(filterId, validationError);
     return validationError === null;

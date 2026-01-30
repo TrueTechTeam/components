@@ -101,8 +101,7 @@ const customColumns: Array<ColumnConfig<User>> = [
     width: '120px',
     align: 'center',
     render: (value) => {
-      const variant =
-        value === 'active' ? 'success' : value === 'pending' ? 'warning' : 'danger';
+      const variant = value === 'active' ? 'success' : value === 'pending' ? 'warning' : 'danger';
       return <Badge variant={variant}>{String(value)}</Badge>;
     },
   },
@@ -168,12 +167,7 @@ function SortingExample() {
       <p style={{ marginBottom: '16px' }}>
         Current sort: {sort.column ? `${sort.column} (${sort.direction})` : 'None'}
       </p>
-      <Table<User>
-        data={sampleUsers}
-        columns={customColumns}
-        sort={sort}
-        onSortChange={setSort}
-      />
+      <Table<User> data={sampleUsers} columns={customColumns} sort={sort} onSortChange={setSort} />
     </div>
   );
 }
@@ -270,7 +264,10 @@ function PaginationExample() {
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 2;
 
-  const allData = [...sampleUsers, ...sampleUsers.map((u, i) => ({ ...u, id: `${u.id}-copy-${i}` }))];
+  const allData = [
+    ...sampleUsers,
+    ...sampleUsers.map((u, i) => ({ ...u, id: `${u.id}-copy-${i}` })),
+  ];
   const paginatedData = allData.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   return (
@@ -298,7 +295,9 @@ function InfiniteScrollExample() {
   const hasMore = data.length < 10;
 
   const loadMore = useCallback(() => {
-    if (loading) {return;}
+    if (loading) {
+      return;
+    }
     setLoading(true);
     setTimeout(() => {
       setData((prev) => [
@@ -392,7 +391,10 @@ function FullFeaturedExample() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const pageSize = 3;
-  const allData = [...sampleUsers, ...sampleUsers.map((u, i) => ({ ...u, id: `copy-${i}-${u.id}` }))];
+  const allData = [
+    ...sampleUsers,
+    ...sampleUsers.map((u, i) => ({ ...u, id: `copy-${i}-${u.id}` })),
+  ];
   const paginatedData = allData.slice((currentPage - 1) * pageSize, currentPage * pageSize);
 
   const handleBulkDelete = () => {
@@ -491,7 +493,8 @@ function SingleSelectionNoControlsExample() {
   return (
     <div>
       <p style={{ marginBottom: '16px' }}>
-        <strong>Single Selection without Controls</strong> - Click on a row to select it. No radio buttons are shown.
+        <strong>Single Selection without Controls</strong> - Click on a row to select it. No radio
+        buttons are shown.
       </p>
       <p style={{ marginBottom: '16px' }}>
         Selected: {selectedKeys.length ? selectedKeys.join(', ') : 'None'}
@@ -519,7 +522,8 @@ function MultipleSelectionWithControlsExample() {
   return (
     <div>
       <p style={{ marginBottom: '16px' }}>
-        <strong>Multiple Selection with Controls</strong> - Checkboxes are visible for selection. Use the header checkbox to select all.
+        <strong>Multiple Selection with Controls</strong> - Checkboxes are visible for selection.
+        Use the header checkbox to select all.
       </p>
       <p style={{ marginBottom: '16px' }}>
         Selected ({selectedKeys.length}): {selectedKeys.join(', ') || 'None'}
@@ -547,7 +551,8 @@ function MultipleSelectionNoControlsExample() {
   return (
     <div>
       <p style={{ marginBottom: '16px' }}>
-        <strong>Multiple Selection without Controls</strong> - Click on rows to toggle selection. No checkboxes are shown.
+        <strong>Multiple Selection without Controls</strong> - Click on rows to toggle selection. No
+        checkboxes are shown.
       </p>
       <p style={{ marginBottom: '16px' }}>
         Selected ({selectedKeys.length}): {selectedKeys.join(', ') || 'None'}
@@ -646,7 +651,8 @@ function PaginationWithPageSizeExample() {
   return (
     <div>
       <p style={{ marginBottom: '16px' }}>
-        Showing {paginatedData.length} of {allData.length} items (Page {currentPage}, {pageSize} per page)
+        Showing {paginatedData.length} of {allData.length} items (Page {currentPage}, {pageSize} per
+        page)
       </p>
       <Table<User>
         data={paginatedData}
@@ -699,9 +705,7 @@ function ControlledSearchExample() {
 
   return (
     <div>
-      <p style={{ marginBottom: '16px' }}>
-        Search query: "{searchQuery}"
-      </p>
+      <p style={{ marginBottom: '16px' }}>Search query: "{searchQuery}"</p>
       <Table<User>
         data={sampleUsers}
         columns={customColumns}
@@ -731,7 +735,9 @@ function CustomSearchFunctionExample() {
         searchable
         searchPlaceholder="Search by role (Admin, Editor, Viewer)..."
         searchFn={(item, query) => {
-          if (!query.trim()) {return true;}
+          if (!query.trim()) {
+            return true;
+          }
           return item.role.toLowerCase() === query.toLowerCase();
         }}
       />

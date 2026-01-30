@@ -22,7 +22,8 @@ export const useRadioGroup = () => {
   return context;
 };
 
-export interface RadioGroupProps extends Omit<InputBaseProps, 'value' | 'onChange' | 'placeholder'> {
+export interface RadioGroupProps
+  extends Omit<InputBaseProps, 'value' | 'onChange' | 'placeholder'> {
   /**
    * RadioGroup variant style
    * @default 'primary'

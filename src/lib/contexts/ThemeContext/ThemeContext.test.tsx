@@ -13,9 +13,7 @@ describe('ThemeContext', () => {
 
     it('should provide custom default mode', () => {
       const { result } = renderHook(() => useTheme(), {
-        wrapper: ({ children }) => (
-          <ThemeProvider defaultMode="dark">{children}</ThemeProvider>
-        ),
+        wrapper: ({ children }) => <ThemeProvider defaultMode="dark">{children}</ThemeProvider>,
       });
 
       expect(result.current.mode).toBe('dark');

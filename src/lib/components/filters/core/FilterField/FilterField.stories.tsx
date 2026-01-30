@@ -266,11 +266,7 @@ export const WithOverrides: Story = {
   render: () => (
     <FilterProvider filters={sampleFilters} onChange={action('onChange')}>
       <div style={{ maxWidth: '300px' }}>
-        <FilterField
-          filterId="status"
-          label="Custom Label"
-          placeholder="Custom placeholder..."
-        />
+        <FilterField filterId="status" label="Custom Label" placeholder="Custom placeholder..." />
       </div>
     </FilterProvider>
   ),

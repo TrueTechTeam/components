@@ -255,13 +255,10 @@ export function useSortable(options: UseSortableOptions): UseSortableReturn {
     [active, canAccept, overId, id, fullData, setOver]
   );
 
-  const handleDrop = useCallback(
-    (event: DragEvent<HTMLElement>) => {
-      event.preventDefault();
-      dragEnterCountRef.current = 0;
-    },
-    []
-  );
+  const handleDrop = useCallback((event: DragEvent<HTMLElement>) => {
+    event.preventDefault();
+    dragEnterCountRef.current = 0;
+  }, []);
 
   // Keyboard support
   const handleKeyDown = useCallback(

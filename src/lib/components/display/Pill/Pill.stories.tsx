@@ -56,13 +56,27 @@ export const Default: Story = {
 export const FilledColors: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
-      <Pill color="primary" variant="filled">Primary</Pill>
-      <Pill color="secondary" variant="filled">Secondary</Pill>
-      <Pill color="success" variant="filled">Success</Pill>
-      <Pill color="warning" variant="filled">Warning</Pill>
-      <Pill color="danger" variant="filled">Danger</Pill>
-      <Pill color="info" variant="filled">Info</Pill>
-      <Pill color="neutral" variant="filled">Neutral</Pill>
+      <Pill color="primary" variant="filled">
+        Primary
+      </Pill>
+      <Pill color="secondary" variant="filled">
+        Secondary
+      </Pill>
+      <Pill color="success" variant="filled">
+        Success
+      </Pill>
+      <Pill color="warning" variant="filled">
+        Warning
+      </Pill>
+      <Pill color="danger" variant="filled">
+        Danger
+      </Pill>
+      <Pill color="info" variant="filled">
+        Info
+      </Pill>
+      <Pill color="neutral" variant="filled">
+        Neutral
+      </Pill>
     </div>
   ),
   parameters: {
@@ -79,13 +93,27 @@ export const FilledColors: Story = {
 export const OutlinedColors: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
-      <Pill color="primary" variant="outlined">Primary</Pill>
-      <Pill color="secondary" variant="outlined">Secondary</Pill>
-      <Pill color="success" variant="outlined">Success</Pill>
-      <Pill color="warning" variant="outlined">Warning</Pill>
-      <Pill color="danger" variant="outlined">Danger</Pill>
-      <Pill color="info" variant="outlined">Info</Pill>
-      <Pill color="neutral" variant="outlined">Neutral</Pill>
+      <Pill color="primary" variant="outlined">
+        Primary
+      </Pill>
+      <Pill color="secondary" variant="outlined">
+        Secondary
+      </Pill>
+      <Pill color="success" variant="outlined">
+        Success
+      </Pill>
+      <Pill color="warning" variant="outlined">
+        Warning
+      </Pill>
+      <Pill color="danger" variant="outlined">
+        Danger
+      </Pill>
+      <Pill color="info" variant="outlined">
+        Info
+      </Pill>
+      <Pill color="neutral" variant="outlined">
+        Neutral
+      </Pill>
     </div>
   ),
   parameters: {
@@ -102,13 +130,27 @@ export const OutlinedColors: Story = {
 export const SubtleColors: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap', alignItems: 'center' }}>
-      <Pill color="primary" variant="subtle">Primary</Pill>
-      <Pill color="secondary" variant="subtle">Secondary</Pill>
-      <Pill color="success" variant="subtle">Success</Pill>
-      <Pill color="warning" variant="subtle">Warning</Pill>
-      <Pill color="danger" variant="subtle">Danger</Pill>
-      <Pill color="info" variant="subtle">Info</Pill>
-      <Pill color="neutral" variant="subtle">Neutral</Pill>
+      <Pill color="primary" variant="subtle">
+        Primary
+      </Pill>
+      <Pill color="secondary" variant="subtle">
+        Secondary
+      </Pill>
+      <Pill color="success" variant="subtle">
+        Success
+      </Pill>
+      <Pill color="warning" variant="subtle">
+        Warning
+      </Pill>
+      <Pill color="danger" variant="subtle">
+        Danger
+      </Pill>
+      <Pill color="info" variant="subtle">
+        Info
+      </Pill>
+      <Pill color="neutral" variant="subtle">
+        Neutral
+      </Pill>
     </div>
   ),
   parameters: {

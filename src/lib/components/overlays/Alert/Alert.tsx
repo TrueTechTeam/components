@@ -168,7 +168,9 @@ export const Alert = forwardRef<HTMLDivElement, AlertProps>(
 
     // Render icon
     const renderIcon = () => {
-      if (hideIcon) return null;
+      if (hideIcon) {
+        return null;
+      }
 
       const iconToRender = icon ?? preset.icon;
 
@@ -192,11 +194,7 @@ export const Alert = forwardRef<HTMLDivElement, AlertProps>(
       <div className={styles.alertActions}>
         {extraActions}
         {shouldShowCancel && (
-          <Button
-            variant="ghost"
-            onClick={handleCancel}
-            data-testid="alert-cancel-button"
-          >
+          <Button variant="ghost" onClick={handleCancel} data-testid="alert-cancel-button">
             {cancelText ?? preset.cancelText ?? 'Cancel'}
           </Button>
         )}

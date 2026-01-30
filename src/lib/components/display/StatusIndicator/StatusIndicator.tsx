@@ -10,7 +10,17 @@ export interface StatusIndicatorProps extends BaseComponentProps {
    * Status variant of the indicator
    * @default 'neutral'
    */
-  status?: 'online' | 'offline' | 'away' | 'busy' | 'success' | 'warning' | 'error' | 'info' | 'neutral' | 'processing';
+  status?:
+    | 'online'
+    | 'offline'
+    | 'away'
+    | 'busy'
+    | 'success'
+    | 'warning'
+    | 'error'
+    | 'info'
+    | 'neutral'
+    | 'processing';
 
   /**
    * Size of the indicator

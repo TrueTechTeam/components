@@ -308,10 +308,7 @@ export const WithCustomRenderChip: Story = {
 
 export const Interactive: Story = {
   render: () => (
-    <FilterProvider
-      filters={sampleFilters}
-      onChange={action('onChange')}
-    >
+    <FilterProvider filters={sampleFilters} onChange={action('onChange')}>
       <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '1rem' }}>
           <FilterField filterId="status" />

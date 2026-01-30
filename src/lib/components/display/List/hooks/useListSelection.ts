@@ -31,13 +31,17 @@ export function useListSelection({
 
   const onSelectItem = useCallback(
     (key: string, selected: boolean) => {
-      if (selectionMode === 'none') {return;}
+      if (selectionMode === 'none') {
+        return;
+      }
 
       const newKeys = new Set(selectedSet);
 
       if (selectionMode === 'single') {
         newKeys.clear();
-        if (selected) {newKeys.add(key);}
+        if (selected) {
+          newKeys.add(key);
+        }
       } else if (selectionMode === 'multiple') {
         if (selected) {
           newKeys.add(key);
@@ -53,7 +57,9 @@ export function useListSelection({
 
   const onSelectAll = useCallback(
     (selected: boolean) => {
-      if (selectionMode !== 'multiple') {return;}
+      if (selectionMode !== 'multiple') {
+        return;
+      }
 
       const newKeys = selected ? new Set(allItemKeys) : new Set<string>();
       updateSelection(newKeys);

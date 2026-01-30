@@ -70,9 +70,8 @@ export const ActiveFilters = forwardRef<HTMLDivElement, ActiveFiltersProps>(
     };
 
     // Determine which filters to show
-    const visibleFilters = maxVisible && !showAll
-      ? activeFilters.slice(0, maxVisible)
-      : activeFilters;
+    const visibleFilters =
+      maxVisible && !showAll ? activeFilters.slice(0, maxVisible) : activeFilters;
 
     const hiddenCount = maxVisible ? activeFilters.length - maxVisible : 0;
     const hasHiddenFilters = hiddenCount > 0 && !showAll;

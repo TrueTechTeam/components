@@ -11,10 +11,7 @@ interface TableRowProps<T = Record<string, unknown>> {
   rowIndex: number;
 }
 
-export function TableRow<T extends Record<string, unknown>>({
-  row,
-  rowIndex,
-}: TableRowProps<T>) {
+export function TableRow<T extends Record<string, unknown>>({ row, rowIndex }: TableRowProps<T>) {
   const {
     columns,
     getRowKey,
@@ -94,10 +91,7 @@ export function TableRow<T extends Record<string, unknown>>({
               aria-label={isExpanded ? 'Collapse row' : 'Expand row'}
               aria-expanded={isExpanded}
             >
-              <Icon
-                name={isExpanded ? 'chevron-down' : 'chevron-right'}
-                size={16}
-              />
+              <Icon name={isExpanded ? 'chevron-down' : 'chevron-right'} size={16} />
             </button>
           </div>
         )}
@@ -116,11 +110,7 @@ export function TableRow<T extends Record<string, unknown>>({
 
         {/* Selection cell - single mode (radio button) */}
         {selectionMode === 'single' && showSelectionControls && (
-          <div
-            className={styles.tableCell}
-            data-type="radio-selection"
-            role="cell"
-          >
+          <div className={styles.tableCell} data-type="radio-selection" role="cell">
             <button
               type="button"
               className={styles.radioButton}
@@ -128,10 +118,7 @@ export function TableRow<T extends Record<string, unknown>>({
               aria-label={`Select row ${rowIndex + 1}`}
               aria-pressed={isSelected}
             >
-              <span
-                className={styles.radioIndicator}
-                data-selected={isSelected || undefined}
-              />
+              <span className={styles.radioIndicator} data-selected={isSelected || undefined} />
             </button>
           </div>
         )}
@@ -152,9 +139,7 @@ export function TableRow<T extends Record<string, unknown>>({
       {hasExpandableRows && expandedRowRender && (
         <Collapse isOpen={isExpanded} unmountOnCollapse>
           <div className={styles.expandedRow} role="row">
-            <div className={styles.expandedContent}>
-              {expandedRowRender(row, rowIndex)}
-            </div>
+            <div className={styles.expandedContent}>{expandedRowRender(row, rowIndex)}</div>
           </div>
         </Collapse>
       )}

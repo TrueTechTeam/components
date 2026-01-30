@@ -2,7 +2,6 @@ import React, { forwardRef, useCallback, useRef, useState, useImperativeHandle }
 import type { BaseComponentProps } from '../../../types';
 import styles from './ScrollArea.module.scss';
 
-
 export interface ScrollAreaRef {
   /**
    * Scroll to specific position
@@ -156,17 +155,19 @@ export const ScrollArea = forwardRef<ScrollAreaRef, ScrollAreaProps>(
     // Imperative handle for programmatic scrolling
     useImperativeHandle(ref, () => ({
       scrollTo: (options) => viewportRef.current?.scrollTo(options),
-      scrollToTop: (behavior = 'smooth') =>
-        viewportRef.current?.scrollTo({ top: 0, behavior }),
+      scrollToTop: (behavior = 'smooth') => viewportRef.current?.scrollTo({ top: 0, behavior }),
       scrollToBottom: (behavior = 'smooth') => {
         const el = viewportRef.current;
-        if (el) el.scrollTo({ top: el.scrollHeight, behavior });
+        if (el) {
+          el.scrollTo({ top: el.scrollHeight, behavior });
+        }
       },
-      scrollToLeft: (behavior = 'smooth') =>
-        viewportRef.current?.scrollTo({ left: 0, behavior }),
+      scrollToLeft: (behavior = 'smooth') => viewportRef.current?.scrollTo({ left: 0, behavior }),
       scrollToRight: (behavior = 'smooth') => {
         const el = viewportRef.current;
-        if (el) el.scrollTo({ left: el.scrollWidth, behavior });
+        if (el) {
+          el.scrollTo({ left: el.scrollWidth, behavior });
+        }
       },
       getScrollPosition: () => ({
         scrollTop: viewportRef.current?.scrollTop ?? 0,
@@ -189,10 +190,18 @@ export const ScrollArea = forwardRef<ScrollAreaRef, ScrollAreaProps>(
         const newAtRight = scrollLeft + clientWidth >= scrollWidth - scrollEndThreshold;
 
         // Trigger callbacks on position changes
-        if (newAtTop && !atTop) onScrollToTop?.();
-        if (newAtBottom && !atBottom) onScrollToBottom?.();
-        if (newAtLeft && !atLeft) onScrollToLeft?.();
-        if (newAtRight && !atRight) onScrollToRight?.();
+        if (newAtTop && !atTop) {
+          onScrollToTop?.();
+        }
+        if (newAtBottom && !atBottom) {
+          onScrollToBottom?.();
+        }
+        if (newAtLeft && !atLeft) {
+          onScrollToLeft?.();
+        }
+        if (newAtRight && !atRight) {
+          onScrollToRight?.();
+        }
 
         setAtTop(newAtTop);
         setAtBottom(newAtBottom);
@@ -218,8 +227,7 @@ export const ScrollArea = forwardRef<ScrollAreaRef, ScrollAreaProps>(
     const containerClasses = [styles.scrollArea, className].filter(Boolean).join(' ');
 
     const containerStyle = {
-      '--scroll-area-max-height':
-        typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight,
+      '--scroll-area-max-height': typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight,
       '--scroll-area-max-width': typeof maxWidth === 'number' ? `${maxWidth}px` : maxWidth,
       ...style,
     } as React.CSSProperties;
@@ -238,12 +246,7 @@ export const ScrollArea = forwardRef<ScrollAreaRef, ScrollAreaProps>(
         style={containerStyle}
         {...restProps}
       >
-        <div
-          ref={viewportRef}
-          className={styles.viewport}
-          onScroll={handleScroll}
-          tabIndex={0}
-        >
+        <div ref={viewportRef} className={styles.viewport} onScroll={handleScroll} tabIndex={0}>
           {children}
         </div>
       </div>

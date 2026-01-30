@@ -167,4 +167,3 @@ export const FilterBar = forwardRef<HTMLDivElement, FilterBarProps>(
 FilterBar.displayName = 'FilterBar';
 
 export default FilterBar;
-

@@ -23,23 +23,10 @@ export interface CheckboxFilterProps extends BaseComponentProps {
  */
 export const CheckboxFilter = forwardRef<HTMLDivElement, CheckboxFilterProps>(
   (
-    {
-      filterId,
-      label: labelOverride,
-      size = 'md',
-      checkboxProps,
-      className,
-      ...restProps
-    },
+    { filterId, label: labelOverride, size = 'md', checkboxProps, className, ...restProps },
     ref
   ) => {
-    const {
-      filter,
-      value,
-      setValue,
-      isEnabled,
-      error,
-    } = useFilter<boolean>({ filterId });
+    const { filter, value, setValue, isEnabled, error } = useFilter<boolean>({ filterId });
 
     if (!filter) {
       console.warn(`CheckboxFilter: Filter "${filterId}" not found`);

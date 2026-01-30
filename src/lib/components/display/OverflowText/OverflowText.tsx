@@ -173,4 +173,3 @@ export const OverflowText = forwardRef<HTMLElement, OverflowTextProps>(
 OverflowText.displayName = 'OverflowText';
 
 export default OverflowText;
-

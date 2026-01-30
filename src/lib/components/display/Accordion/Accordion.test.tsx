@@ -409,7 +409,9 @@ describe('Accordion', () => {
   });
 
   describe('Context Integration', () => {
-    const createMockContext = (overrides: Partial<AccordionContextValue> = {}): AccordionContextValue => ({
+    const createMockContext = (
+      overrides: Partial<AccordionContextValue> = {}
+    ): AccordionContextValue => ({
       expandedIds: new Set<string>(),
       toggleAccordion: jest.fn(),
       mode: 'multiple',

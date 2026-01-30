@@ -428,4 +428,3 @@ export const WithScrollingContent: Story = {
     </div>
   ),
 };
-

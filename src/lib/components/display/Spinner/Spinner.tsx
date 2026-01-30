@@ -191,9 +191,7 @@ export const Spinner = forwardRef<HTMLDivElement, SpinnerProps>(
         ) : (
           renderSpinner()
         )}
-        <span className={showSrText ? styles.spinnerText : styles.srOnly}>
-          {srText}
-        </span>
+        <span className={showSrText ? styles.spinnerText : styles.srOnly}>{srText}</span>
       </div>
     );
   }

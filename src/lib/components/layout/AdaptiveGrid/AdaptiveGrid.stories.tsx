@@ -189,9 +189,16 @@ export const FillModeComparison: Story = {
     <div style={{ display: 'flex', flexDirection: 'column', gap: 32, width: 800 }}>
       <div>
         <p style={{ margin: '0 0 8px' }}>
-          <strong>auto-fill</strong> - Items stay at minimum width, empty column tracks are preserved:
+          <strong>auto-fill</strong> - Items stay at minimum width, empty column tracks are
+          preserved:
         </p>
-        <div style={{ border: '1px dashed var(--theme-border-primary)', padding: 16, background: 'var(--theme-background-secondary)' }}>
+        <div
+          style={{
+            border: '1px dashed var(--theme-border-primary)',
+            padding: 16,
+            background: 'var(--theme-background-secondary)',
+          }}
+        >
           <AdaptiveGrid minItemWidth={150} fillMode="auto-fill" gap={16}>
             {Array.from({ length: 2 }, (_, i) => (
               <Card key={i} variant="filled" padding="md" fullWidth>
@@ -203,9 +210,16 @@ export const FillModeComparison: Story = {
       </div>
       <div>
         <p style={{ margin: '0 0 8px' }}>
-          <strong>auto-fit</strong> - Items expand to fill available space when there are fewer items than columns:
+          <strong>auto-fit</strong> - Items expand to fill available space when there are fewer
+          items than columns:
         </p>
-        <div style={{ border: '1px dashed var(--theme-border-primary)', padding: 16, background: 'var(--theme-background-secondary)' }}>
+        <div
+          style={{
+            border: '1px dashed var(--theme-border-primary)',
+            padding: 16,
+            background: 'var(--theme-background-secondary)',
+          }}
+        >
           <AdaptiveGrid minItemWidth={150} fillMode="auto-fit" gap={16}>
             {Array.from({ length: 2 }, (_, i) => (
               <Card key={i} variant="filled" padding="md" fullWidth>
@@ -264,7 +278,13 @@ export const AlignmentOptions: Story = {
           <p style={{ margin: '0 0 8px' }}>
             <strong>alignItems: {align}</strong>
           </p>
-          <div style={{ border: '1px dashed var(--theme-border-primary)', padding: 16, background: 'var(--theme-background-secondary)' }}>
+          <div
+            style={{
+              border: '1px dashed var(--theme-border-primary)',
+              padding: 16,
+              background: 'var(--theme-background-secondary)',
+            }}
+          >
             <AdaptiveGrid minItemWidth={150} gap={16} alignItems={align}>
               <Card variant="filled" padding="md" fullWidth>
                 <div style={{ height: 40 }}>Short</div>
@@ -273,7 +293,9 @@ export const AlignmentOptions: Story = {
                 <div style={{ height: 80 }}>Medium height content that takes more space</div>
               </Card>
               <Card variant="filled" padding="md" fullWidth>
-                <div style={{ height: 120 }}>Tall content that takes the most vertical space in this row</div>
+                <div style={{ height: 120 }}>
+                  Tall content that takes the most vertical space in this row
+                </div>
               </Card>
             </AdaptiveGrid>
           </div>
@@ -294,15 +316,33 @@ export const JustifyOptions: Story = {
           <p style={{ margin: '0 0 8px' }}>
             <strong>justifyItems: {justify}</strong>
           </p>
-          <div style={{ border: '1px dashed var(--theme-border-primary)', padding: 16, background: 'var(--theme-background-secondary)' }}>
+          <div
+            style={{
+              border: '1px dashed var(--theme-border-primary)',
+              padding: 16,
+              background: 'var(--theme-background-secondary)',
+            }}
+          >
             <AdaptiveGrid minItemWidth={200} gap={16} justifyItems={justify}>
-              <Card variant="filled" padding="md" style={{ width: justify === 'stretch' ? '100%' : '120px' }}>
+              <Card
+                variant="filled"
+                padding="md"
+                style={{ width: justify === 'stretch' ? '100%' : '120px' }}
+              >
                 <div style={{ textAlign: 'center' }}>Narrow</div>
               </Card>
-              <Card variant="filled" padding="md" style={{ width: justify === 'stretch' ? '100%' : '120px' }}>
+              <Card
+                variant="filled"
+                padding="md"
+                style={{ width: justify === 'stretch' ? '100%' : '120px' }}
+              >
                 <div style={{ textAlign: 'center' }}>Narrow</div>
               </Card>
-              <Card variant="filled" padding="md" style={{ width: justify === 'stretch' ? '100%' : '120px' }}>
+              <Card
+                variant="filled"
+                padding="md"
+                style={{ width: justify === 'stretch' ? '100%' : '120px' }}
+              >
                 <div style={{ textAlign: 'center' }}>Narrow</div>
               </Card>
             </AdaptiveGrid>
@@ -420,4 +460,3 @@ export const MixedContent: Story = {
     </div>
   ),
 };
-

@@ -86,4 +86,3 @@ export const SelectFilter = forwardRef<HTMLDivElement, SelectFilterProps>(
 SelectFilter.displayName = 'SelectFilter';
 
 export default SelectFilter;
-

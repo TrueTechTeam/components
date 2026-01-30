@@ -155,15 +155,8 @@ export const SideNavGroup = forwardRef<HTMLDivElement, SideNavGroupProps>(
         )}
 
         {!collapsed && (
-          <Collapse
-            isOpen={isExpanded}
-            data-testid={testId ? `${testId}-content` : undefined}
-          >
-            <div
-              id={`${groupId}-content`}
-              role="group"
-              aria-label={label}
-            >
+          <Collapse isOpen={isExpanded} data-testid={testId ? `${testId}-content` : undefined}>
+            <div id={`${groupId}-content`} role="group" aria-label={label}>
               {childrenWithLevel}
             </div>
           </Collapse>

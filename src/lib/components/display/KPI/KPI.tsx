@@ -148,9 +148,7 @@ export const KPI = forwardRef<HTMLDivElement, KPIProps>(
 
         {trend && <div className={styles.kpiTrend}>{trend}</div>}
 
-        {(footer || children) && (
-          <div className={styles.kpiFooter}>{footer || children}</div>
-        )}
+        {(footer || children) && <div className={styles.kpiFooter}>{footer || children}</div>}
       </div>
     );
   }

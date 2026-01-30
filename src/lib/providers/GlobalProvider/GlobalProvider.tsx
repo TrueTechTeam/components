@@ -114,9 +114,7 @@ export function GlobalProvider({
       <PageMessagesProvider {...pageMessagesConfig}>
         <DialogProvider {...dialogConfig}>
           <AlertProvider {...alertConfig}>
-            <ToastProvider {...toastConfig}>
-              {children}
-            </ToastProvider>
+            <ToastProvider {...toastConfig}>{children}</ToastProvider>
           </AlertProvider>
         </DialogProvider>
       </PageMessagesProvider>

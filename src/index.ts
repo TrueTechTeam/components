@@ -31,6 +31,40 @@ export type { UseAsyncToastReturn, AsyncToastConfig } from './lib/hooks';
 export { useResizeObserver } from './lib/hooks';
 export type { UseResizeObserverOptions, UseResizeObserverReturn } from './lib/hooks';
 
+// URL State Hook
+export { useUrlState, urlStateSerializers } from './lib/hooks';
+export type { UseUrlStateOptions, UseUrlStateReturn, UrlStateSerializer } from './lib/hooks';
+
+// Intersection Observer Hook
+export { useIntersectionObserver } from './lib/hooks';
+export type { UseIntersectionObserverOptions, UseIntersectionObserverReturn } from './lib/hooks';
+
+// Local Storage Hook
+export { useLocalStorage } from './lib/hooks';
+export type {
+  UseLocalStorageOptions,
+  UseLocalStorageReturn,
+  LocalStorageSerializer,
+} from './lib/hooks';
+
+// Media Query Hook
+export { useMediaQuery } from './lib/hooks';
+export type { UseMediaQueryOptions, UseMediaQueryReturn } from './lib/hooks';
+
+// Previous Value Hook
+export { usePrevious } from './lib/hooks';
+
+// Clipboard Hook
+export { useClipboard } from './lib/hooks';
+export type { UseClipboardOptions, UseClipboardReturn } from './lib/hooks';
+
+// Timer Hooks
+export { useTimeout } from './lib/hooks';
+export type { UseTimeoutOptions, UseTimeoutReturn } from './lib/hooks';
+
+export { useInterval } from './lib/hooks';
+export type { UseIntervalOptions, UseIntervalReturn } from './lib/hooks';
+
 // Types
 export type {
   // Theme types

@@ -40,14 +40,11 @@ describe('IconButton', () => {
   });
 
   describe('sizes', () => {
-    it.each(['xs', 'sm', 'md', 'lg', 'xl'] as const)(
-      'should render %s size',
-      (size) => {
-        render(<IconButton icon="check" aria-label="Confirm" size={size} />);
-        const button = screen.getByRole('button');
-        expect(button).toHaveAttribute('data-size', size);
-      }
-    );
+    it.each(['xs', 'sm', 'md', 'lg', 'xl'] as const)('should render %s size', (size) => {
+      render(<IconButton icon="check" aria-label="Confirm" size={size} />);
+      const button = screen.getByRole('button');
+      expect(button).toHaveAttribute('data-size', size);
+    });
 
     it('should default to md size', () => {
       render(<IconButton icon="check" aria-label="Confirm" />);
@@ -66,9 +63,7 @@ describe('IconButton', () => {
 
     it('should not trigger click when disabled', () => {
       const handleClick = jest.fn();
-      render(
-        <IconButton icon="check" aria-label="Confirm" onClick={handleClick} disabled />
-      );
+      render(<IconButton icon="check" aria-label="Confirm" onClick={handleClick} disabled />);
       fireEvent.click(screen.getByRole('button'));
       expect(handleClick).not.toHaveBeenCalled();
     });

@@ -125,4 +125,3 @@ export const TextFilter = forwardRef<HTMLDivElement, TextFilterProps>(
 TextFilter.displayName = 'TextFilter';
 
 export default TextFilter;
-

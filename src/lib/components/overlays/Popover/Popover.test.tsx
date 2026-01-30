@@ -35,11 +35,7 @@ describe('Popover', () => {
 
     it('should render with data-testid', () => {
       render(
-        <Popover
-          trigger={<button>Trigger</button>}
-          isOpen
-          data-testid="custom-popover"
-        >
+        <Popover trigger={<button>Trigger</button>} isOpen data-testid="custom-popover">
           Popover Content
         </Popover>
       );
@@ -112,11 +108,7 @@ describe('Popover', () => {
       'right',
     ] as const)('should apply %s position', (position) => {
       render(
-        <Popover
-          trigger={<button>Trigger</button>}
-          isOpen
-          position={position}
-        >
+        <Popover trigger={<button>Trigger</button>} isOpen position={position}>
           Popover Content
         </Popover>
       );
@@ -188,12 +180,7 @@ describe('Popover', () => {
       const onClose = jest.fn();
 
       render(
-        <Popover
-          trigger={<button>Trigger</button>}
-          isOpen
-          onClose={onClose}
-          closeOnClickOutside
-        >
+        <Popover trigger={<button>Trigger</button>} isOpen onClose={onClose} closeOnClickOutside>
           Popover Content
         </Popover>
       );
@@ -217,10 +204,7 @@ describe('Popover', () => {
 
     it('should support render prop trigger', () => {
       render(
-        <Popover
-          trigger={({ ref }) => <button ref={ref}>Render Prop</button>}
-          isOpen
-        >
+        <Popover trigger={({ ref }) => <button ref={ref}>Render Prop</button>} isOpen>
           Popover Content
         </Popover>
       );
