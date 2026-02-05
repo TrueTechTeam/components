@@ -30,8 +30,6 @@ export const NavbarCollapse = forwardRef<HTMLDivElement, NavbarCollapseProps>(
   ({ children, className, 'data-testid': testId, style, ...restProps }, ref) => {
     const { navbarId, isExpanded, isMobile } = useNavbarContextStrict();
 
-    console.log(isMobile);
-
     const componentClasses = [styles.collapse, className].filter(Boolean).join(' ');
 
     return (

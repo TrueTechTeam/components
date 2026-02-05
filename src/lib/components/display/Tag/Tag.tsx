@@ -107,7 +107,7 @@ export const Tag = forwardRef<HTMLElement, TagProps>(
 
     return (
       <Component
-        ref={ref as any}
+        ref={ref as React.Ref<HTMLButtonElement & HTMLSpanElement>}
         className={componentClasses}
         data-component="tag"
         data-variant={variant}

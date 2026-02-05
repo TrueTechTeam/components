@@ -7,6 +7,7 @@ import {
   useCallback,
   useEffect,
   useRef,
+  useMemo,
   type ReactNode,
   type KeyboardEvent,
 } from 'react';
@@ -113,10 +114,13 @@ export const Menu: React.FC<MenuProps> = ({
     new Set(defaultSelectedKeys)
   );
 
-  const selectedKeys =
-    controlledSelectedKeys !== undefined
-      ? new Set(controlledSelectedKeys)
-      : uncontrolledSelectedKeys;
+  const selectedKeys = useMemo(
+    () =>
+      controlledSelectedKeys !== undefined
+        ? new Set(controlledSelectedKeys)
+        : uncontrolledSelectedKeys,
+    [controlledSelectedKeys, uncontrolledSelectedKeys]
+  );
 
   // Focus state
   const [focusedIndex, setFocusedIndex] = useState(-1);
@@ -125,7 +129,7 @@ export const Menu: React.FC<MenuProps> = ({
   const nextIndexRef = useRef(0);
 
   // Type-ahead state
-  const [itemLabels, setItemLabels] = useState<Map<number, string>>(new Map());
+  const [, setItemLabels] = useState<Map<number, string>>(new Map());
   const [searchString, setSearchString] = useState('');
   const searchTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -272,65 +276,9 @@ export const Menu: React.FC<MenuProps> = ({
     [] // No dependencies - stable!
   );
 
-  // Find matching item based on search string
-  const findMatchingItem = useCallback(
-    (searchStr: string, currentIndex: number) => {
-      const searchLower = searchStr.toLowerCase();
-      const items = Array.from(itemLabels.entries());
-
-      if (searchStr.length === 1) {
-        // Single character - cycle through matches
-        // Find all items starting with this character
-        const matches = items.filter(([_, label]) => label.toLowerCase().startsWith(searchLower));
-
-        if (matches.length === 0) {
-          return -1;
-        }
-
-        // Find next match after current index (wrap around)
-        const currentMatchIndex = matches.findIndex(([index]) => index === currentIndex);
-        const nextMatchIndex = (currentMatchIndex + 1) % matches.length;
-        return matches[nextMatchIndex][0];
-      } else {
-        // Multiple characters - jump to first match
-        const match = items.find(([_, label]) => label.toLowerCase().startsWith(searchLower));
-        return match ? match[0] : -1;
-      }
-    },
-    [itemLabels]
-  );
-
-  // Handle type-ahead key press
-  const handleTypeAheadKeyPress = useCallback(
-    (key: string) => {
-      // Clear existing timeout
-      if (searchTimeoutRef.current) {
-        clearTimeout(searchTimeoutRef.current);
-      }
-
-      // Append character to search string
-      const newSearchString = searchString + key;
-      setSearchString(newSearchString);
-
-      // Find matching item
-      const matchIndex = findMatchingItem(newSearchString, focusedIndex);
-
-      if (matchIndex !== -1) {
-        setFocusedIndex(matchIndex);
-      }
-
-      // Set timeout to reset search string
-      searchTimeoutRef.current = setTimeout(() => {
-        resetSearchString();
-      }, typeAheadDelay);
-    },
-    [searchString, focusedIndex, findMatchingItem, resetSearchString, typeAheadDelay]
-  );
-
   // Keyboard navigation
   const handleKeyDown = useCallback(
     (event: KeyboardEvent) => {
-      console.log(event.key);
       // Handle type-ahead if enabled
       if (enableTypeAhead && event.key.length === 1) {
         // Only handle printable characters (not modifier keys)

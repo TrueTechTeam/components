@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { forwardRef, useMemo } from 'react';
 import type { TableProps, ColumnConfig, TableContextValue } from './types';
 import { TableContext } from './TableContext';
@@ -17,7 +18,7 @@ import { autoGenerateColumns, sortData, calculateColumnWidths } from './utils';
 import styles from './Table.module.scss';
 
 // Generic component with forwardRef
-function TableInner<T extends Record<string, unknown>>(
+function TableInner<T extends Record<string, any>>(
   {
     data,
     columns: columnsProp,
@@ -315,7 +316,7 @@ function TableInner<T extends Record<string, unknown>>(
 
 // Wrap with forwardRef while preserving generic type
 export const Table = forwardRef(TableInner) as <
-  T extends Record<string, unknown> = Record<string, unknown>,
+  T extends Record<string, any> = Record<string, unknown>,
 >(
   props: TableProps<T> & { ref?: React.ForwardedRef<HTMLDivElement> }
 ) => React.ReactElement;

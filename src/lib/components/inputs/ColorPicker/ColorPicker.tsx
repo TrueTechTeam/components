@@ -116,6 +116,34 @@ const DEFAULT_PRESETS = [
 ];
 
 /**
+ * Parse a color string to RGB and HSL values with alpha
+ */
+const parseColor = (colorValue: string): { rgb: RGB; hsl: HSL; alpha: number } => {
+  let alpha = 1;
+
+  // Extract alpha from rgba/hsla/hex8
+  const rgbaMatch = colorValue.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
+  if (rgbaMatch && rgbaMatch[4]) {
+    alpha = parseFloat(rgbaMatch[4]);
+  }
+
+  const hslaMatch = colorValue.match(/hsla?\((\d+),\s*(\d+)%,\s*(\d+)%(?:,\s*([\d.]+))?\)/);
+  if (hslaMatch && hslaMatch[4]) {
+    alpha = parseFloat(hslaMatch[4]);
+  }
+
+  // Extract alpha from 8-character hex (#RRGGBBAA)
+  if (colorValue.startsWith('#') && colorValue.length === 9) {
+    const alphaHex = colorValue.substring(7, 9);
+    alpha = parseInt(alphaHex, 16) / 255;
+  }
+
+  const rgb = parseColorToRgb(colorValue) || { r: 255, g: 87, b: 51 };
+  const hsl = rgbToHsl(rgb);
+  return { rgb, hsl, alpha };
+};
+
+/**
  * ColorPicker component with HSL/RGB sliders and color canvas
  *
  * @example
@@ -155,32 +183,6 @@ export const ColorPicker = forwardRef<HTMLInputElement, ColorPickerProps>(
     ref
   ) => {
     const id = useId();
-
-    // Parse initial color
-    const parseColor = (colorValue: string): { rgb: RGB; hsl: HSL; alpha: number } => {
-      let alpha = 1;
-
-      // Extract alpha from rgba/hsla/hex8
-      const rgbaMatch = colorValue.match(/rgba?\((\d+),\s*(\d+),\s*(\d+)(?:,\s*([\d.]+))?\)/);
-      if (rgbaMatch && rgbaMatch[4]) {
-        alpha = parseFloat(rgbaMatch[4]);
-      }
-
-      const hslaMatch = colorValue.match(/hsla?\((\d+),\s*(\d+)%,\s*(\d+)%(?:,\s*([\d.]+))?\)/);
-      if (hslaMatch && hslaMatch[4]) {
-        alpha = parseFloat(hslaMatch[4]);
-      }
-
-      // Extract alpha from 8-character hex (#RRGGBBAA)
-      if (colorValue.startsWith('#') && colorValue.length === 9) {
-        const alphaHex = colorValue.substring(7, 9);
-        alpha = parseInt(alphaHex, 16) / 255;
-      }
-
-      const rgb = parseColorToRgb(colorValue) || { r: 255, g: 87, b: 51 };
-      const hsl = rgbToHsl(rgb);
-      return { rgb, hsl, alpha };
-    };
 
     // Format color based on format prop
     const formatColor = useCallback(
@@ -243,7 +245,7 @@ export const ColorPicker = forwardRef<HTMLInputElement, ColorPickerProps>(
         return formatColor(color.rgb, color.hsl, color.alpha, format);
       }
       return null;
-    }, [controlledValue, format, formatColor, parseColor]);
+    }, [controlledValue, format, formatColor]);
 
     useEffect(() => {
       if (formattedControlledValue !== null && inputValue !== formattedControlledValue) {

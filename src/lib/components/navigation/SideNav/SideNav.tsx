@@ -127,7 +127,7 @@ export const SideNav = forwardRef<HTMLElement, SideNavProps>(
 
     // Collapsed state
     const isCollapsedControlled = controlledCollapsed !== undefined;
-    const [internalCollapsed, _setInternalCollapsed] = useState(defaultCollapsed);
+    const [internalCollapsed] = useState(defaultCollapsed);
     const collapsed = isCollapsedControlled ? controlledCollapsed : internalCollapsed;
 
     // Selected state

@@ -115,7 +115,7 @@ export function groupItems<T extends Record<string, unknown>>(
     if (!groups.has(groupKey)) {
       groups.set(groupKey, []);
     }
-    groups.get(groupKey)!.push(item);
+    groups.get(groupKey)?.push(item);
   });
 
   return groups;

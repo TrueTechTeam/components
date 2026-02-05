@@ -373,9 +373,10 @@ export const Panes = forwardRef<HTMLDivElement, PanesProps>(
 
     // Clean up timeouts on unmount
     useEffect(() => {
+      const timeoutsMap = animationTimeoutsRef.current;
       return () => {
-        animationTimeoutsRef.current.forEach((timeout) => clearTimeout(timeout));
-        animationTimeoutsRef.current.clear();
+        timeoutsMap.forEach((timeout) => clearTimeout(timeout));
+        timeoutsMap.clear();
       };
     }, []);
 

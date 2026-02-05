@@ -1,6 +1,11 @@
 /**
  * Type definitions for FormBuilder component
+ *
+ * Note: `any` types are used intentionally for form values since form fields
+ * can contain values of any type (string, number, boolean, array, object, etc.)
  */
+
+/* eslint-disable @typescript-eslint/no-explicit-any */
 
 export type FormFieldType =
   | 'input'

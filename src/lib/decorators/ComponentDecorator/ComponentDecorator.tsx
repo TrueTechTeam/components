@@ -70,14 +70,7 @@ export function withComponentDecorator<P extends object>(
     HTMLDivElement,
     P & Omit<ComponentDecoratorProps, 'componentName'>
   >((props, ref) => {
-    const {
-      className,
-      cssVariables,
-      as: Element = 'div',
-      'data-testid': testId,
-      children,
-      ...restProps
-    } = props;
+    const { className, cssVariables, 'data-testid': testId, children, ...restProps } = props;
 
     // Generate CSS variable styles
     const cssVarStyles = cssVariables

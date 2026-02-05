@@ -9,8 +9,8 @@ describe('SideNav', () => {
     it('should render with items', () => {
       render(
         <SideNav data-testid="sidenav">
-          <SideNavItem value="home" icon="Home" label="Home" />
-          <SideNavItem value="settings" icon="Settings" label="Settings" />
+          <SideNavItem value="home" icon="home" label="Home" />
+          <SideNavItem value="settings" icon="settings" label="Settings" />
         </SideNav>
       );
 
@@ -25,7 +25,7 @@ describe('SideNav', () => {
           header={<div data-testid="header">Header</div>}
           footer={<div data-testid="footer">Footer</div>}
         >
-          <SideNavItem value="home" icon="Home" label="Home" />
+          <SideNavItem value="home" icon="home" label="Home" />
         </SideNav>
       );
 
@@ -36,7 +36,7 @@ describe('SideNav', () => {
     it('should apply position data attribute', () => {
       render(
         <SideNav position="right" data-testid="sidenav">
-          <SideNavItem value="home" icon="Home" label="Home" />
+          <SideNavItem value="home" icon="home" label="Home" />
         </SideNav>
       );
 
@@ -46,7 +46,7 @@ describe('SideNav', () => {
     it('should apply collapsed data attribute', () => {
       render(
         <SideNav collapsed data-testid="sidenav">
-          <SideNavItem value="home" icon="Home" label="Home" />
+          <SideNavItem value="home" icon="home" label="Home" />
         </SideNav>
       );
 
@@ -59,8 +59,8 @@ describe('SideNav', () => {
       const handleSelect = jest.fn();
       render(
         <SideNav onSelect={handleSelect}>
-          <SideNavItem value="home" icon="Home" label="Home" data-testid="home" />
-          <SideNavItem value="settings" icon="Settings" label="Settings" data-testid="settings" />
+          <SideNavItem value="home" icon="home" label="Home" data-testid="home" />
+          <SideNavItem value="settings" icon="settings" label="Settings" data-testid="settings" />
         </SideNav>
       );
 
@@ -71,8 +71,8 @@ describe('SideNav', () => {
     it('should mark selected item', () => {
       render(
         <SideNav selectedValue="home">
-          <SideNavItem value="home" icon="Home" label="Home" data-testid="home" />
-          <SideNavItem value="settings" icon="Settings" label="Settings" data-testid="settings" />
+          <SideNavItem value="home" icon="home" label="Home" data-testid="home" />
+          <SideNavItem value="settings" icon="settings" label="Settings" data-testid="settings" />
         </SideNav>
       );
 
@@ -83,8 +83,8 @@ describe('SideNav', () => {
     it('should use defaultSelectedValue', () => {
       render(
         <SideNav defaultSelectedValue="settings">
-          <SideNavItem value="home" icon="Home" label="Home" data-testid="home" />
-          <SideNavItem value="settings" icon="Settings" label="Settings" data-testid="settings" />
+          <SideNavItem value="home" icon="home" label="Home" data-testid="home" />
+          <SideNavItem value="settings" icon="settings" label="Settings" data-testid="settings" />
         </SideNav>
       );
 
@@ -97,7 +97,7 @@ describe('SideNav', () => {
       const handleSelect = jest.fn();
       render(
         <SideNav onSelect={handleSelect}>
-          <SideNavItem value="home" icon="Home" label="Home" disabled data-testid="home" />
+          <SideNavItem value="home" icon="home" label="Home" disabled data-testid="home" />
         </SideNav>
       );
 
@@ -108,7 +108,7 @@ describe('SideNav', () => {
     it('should render as link when href is provided', () => {
       render(
         <SideNav>
-          <SideNavItem value="home" icon="Home" label="Home" href="/home" />
+          <SideNavItem value="home" icon="home" label="Home" href="/home" />
         </SideNav>
       );
 
@@ -119,7 +119,7 @@ describe('SideNav', () => {
     it('should have correct accessibility attributes', () => {
       render(
         <SideNav selectedValue="home">
-          <SideNavItem value="home" icon="Home" label="Home" data-testid="home" />
+          <SideNavItem value="home" icon="home" label="Home" data-testid="home" />
         </SideNav>
       );
 
@@ -133,7 +133,7 @@ describe('SideNav', () => {
     it('should toggle group expansion', () => {
       render(
         <SideNav>
-          <SideNavGroup groupId="settings" label="Settings" icon="Settings">
+          <SideNavGroup groupId="settings" label="Settings" icon="settings">
             <SideNavItem value="profile" label="Profile" data-testid="profile" />
           </SideNavGroup>
         </SideNav>
@@ -149,7 +149,7 @@ describe('SideNav', () => {
     it('should respect defaultExpanded', () => {
       render(
         <SideNav>
-          <SideNavGroup groupId="settings" label="Settings" icon="Settings" defaultExpanded>
+          <SideNavGroup groupId="settings" label="Settings" icon="settings" defaultExpanded>
             <SideNavItem value="profile" label="Profile" />
           </SideNavGroup>
         </SideNav>
@@ -164,9 +164,9 @@ describe('SideNav', () => {
     it('should render without label', () => {
       render(
         <SideNav>
-          <SideNavItem value="home" icon="Home" label="Home" />
+          <SideNavItem value="home" icon="home" label="Home" />
           <SideNavDivider data-testid="divider" />
-          <SideNavItem value="settings" icon="Settings" label="Settings" />
+          <SideNavItem value="settings" icon="settings" label="Settings" />
         </SideNav>
       );
 
@@ -188,7 +188,7 @@ describe('SideNav', () => {
     it('should have navigation role', () => {
       render(
         <SideNav data-testid="sidenav">
-          <SideNavItem value="home" icon="Home" label="Home" />
+          <SideNavItem value="home" icon="home" label="Home" />
         </SideNav>
       );
 
@@ -199,7 +199,7 @@ describe('SideNav', () => {
       const handleSelect = jest.fn();
       render(
         <SideNav onSelect={handleSelect}>
-          <SideNavItem value="home" icon="Home" label="Home" data-testid="home" />
+          <SideNavItem value="home" icon="home" label="Home" data-testid="home" />
         </SideNav>
       );
 

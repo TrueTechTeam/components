@@ -65,7 +65,7 @@ export function ListGroup({
 
   // Skip rendering the default group if there's no groupBy
   if (groupKey === '__default__') {
-    return <>{children}</>;
+    return children;
   }
 
   return (

@@ -1,4 +1,4 @@
-import React, { forwardRef, useState, useCallback, useRef, useId, useEffect } from 'react';
+import React, { forwardRef, useState, useCallback, useId, useEffect } from 'react';
 import type { BaseComponentProps } from '../../../types/component.types';
 import { IconButton } from '../../buttons/IconButton';
 import { Select } from '../Select';
@@ -278,7 +278,7 @@ export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
             onOpenChange={setIsPopoverOpen}
             trigger={({ ref: popoverRef }) => (
               <div
-                ref={popoverRef as any}
+                ref={popoverRef as React.RefObject<HTMLDivElement>}
                 onClick={() => {
                   if (!disabled) {
                     setIsPopoverOpen(true);

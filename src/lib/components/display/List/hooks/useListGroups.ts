@@ -17,7 +17,10 @@ export function useListGroups<T extends Record<string, unknown>>({
   );
 
   const isControlled = controlledCollapsed !== undefined;
-  const collapsedSet = isControlled ? new Set(controlledCollapsed) : uncontrolledCollapsed;
+  const collapsedSet = useMemo(
+    () => (isControlled ? new Set(controlledCollapsed) : uncontrolledCollapsed),
+    [isControlled, controlledCollapsed, uncontrolledCollapsed]
+  );
 
   // Group items by the specified key or function
   const groups = useMemo<Array<ListGroup<T>>>(() => {
@@ -34,7 +37,7 @@ export function useListGroups<T extends Record<string, unknown>>({
       if (!groupMap.has(groupKey)) {
         groupMap.set(groupKey, []);
       }
-      groupMap.get(groupKey)!.push(item);
+      groupMap.get(groupKey)?.push(item);
     });
 
     return Array.from(groupMap.entries()).map(([key, items]) => ({

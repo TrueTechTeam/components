@@ -6,7 +6,6 @@ import React, {
   useRef,
   Children,
   isValidElement,
-  cloneElement,
 } from 'react';
 import { useResizeObserver } from '../../../hooks';
 import type { BaseComponentProps } from '../../../types';

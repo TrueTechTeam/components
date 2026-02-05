@@ -368,7 +368,7 @@ export const FilterProvider: React.FC<FilterProviderProps> = ({
     return initialValues;
   });
   const [pendingValues, setPendingValues] = useState<Record<string, FilterValue> | null>(null);
-  const [loadingFilters, _setLoadingFilters] = useState<Set<string>>(new Set());
+  const [loadingFilters] = useState<Set<string>>(new Set());
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [touched, setTouched] = useState<Set<string>>(new Set());
 

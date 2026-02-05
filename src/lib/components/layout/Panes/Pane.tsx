@@ -112,13 +112,13 @@ export const Pane = forwardRef<HTMLDivElement, PaneProps & PaneInternalProps>(
       exitingPanes,
       animationDuration,
       animationEasing,
-      gap,
     } = usePanesContext();
 
     // Calculate effective priority (higher index = higher priority by default)
     const effectivePriority = priority ?? _index;
 
-    // Register/unregister pane
+    // Register/unregister pane - only re-run when id or registration functions change
+    // Other prop updates are handled by the second useEffect below
     useEffect(() => {
       registerPane({
         id,
@@ -134,6 +134,7 @@ export const Pane = forwardRef<HTMLDivElement, PaneProps & PaneInternalProps>(
       return () => {
         unregisterPane(id);
       };
+      // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [id, registerPane, unregisterPane]);
 
     // Update pane config when props change

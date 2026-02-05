@@ -52,7 +52,10 @@ export const FilterAccordion = forwardRef<HTMLDivElement, FilterAccordionProps>(
       () => new Set(defaultExpandedGroups ?? [])
     );
 
-    const expandedIds = controlledExpanded ? new Set(controlledExpanded) : internalExpanded;
+    const expandedIds = useMemo(
+      () => (controlledExpanded ? new Set(controlledExpanded) : internalExpanded),
+      [controlledExpanded, internalExpanded]
+    );
 
     const handleToggle = useCallback(
       (id: string) => {

@@ -2,7 +2,7 @@
  * Hook to manage filter options with async loading support
  */
 
-import { useState, useCallback, useEffect, useRef, useMemo } from 'react';
+import { useState, useCallback, useEffect, useRef } from 'react';
 import type { FilterOption, FilterOptionsLoader, FilterValue } from '../types';
 
 export interface UseFilterOptionsOptions<T = string> {
@@ -124,23 +124,11 @@ export function useFilterOptions<T = string>(
   const [hasMore, setHasMore] = useState(false);
   const [totalCount, setTotalCount] = useState<number | undefined>(undefined);
   const [page, setPage] = useState(1);
-  const [_hasLoadedOnce, setHasLoadedOnce] = useState(false);
+  const [, setHasLoadedOnce] = useState(false);
 
   const debounceMs = loader?.debounceMs ?? 300;
   const debouncedSearchQuery = useDebounce(searchQuery, debounceMs);
   const abortControllerRef = useRef<AbortController | null>(null);
-
-  // Generate cache key (used for cache invalidation)
-  const _cacheKey = useMemo(() => {
-    if (!loader) {
-      return '';
-    }
-    return `${filterId}:${JSON.stringify({
-      search: debouncedSearchQuery,
-      deps: dependencyValues,
-      page,
-    })}`;
-  }, [loader, filterId, debouncedSearchQuery, dependencyValues, page]);
 
   // Load options function
   const loadOptions = useCallback(

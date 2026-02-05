@@ -355,7 +355,7 @@ export const DateRangePicker = forwardRef<HTMLInputElement, DateRangePickerProps
                 }
                 onChange?.(startDate, endDate);
               }
-            } catch (error) {
+            } catch {
               // Invalid date format, ignore
             }
           }
@@ -577,7 +577,7 @@ export const DateRangePicker = forwardRef<HTMLInputElement, DateRangePickerProps
             isOpen={isPopoverOpen}
             onOpenChange={setIsPopoverOpen}
             trigger={({ ref: popoverRef }) => (
-              <div ref={popoverRef as any}>
+              <div ref={popoverRef as React.RefObject<HTMLDivElement>}>
                 <Input
                   {...rest}
                   ref={ref}

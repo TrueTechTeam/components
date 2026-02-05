@@ -32,7 +32,6 @@
   user-select: none;
   white-space: nowrap;
 
-  @include px(4);
   @include py(2);
 
   // Apply colors using CSS variables

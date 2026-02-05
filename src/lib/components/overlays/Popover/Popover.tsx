@@ -175,20 +175,17 @@ export const Popover: React.FC<PopoverProps> = ({
       typeof trigger === 'function' ? (
         trigger({ ref: triggerRef })
       ) : isValidElement(trigger) ? (
-        cloneElement(
-          trigger as ReactElement,
-          {
-            ref: triggerRef,
-            onClick: (event: React.MouseEvent) => {
-              // Call original onClick if it exists
-              const originalOnClick = (trigger as ReactElement).props?.onClick;
-              originalOnClick?.(event);
-              handleTriggerClick(event);
-            },
-          } as any
-        )
+        cloneElement(trigger as ReactElement, {
+          ref: triggerRef,
+          onClick: (event: React.MouseEvent) => {
+            // Call original onClick if it exists
+            const originalOnClick = (trigger as ReactElement).props?.onClick;
+            originalOnClick?.(event);
+            handleTriggerClick(event);
+          },
+        })
       ) : (
-        <span ref={triggerRef as any} onClick={handleTriggerClick}>
+        <span ref={triggerRef} onClick={handleTriggerClick}>
           {trigger}
         </span>
       ),

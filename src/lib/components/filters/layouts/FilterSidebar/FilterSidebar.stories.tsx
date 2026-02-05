@@ -246,7 +246,7 @@ export const WithFooter: Story = {
           header={<h3 style={{ margin: 0, fontSize: '1rem' }}>Filters</h3>}
           footer={
             <div style={{ fontSize: '0.875rem', color: '#666' }}>
-              Need help? <a href="#">Contact support</a>
+              Need help? <a href="/support">Contact support</a>
             </div>
           }
         >

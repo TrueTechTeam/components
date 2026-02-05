@@ -24,7 +24,7 @@ describe('Navbar', () => {
         <Navbar>
           <NavbarBrand data-testid="brand">Brand</NavbarBrand>
           <NavbarNav data-testid="nav">
-            <a href="#">Link</a>
+            <a href="/example">Link</a>
           </NavbarNav>
           <NavbarActions data-testid="actions">
             <button>Action</button>

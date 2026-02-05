@@ -475,7 +475,7 @@ export const Dialog = forwardRef<HTMLDivElement, DialogProps>(
         }, animationDuration);
         return () => clearTimeout(timer);
       }
-    }, [isOpen, animationDuration, onOpenComplete, onCloseComplete]);
+    }, [isOpen, animationDuration, onOpenComplete, onCloseComplete, animationState]);
 
     // Don't render if fully closed
     if (animationState === 'exited' && !isOpen) {

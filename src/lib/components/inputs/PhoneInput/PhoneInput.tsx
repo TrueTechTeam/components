@@ -267,14 +267,6 @@ export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
       .filter(Boolean)
       .join(' ');
 
-    // Country code icon for the input's startIcon
-    const countryCodeIcon = (
-      <div className={styles.countryCodeDisplay}>
-        <span className={styles.flag}>{selectedCountry.flag}</span>
-        <span className={styles.dialCode}>{selectedCountry.dialCode}</span>
-      </div>
-    );
-
     return (
       <div className={containerClasses} style={style} data-testid={dataTestId}>
         {label && (

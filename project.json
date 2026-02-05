@@ -43,6 +43,7 @@
       "executor": "@nx/eslint:lint",
       "outputs": ["{options.outputFile}"],
       "options": {
+        "maxWarnings": 0,
         "lintFilePatterns": [
           "libs/ui-components/**/*.{ts,tsx,js,jsx}",
           "!libs/ui-components/.claude/**"
@@ -96,12 +97,8 @@
     }
   },
   "release": {
-    "version": {
-      "generatorOptions": {
-        "packageRoot": "dist/{projectRoot}",
-        "currentVersionResolver": "git-tag",
-        "fallbackCurrentVersionResolver": "disk"
-      }
+    "changelog": {
+      "file": "libs/ui-components/CHANGELOG.md"
     }
   }
 }

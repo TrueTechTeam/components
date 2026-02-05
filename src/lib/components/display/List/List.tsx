@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { forwardRef, useMemo, useId, useCallback, type KeyboardEvent } from 'react';
 import type { ListProps, ListContextValue } from './types';
 import { ListContext } from './ListContext';
@@ -16,7 +17,7 @@ import { useInfiniteScroll } from '../Table/hooks/useInfiniteScroll';
 import { Spinner } from '../Spinner';
 import styles from './List.module.scss';
 
-function ListInner<T extends Record<string, unknown>>(
+function ListInner<T extends Record<string, any>>(
   {
     // Data
     data,
@@ -481,9 +482,7 @@ function ListInner<T extends Record<string, unknown>>(
 }
 
 // Wrap with forwardRef while preserving generic type
-export const List = forwardRef(ListInner) as <
-  T extends Record<string, unknown> = Record<string, unknown>,
->(
+export const List = forwardRef(ListInner) as <T extends Record<string, any> = Record<string, any>>(
   props: ListProps<T> & { ref?: React.ForwardedRef<HTMLDivElement> }
 ) => React.ReactElement;
 

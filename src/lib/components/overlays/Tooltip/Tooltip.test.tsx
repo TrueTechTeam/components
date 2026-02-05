@@ -1,4 +1,4 @@
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, act } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Tooltip } from './Tooltip';
 
@@ -278,6 +278,169 @@ describe('Tooltip', () => {
         const tooltip = screen.getByTestId('tooltip');
         expect(tooltip.querySelector('[data-component="tooltip"]')).toBeInTheDocument();
       });
+    });
+
+    it('should generate trigger testid when custom testid is provided', async () => {
+      render(
+        <Tooltip content="Tooltip text" data-testid="custom-tooltip" delayShow={0}>
+          <button>Hover me</button>
+        </Tooltip>
+      );
+
+      expect(screen.getByTestId('custom-tooltip-trigger')).toBeInTheDocument();
+    });
+
+    it('should show tooltip on focus', async () => {
+      render(
+        <Tooltip content="Tooltip text" delayShow={0}>
+          <button>Hover me</button>
+        </Tooltip>
+      );
+
+      const button = screen.getByText('Hover me');
+
+      await act(async () => {
+        button.focus();
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText('Tooltip text')).toBeInTheDocument();
+      });
+    });
+
+    it('should hide tooltip on blur', async () => {
+      render(
+        <Tooltip content="Tooltip text" delayShow={0} delayHide={0}>
+          <button>Hover me</button>
+        </Tooltip>
+      );
+
+      const button = screen.getByText('Hover me');
+
+      await act(async () => {
+        button.focus();
+      });
+
+      await waitFor(() => {
+        expect(screen.getByText('Tooltip text')).toBeInTheDocument();
+      });
+
+      await act(async () => {
+        button.blur();
+      });
+
+      await waitFor(() => {
+        expect(screen.queryByText('Tooltip text')).not.toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('props', () => {
+    it('should apply custom className', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <Tooltip content="Tooltip text" className="custom-tooltip-class" delayShow={0}>
+          <button>Hover me</button>
+        </Tooltip>
+      );
+
+      await user.hover(screen.getByText('Hover me'));
+
+      await waitFor(() => {
+        const tooltip = screen.getByTestId('tooltip');
+        expect(tooltip).toHaveClass('custom-tooltip-class');
+      });
+    });
+
+    it('should apply custom offset', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <Tooltip content="Tooltip text" offset={16} delayShow={0}>
+          <button>Hover me</button>
+        </Tooltip>
+      );
+
+      await user.hover(screen.getByText('Hover me'));
+
+      await waitFor(() => {
+        expect(screen.getByText('Tooltip text')).toBeInTheDocument();
+      });
+    });
+
+    it('should use default position (bottom) when not specified', () => {
+      render(
+        <Tooltip content="Tooltip text">
+          <button>Hover me</button>
+        </Tooltip>
+      );
+
+      expect(screen.getByText('Hover me')).toBeInTheDocument();
+    });
+
+    it('should render ReactNode content', async () => {
+      const user = userEvent.setup();
+
+      render(
+        <Tooltip
+          content={
+            <div>
+              <strong>Bold text</strong>
+              <span>Normal text</span>
+            </div>
+          }
+          delayShow={0}
+        >
+          <button>Hover me</button>
+        </Tooltip>
+      );
+
+      await user.hover(screen.getByText('Hover me'));
+
+      await waitFor(() => {
+        expect(screen.getByText('Bold text')).toBeInTheDocument();
+        expect(screen.getByText('Normal text')).toBeInTheDocument();
+      });
+    });
+  });
+
+  describe('arrow positioning', () => {
+    it('should position arrow correctly for each tooltip position', async () => {
+      const user = userEvent.setup();
+      const positionMap = {
+        top: 'bottom',
+        'top-left': 'bottom-left',
+        'top-right': 'bottom-right',
+        bottom: 'top',
+        'bottom-left': 'top-left',
+        'bottom-right': 'top-right',
+        left: 'right',
+        right: 'left',
+      } as const;
+
+      for (const [tooltipPos, arrowPos] of Object.entries(positionMap)) {
+        const { unmount } = render(
+          <Tooltip content="Tooltip text" position={tooltipPos as any} delayShow={0}>
+            <button>Hover me {tooltipPos}</button>
+          </Tooltip>
+        );
+
+        await user.hover(screen.getByText(`Hover me ${tooltipPos}`));
+
+        await waitFor(() => {
+          const arrow = document.querySelector(`[data-position="${arrowPos}"]`);
+          expect(arrow).toBeInTheDocument();
+        });
+
+        unmount();
+      }
+    });
+  });
+
+  describe('displayName', () => {
+    it('should have correct displayName', () => {
+      expect(Tooltip.displayName).toBe('Tooltip');
     });
   });
 });

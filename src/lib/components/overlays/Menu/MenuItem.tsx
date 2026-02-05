@@ -13,7 +13,7 @@ import {
 } from 'react';
 import { useMenuContext } from './MenuContext';
 import type { BaseComponentProps } from '../../../types';
-import { Icon, type IconProps } from '../../display/Icon';
+import { Icon } from '../../display/Icon';
 import type { IconName } from '../../display/Icon/icons';
 import styles from './MenuItem.module.scss';
 

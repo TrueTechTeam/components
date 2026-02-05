@@ -241,7 +241,7 @@ export const FilePicker = forwardRef<HTMLInputElement, FilePickerProps>(
 
         return { valid, errors };
       },
-      [accept, maxFiles, maxSize, multiple, selectedFiles.length]
+      [accept, maxFiles, maxSize, selectedFiles.length]
     );
 
     // Handle file selection

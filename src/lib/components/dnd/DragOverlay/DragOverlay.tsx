@@ -13,7 +13,8 @@ export interface DragOverlayProps extends Omit<BaseComponentProps, 'children'> {
    * Content to render in the overlay
    * Can be a render function that receives the active drag data
    */
-  children?: ReactNode | ((activeId: string, activeData: Record<string, unknown>) => ReactNode);
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  children?: ReactNode | ((activeId: string, activeData: Record<string, any>) => ReactNode);
 
   /**
    * Whether to adjust position with scroll

@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useMemo } from 'react';
 import type { UseListExpandOptions, UseListExpandReturn } from '../types';
 
 /**
@@ -15,7 +15,10 @@ export function useListExpand({
   );
 
   const isControlled = controlledKeys !== undefined;
-  const expandedSet = isControlled ? new Set(controlledKeys) : uncontrolledKeys;
+  const expandedSet = useMemo(
+    () => (isControlled ? new Set(controlledKeys) : uncontrolledKeys),
+    [isControlled, controlledKeys, uncontrolledKeys]
+  );
 
   const onExpandItem = useCallback(
     (key: string) => {

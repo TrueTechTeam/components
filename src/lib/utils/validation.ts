@@ -8,6 +8,7 @@ export interface ValidationResult {
   errorMessage: string | null;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 export type Validator = (value: any) => string | null;
 
 /**
@@ -20,7 +21,7 @@ export const validators = {
    */
   required:
     (message = 'This field is required'): Validator =>
-    (value: any): string | null => {
+    (value: unknown): string | null => {
       if (value === null || value === undefined) {
         return message;
       }
@@ -180,8 +181,8 @@ export const validators = {
    * @param message Custom error message
    */
   matches:
-    (otherValue: any, message = 'Values do not match'): Validator =>
-    (value: any): string | null => {
+    (otherValue: unknown, message = 'Values do not match'): Validator =>
+    (value: unknown): string | null => {
       return value === otherValue ? null : message;
     },
 
@@ -234,7 +235,7 @@ export const validators = {
  */
 export const combineValidators =
   (...validators: Validator[]): Validator =>
-  (value: any): string | null => {
+  (value: unknown): string | null => {
     for (const validator of validators) {
       const error = validator(value);
       if (error) {
@@ -250,7 +251,7 @@ export const combineValidators =
  * @param validator Single validator or array of validators
  * @returns ValidationResult object
  */
-export const validate = (value: any, validator: Validator | Validator[]): ValidationResult => {
+export const validate = (value: unknown, validator: Validator | Validator[]): ValidationResult => {
   const validatorFn = Array.isArray(validator) ? combineValidators(...validator) : validator;
 
   const errorMessage = validatorFn(value);
@@ -268,7 +269,7 @@ export const validate = (value: any, validator: Validator | Validator[]): Valida
  * @returns Object with validation results
  */
 export const validateForm = (
-  values: Record<string, any>,
+  values: Record<string, unknown>,
   validators: Record<string, Validator | Validator[]>
 ): Record<string, ValidationResult> => {
   const results: Record<string, ValidationResult> = {};

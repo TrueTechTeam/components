@@ -17,7 +17,7 @@ export interface AutocompleteOption {
   key: string;
   label: string;
   disabled?: boolean;
-  [key: string]: any;
+  [key: string]: unknown;
 }
 
 /**
@@ -261,7 +261,7 @@ export const Autocomplete: React.FC<AutocompleteProps> = ({
     >
       <Menu
         trigger={({ ref }) => (
-          <div ref={ref as any}>
+          <div ref={ref as React.RefObject<HTMLDivElement>}>
             <Input
               label={label}
               placeholder={placeholder}
@@ -317,7 +317,7 @@ Autocomplete.displayName = 'Autocomplete';
  */
 const HighlightedText: React.FC<{ text: string; highlight: string }> = ({ text, highlight }) => {
   if (!highlight) {
-    return <>{text}</>;
+    return <span>{text}</span>;
   }
 
   const parts = text.split(new RegExp(`(${highlight})`, 'gi'));

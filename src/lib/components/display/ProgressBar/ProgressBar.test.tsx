@@ -240,7 +240,138 @@ describe('ProgressBar', () => {
     });
   });
 
-  // 7. Ref forwarding
+  // 7. Indeterminate mode tests
+  describe('indeterminate mode', () => {
+    it('sets indeterminate data attribute on container', () => {
+      const { container } = render(<ProgressBar indeterminate />);
+      const progressBar = container.querySelector('[data-component="progress-bar"]');
+      expect(progressBar).toHaveAttribute('data-indeterminate', 'true');
+    });
+
+    it('sets indeterminate data attribute on fill', () => {
+      const { container } = render(<ProgressBar indeterminate />);
+      const progressFill = container.querySelector('[class*="progressBarFill"]');
+      expect(progressFill).toHaveAttribute('data-indeterminate', 'true');
+    });
+
+    it('does not set width style in indeterminate mode', () => {
+      const { container } = render(<ProgressBar indeterminate value={50} />);
+      const progressFill = container.querySelector('[class*="progressBarFill"]') as HTMLElement;
+      expect(progressFill.style.width).toBe('');
+    });
+
+    it('does not show value in indeterminate mode even when showValue is true', () => {
+      render(<ProgressBar indeterminate value={50} showValue />);
+      expect(screen.queryByText('50%')).not.toBeInTheDocument();
+    });
+
+    it('still shows label in indeterminate mode', () => {
+      render(<ProgressBar indeterminate label="Loading..." />);
+      expect(screen.getByText('Loading...')).toBeInTheDocument();
+    });
+
+    it('does not set aria-valuenow in indeterminate mode', () => {
+      const { container } = render(<ProgressBar indeterminate />);
+      const progressBar = container.querySelector('[role="progressbar"]');
+      expect(progressBar).not.toHaveAttribute('aria-valuenow');
+    });
+
+    it('does not render buffer in indeterminate mode', () => {
+      const { container } = render(<ProgressBar indeterminate bufferValue={75} />);
+      const buffer = container.querySelector('[class*="progressBarBuffer"]');
+      expect(buffer).not.toBeInTheDocument();
+    });
+  });
+
+  // 8. Buffer value tests
+  describe('buffer value', () => {
+    it('renders buffer when bufferValue is provided', () => {
+      const { container } = render(<ProgressBar value={50} bufferValue={75} />);
+      const buffer = container.querySelector('[class*="progressBarBuffer"]');
+      expect(buffer).toBeInTheDocument();
+    });
+
+    it('does not render buffer when bufferValue is not provided', () => {
+      const { container } = render(<ProgressBar value={50} />);
+      const buffer = container.querySelector('[class*="progressBarBuffer"]');
+      expect(buffer).not.toBeInTheDocument();
+    });
+
+    it('sets correct width for buffer value', () => {
+      const { container } = render(<ProgressBar value={50} bufferValue={75} />);
+      const buffer = container.querySelector('[class*="progressBarBuffer"]') as HTMLElement;
+      expect(buffer).toHaveStyle({ width: '75%' });
+    });
+
+    it('normalizes buffer value above max to 100%', () => {
+      const { container } = render(<ProgressBar value={50} bufferValue={150} max={100} />);
+      const buffer = container.querySelector('[class*="progressBarBuffer"]') as HTMLElement;
+      expect(buffer).toHaveStyle({ width: '100%' });
+    });
+
+    it('normalizes negative buffer value to 0%', () => {
+      const { container } = render(<ProgressBar value={50} bufferValue={-10} />);
+      const buffer = container.querySelector('[class*="progressBarBuffer"]') as HTMLElement;
+      expect(buffer).toHaveStyle({ width: '0%' });
+    });
+
+    it('calculates buffer percentage based on custom max', () => {
+      const { container } = render(<ProgressBar value={50} bufferValue={100} max={200} />);
+      const buffer = container.querySelector('[class*="progressBarBuffer"]') as HTMLElement;
+      expect(buffer).toHaveStyle({ width: '50%' });
+    });
+  });
+
+  // 9. Edge cases
+  describe('edge cases', () => {
+    it('handles zero max value gracefully', () => {
+      const { container } = render(<ProgressBar value={50} max={0} showValue />);
+      expect(screen.getByText('0%')).toBeInTheDocument();
+      const progressFill = container.querySelector('[class*="progressBarFill"]') as HTMLElement;
+      expect(progressFill).toHaveStyle({ width: '0%' });
+    });
+
+    it('rounds displayed percentage', () => {
+      render(<ProgressBar value={33.333} max={100} showValue />);
+      expect(screen.getByText('33%')).toBeInTheDocument();
+    });
+
+    it('handles value equal to max', () => {
+      const { container } = render(<ProgressBar value={100} max={100} showValue />);
+      expect(screen.getByText('100%')).toBeInTheDocument();
+      const progressFill = container.querySelector('[class*="progressBarFill"]') as HTMLElement;
+      expect(progressFill).toHaveStyle({ width: '100%' });
+      const progressBar = container.querySelector('[role="progressbar"]');
+      expect(progressBar).toHaveAttribute('aria-valuenow', '100');
+    });
+
+    it('handles zero value', () => {
+      const { container } = render(<ProgressBar value={0} showValue />);
+      expect(screen.getByText('0%')).toBeInTheDocument();
+      const progressFill = container.querySelector('[class*="progressBarFill"]') as HTMLElement;
+      expect(progressFill).toHaveStyle({ width: '0%' });
+    });
+
+    it('renders without label or value display', () => {
+      const { container } = render(<ProgressBar value={50} />);
+      const header = container.querySelector('[class*="progressBarHeader"]');
+      expect(header).not.toBeInTheDocument();
+    });
+
+    it('renders header when only label is provided', () => {
+      const { container } = render(<ProgressBar label="Test" value={50} />);
+      const header = container.querySelector('[class*="progressBarHeader"]');
+      expect(header).toBeInTheDocument();
+    });
+
+    it('renders header when only showValue is true', () => {
+      const { container } = render(<ProgressBar value={50} showValue />);
+      const header = container.querySelector('[class*="progressBarHeader"]');
+      expect(header).toBeInTheDocument();
+    });
+  });
+
+  // 10. Ref forwarding
   describe('ref forwarding', () => {
     it('forwards ref to element', () => {
       const ref = React.createRef<HTMLDivElement>();

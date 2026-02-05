@@ -4,7 +4,7 @@ import type { FormFieldValidation, FormValues } from '../types';
  * Validate a field value against validation rules
  */
 export const validateField = (
-  value: any,
+  value: unknown,
   validation: FormFieldValidation,
   allValues: FormValues = {}
 ): string | null => {

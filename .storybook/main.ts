@@ -35,6 +35,7 @@ const config: StorybookConfig = {
 
 export default config;
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 function getAbsolutePath(value: string): any {
   return dirname(require.resolve(join(value, 'package.json')));
 }

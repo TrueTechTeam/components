@@ -3,12 +3,6 @@ import { action } from '@storybook/addon-actions';
 import { useState } from 'react';
 import { FormBuilder } from './FormBuilder';
 import { Input } from '../../inputs/Input';
-import { Textarea } from '../../inputs/Textarea';
-import { Toggle } from '../../inputs/Toggle';
-import { Checkbox } from '../../inputs/Checkbox';
-import { Select } from '../../inputs/Select';
-import { Slider } from '../../inputs/Slider';
-import { Rating } from '../../inputs/Rating';
 import type { FormFieldConfig } from './types';
 
 const meta: Meta<typeof FormBuilder> = {

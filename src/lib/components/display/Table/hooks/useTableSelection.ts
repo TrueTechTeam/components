@@ -29,7 +29,10 @@ export function useTableSelection({
   );
 
   const isControlled = controlledKeys !== undefined;
-  const selectedSet = isControlled ? new Set(controlledKeys) : uncontrolledKeys;
+  const selectedSet = useMemo(
+    () => (isControlled ? new Set(controlledKeys) : uncontrolledKeys),
+    [isControlled, controlledKeys, uncontrolledKeys]
+  );
 
   const updateSelection = useCallback(
     (newKeys: Set<string>) => {

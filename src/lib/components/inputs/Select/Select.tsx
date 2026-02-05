@@ -225,7 +225,7 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
     const searchInputRef = useRef<HTMLInputElement>(null);
 
     // Expose the trigger element via the forwarded ref
-    useImperativeHandle(ref, () => triggerRef.current!);
+    useImperativeHandle(ref, () => triggerRef.current as HTMLDivElement);
 
     const handleSelectionChange = useCallback(
       (keys: string[]) => {

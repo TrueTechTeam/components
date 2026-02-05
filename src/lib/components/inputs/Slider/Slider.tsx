@@ -1,4 +1,4 @@
-import React, { forwardRef, useState, useId, useCallback, useRef, useEffect } from 'react';
+import React, { forwardRef, useState, useId, useCallback, useRef, useEffect, useMemo } from 'react';
 import type { ComponentSize, ComponentVariant } from '../../../types';
 import styles from './Slider.module.scss';
 
@@ -73,7 +73,7 @@ export const Slider = forwardRef<HTMLInputElement, SliderProps>(
 
     const value = controlledValue !== undefined ? controlledValue : internalValue;
     const isRange = Array.isArray(value);
-    const currentValue = isRange ? value : [value];
+    const currentValue = useMemo(() => (isRange ? value : [value]), [isRange, value]);
 
     const handleChange = useCallback(
       (newValue: number | number[]) => {
@@ -115,7 +115,7 @@ export const Slider = forwardRef<HTMLInputElement, SliderProps>(
       return markValue <= currentValue[0];
     };
 
-    const getClickPosition = (e: React.MouseEvent<HTMLInputElement>): number => {
+    const getClickPosition = (e: React.MouseEvent<HTMLElement>): number => {
       // Use the slider container, not the input element, for accurate positioning
       if (!sliderRef.current) {
         return min;
@@ -138,24 +138,6 @@ export const Slider = forwardRef<HTMLInputElement, SliderProps>(
         const percentage = 1 - clickY / rect.height;
         return min + percentage * (max - min);
       }
-    };
-
-    const isClickNearThumb = (clickValue: number, thumbValue: number): boolean => {
-      // Calculate pixel threshold (approximately 30 pixels worth of value range for easier clicking)
-      if (!sliderRef.current) {
-        return false;
-      }
-      const sliderElement = sliderRef.current.querySelector(
-        '[data-component="slider"]'
-      ) as HTMLElement;
-      if (!sliderElement) {
-        return false;
-      }
-
-      const rect = sliderElement.getBoundingClientRect();
-      const sliderSize = orientation === 'horizontal' ? rect.width : rect.height;
-      const threshold = ((max - min) / sliderSize) * 50;
-      return Math.abs(clickValue - thumbValue) <= threshold;
     };
 
     // Handle dragging for all sliders with global mouse events
@@ -261,7 +243,7 @@ export const Slider = forwardRef<HTMLInputElement, SliderProps>(
                   return;
                 }
 
-                const clickValue = getClickPosition(e as any);
+                const clickValue = getClickPosition(e);
                 // Round to nearest step
                 const roundedValue = Math.round(clickValue / step) * step;
 

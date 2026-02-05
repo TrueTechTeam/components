@@ -208,6 +208,51 @@ describe('Chip', () => {
       await user.keyboard('{Enter}');
       expect(handleRemove).toHaveBeenCalledTimes(1);
     });
+
+    it('has defensive check preventing onRemove when disabled prop is true', () => {
+      const handleRemove = jest.fn();
+      const { rerender } = render(
+        <Chip disabled={false} onRemove={handleRemove}>
+          Test
+        </Chip>
+      );
+
+      // First verify it works when not disabled
+      const removeButton = screen.getByRole('button', { name: /remove/i });
+      fireEvent.click(removeButton);
+      expect(handleRemove).toHaveBeenCalledTimes(1);
+
+      // Now rerender with disabled=true
+      handleRemove.mockClear();
+      rerender(
+        <Chip disabled onRemove={handleRemove}>
+          Test
+        </Chip>
+      );
+
+      // The button now has disabled attribute which prevents clicks
+      // This test verifies the disabled state is properly applied
+      expect(removeButton).toBeDisabled();
+
+      // Note: The defensive return in handleRemoveClick (line 93) is difficult to test
+      // because disabled buttons don't trigger click events. This is intentional
+      // defensive programming - providing an extra safety layer.
+    });
+
+    it('calls onRemove with correct event object', () => {
+      const handleRemove = jest.fn();
+      render(<Chip onRemove={handleRemove}>Test</Chip>);
+
+      const removeButton = screen.getByRole('button', { name: /remove/i });
+      fireEvent.click(removeButton);
+
+      expect(handleRemove).toHaveBeenCalledTimes(1);
+      expect(handleRemove).toHaveBeenCalledWith(
+        expect.objectContaining({
+          type: 'click',
+        })
+      );
+    });
   });
 
   // 6. Accessibility tests
@@ -261,6 +306,18 @@ describe('Chip', () => {
 
       const removeButton = screen.getByRole('button', { name: /remove/i });
       expect(removeButton).toHaveAttribute('tabIndex', '-1');
+    });
+
+    it('applies custom className to remove button', () => {
+      const handleRemove = jest.fn();
+      render(
+        <Chip onRemove={handleRemove} removeButtonClassName="custom-remove-btn">
+          Test
+        </Chip>
+      );
+
+      const removeButton = screen.getByRole('button', { name: /remove/i });
+      expect(removeButton).toHaveClass('custom-remove-btn');
     });
   });
 
