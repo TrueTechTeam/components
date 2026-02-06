@@ -10,6 +10,46 @@ const meta: Meta<typeof ResizablePanels> = {
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',
+    docs: {
+      description: {
+        component: `
+ResizablePanels component for creating resizable split layouts with drag-to-resize handles.
+
+## CSS Variables
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--transition-fast</code></td>
+<td><a href="?path=/story/theme-css-variables--transitions"><code>var(--transition-fast)</code></a></td>
+<td>Fast transition duration</td>
+</tr>
+<tr>
+<td><code>--theme-interactive-hover</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-interactive-hover)</code></a></td>
+<td>Hover background color for handles</td>
+</tr>
+<tr>
+<td><code>--theme-border-primary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-border-primary)</code></a></td>
+<td>Border color for handle lines</td>
+</tr>
+<tr>
+<td><code>--theme-primary</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-primary)</code></a></td>
+<td>Primary color for active handles</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
   },
   decorators: [
     (Story) => (
@@ -23,6 +63,19 @@ const meta: Meta<typeof ResizablePanels> = {
       control: 'select',
       options: ['horizontal', 'vertical'],
       description: 'Direction of panels',
+    },
+    onResize: { table: { disable: true } },
+    sizes: { table: { disable: true } },
+    defaultSizes: { table: { disable: true } },
+    children: { table: { disable: true } },
+    className: {
+      table: { disable: true },
+    },
+    'data-testid': {
+      table: { disable: true },
+    },
+    style: {
+      table: { disable: true },
     },
   },
 };

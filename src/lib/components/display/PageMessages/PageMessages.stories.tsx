@@ -12,6 +12,103 @@ const meta: Meta<typeof PageMessages> = {
   title: 'Display/PageMessages',
   component: PageMessages,
   tags: ['autodocs'],
+  parameters: {
+    layout: 'centered',
+    docs: {
+      description: {
+        component: `
+Page-level state container that displays loading, error, empty, and other status messages.
+Shows different states based on priority: loading > error > forbidden > not-found > unauthorized > maintenance > offline > timeout > empty.
+
+When no state is active, children render directly without wrapper.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--spacing-xl</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>32px</code></a></td>
+<td>Padding around the message container</td>
+</tr>
+<tr>
+<td><code>--z-modal</code></td>
+<td><code>1000</code></td>
+<td>Z-index for fullscreen mode</td>
+</tr>
+<tr>
+<td><code>--theme-background-primary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>#ffffff</code></a></td>
+<td>Background color in fullscreen mode</td>
+</tr>
+<tr>
+<td><code>--spacing-md</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>16px</code></a></td>
+<td>Gap between content elements</td>
+</tr>
+<tr>
+<td><code>--theme-text-secondary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>#6b7280</code></a></td>
+<td>Secondary text color (descriptions, icon defaults)</td>
+</tr>
+<tr>
+<td><code>--theme-error</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>#dc2626</code></a></td>
+<td>Error icon color</td>
+</tr>
+<tr>
+<td><code>--theme-warning</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>#f59e0b</code></a></td>
+<td>Warning/forbidden icon color</td>
+</tr>
+<tr>
+<td><code>--theme-text-tertiary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>#9ca3af</code></a></td>
+<td>Tertiary text color (empty/not-found icons)</td>
+</tr>
+<tr>
+<td><code>--theme-info</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>#3b82f6</code></a></td>
+<td>Info/maintenance icon color</td>
+</tr>
+<tr>
+<td><code>--font-size-xl</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>20px</code></a></td>
+<td>Title font size (default md)</td>
+</tr>
+<tr>
+<td><code>--font-weight-semibold</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>600</code></a></td>
+<td>Title font weight</td>
+</tr>
+<tr>
+<td><code>--theme-text-primary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>#111827</code></a></td>
+<td>Primary text color for titles</td>
+</tr>
+<tr>
+<td><code>--font-size-base</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>16px</code></a></td>
+<td>Description font size</td>
+</tr>
+<tr>
+<td><code>--spacing-sm</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>8px</code></a></td>
+<td>Gap between action buttons</td>
+</tr>
+</tbody>
+</table>
+        `,
+      },
+    },
+  },
   argTypes: {
     loading: {
       control: 'boolean',
@@ -62,9 +159,49 @@ const meta: Meta<typeof PageMessages> = {
       control: 'boolean',
       description: 'Center content vertically',
     },
-  },
-  parameters: {
-    layout: 'centered',
+    minHeight: {
+      control: 'text',
+      description: 'Minimum height when centered (not fullscreen)',
+    },
+    loadingConfig: {
+      table: { disable: true },
+    },
+    errorConfig: {
+      table: { disable: true },
+    },
+    forbiddenConfig: {
+      table: { disable: true },
+    },
+    notFoundConfig: {
+      table: { disable: true },
+    },
+    unauthorizedConfig: {
+      table: { disable: true },
+    },
+    maintenanceConfig: {
+      table: { disable: true },
+    },
+    offlineConfig: {
+      table: { disable: true },
+    },
+    timeoutConfig: {
+      table: { disable: true },
+    },
+    emptyConfig: {
+      table: { disable: true },
+    },
+    className: {
+      table: { disable: true },
+    },
+    'data-testid': {
+      table: { disable: true },
+    },
+    style: {
+      table: { disable: true },
+    },
+    children: {
+      table: { disable: true },
+    },
   },
 };
 

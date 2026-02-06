@@ -7,6 +7,74 @@ const meta: Meta<typeof Toggle> = {
   title: 'Inputs/Toggle',
   component: Toggle,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+Toggle (Switch) component for boolean input with smooth animations and multiple variants.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--toggle-track-width</code></td>
+<td><code>38px</code></td>
+<td>Width of the toggle track</td>
+</tr>
+<tr>
+<td><code>--toggle-track-height</code></td>
+<td><code>22px</code></td>
+<td>Height of the toggle track</td>
+</tr>
+<tr>
+<td><code>--toggle-thumb-size</code></td>
+<td><code>calc(var(--toggle-track-height) - 4px)</code></td>
+<td>Size of the toggle thumb</td>
+</tr>
+<tr>
+<td><code>--toggle-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-control-border)</code></a></td>
+<td>Background color of unchecked toggle</td>
+</tr>
+<tr>
+<td><code>--toggle-bg-checked</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-control-bg-checked)</code></a></td>
+<td>Background color of checked toggle</td>
+</tr>
+<tr>
+<td><code>--toggle-thumb-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-white)</code></a></td>
+<td>Background color of thumb</td>
+</tr>
+<tr>
+<td><code>--toggle-border</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-control-border-hover)</code></a></td>
+<td>Border color</td>
+</tr>
+<tr>
+<td><code>--toggle-focus-ring</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-interactive-focus)</code></a></td>
+<td>Focus ring color</td>
+</tr>
+<tr>
+<td><code>--toggle-transition</code></td>
+<td><code>all 0.2s ease-in-out</code></td>
+<td>Transition timing</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   argTypes: {
     // Simple controls
     label: {

@@ -7,6 +7,59 @@ const meta: Meta<typeof Slider> = {
   title: 'Inputs/Slider',
   component: Slider,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+Slider component for selecting a numeric value or range. Supports both single and range sliders with customizable marks and orientation.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--slider-track-height</code></td>
+<td><code>4px</code></td>
+<td>Height of the slider track</td>
+</tr>
+<tr>
+<td><code>--slider-thumb-size</code></td>
+<td><code>20px</code></td>
+<td>Size of the slider thumb</td>
+</tr>
+<tr>
+<td><code>--slider-track-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-control-border)</code></a></td>
+<td>Color of the track background</td>
+</tr>
+<tr>
+<td><code>--slider-track-filled-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-primary)</code></a></td>
+<td>Color of the filled portion of track</td>
+</tr>
+<tr>
+<td><code>--slider-thumb-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-white)</code></a></td>
+<td>Background color of the thumb</td>
+</tr>
+<tr>
+<td><code>--slider-thumb-border</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-primary)</code></a></td>
+<td>Border color of the thumb</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   argTypes: {
     // Simple controls
     label: {

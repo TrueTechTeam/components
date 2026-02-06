@@ -11,6 +11,33 @@ const meta: Meta<typeof AccordionContainer> = {
   title: 'Display/AccordionContainer',
   component: AccordionContainer,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `AccordionContainer component - Manages multiple accordions with expand/collapse all functionality
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--accordion-container-gap</code></td>
+<td><code>0</code></td>
+<td>Gap between accordions (set via gap prop)</td>
+</tr>
+</tbody>
+</table>
+        `,
+      },
+    },
+  },
   argTypes: {
     mode: {
       control: 'select',
@@ -52,6 +79,7 @@ const meta: Meta<typeof AccordionContainer> = {
     style: { table: { disable: true } },
     'data-testid': { table: { disable: true } },
     'aria-label': { table: { disable: true } },
+    children: { table: { disable: true } },
   },
 };
 

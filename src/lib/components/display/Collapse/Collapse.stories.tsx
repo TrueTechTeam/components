@@ -12,6 +12,41 @@ const meta: Meta<typeof Collapse> = {
   title: 'Display/Collapse',
   component: Collapse,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+Collapse component for smooth expand/collapse animations.
+
+The Collapse component provides smooth height animation when expanding or collapsing its children content. It supports customizable animation durations and easing functions, and can optionally unmount content when collapsed to save DOM resources.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--collapse-duration</code></td>
+<td><code>250ms</code></td>
+<td>Duration of expand/collapse animation</td>
+</tr>
+<tr>
+<td><code>--collapse-easing</code></td>
+<td><code>ease-in-out</code></td>
+<td>Easing function for animation</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   argTypes: {
     isOpen: {
       control: 'boolean',
@@ -30,6 +65,7 @@ const meta: Meta<typeof Collapse> = {
       control: 'boolean',
       description: 'Whether to unmount children when collapsed',
     },
+    children: { table: { disable: true } },
     onExpandStart: { table: { disable: true } },
     onExpandEnd: { table: { disable: true } },
     onCollapseStart: { table: { disable: true } },

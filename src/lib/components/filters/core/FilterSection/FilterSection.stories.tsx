@@ -15,6 +15,65 @@ const meta: Meta<typeof FilterSection> = {
         component: `
 FilterSection provides a collapsible container for grouping related filters.
 Shows an optional badge with the count of active filters in the section.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--filter-section-border-color</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-border-primary, #e0e0e0)</code></a></td>
+<td>Border color between sections</td>
+</tr>
+<tr>
+<td><code>--filter-section-header-bg</code></td>
+<td><code>transparent</code></td>
+<td>Header background color</td>
+</tr>
+<tr>
+<td><code>--filter-section-header-hover-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-interactive-hover, rgba(0, 0, 0, 0.04))</code></a></td>
+<td>Header background color on hover</td>
+</tr>
+<tr>
+<td><code>--filter-section-header-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-primary, #1a1a1a)</code></a></td>
+<td>Header text color</td>
+</tr>
+<tr>
+<td><code>--filter-section-description-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-tertiary, #666666)</code></a></td>
+<td>Description text color</td>
+</tr>
+<tr>
+<td><code>--filter-section-badge-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-primary, #2563eb)</code></a></td>
+<td>Active count badge background color</td>
+</tr>
+<tr>
+<td><code>--filter-section-badge-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-on-primary, #ffffff)</code></a></td>
+<td>Active count badge text color</td>
+</tr>
+<tr>
+<td><code>--filter-section-gap</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-md, 16px)</code></a></td>
+<td>Gap between filters in the section</td>
+</tr>
+<tr>
+<td><code>--filter-section-padding</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-sm, 8px)</code></a></td>
+<td>Padding for header and content</td>
+</tr>
+</tbody>
+</table>
         `,
       },
     },

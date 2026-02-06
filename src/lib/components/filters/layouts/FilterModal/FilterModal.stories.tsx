@@ -21,8 +21,51 @@ const meta: Meta<typeof FilterModal> = {
     docs: {
       description: {
         component: `
-FilterModal provides a full modal dialog for complex filter interfaces.
-Useful for advanced filters with many options.
+FilterModal provides a full modal dialog for complex filter interfaces. Useful for advanced filters with many options.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--spacing-xs</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>4px</code></a></td>
+<td>Margin for trigger badge</td>
+</tr>
+<tr>
+<td><code>--spacing-sm</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>8px</code></a></td>
+<td>Gap in header and footer</td>
+</tr>
+<tr>
+<td><code>--spacing-md</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>16px</code></a></td>
+<td>Padding and margin spacing</td>
+</tr>
+<tr>
+<td><code>--theme-border-primary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>#e0e0e0</code></a></td>
+<td>Border color for separators</td>
+</tr>
+<tr>
+<td><code>--font-size-lg</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>1.125rem</code></a></td>
+<td>Modal title font size</td>
+</tr>
+<tr>
+<td><code>--font-weight-semibold</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>600</code></a></td>
+<td>Modal title font weight</td>
+</tr>
+</tbody>
+</table>
         `,
       },
     },
@@ -57,6 +100,30 @@ Useful for advanced filters with many options.
       control: 'boolean',
       description: 'Close modal on apply',
     },
+    showActiveFilters: {
+      control: 'boolean',
+      description: 'Show active filters display',
+    },
+    activeFiltersPosition: {
+      control: 'select',
+      options: ['top', 'bottom'],
+      description: 'Position of active filters',
+    },
+    applyButtonLabel: {
+      control: 'text',
+      description: 'Label for apply button',
+    },
+    clearButtonLabel: {
+      control: 'text',
+      description: 'Label for clear button',
+    },
+    resetButtonLabel: {
+      control: 'text',
+      description: 'Label for reset button',
+    },
+    defaultOpen: { table: { disable: true } },
+    isOpen: { table: { disable: true } },
+    onOpenChange: { table: { disable: true } },
     children: { table: { disable: true } },
     renderTrigger: { table: { disable: true } },
     className: { table: { disable: true } },

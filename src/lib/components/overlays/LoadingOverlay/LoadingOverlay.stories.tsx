@@ -7,6 +7,64 @@ const meta: Meta<typeof LoadingOverlay> = {
   title: 'Overlays/LoadingOverlay',
   component: LoadingOverlay,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+LoadingOverlay displays a loading spinner over content with optional blur and backdrop effects.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--z-modal</code></td>
+<td>1000</td>
+<td>Overlay z-index layer</td>
+</tr>
+<tr>
+<td><code>--backdrop-opacity</code></td>
+<td>0.7</td>
+<td>Backdrop opacity</td>
+</tr>
+<tr>
+<td><code>--transition-duration</code></td>
+<td>200ms</td>
+<td>Fade in/out transition duration</td>
+</tr>
+<tr>
+<td><code>--spacing-md</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-md)</code></a></td>
+<td>Gap between spinner and message</td>
+</tr>
+<tr>
+<td><code>--theme-text-secondary</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-text-secondary)</code></a></td>
+<td>Message text color</td>
+</tr>
+<tr>
+<td><code>--font-size-sm</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-size-sm)</code></a></td>
+<td>Message font size</td>
+</tr>
+<tr>
+<td><code>--font-family-primary</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-family-primary)</code></a></td>
+<td>Message font family</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   argTypes: {
     visible: {
       control: 'boolean',

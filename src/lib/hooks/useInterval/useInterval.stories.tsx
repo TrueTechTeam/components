@@ -302,7 +302,7 @@ const meta: Meta = {
     docs: {
       description: {
         component: `
-\`useInterval\` provides a declarative way to use setInterval with automatic cleanup.
+\`useInterval\` is a React hook that provides a declarative way to use setInterval with automatic cleanup and pause/resume control.
 
 ## Features
 - Automatic cleanup on unmount

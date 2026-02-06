@@ -8,6 +8,79 @@ const meta: Meta<typeof Panes> = {
   title: 'Layout/Panes',
   component: Panes,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+Flexible pane layout with priority-based visibility. Panes hide based on available space and priority configuration, perfect for responsive sidebar/main content layouts.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--panes-gap</code></td>
+<td>16px</td>
+<td>Gap between panes</td>
+</tr>
+<tr>
+<td><code>--panes-animation-duration</code></td>
+<td><a href="?path=/story/theme-css-variables--transitions"><code>var(--transition-normal)</code></a></td>
+<td>Duration of pane visibility animations</td>
+</tr>
+<tr>
+<td><code>--panes-animation-easing</code></td>
+<td>ease-in-out</td>
+<td>Easing function for pane animations</td>
+</tr>
+<tr>
+<td><code>--pane-min-width</code></td>
+<td>200px</td>
+<td>Minimum width of individual pane</td>
+</tr>
+<tr>
+<td><code>--pane-max-width</code></td>
+<td>none</td>
+<td>Maximum width of individual pane</td>
+</tr>
+<tr>
+<td><code>--pane-preferred-width</code></td>
+<td>auto</td>
+<td>Preferred/basis width for pane flex sizing</td>
+</tr>
+<tr>
+<td><code>--pane-grow</code></td>
+<td>1</td>
+<td>Flex grow factor for panes</td>
+</tr>
+<tr>
+<td><code>--pane-shrink</code></td>
+<td>1</td>
+<td>Flex shrink factor for panes</td>
+</tr>
+<tr>
+<td><code>--pane-animation-duration</code></td>
+<td><a href="?path=/story/theme-css-variables--transitions"><code>var(--transition-normal)</code></a></td>
+<td>Individual pane animation duration</td>
+</tr>
+<tr>
+<td><code>--pane-animation-easing</code></td>
+<td>ease-in-out</td>
+<td>Individual pane animation easing</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   argTypes: {
     gap: {
       control: { type: 'number', min: 0, max: 48 },

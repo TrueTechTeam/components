@@ -6,12 +6,50 @@ const meta: Meta<typeof OverflowText> = {
   title: 'Display/OverflowText',
   component: OverflowText,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+Text component that truncates with ellipsis when it overflows, showing the full content in a tooltip on hover. Supports multi-line truncation and customizable tooltip behavior.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--overflow-text-lines</code></td>
+<td>1</td>
+<td>Number of lines before truncation</td>
+</tr>
+<tr>
+<td><code>--overflow-text-tooltip-max-width</code></td>
+<td>300px</td>
+<td>Maximum width of the tooltip content</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   args: {
     onOverflowChange: fn(),
   },
   argTypes: {
+    children: {
+      control: 'text',
+      description: 'Text content to display',
+    },
     lines: {
       control: { type: 'number', min: 1, max: 10 },
+      description: 'Maximum number of lines before truncation',
     },
     tooltipPosition: {
       control: 'select',
@@ -25,11 +63,31 @@ const meta: Meta<typeof OverflowText> = {
         'bottom-left',
         'bottom-right',
       ],
+      description: 'Position of the tooltip',
+    },
+    tooltipDelay: {
+      control: { type: 'number', min: 0, max: 1000, step: 100 },
+      description: 'Delay before showing tooltip (ms)',
+    },
+    tooltipMaxWidth: {
+      control: { type: 'number', min: 100, max: 500, step: 50 },
+      description: 'Maximum width of the tooltip',
+    },
+    disableTooltip: {
+      control: 'boolean',
+      description: 'Disable tooltip and use native title attribute',
     },
     as: {
       control: 'select',
       options: ['span', 'p', 'div'],
+      description: 'HTML element to render',
     },
+    tooltipContent: { table: { disable: true } },
+    onOverflowChange: { table: { disable: true } },
+    className: { table: { disable: true } },
+    style: { table: { disable: true } },
+    'data-testid': { table: { disable: true } },
+    'aria-label': { table: { disable: true } },
   },
 };
 

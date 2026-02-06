@@ -13,8 +13,46 @@ const meta: Meta<typeof FilterPopover> = {
     docs: {
       description: {
         component: `
-FilterPopover provides a trigger-based dropdown for filter controls.
-Shows a badge with active filter count on the trigger button.
+FilterPopover provides a trigger-based dropdown for filter controls. Shows a badge with active filter count on the trigger button.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--spacing-xs</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>4px</code></a></td>
+<td>Margin for trigger badge</td>
+</tr>
+<tr>
+<td><code>--spacing-sm</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>8px</code></a></td>
+<td>Padding and gap spacing</td>
+</tr>
+<tr>
+<td><code>--spacing-md</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>16px</code></a></td>
+<td>Content padding</td>
+</tr>
+<tr>
+<td><code>--theme-border-primary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>#e0e0e0</code></a></td>
+<td>Border color for separators</td>
+</tr>
+<tr>
+<td><code>--theme-background-tertiary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>#f5f5f5</code></a></td>
+<td>Footer background color</td>
+</tr>
+</tbody>
+</table>
         `,
       },
     },
@@ -46,6 +84,19 @@ Shows a badge with active filter count on the trigger button.
       control: 'number',
       description: 'Popover width in pixels',
     },
+    maxHeight: {
+      control: 'number',
+      description: 'Maximum popover height in pixels',
+    },
+    showActiveFilters: {
+      control: 'boolean',
+      description: 'Show active filters display',
+    },
+    activeFiltersPosition: {
+      control: 'select',
+      options: ['top', 'bottom'],
+      description: 'Position of active filters',
+    },
     showApplyButton: {
       control: 'boolean',
       description: 'Show apply button',
@@ -54,10 +105,33 @@ Shows a badge with active filter count on the trigger button.
       control: 'boolean',
       description: 'Show clear button',
     },
+    showResetButton: {
+      control: 'boolean',
+      description: 'Show reset button',
+    },
     closeOnApply: {
       control: 'boolean',
       description: 'Close popover on apply',
     },
+    closeOnClickOutside: {
+      control: 'boolean',
+      description: 'Close popover when clicking outside',
+    },
+    applyButtonLabel: {
+      control: 'text',
+      description: 'Label for apply button',
+    },
+    clearButtonLabel: {
+      control: 'text',
+      description: 'Label for clear button',
+    },
+    resetButtonLabel: {
+      control: 'text',
+      description: 'Label for reset button',
+    },
+    defaultOpen: { table: { disable: true } },
+    isOpen: { table: { disable: true } },
+    onOpenChange: { table: { disable: true } },
     children: { table: { disable: true } },
     trigger: { table: { disable: true } },
     className: { table: { disable: true } },

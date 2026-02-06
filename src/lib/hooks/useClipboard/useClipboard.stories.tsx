@@ -265,7 +265,7 @@ const meta: Meta = {
     docs: {
       description: {
         component: `
-\`useClipboard\` copies text to the clipboard with success/error feedback.
+\`useClipboard\` is a React hook that copies text to the clipboard with success/error feedback and automatic state reset.
 
 ## Features
 - Modern Clipboard API with fallback for older browsers

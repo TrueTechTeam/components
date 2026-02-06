@@ -8,6 +8,78 @@ const meta: Meta<typeof ButtonToggleGroup> = {
   title: 'Buttons/ButtonToggleGroup',
   component: ButtonToggleGroup,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+ButtonToggleGroup component - a segmented control for selecting one option from a group.
+
+A group of buttons where only one can be selected at a time. Perfect for filtering options,
+selecting views, or toggling between related choices. Can be controlled or uncontrolled,
+with support for various orientations and styles.
+
+## CSS Variables
+
+<table>
+  <thead>
+    <tr>
+      <th>Variable</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>--btg-bg</code></td>
+      <td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-background-primary)</code></a></td>
+      <td>Container background color</td>
+    </tr>
+    <tr>
+      <td><code>--btg-border-color</code></td>
+      <td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-border-primary)</code></a></td>
+      <td>Border color</td>
+    </tr>
+    <tr>
+      <td><code>--btg-border-radius</code></td>
+      <td><a href="?path=/story/theme-css-variables--borders"><code>var(--radius-md)</code></a></td>
+      <td>Border radius</td>
+    </tr>
+    <tr>
+      <td><code>--btg-item-bg</code></td>
+      <td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-background-primary)</code></a></td>
+      <td>Item background color</td>
+    </tr>
+    <tr>
+      <td><code>--btg-item-bg-hover</code></td>
+      <td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-interactive-hover)</code></a></td>
+      <td>Item background color on hover</td>
+    </tr>
+    <tr>
+      <td><code>--btg-item-bg-selected</code></td>
+      <td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-primary)</code></a></td>
+      <td>Item background color when selected</td>
+    </tr>
+    <tr>
+      <td><code>--btg-item-color</code></td>
+      <td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-text-primary)</code></a></td>
+      <td>Item text color</td>
+    </tr>
+    <tr>
+      <td><code>--btg-item-color-selected</code></td>
+      <td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-text-on-primary)</code></a></td>
+      <td>Item text color when selected</td>
+    </tr>
+    <tr>
+      <td><code>--btg-disabled-opacity</code></td>
+      <td><code>0.5</code></td>
+      <td>Opacity when disabled</td>
+    </tr>
+  </tbody>
+</table>
+        `,
+      },
+    },
+  },
   argTypes: {
     value: {
       control: 'text',
@@ -20,31 +92,30 @@ const meta: Meta<typeof ButtonToggleGroup> = {
     variant: {
       control: 'select',
       options: ['primary', 'secondary', 'outline', 'ghost', 'success', 'warning', 'danger'],
-      description: 'Button variant style',
+      description: 'Button variant style for all buttons in the group',
     },
     size: {
       control: 'select',
       options: ['sm', 'md', 'lg'],
-      description: 'Button size',
+      description: 'Button size for all buttons in the group',
     },
     orientation: {
       control: 'select',
       options: ['horizontal', 'vertical'],
-      description: 'Orientation of the button group',
+      description: 'Orientation of the button group layout',
     },
     fullWidth: {
       control: 'boolean',
-      description: 'Whether buttons should take full width',
+      description: 'Whether buttons should distribute equally across available width',
     },
     disabled: {
       control: 'boolean',
-      description: 'Whether all buttons are disabled',
+      description: 'Whether all buttons in the group are disabled',
     },
     'aria-label': {
       control: 'text',
-      description: 'Accessible label for the group',
+      description: 'Accessible label for the button group',
     },
-    // Disable complex props
     onChange: { table: { disable: true } },
     className: { table: { disable: true } },
     style: { table: { disable: true } },
@@ -61,16 +132,23 @@ type Story = StoryObj<typeof ButtonToggleGroup>;
  * Default text button group
  */
 export const Default: Story = {
+  args: {
+    defaultValue: 'md',
+    'aria-label': 'Select size',
+    variant: 'outline',
+    size: 'md',
+    orientation: 'horizontal',
+    fullWidth: false,
+    disabled: false,
+    onChange: action('onChange'),
+  },
   render: (args) => (
-    <ButtonToggleGroup {...args} defaultValue="md" onChange={action('onChange')}>
+    <ButtonToggleGroup {...args}>
       <ButtonToggleGroupItem value="sm">Small</ButtonToggleGroupItem>
       <ButtonToggleGroupItem value="md">Medium</ButtonToggleGroupItem>
       <ButtonToggleGroupItem value="lg">Large</ButtonToggleGroupItem>
     </ButtonToggleGroup>
   ),
-  args: {
-    'aria-label': 'Select size',
-  },
 };
 
 /**
@@ -85,6 +163,11 @@ export const IconsOnly: Story = {
   ),
   parameters: {
     controls: { disable: true },
+    docs: {
+      description: {
+        story: 'Toggle group with icon-only buttons for compact view selection.',
+      },
+    },
   },
 };
 
@@ -107,6 +190,12 @@ export const IconsWithText: Story = {
   ),
   parameters: {
     controls: { disable: true },
+    docs: {
+      description: {
+        story:
+          'Toggle group with both icons and text labels for clear visual and textual feedback.',
+      },
+    },
   },
 };
 
@@ -150,6 +239,11 @@ export const Sizes: Story = {
   ),
   parameters: {
     controls: { disable: true },
+    docs: {
+      description: {
+        story: 'All available size options for button toggle groups.',
+      },
+    },
   },
 };
 
@@ -208,6 +302,11 @@ export const Variants: Story = {
   ),
   parameters: {
     controls: { disable: true },
+    docs: {
+      description: {
+        story: 'All available visual variants for button toggle groups.',
+      },
+    },
   },
 };
 
@@ -233,6 +332,11 @@ export const Vertical: Story = {
   ),
   parameters: {
     controls: { disable: true },
+    docs: {
+      description: {
+        story: 'Vertical orientation for sidebar or vertical navigation patterns.',
+      },
+    },
   },
 };
 
@@ -251,6 +355,11 @@ export const FullWidth: Story = {
   ),
   parameters: {
     controls: { disable: true },
+    docs: {
+      description: {
+        story: 'Full width mode where buttons distribute equally to fill available space.',
+      },
+    },
   },
 };
 
@@ -286,6 +395,11 @@ export const Disabled: Story = {
   ),
   parameters: {
     controls: { disable: true },
+    docs: {
+      description: {
+        story: 'Disabled states for entire group and individual items.',
+      },
+    },
   },
 };
 
@@ -319,6 +433,11 @@ export const Controlled: Story = {
   render: () => <ControlledExample />,
   parameters: {
     controls: { disable: true },
+    docs: {
+      description: {
+        story: 'Controlled component example with value managed by parent state.',
+      },
+    },
   },
 };
 
@@ -336,6 +455,11 @@ export const TextAlignment: Story = {
   ),
   parameters: {
     controls: { disable: true },
+    docs: {
+      description: {
+        story: 'Real-world example: text alignment control for editor applications.',
+      },
+    },
   },
 };
 
@@ -358,6 +482,11 @@ export const ChartType: Story = {
   ),
   parameters: {
     controls: { disable: true },
+    docs: {
+      description: {
+        story: 'Real-world example: chart type selection for data visualization.',
+      },
+    },
   },
 };
 
@@ -365,13 +494,6 @@ export const ChartType: Story = {
  * Interactive playground with all controls
  */
 export const Playground: Story = {
-  render: (args) => (
-    <ButtonToggleGroup {...args} onChange={action('onChange')}>
-      <ButtonToggleGroupItem value="option1">Option 1</ButtonToggleGroupItem>
-      <ButtonToggleGroupItem value="option2">Option 2</ButtonToggleGroupItem>
-      <ButtonToggleGroupItem value="option3">Option 3</ButtonToggleGroupItem>
-    </ButtonToggleGroup>
-  ),
   args: {
     defaultValue: 'option1',
     variant: 'outline',
@@ -380,5 +502,21 @@ export const Playground: Story = {
     fullWidth: false,
     disabled: false,
     'aria-label': 'Button toggle group',
+    onChange: action('onChange'),
+  },
+  render: (args) => (
+    <ButtonToggleGroup {...args}>
+      <ButtonToggleGroupItem value="option1">Option 1</ButtonToggleGroupItem>
+      <ButtonToggleGroupItem value="option2">Option 2</ButtonToggleGroupItem>
+      <ButtonToggleGroupItem value="option3">Option 3</ButtonToggleGroupItem>
+    </ButtonToggleGroup>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Interactive playground with all button toggle group props available for experimentation.',
+      },
+    },
   },
 };

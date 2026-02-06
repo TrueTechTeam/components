@@ -5,6 +5,99 @@ const meta: Meta<typeof NavLink> = {
   title: 'Navigation/NavLink',
   component: NavLink,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+Semantic navigation link component with multiple variants (default, underline, pill, ghost) and sizes. Supports icons and active/disabled states.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--nav-link-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-secondary)</code></a></td>
+<td>Text color for inactive link</td>
+</tr>
+<tr>
+<td><code>--nav-link-color-hover</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-primary)</code></a></td>
+<td>Text color on hover</td>
+</tr>
+<tr>
+<td><code>--nav-link-color-active</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-primary)</code></a></td>
+<td>Text color when active</td>
+</tr>
+<tr>
+<td><code>--nav-link-bg</code></td>
+<td>transparent</td>
+<td>Background color for inactive link</td>
+</tr>
+<tr>
+<td><code>--nav-link-bg-hover</code></td>
+<td>transparent</td>
+<td>Background color on hover</td>
+</tr>
+<tr>
+<td><code>--nav-link-bg-active</code></td>
+<td>transparent</td>
+<td>Background color when active</td>
+</tr>
+<tr>
+<td><code>--nav-link-font-size</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-size-base)</code></a></td>
+<td>Font size</td>
+</tr>
+<tr>
+<td><code>--nav-link-font-weight</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-weight-medium)</code></a></td>
+<td>Font weight</td>
+</tr>
+<tr>
+<td><code>--nav-link-padding-x</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-sm)</code></a></td>
+<td>Horizontal padding</td>
+</tr>
+<tr>
+<td><code>--nav-link-padding-y</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-xs)</code></a></td>
+<td>Vertical padding</td>
+</tr>
+<tr>
+<td><code>--nav-link-gap</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-xs)</code></a></td>
+<td>Gap between icon and text</td>
+</tr>
+<tr>
+<td><code>--nav-link-radius</code></td>
+<td><a href="?path=/story/theme-css-variables--borders"><code>var(--radius-md)</code></a></td>
+<td>Border radius</td>
+</tr>
+<tr>
+<td><code>--nav-link-underline-height</code></td>
+<td>2px</td>
+<td>Height of underline in underline variant</td>
+</tr>
+<tr>
+<td><code>--nav-link-transition</code></td>
+<td><a href="?path=/story/theme-css-variables--transitions"><code>var(--transition-fast)</code></a></td>
+<td>Transition duration and easing</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   argTypes: {
     variant: {
       control: 'select',

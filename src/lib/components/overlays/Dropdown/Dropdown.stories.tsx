@@ -41,8 +41,28 @@ const meta: Meta<typeof Dropdown> = {
   parameters: {
     docs: {
       description: {
-        component:
-          'Dropdown combines a Menu with a Button trigger for easy selection from a list of options. Use the items prop for simple lists or children for custom menu structures.',
+        component: `
+Dropdown combines a Menu with a Button trigger for easy selection from a list of options. Use the items prop for simple lists or children for custom menu structures.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--transition-normal</code></td>
+<td><a href="?path=/story/theme-css-variables--transitions"><code>var(--transition-normal)</code></a></td>
+<td>Chevron rotation transition</td>
+</tr>
+</tbody>
+</table>
+`,
       },
     },
   },

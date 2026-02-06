@@ -14,6 +14,122 @@ const meta: Meta<typeof SideNav> = {
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',
+    docs: {
+      description: {
+        component: `
+Vertical side navigation with collapsible groups, dividers, badges, and optional header/footer sections. Supports nested items and visual collapse animations.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--sidenav-width</code></td>
+<td>240px</td>
+<td>Current width of navigation</td>
+</tr>
+<tr>
+<td><code>--sidenav-expanded-width</code></td>
+<td>240px</td>
+<td>Width when expanded</td>
+</tr>
+<tr>
+<td><code>--sidenav-collapsed-width</code></td>
+<td>64px</td>
+<td>Width when collapsed</td>
+</tr>
+<tr>
+<td><code>--sidenav-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-background-secondary)</code></a></td>
+<td>Background color</td>
+</tr>
+<tr>
+<td><code>--sidenav-border-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-border-primary)</code></a></td>
+<td>Border color</td>
+</tr>
+<tr>
+<td><code>--sidenav-item-hover-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-background-tertiary)</code></a></td>
+<td>Item background on hover</td>
+</tr>
+<tr>
+<td><code>--sidenav-item-active-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-primary-100)</code></a></td>
+<td>Item background when active</td>
+</tr>
+<tr>
+<td><code>--sidenav-item-active-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-primary)</code></a></td>
+<td>Item text color when active</td>
+</tr>
+<tr>
+<td><code>--sidenav-text-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-primary)</code></a></td>
+<td>Primary text color</td>
+</tr>
+<tr>
+<td><code>--sidenav-text-secondary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-secondary)</code></a></td>
+<td>Secondary text color</td>
+</tr>
+<tr>
+<td><code>--sidenav-transition-duration</code></td>
+<td>250ms</td>
+<td>Transition duration for state changes</td>
+</tr>
+<tr>
+<td><code>--sidenav-transition-easing</code></td>
+<td>ease-in-out</td>
+<td>Easing for transitions</td>
+</tr>
+<tr>
+<td><code>--sidenav-item-height</code></td>
+<td>40px</td>
+<td>Height of navigation items</td>
+</tr>
+<tr>
+<td><code>--sidenav-item-padding-x</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-md)</code></a></td>
+<td>Horizontal padding of items</td>
+</tr>
+<tr>
+<td><code>--sidenav-item-padding-y</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-sm)</code></a></td>
+<td>Vertical padding of items</td>
+</tr>
+<tr>
+<td><code>--sidenav-item-radius</code></td>
+<td><a href="?path=/story/theme-css-variables--borders"><code>var(--radius-md)</code></a></td>
+<td>Border radius of items</td>
+</tr>
+<tr>
+<td><code>--sidenav-item-gap</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-sm)</code></a></td>
+<td>Gap between icon and label</td>
+</tr>
+<tr>
+<td><code>--sidenav-nested-indent</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-lg)</code></a></td>
+<td>Indentation for nested items</td>
+</tr>
+<tr>
+<td><code>--sidenav-section-gap</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-md)</code></a></td>
+<td>Gap between section dividers</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
   },
   argTypes: {
     position: {

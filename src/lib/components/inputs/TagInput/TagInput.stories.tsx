@@ -7,6 +7,54 @@ const meta: Meta<typeof TagInput> = {
   title: 'Inputs/TagInput',
   component: TagInput,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+TagInput component for managing multiple tags with customizable validation, suggestions, and styling.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--tag-padding</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-sm)</code></a></td>
+<td>Padding inside tags</td>
+</tr>
+<tr>
+<td><code>--tag-font-size</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-size-sm)</code></a></td>
+<td>Font size of tag text</td>
+</tr>
+<tr>
+<td><code>--tag-height</code></td>
+<td><code>28px</code></td>
+<td>Height of tags</td>
+</tr>
+<tr>
+<td><code>--input-padding</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-xs)</code></a></td>
+<td>Padding of input field</td>
+</tr>
+<tr>
+<td><code>--input-font-size</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-size-base)</code></a></td>
+<td>Font size of input field</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   argTypes: {
     // Simple controls
     label: {

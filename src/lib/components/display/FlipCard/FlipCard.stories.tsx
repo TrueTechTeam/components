@@ -7,6 +7,79 @@ const meta: Meta<typeof FlipCard> = {
   title: 'Display/FlipCard',
   component: FlipCard,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+An animated card component that flips to reveal back content. Supports various flip triggers (click, hover, manual), directions (horizontal, vertical), and animation customization.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--flipcard-duration</code></td>
+<td>600ms</td>
+<td>Animation duration for flip transition</td>
+</tr>
+<tr>
+<td><code>--flipcard-easing</code></td>
+<td>ease-in-out</td>
+<td>CSS easing function for animation</td>
+</tr>
+<tr>
+<td><code>--flipcard-perspective</code></td>
+<td>1000px</td>
+<td>Perspective distance for 3D effect</td>
+</tr>
+<tr>
+<td><code>--flipcard-height</code></td>
+<td>200px</td>
+<td>Height of the card</td>
+</tr>
+<tr>
+<td><code>--flipcard-width</code></td>
+<td>300px</td>
+<td>Width of the card</td>
+</tr>
+<tr>
+<td><code>--flipcard-border-radius</code></td>
+<td><a href="?path=/story/theme-css-variables--borders"><code>var(--radius-md)</code></a></td>
+<td>Border radius for card corners</td>
+</tr>
+<tr>
+<td><code>--flipcard-bg-front</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-surface-primary)</code></a></td>
+<td>Background color of front face</td>
+</tr>
+<tr>
+<td><code>--flipcard-bg-back</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-surface-secondary)</code></a></td>
+<td>Background color of back face</td>
+</tr>
+<tr>
+<td><code>--flipcard-border-color</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-border-primary)</code></a></td>
+<td>Border color for the card</td>
+</tr>
+<tr>
+<td><code>--flipcard-shadow</code></td>
+<td>0 2px 8px rgba(0, 0, 0, 0.1)</td>
+<td>Box shadow for the card</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   argTypes: {
     flipTrigger: {
       control: 'select',
@@ -38,6 +111,18 @@ const meta: Meta<typeof FlipCard> = {
       control: 'text',
       description: 'Fixed width for the card',
     },
+    defaultFlipped: {
+      control: 'boolean',
+      description: 'Default flipped state in uncontrolled mode',
+    },
+    easing: {
+      control: 'text',
+      description: 'CSS easing function',
+    },
+    flipButtonAriaLabel: {
+      control: 'text',
+      description: 'ARIA label for accessibility',
+    },
     onFlipChange: { table: { disable: true } },
     onFlipStart: { table: { disable: true } },
     onFlipEnd: { table: { disable: true } },
@@ -47,6 +132,7 @@ const meta: Meta<typeof FlipCard> = {
     className: { table: { disable: true } },
     'data-testid': { table: { disable: true } },
     style: { table: { disable: true } },
+    'aria-label': { table: { disable: true } },
   },
 };
 

@@ -9,6 +9,68 @@ const meta: Meta<typeof Card> = {
   title: 'Display/Card',
   component: Card,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `Card component - A flexible container component for grouping related content
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--card-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-surface-primary)</code></a></td>
+<td>Background color</td>
+</tr>
+<tr>
+<td><code>--card-border-color</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-border-primary)</code></a></td>
+<td>Border color</td>
+</tr>
+<tr>
+<td><code>--card-border-width</code></td>
+<td><code>1px</code></td>
+<td>Border width</td>
+</tr>
+<tr>
+<td><code>--card-border-radius</code></td>
+<td><a href="?path=/story/theme-css-variables--borders"><code>var(--radius-md)</code></a></td>
+<td>Border radius</td>
+</tr>
+<tr>
+<td><code>--card-padding</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-md)</code></a></td>
+<td>Content padding</td>
+</tr>
+<tr>
+<td><code>--card-shadow</code></td>
+<td><code>none</code></td>
+<td>Box shadow</td>
+</tr>
+<tr>
+<td><code>--card-shadow-hover</code></td>
+<td><code>0 8px 24px rgba(0, 0, 0, 0.15)</code></td>
+<td>Box shadow on hover</td>
+</tr>
+<tr>
+<td><code>--card-transition</code></td>
+<td><a href="?path=/story/theme-css-variables--transitions"><code>var(--transition-normal)</code></a></td>
+<td>Transition timing</td>
+</tr>
+</tbody>
+</table>
+        `,
+      },
+    },
+  },
   argTypes: {
     variant: {
       control: 'select',
@@ -56,6 +118,7 @@ const meta: Meta<typeof Card> = {
     className: { table: { disable: true } },
     'data-testid': { table: { disable: true } },
     style: { table: { disable: true } },
+    'aria-label': { table: { disable: true } },
   },
 };
 

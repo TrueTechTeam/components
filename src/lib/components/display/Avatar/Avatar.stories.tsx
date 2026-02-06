@@ -6,6 +6,63 @@ const meta: Meta<typeof Avatar> = {
   title: 'Display/Avatar',
   component: Avatar,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `Avatar component - User profile picture or placeholder with initials/fallback
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--avatar-size</code></td>
+<td><code>40px</code></td>
+<td>Size of the avatar (width and height)</td>
+</tr>
+<tr>
+<td><code>--avatar-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-neutral-200)</code></a></td>
+<td>Background color</td>
+</tr>
+<tr>
+<td><code>--avatar-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-neutral-800)</code></a></td>
+<td>Text/initials color</td>
+</tr>
+<tr>
+<td><code>--avatar-border-radius</code></td>
+<td><code>50%</code></td>
+<td>Border radius (50% for circular, modified by variant)</td>
+</tr>
+<tr>
+<td><code>--avatar-font-size</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-size-sm)</code></a></td>
+<td>Font size for initials</td>
+</tr>
+<tr>
+<td><code>--avatar-font-weight</code></td>
+<td><code>500</code></td>
+<td>Font weight for initials</td>
+</tr>
+<tr>
+<td><code>--avatar-status-position</code></td>
+<td><code>0px</code></td>
+<td>Position offset for status indicator</td>
+</tr>
+</tbody>
+</table>
+        `,
+      },
+    },
+  },
   argTypes: {
     variant: {
       control: 'select',
@@ -19,7 +76,18 @@ const meta: Meta<typeof Avatar> = {
     },
     status: {
       control: 'select',
-      options: ['success', 'warning', 'error', 'info', 'neutral', 'processing'],
+      options: [
+        'online',
+        'offline',
+        'away',
+        'busy',
+        'success',
+        'warning',
+        'error',
+        'info',
+        'neutral',
+        'processing',
+      ],
       description: 'Status indicator',
     },
     src: {

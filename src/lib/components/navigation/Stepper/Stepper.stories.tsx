@@ -8,6 +8,119 @@ const meta: Meta<typeof Stepper> = {
   title: 'Navigation/Stepper',
   component: Stepper,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+Step indicator component for multi-step processes. Supports horizontal and vertical orientations with multiple indicator variants (numbered, dot, icon). Shows completed, active, and error states.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--stepper-indicator-size-sm</code></td>
+<td>24px</td>
+<td>Indicator size for small variant</td>
+</tr>
+<tr>
+<td><code>--stepper-indicator-size-md</code></td>
+<td>32px</td>
+<td>Indicator size for medium variant</td>
+</tr>
+<tr>
+<td><code>--stepper-indicator-size-lg</code></td>
+<td>40px</td>
+<td>Indicator size for large variant</td>
+</tr>
+<tr>
+<td><code>--stepper-indicator-size</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--stepper-indicator-size-md)</code></a></td>
+<td>Current indicator size</td>
+</tr>
+<tr>
+<td><code>--stepper-indicator-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-background-secondary)</code></a></td>
+<td>Background color of inactive indicator</td>
+</tr>
+<tr>
+<td><code>--stepper-indicator-active-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-primary)</code></a></td>
+<td>Background color of active indicator</td>
+</tr>
+<tr>
+<td><code>--stepper-indicator-completed-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-success)</code></a></td>
+<td>Background color of completed indicator</td>
+</tr>
+<tr>
+<td><code>--stepper-indicator-error-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-error)</code></a></td>
+<td>Background color of error indicator</td>
+</tr>
+<tr>
+<td><code>--stepper-indicator-text</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-secondary)</code></a></td>
+<td>Text color in inactive indicator</td>
+</tr>
+<tr>
+<td><code>--stepper-indicator-active-text</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-on-primary)</code></a></td>
+<td>Text color in active indicator</td>
+</tr>
+<tr>
+<td><code>--stepper-connector-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-border-primary)</code></a></td>
+<td>Color of connector lines</td>
+</tr>
+<tr>
+<td><code>--stepper-connector-completed-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-success)</code></a></td>
+<td>Color of completed connector</td>
+</tr>
+<tr>
+<td><code>--stepper-connector-thickness</code></td>
+<td>2px</td>
+<td>Thickness of connector lines</td>
+</tr>
+<tr>
+<td><code>--stepper-title-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-primary)</code></a></td>
+<td>Color of step title</td>
+</tr>
+<tr>
+<td><code>--stepper-description-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-secondary)</code></a></td>
+<td>Color of step description</td>
+</tr>
+<tr>
+<td><code>--stepper-transition</code></td>
+<td><a href="?path=/story/theme-css-variables--transitions"><code>var(--transition-normal)</code></a></td>
+<td>Transition duration and easing</td>
+</tr>
+<tr>
+<td><code>--stepper-gap</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-md)</code></a></td>
+<td>Gap between steps</td>
+</tr>
+<tr>
+<td><code>--stepper-font-size</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-size-sm)</code></a></td>
+<td>Font size of step labels</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   argTypes: {
     orientation: {
       control: 'select',

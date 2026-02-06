@@ -7,6 +7,69 @@ const meta: Meta<typeof Checkbox> = {
   title: 'Inputs/Checkbox',
   component: Checkbox,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+Checkbox component with support for checked, unchecked, and indeterminate states. Fully accessible with label support and error handling.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--checkbox-size</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-lg)</code></a></td>
+<td>Size of checkbox element</td>
+</tr>
+<tr>
+<td><code>--checkbox-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-control-bg)</code></a></td>
+<td>Background color of checkbox</td>
+</tr>
+<tr>
+<td><code>--checkbox-border</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-control-border)</code></a></td>
+<td>Border color of checkbox</td>
+</tr>
+<tr>
+<td><code>--checkbox-bg-checked</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-primary)</code></a></td>
+<td>Background color when checked</td>
+</tr>
+<tr>
+<td><code>--checkbox-border-checked</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-primary)</code></a></td>
+<td>Border color when checked</td>
+</tr>
+<tr>
+<td><code>--checkbox-icon-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-on-primary)</code></a></td>
+<td>Color of check icon</td>
+</tr>
+<tr>
+<td><code>--checkbox-focus-ring</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-interactive-focus)</code></a></td>
+<td>Focus ring color</td>
+</tr>
+<tr>
+<td><code>--checkbox-transition</code></td>
+<td><code>all 0.15s ease-in-out</code></td>
+<td>Transition property</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   argTypes: {
     // Simple controls
     variant: {

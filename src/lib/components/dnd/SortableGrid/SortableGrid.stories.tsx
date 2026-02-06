@@ -6,7 +6,67 @@ const meta: Meta<typeof SortableGrid> = {
   title: 'DnD/SortableGrid',
   component: SortableGrid,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+SortableGrid component for creating reorderable grid layouts with drag-and-drop functionality.
+
+## CSS Variables
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--grid-gap</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-md)</code></a></td>
+<td>Gap between grid items</td>
+</tr>
+<tr>
+<td><code>--grid-template</code></td>
+<td><code>repeat(auto-fill, minmax(150px, 1fr))</code></td>
+<td>CSS grid template columns</td>
+</tr>
+<tr>
+<td><code>--theme-surface-primary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-surface-primary)</code></a></td>
+<td>Background color for items</td>
+</tr>
+<tr>
+<td><code>--radius-md</code></td>
+<td><a href="?path=/story/theme-css-variables--borders"><code>var(--radius-md)</code></a></td>
+<td>Border radius for items</td>
+</tr>
+<tr>
+<td><code>--shadow-lg</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--shadow-lg)</code></a></td>
+<td>Shadow for dragging items</td>
+</tr>
+<tr>
+<td><code>--shadow-md</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--shadow-md)</code></a></td>
+<td>Shadow on hover</td>
+</tr>
+<tr>
+<td><code>--theme-primary</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-primary)</code></a></td>
+<td>Color for drop indicator</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   argTypes: {
+    items: { table: { disable: true } },
+    onReorder: { table: { disable: true } },
+    renderItem: { table: { disable: true } },
     columns: {
       control: 'number',
       description: 'Number of columns (or "auto")',
@@ -23,6 +83,15 @@ const meta: Meta<typeof SortableGrid> = {
     disabled: {
       control: 'boolean',
       description: 'Whether the grid is disabled',
+    },
+    className: {
+      table: { disable: true },
+    },
+    'data-testid': {
+      table: { disable: true },
+    },
+    style: {
+      table: { disable: true },
     },
   },
 };

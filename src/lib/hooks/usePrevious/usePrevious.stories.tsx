@@ -293,7 +293,7 @@ const meta: Meta = {
     docs: {
       description: {
         component: `
-\`usePrevious\` tracks the previous value of a state or prop across renders. Useful for comparing values, detecting changes, and determining direction of change.
+\`usePrevious\` is a React hook that tracks the previous value of a state or prop across renders, useful for comparing values, detecting changes, and determining the direction of change.
 
 ## Basic Usage
 

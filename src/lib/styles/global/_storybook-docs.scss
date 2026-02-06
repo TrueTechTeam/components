@@ -1,0 +1,500 @@
+// =============================================================================
+// TABLES - ArgTypes and Controls tables
+// =============================================================================
+
+.docblock-argstable,
+.sbdocs table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0;
+  border: 1px solid var(--theme-border-primary);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  font-size: var(--font-size-sm);
+  background: var(--theme-background-secondary);
+
+  th {
+    background: var(--theme-background-secondary);
+    color: var(--theme-text-primary);
+    font-weight: var(--font-weight-semibold);
+    text-align: left;
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-bottom: 1px solid var(--theme-border-primary);
+  }
+
+  td {
+    background: var(--theme-background-tertiary);
+    color: var(--theme-text-primary);
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-bottom: 1px solid var(--theme-border-primary);
+    vertical-align: middle;
+
+    // Description column styling
+    &:last-child {
+      color: var(--theme-text-secondary);
+    }
+  }
+
+  tr:last-child td {
+    border-bottom: none;
+  }
+
+  tbody tr:hover td {
+    background: var(--theme-interactive-hover);
+  }
+
+  // Required indicator
+  span[title='Required'] {
+    color: var(--theme-error);
+  }
+}
+
+// Full width table wrapper
+.docblock-argstable-wrapper,
+.sbdocs-wrapper .docblock-argstable {
+  width: 100%;
+  max-width: 100%;
+}
+
+// =============================================================================
+// CONTROLS - Input fields, selects, toggles
+// =============================================================================
+
+// Text and number inputs
+.docblock-argstable input[type='text'],
+.docblock-argstable input[type='number'],
+.docblock-argstable textarea,
+.sbdocs input[type='text'],
+.sbdocs input[type='number'],
+.sbdocs textarea {
+  background: var(--theme-input-bg);
+  border: 1px solid var(--theme-input-border);
+  border-radius: var(--radius-md);
+  color: var(--theme-input-text);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-sm);
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+
+  &::placeholder {
+    color: var(--theme-input-placeholder);
+  }
+
+  &:hover {
+    border-color: var(--theme-input-border-hover);
+  }
+
+  &:focus {
+    border-color: var(--theme-input-border-focus);
+    outline: none;
+    box-shadow: 0 0 0 3px var(--theme-interactive-focus);
+  }
+}
+
+// Select dropdowns
+.docblock-argstable select,
+.sbdocs select {
+  background: var(--theme-input-bg);
+  border: 1px solid var(--theme-input-border);
+  border-radius: var(--radius-md);
+  color: var(--theme-input-text);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+
+  &:hover {
+    border-color: var(--theme-input-border-hover);
+  }
+
+  &:focus {
+    border-color: var(--theme-input-border-focus);
+    outline: none;
+    box-shadow: 0 0 0 3px var(--theme-interactive-focus);
+  }
+
+  option {
+    background: var(--theme-surface-primary);
+    color: var(--theme-text-primary);
+  }
+}
+
+// Boolean toggle buttons
+.docblock-argstable button[class*='Bool'],
+.docblock-argstable [role='switch'] {
+  border: 1px solid var(--theme-control-border);
+  border-radius: var(--radius-full);
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
+
+  &:hover {
+    border-color: var(--theme-control-border-hover);
+  }
+
+  &[data-state='true'],
+  &[aria-pressed='true'],
+  &[aria-checked='true'] {
+    background: var(--theme-control-bg-checked);
+    border-color: var(--theme-control-bg-checked);
+  }
+}
+
+// Radio and checkbox controls
+.docblock-argstable input[type='radio'],
+.docblock-argstable input[type='checkbox'] {
+  accent-color: var(--theme-primary);
+}
+
+// Color picker
+.docblock-argstable [class*='ColorIcon'],
+.docblock-argstable input[type='color'] {
+  border: 1px solid var(--theme-input-border);
+  border-radius: var(--radius-sm);
+}
+
+// Range/slider controls
+.docblock-argstable input[type='range'] {
+  accent-color: var(--theme-primary);
+}
+
+// =============================================================================
+// DOCS PAGE ELEMENTS
+// =============================================================================
+
+// Code blocks
+.sbdocs code {
+  background: var(--theme-surface-secondary);
+  color: var(--theme-text-primary);
+  border-radius: var(--radius-sm);
+  padding: 2px 6px;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+}
+
+// Pre blocks (code snippets)
+.sbdocs pre {
+  background: var(--theme-surface-secondary);
+  border: 1px solid var(--theme-border-primary);
+  border-radius: var(--radius-md);
+  padding: var(--spacing-md);
+
+  code {
+    background: transparent;
+    padding: 0;
+  }
+}
+
+// Links
+.sbdocs a {
+  color: var(--theme-primary);
+
+  &:hover {
+    color: var(--theme-primary-hover);
+  }
+}
+
+// Headings
+.sbdocs h1,
+.sbdocs h2,
+.sbdocs h3,
+.sbdocs h4,
+.sbdocs h5,
+.sbdocs h6 {
+  color: var(--theme-text-primary);
+}
+
+// Paragraphs
+.sbdocs p {
+  color: var(--theme-text-secondary);
+}
+
+// Control action buttons (reset, etc)
+.docblock-argstable button:not([class*='Bool']):not([role='switch']) {
+  background: var(--theme-primary);
+  border: 1px solid var(--theme-border-primary);
+  border-radius: var(--radius-md);
+  color: var(--theme-text-on-primary);
+  padding: var(--spacing-xs) var(--spacing-sm);
+  cursor: pointer;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
+
+  &:hover {
+    background: var(--theme-interactive-hover);
+    border-color: var(--theme-input-border-hover);
+  }
+
+  &:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px var(--theme-interactive-focus);
+  }
+}
+
+// =============================================================================
+// ADDITIONAL CONTROL ELEMENTS
+// =============================================================================
+
+// JSON tree/object controls
+.docblock-argstable [class*='JsonTree'],
+.docblock-argstable [class*='ObjectControl'] {
+  background: var(--theme-input-bg);
+  border: 1px solid var(--theme-input-border);
+  border-radius: var(--radius-md);
+  color: var(--theme-input-text);
+}
+
+// Array/object add buttons
+.docblock-argstable [class*='AddButton'],
+.docblock-argstable [class*='RemoveButton'] {
+  background: var(--theme-surface-secondary);
+  border: 1px solid var(--theme-border-primary);
+  color: var(--theme-text-secondary);
+
+  &:hover {
+    background: var(--theme-interactive-hover);
+    color: var(--theme-text-primary);
+    border-color: var(--theme-input-border-hover);
+  }
+}
+
+// Expand/collapse buttons
+.docblock-argstable [class*='ExpanderButton'],
+.docblock-argstable [aria-expanded] {
+  color: var(--theme-text-secondary);
+
+  &:hover {
+    color: var(--theme-text-primary);
+    background: var(--theme-interactive-hover);
+  }
+}
+
+// Reset button styling
+.docblock-argstable [class*='ResetButton'],
+.docblock-argstable button[title*='Reset'] {
+  background: var(--theme-surface-secondary);
+  border: 1px solid var(--theme-border-primary);
+  color: var(--theme-text-secondary);
+
+  &:hover {
+    background: var(--theme-interactive-hover);
+    color: var(--theme-text-primary);
+    border-color: var(--theme-input-border-hover);
+  }
+}
+
+// Radio button groups in controls
+.docblock-argstable [class*='RadioGroup'] {
+  background: var(--theme-input-bg);
+  border: 1px solid var(--theme-input-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+
+  button,
+  label {
+    background: transparent;
+    border: none;
+    color: var(--theme-text-secondary);
+    border-right: 1px solid var(--theme-input-border);
+
+    &:last-child {
+      border-right: none;
+    }
+
+    &:hover {
+      background: var(--theme-interactive-hover);
+      color: var(--theme-text-primary);
+    }
+
+    &[data-selected='true'],
+    &[aria-checked='true'],
+    &.selected {
+      background: var(--theme-primary);
+      color: var(--theme-text-on-primary);
+    }
+  }
+}
+
+// Segmented control buttons
+.docblock-argstable [class*='Segment'],
+.docblock-argstable [role='radiogroup'] button {
+  background: var(--theme-surface-secondary);
+  border: 1px solid var(--theme-border-primary);
+  color: var(--theme-text-secondary);
+
+  &:hover {
+    background: var(--theme-interactive-hover);
+    color: var(--theme-text-primary);
+  }
+
+  &[aria-checked='true'],
+  &[data-state='checked'] {
+    background: var(--theme-primary);
+    border-color: var(--theme-primary);
+    color: var(--theme-text-on-primary);
+  }
+}
+
+// =============================================================================
+// STORY CANVAS
+// =============================================================================
+
+// Story container background
+.docs-story {
+  background: var(--theme-surface-primary);
+}
+
+// =============================================================================
+// STORYBOOK PANELS & CHROME
+// =============================================================================
+
+// Addon panel tabs
+[class*='tabbutton'] {
+  background: transparent;
+  border: none;
+  color: var(--theme-text-secondary);
+
+  &:hover {
+    color: var(--theme-text-primary);
+  }
+
+  &[data-selected='true'],
+  &[aria-selected='true'] {
+    color: var(--theme-primary);
+    border-bottom-color: var(--theme-primary);
+  }
+}
+
+// Panel content area
+[class*='panelInner'] {
+  background: var(--theme-surface-primary);
+}
+
+// Separator lines
+[class*='Separator'],
+hr {
+  border-color: var(--theme-border-primary);
+  background-color: var(--theme-border-primary);
+}
+
+// =============================================================================
+// TOOLTIP & POPOVERS
+// =============================================================================
+
+[class*='TooltipWrapper'],
+[class*='Tooltip'] {
+  background: var(--theme-surface-secondary);
+  border: 1px solid var(--theme-border-primary);
+  color: var(--theme-text-primary);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+}
+
+// =============================================================================
+// DESCRIPTION & LABELS
+// =============================================================================
+
+// Property name/label
+.docblock-argstable td:first-child {
+  color: var(--theme-text-primary);
+  font-weight: var(--font-weight-medium);
+}
+
+// Type annotations
+.docblock-argstable [class*='Type'],
+.docblock-argstable code {
+  background: var(--theme-surface-secondary);
+  color: var(--theme-primary);
+  border-radius: var(--radius-sm);
+  padding: 2px 6px;
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+}
+
+// Default value display
+.docblock-argstable [class*='Default'] {
+  color: var(--theme-text-tertiary);
+  font-family: var(--font-family-mono);
+  font-size: var(--font-size-xs);
+}
+
+// =============================================================================
+// MARKDOWN CONTENT IN DOCS
+// =============================================================================
+
+.sbdocs-content {
+  // Lists
+  ul,
+  ol {
+    color: var(--theme-text-secondary);
+
+    li {
+      color: var(--theme-text-secondary);
+    }
+  }
+
+  // Blockquotes
+  blockquote {
+    border-left: 4px solid var(--theme-primary);
+    background: var(--theme-surface-secondary);
+    color: var(--theme-text-secondary);
+    padding: var(--spacing-sm) var(--spacing-md);
+    margin: var(--spacing-md) 0;
+  }
+
+  // Horizontal rules
+  hr {
+    border-color: var(--theme-border-primary);
+  }
+
+  // Strong/bold
+  strong,
+  b {
+    color: var(--theme-text-primary);
+  }
+}
+
+// =============================================================================
+// SHOW CODE BUTTON & CODE PANELS
+// =============================================================================
+
+// Show code toggle button
+[class*='showCodeButton'],
+button[title*='Show code'] {
+  background: var(--theme-surface-secondary);
+  border: 1px solid var(--theme-border-primary);
+  color: var(--theme-text-secondary);
+
+  &:hover {
+    background: var(--theme-interactive-hover);
+    color: var(--theme-text-primary);
+    border-color: var(--theme-input-border-hover);
+  }
+}
+
+// Source code panel
+[class*='docblock-source'],
+.docblock-source {
+  background: var(--theme-surface-secondary);
+  border: 1px solid var(--theme-border-primary);
+  border-radius: var(--radius-md);
+}
+
+// Copy button in code blocks
+[class*='copyButton'],
+button[title*='Copy'] {
+  background: var(--theme-surface-secondary);
+  border: 1px solid var(--theme-border-primary);
+  color: var(--theme-text-secondary);
+
+  &:hover {
+    background: var(--theme-interactive-hover);
+    color: var(--theme-text-primary);
+  }
+}

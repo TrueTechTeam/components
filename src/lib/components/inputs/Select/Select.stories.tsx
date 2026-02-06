@@ -7,6 +7,74 @@ const meta: Meta<typeof Select> = {
   title: 'Inputs/Select',
   component: Select,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+Select component for choosing one option from a dropdown menu. Supports search, grouping, and custom rendering.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--select-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-input-bg)</code></a></td>
+<td>Background color of select trigger</td>
+</tr>
+<tr>
+<td><code>--select-border</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-input-border)</code></a></td>
+<td>Border color of select trigger</td>
+</tr>
+<tr>
+<td><code>--select-text</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-input-text)</code></a></td>
+<td>Text color of select trigger</td>
+</tr>
+<tr>
+<td><code>--select-focus-border</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-input-border-focus)</code></a></td>
+<td>Border color when focused</td>
+</tr>
+<tr>
+<td><code>--select-focus-ring</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-interactive-focus)</code></a></td>
+<td>Focus ring color</td>
+</tr>
+<tr>
+<td><code>--select-padding-y</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-sm)</code></a></td>
+<td>Vertical padding</td>
+</tr>
+<tr>
+<td><code>--select-padding-x</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-sm)</code></a></td>
+<td>Horizontal padding</td>
+</tr>
+<tr>
+<td><code>--select-font-size</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-size-base)</code></a></td>
+<td>Font size of select trigger</td>
+</tr>
+<tr>
+<td><code>--select-height</code></td>
+<td><code>40px</code></td>
+<td>Height of select trigger</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   argTypes: {
     // Simple controls
     label: {

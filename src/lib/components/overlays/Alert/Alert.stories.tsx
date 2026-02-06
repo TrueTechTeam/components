@@ -11,6 +11,92 @@ const meta: Meta<typeof Alert> = {
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component: `
+Alert component displays important messages with icons, titles, and optional actions.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--spacing-md</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-md)</code></a></td>
+<td>Gap between alert header and actions</td>
+</tr>
+<tr>
+<td><code>--spacing-lg</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-lg)</code></a></td>
+<td>Padding for header and actions</td>
+</tr>
+<tr>
+<td><code>--spacing-sm</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-sm)</code></a></td>
+<td>Gap between action buttons</td>
+</tr>
+<tr>
+<td><code>--font-size-lg</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-size-lg)</code></a></td>
+<td>Alert title font size</td>
+</tr>
+<tr>
+<td><code>--font-weight-semibold</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-weight-semibold)</code></a></td>
+<td>Alert title font weight</td>
+</tr>
+<tr>
+<td><code>--font-size-base</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-size-base)</code></a></td>
+<td>Alert description font size</td>
+</tr>
+<tr>
+<td><code>--theme-text-primary</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-text-primary)</code></a></td>
+<td>Title and icon text color</td>
+</tr>
+<tr>
+<td><code>--theme-text-secondary</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-text-secondary)</code></a></td>
+<td>Description text color</td>
+</tr>
+<tr>
+<td><code>--theme-info</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-info)</code></a></td>
+<td>Info variant color</td>
+</tr>
+<tr>
+<td><code>--theme-success</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-success)</code></a></td>
+<td>Success variant color</td>
+</tr>
+<tr>
+<td><code>--theme-warning</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-warning)</code></a></td>
+<td>Warning variant color</td>
+</tr>
+<tr>
+<td><code>--theme-error</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-error)</code></a></td>
+<td>Error variant color</td>
+</tr>
+<tr>
+<td><code>--theme-primary</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-primary)</code></a></td>
+<td>Confirm variant color</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
   },
   argTypes: {
     variant: {

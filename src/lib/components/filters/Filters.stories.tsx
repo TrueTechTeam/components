@@ -17,10 +17,31 @@ lazy-loaded options, and various UI layouts.
 
 ## Features
 - 11 filter types: select, multi-select, checkbox, toggle, text, number, number-range, date, date-range, rating, list-select
-- Cascading filter dependencies
-- URL synchronization
+- Cascading filter dependencies with show/hide/disable actions
+- Controlled and uncontrolled modes
+- Active filter tracking and display
 - Multiple layout options (sidebar, bar, popover, modal, accordion)
-- Active filters display with chips
+- Extensible filter field architecture
+
+## Core Components
+- **FilterProvider**: Context wrapper that manages filter state
+- **FilterField**: Unified wrapper that renders the appropriate filter component
+- **FilterSection**: Collapsible container for grouping related filters
+- **ActiveFilters**: Displays currently applied filters as removable chips
+- **FilterSidebar**: Layout container for filter components
+
+## Filter Types
+1. **select**: Single-select dropdown
+2. **multi-select**: Multiple selection with checkbox or list display
+3. **checkbox**: Boolean checkbox
+4. **toggle**: Boolean toggle switch
+5. **text**: Text input with debounce
+6. **number**: Single number input
+7. **number-range**: Range slider or input pair
+8. **date**: Single date picker
+9. **date-range**: Date range picker with presets
+10. **rating**: Star rating selector
+11. **list-select**: List-based selection
         `,
       },
     },

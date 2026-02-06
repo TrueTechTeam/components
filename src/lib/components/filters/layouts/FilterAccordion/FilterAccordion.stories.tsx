@@ -15,9 +15,51 @@ const meta: Meta<typeof FilterAccordion> = {
     docs: {
       description: {
         component: `
-FilterAccordion automatically groups filters by their group property
-and displays them in an accordion layout. Supports single or multiple
-expanded panels.
+FilterAccordion automatically groups filters by their group property and displays them in an accordion layout. Supports single or multiple expanded panels.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--spacing-md</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>16px</code></a></td>
+<td>Gap between accordion items</td>
+</tr>
+<tr>
+<td><code>--spacing-sm</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>8px</code></a></td>
+<td>Padding and gap spacing</td>
+</tr>
+<tr>
+<td><code>--theme-border-primary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>#e0e0e0</code></a></td>
+<td>Border color for separators</td>
+</tr>
+<tr>
+<td><code>--theme-text-secondary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>#666666</code></a></td>
+<td>Icon color for group titles</td>
+</tr>
+<tr>
+<td><code>--theme-text-tertiary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>#666666</code></a></td>
+<td>Color for group descriptions</td>
+</tr>
+<tr>
+<td><code>--font-size-sm</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>0.875rem</code></a></td>
+<td>Font size for group descriptions</td>
+</tr>
+</tbody>
+</table>
         `,
       },
     },
@@ -41,6 +83,10 @@ expanded panels.
       options: ['top', 'bottom'],
       description: 'Position of active filters',
     },
+    showApplyButton: {
+      control: 'boolean',
+      description: 'Show apply button',
+    },
     showClearButton: {
       control: 'boolean',
       description: 'Show clear all button',
@@ -48,6 +94,18 @@ expanded panels.
     showResetButton: {
       control: 'boolean',
       description: 'Show reset button',
+    },
+    applyButtonLabel: {
+      control: 'text',
+      description: 'Label for apply button',
+    },
+    clearButtonLabel: {
+      control: 'text',
+      description: 'Label for clear button',
+    },
+    resetButtonLabel: {
+      control: 'text',
+      description: 'Label for reset button',
     },
     children: { table: { disable: true } },
     className: { table: { disable: true } },

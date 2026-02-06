@@ -24,6 +24,20 @@ const meta: Meta = {
         component: `
 Individual filter field components. Each wraps a base input component and
 integrates with the FilterProvider context.
+
+## Supported Filter Types
+
+This showcase includes the following filter field types:
+- **Select**: Single-select dropdown with search and clear functionality
+- **Multi-Select**: Multiple selection with checkbox group or list display mode
+- **Text**: Text input with debounce and clear button support
+- **Checkbox**: Boolean checkbox filter
+- **Toggle**: Boolean toggle switch filter
+- **Number**: Single number input with min/max constraints
+- **Number Range**: Range slider or input pair for min/max values
+- **Date**: Single date picker
+- **Date Range**: Date range picker with preset options
+- **Rating**: Star rating selector
         `,
       },
     },

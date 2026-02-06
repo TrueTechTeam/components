@@ -7,6 +7,69 @@ const meta: Meta<typeof AdaptiveGrid> = {
   title: 'Layout/AdaptiveGrid',
   component: AdaptiveGrid,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+Responsive grid layout that automatically adjusts column count based on available space. Items maintain a minimum width and expand to fill available space.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--grid-min-item-width</code></td>
+<td>200px</td>
+<td>Minimum width of each grid item</td>
+</tr>
+<tr>
+<td><code>--grid-gap</code></td>
+<td>16px</td>
+<td>Gap between grid items (overrides row-gap and column-gap if set)</td>
+</tr>
+<tr>
+<td><code>--grid-row-gap</code></td>
+<td>16px</td>
+<td>Gap between rows</td>
+</tr>
+<tr>
+<td><code>--grid-column-gap</code></td>
+<td>16px</td>
+<td>Gap between columns</td>
+</tr>
+<tr>
+<td><code>--grid-fill-mode</code></td>
+<td>auto-fill</td>
+<td>CSS Grid fill mode - auto-fill or auto-fit</td>
+</tr>
+<tr>
+<td><code>--grid-align-items</code></td>
+<td>stretch</td>
+<td>Vertical alignment of items within rows</td>
+</tr>
+<tr>
+<td><code>--grid-justify-items</code></td>
+<td>start</td>
+<td>Horizontal alignment of items within grid cells</td>
+</tr>
+<tr>
+<td><code>--grid-max-columns</code></td>
+<td>none</td>
+<td>Maximum number of columns (none for unlimited)</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   argTypes: {
     minItemWidth: {
       control: { type: 'number', min: 100, max: 500 },

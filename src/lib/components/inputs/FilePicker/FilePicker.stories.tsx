@@ -14,6 +14,143 @@ const meta: Meta<typeof FilePicker> = {
   title: 'Inputs/FilePicker',
   component: FilePicker,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+File picker component with drag-and-drop support and image preview capabilities.
+
+## CSS Variables
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--spacing-sm</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-sm)</code></a></td>
+<td>Small spacing between container elements</td>
+</tr>
+<tr>
+<td><code>--font-size-base</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-size-base)</code></a></td>
+<td>Font size for label text</td>
+</tr>
+<tr>
+<td><code>--theme-text-primary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-primary)</code></a></td>
+<td>Primary text color for labels</td>
+</tr>
+<tr>
+<td><code>--spacing-xl</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-xl)</code></a></td>
+<td>Extra large padding for dropzone</td>
+</tr>
+<tr>
+<td><code>--radius-md</code></td>
+<td><a href="?path=/story/theme-css-variables--borders"><code>var(--radius-md)</code></a></td>
+<td>Medium border radius</td>
+</tr>
+<tr>
+<td><code>--theme-neutral-400</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-neutral-400)</code></a></td>
+<td>Dashed border color for dropzone</td>
+</tr>
+<tr>
+<td><code>--theme-neutral-50</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-neutral-50)</code></a></td>
+<td>Background color for dropzone</td>
+</tr>
+<tr>
+<td><code>--theme-primary-500</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-primary-500)</code></a></td>
+<td>Border color on hover</td>
+</tr>
+<tr>
+<td><code>--theme-primary-50</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-primary-50)</code></a></td>
+<td>Background color on hover</td>
+</tr>
+<tr>
+<td><code>--theme-primary-100</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-primary-100)</code></a></td>
+<td>Background color while dragging</td>
+</tr>
+<tr>
+<td><code>--theme-error</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-error)</code></a></td>
+<td>Border color for error state</td>
+</tr>
+<tr>
+<td><code>--theme-background-tertiary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-background-tertiary)</code></a></td>
+<td>Background color for error state</td>
+</tr>
+<tr>
+<td><code>--theme-neutral-100</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-neutral-100)</code></a></td>
+<td>Background color for disabled state</td>
+</tr>
+<tr>
+<td><code>--spacing-xxl</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-xxl)</code></a></td>
+<td>Extra extra large padding for lg size variant</td>
+</tr>
+<tr>
+<td><code>--theme-secondary-500</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-secondary-500)</code></a></td>
+<td>Secondary variant hover border color</td>
+</tr>
+<tr>
+<td><code>--theme-secondary-50</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-secondary-50)</code></a></td>
+<td>Secondary variant hover background</td>
+</tr>
+<tr>
+<td><code>--theme-tertiary-500</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-tertiary-500)</code></a></td>
+<td>Tertiary variant hover border color</td>
+</tr>
+<tr>
+<td><code>--theme-tertiary-50</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-tertiary-50)</code></a></td>
+<td>Tertiary variant hover background</td>
+</tr>
+<tr>
+<td><code>--theme-text-secondary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-secondary)</code></a></td>
+<td>Icon and text color in dropzone</td>
+</tr>
+<tr>
+<td><code>--theme-background-primary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-background-primary)</code></a></td>
+<td>Background for file list items</td>
+</tr>
+<tr>
+<td><code>--theme-border-primary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-border-primary)</code></a></td>
+<td>Border color for file list items</td>
+</tr>
+<tr>
+<td><code>--theme-neutral-300</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-neutral-300)</code></a></td>
+<td>Border color for image previews</td>
+</tr>
+<tr>
+<td><code>--radius-sm</code></td>
+<td><a href="?path=/story/theme-css-variables--borders"><code>var(--radius-sm)</code></a></td>
+<td>Small border radius for file items and previews</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   argTypes: {
     // Simple controls
     label: {

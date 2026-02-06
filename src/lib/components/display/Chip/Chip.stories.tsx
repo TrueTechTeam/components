@@ -7,6 +7,76 @@ const meta: Meta<typeof Chip> = {
   title: 'Display/Chip',
   component: Chip,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+Chip component for displaying small, interactive labels or tags.
+
+The Chip component is a versatile component for displaying categorical content, tags, or status information. It supports multiple visual variants, sizes, and can include an optional remove button.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--chip-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-primary-100)</code></a></td>
+<td>Background color of the chip</td>
+</tr>
+<tr>
+<td><code>--chip-color</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-primary-700)</code></a></td>
+<td>Text color of the chip</td>
+</tr>
+<tr>
+<td><code>--chip-padding</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-xs) var(--spacing-sm)</code></a></td>
+<td>Padding inside the chip</td>
+</tr>
+<tr>
+<td><code>--chip-font-size</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-size-sm)</code></a></td>
+<td>Font size of chip text</td>
+</tr>
+<tr>
+<td><code>--chip-border-radius</code></td>
+<td><a href="?path=/story/theme-css-variables--borders"><code>var(--radius-full)</code></a></td>
+<td>Border radius of the chip</td>
+</tr>
+<tr>
+<td><code>--chip-transition</code></td>
+<td><code>background-color 0.15s ease</code></td>
+<td>Transition effect for color changes</td>
+</tr>
+<tr>
+<td><code>--chip-remove-size</code></td>
+<td><code>16px</code></td>
+<td>Size of the remove button</td>
+</tr>
+<tr>
+<td><code>--chip-remove-icon-size</code></td>
+<td><code>12px</code></td>
+<td>Size of the remove button icon</td>
+</tr>
+<tr>
+<td><code>--chip-remove-hover-bg</code></td>
+<td><code>rgba(0, 0, 0, 0.1)</code></td>
+<td>Background color on remove button hover</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   argTypes: {
     variant: {
       control: 'select',
@@ -22,7 +92,6 @@ const meta: Meta<typeof Chip> = {
       control: 'boolean',
       description: 'Whether the component is disabled',
     },
-    onRemove: { table: { disable: true } },
     removeButtonAriaLabel: {
       control: 'text',
       description: 'ARIA label for the remove button',
@@ -31,18 +100,11 @@ const meta: Meta<typeof Chip> = {
       control: 'text',
       description: 'Content to display inside the component',
     },
-    className: {
-      table: { disable: true },
-    },
-    removeButtonClassName: {
-      table: { disable: true },
-    },
-    'data-testid': {
-      table: { disable: true },
-    },
-    style: {
-      table: { disable: true },
-    },
+    onRemove: { table: { disable: true } },
+    removeButtonClassName: { table: { disable: true } },
+    className: { table: { disable: true } },
+    'data-testid': { table: { disable: true } },
+    style: { table: { disable: true } },
   },
 };
 

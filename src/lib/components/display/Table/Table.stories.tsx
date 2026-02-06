@@ -11,6 +11,91 @@ const meta: Meta<typeof Table> = {
   tags: ['autodocs'],
   parameters: {
     layout: 'padded',
+    docs: {
+      description: {
+        component: `
+Comprehensive data table component with support for sorting, selection, pagination, and expandable rows.
+
+## CSS Variables
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--table-border-color</code></td>
+<td><code>var(--theme-border-primary, #e0e0e0)</code></td>
+<td>Color of table borders</td>
+</tr>
+<tr>
+<td><code>--table-header-bg</code></td>
+<td><code>var(--theme-surface-secondary, #f5f5f5)</code></td>
+<td>Background color of table header</td>
+</tr>
+<tr>
+<td><code>--table-row-bg</code></td>
+<td><code>var(--theme-surface-primary, #ffffff)</code></td>
+<td>Background color of table rows</td>
+</tr>
+<tr>
+<td><code>--table-row-hover-bg</code></td>
+<td><code>var(--theme-interactive-hover, rgba(0, 0, 0, 0.04))</code></td>
+<td>Background color on row hover</td>
+</tr>
+<tr>
+<td><code>--table-row-selected-bg</code></td>
+<td><code>var(--theme-primary-subtle, rgba(37, 99, 235, 0.08))</code></td>
+<td>Background color of selected rows</td>
+</tr>
+<tr>
+<td><code>--table-text-color</code></td>
+<td><code>var(--theme-text-primary, #1a1a1a)</code></td>
+<td>Primary text color</td>
+</tr>
+<tr>
+<td><code>--table-text-secondary</code></td>
+<td><code>var(--theme-text-secondary, #666666)</code></td>
+<td>Secondary text color</td>
+</tr>
+<tr>
+<td><code>--table-sticky-column-shadow</code></td>
+<td><code>4px 0 8px -2px rgba(0, 0, 0, 0.1)</code></td>
+<td>Shadow for sticky columns</td>
+</tr>
+<tr>
+<td><code>--table-cell-padding-x</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-md, 16px)</code></a></td>
+<td>Horizontal padding of cells</td>
+</tr>
+<tr>
+<td><code>--table-cell-padding-y</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-sm, 8px)</code></a></td>
+<td>Vertical padding of cells</td>
+</tr>
+<tr>
+<td><code>--table-font-size</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-size-sm, 0.875rem)</code></a></td>
+<td>Font size of table text</td>
+</tr>
+<tr>
+<td><code>--table-max-height</code></td>
+<td><code>none</code></td>
+<td>Maximum height of the table</td>
+</tr>
+<tr>
+<td><code>--table-grid-template-columns</code></td>
+<td>Auto</td>
+<td>Grid template for columns</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
   },
 };
 

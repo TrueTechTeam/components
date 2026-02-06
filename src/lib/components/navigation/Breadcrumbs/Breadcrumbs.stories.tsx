@@ -8,6 +8,69 @@ const meta: Meta<typeof Breadcrumbs> = {
   title: 'Navigation/Breadcrumbs',
   component: Breadcrumbs,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+Breadcrumb navigation showing the current location within a hierarchy. Supports collapsing intermediate items and custom separators.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--breadcrumbs-gap</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-sm)</code></a></td>
+<td>Gap between breadcrumb items</td>
+</tr>
+<tr>
+<td><code>--breadcrumbs-separator-gap</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-xs)</code></a></td>
+<td>Gap around separators</td>
+</tr>
+<tr>
+<td><code>--breadcrumbs-text-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-secondary)</code></a></td>
+<td>Default text color</td>
+</tr>
+<tr>
+<td><code>--breadcrumbs-link-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-primary)</code></a></td>
+<td>Color of navigation links</td>
+</tr>
+<tr>
+<td><code>--breadcrumbs-link-hover-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-primary)</code></a></td>
+<td>Hover color for links</td>
+</tr>
+<tr>
+<td><code>--breadcrumbs-current-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-primary)</code></a></td>
+<td>Color of current/active breadcrumb</td>
+</tr>
+<tr>
+<td><code>--breadcrumbs-separator-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-tertiary)</code></a></td>
+<td>Color of separator elements</td>
+</tr>
+<tr>
+<td><code>--breadcrumbs-font-size</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-size-sm)</code></a></td>
+<td>Font size of breadcrumbs</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   argTypes: {
     size: {
       control: 'select',

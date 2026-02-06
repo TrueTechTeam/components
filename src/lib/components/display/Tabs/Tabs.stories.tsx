@@ -10,6 +10,43 @@ const meta: Meta<typeof Tabs> = {
   title: 'Display/Tabs',
   component: Tabs,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+Tab navigation component that manages tab selection and provides context to TabList, Tab, and TabPanel children.
+
+## CSS Variables
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--tabs-border-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-border-primary)</code></a></td>
+<td>Color of tab borders</td>
+</tr>
+<tr>
+<td><code>--tabs-indicator-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-primary)</code></a></td>
+<td>Color of the active tab indicator</td>
+</tr>
+<tr>
+<td><code>--tabs-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-background-primary)</code></a></td>
+<td>Background color of tabs</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   argTypes: {
     value: {
       control: 'text',
@@ -50,7 +87,6 @@ const meta: Meta<typeof Tabs> = {
       control: 'boolean',
       description: 'Whether to keep inactive panels mounted',
     },
-    // Disable complex props
     onChange: { table: { disable: true } },
     className: { table: { disable: true } },
     style: { table: { disable: true } },

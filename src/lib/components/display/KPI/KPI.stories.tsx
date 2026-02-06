@@ -6,6 +6,103 @@ const meta: Meta<typeof KPI> = {
   title: 'Display/KPI',
   component: KPI,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+KPI (Key Performance Indicator) component for displaying important metrics with context, change indicators, and optional trend data.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--kpi-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-background-primary)</code></a></td>
+<td>Background color of the KPI card</td>
+</tr>
+<tr>
+<td><code>--kpi-border</code></td>
+<td>1px solid <a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-border-primary)</code></a></td>
+<td>Border styling for the KPI card</td>
+</tr>
+<tr>
+<td><code>--kpi-padding</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-lg)</code></a></td>
+<td>Padding inside the KPI card</td>
+</tr>
+<tr>
+<td><code>--kpi-border-radius</code></td>
+<td><a href="?path=/story/theme-css-variables--borders"><code>var(--radius-lg)</code></a></td>
+<td>Border radius for the KPI card</td>
+</tr>
+<tr>
+<td><code>--kpi-gap</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-md)</code></a></td>
+<td>Gap between sections in the KPI card</td>
+</tr>
+<tr>
+<td><code>--kpi-shadow</code></td>
+<td>0 1px 3px rgba(0, 0, 0, 0.1)</td>
+<td>Box shadow for the KPI card</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
+  argTypes: {
+    title: {
+      control: 'text',
+      description: 'Title of the KPI',
+    },
+    value: {
+      control: 'text',
+      description: 'The main metric value',
+    },
+    subtitle: {
+      control: 'text',
+      description: 'Optional subtitle or category',
+    },
+    description: {
+      control: 'text',
+      description: 'Optional description text',
+    },
+    change: {
+      control: 'text',
+      description: 'Optional change indicator (e.g., "+12%", "-5%")',
+    },
+    changeType: {
+      control: 'select',
+      options: ['increase', 'decrease', 'neutral'],
+      description: 'Direction of change',
+    },
+    variant: {
+      control: 'select',
+      options: ['primary', 'secondary', 'success', 'warning', 'danger', 'info', 'neutral'],
+      description: 'Visual variant of the component',
+    },
+    size: {
+      control: 'select',
+      options: ['sm', 'md', 'lg'],
+      description: 'Size of the component',
+    },
+    icon: { table: { disable: true } },
+    trend: { table: { disable: true } },
+    footer: { table: { disable: true } },
+    children: { table: { disable: true } },
+    className: { table: { disable: true } },
+    style: { table: { disable: true } },
+    'data-testid': { table: { disable: true } },
+  },
 };
 
 export default meta;

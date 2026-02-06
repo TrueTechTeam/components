@@ -11,6 +11,92 @@ const meta: Meta<typeof Button> = {
   title: 'Buttons/Button',
   component: Button,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+Button component with multiple variants, sizes, and states.
+
+Supports icons, loading states, and full-width layouts. The button component
+is the primary interaction element for user actions throughout the application.
+
+## CSS Variables
+
+<table>
+  <thead>
+    <tr>
+      <th>Variable</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>--button-bg</code></td>
+      <td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-primary)</code></a></td>
+      <td>Background color</td>
+    </tr>
+    <tr>
+      <td><code>--button-bg-hover</code></td>
+      <td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-primary-hover)</code></a></td>
+      <td>Background color on hover</td>
+    </tr>
+    <tr>
+      <td><code>--button-bg-active</code></td>
+      <td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-primary-active)</code></a></td>
+      <td>Background color on active/pressed</td>
+    </tr>
+    <tr>
+      <td><code>--button-bg-disabled</code></td>
+      <td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-primary-disabled)</code></a></td>
+      <td>Background color when disabled</td>
+    </tr>
+    <tr>
+      <td><code>--button-color</code></td>
+      <td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-text-on-primary)</code></a></td>
+      <td>Text color</td>
+    </tr>
+    <tr>
+      <td><code>--button-border-color</code></td>
+      <td><code>transparent</code></td>
+      <td>Border color</td>
+    </tr>
+    <tr>
+      <td><code>--button-border-color-hover</code></td>
+      <td><code>transparent</code></td>
+      <td>Border color on hover</td>
+    </tr>
+    <tr>
+      <td><code>--button-border-width</code></td>
+      <td><code>1px</code></td>
+      <td>Border width</td>
+    </tr>
+    <tr>
+      <td><code>--button-gap</code></td>
+      <td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-sm)</code></a></td>
+      <td>Gap between icon and text</td>
+    </tr>
+    <tr>
+      <td><code>--button-radius</code></td>
+      <td><a href="?path=/story/theme-css-variables--borders"><code>var(--radius-md)</code></a></td>
+      <td>Border radius</td>
+    </tr>
+    <tr>
+      <td><code>--button-disabled-opacity</code></td>
+      <td><code>0.5</code></td>
+      <td>Opacity when disabled</td>
+    </tr>
+    <tr>
+      <td><code>--button-icon-padding</code></td>
+      <td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-sm)</code></a></td>
+      <td>Padding for icon-only buttons</td>
+    </tr>
+  </tbody>
+</table>
+        `,
+      },
+    },
+  },
   argTypes: {
     variant: {
       control: 'select',
@@ -19,7 +105,7 @@ const meta: Meta<typeof Button> = {
     },
     size: {
       control: 'select',
-      options: ['sm', 'md', 'lg'],
+      options: ['xs', 'sm', 'md', 'lg', 'xl'],
       description: 'Button size',
     },
     disabled: {
@@ -53,9 +139,11 @@ const meta: Meta<typeof Button> = {
       options: ['start', 'end', 'center'],
       description: 'Position of the loading spinner',
     },
-    // Hide other controls
+    children: {
+      control: 'text',
+      description: 'Button text content',
+    },
     onClick: { table: { disable: true } },
-    children: { table: { disable: true } },
     className: { table: { disable: true } },
     'data-testid': { table: { disable: true } },
     'aria-label': { table: { disable: true } },
@@ -94,7 +182,14 @@ export const Variants: Story = {
       <Button variant="danger">Danger</Button>
     </div>
   ),
-  parameters: { controls: { disable: true } },
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      description: {
+        story: 'All available button variants showing different visual styles.',
+      },
+    },
+  },
 };
 
 /**
@@ -114,7 +209,15 @@ export const SemanticVariants: Story = {
       </Button>
     </div>
   ),
-  parameters: { controls: { disable: true } },
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      description: {
+        story:
+          'Semantic color variants with appropriate icons for success, warning, and error actions.',
+      },
+    },
+  },
 };
 
 /**
@@ -123,12 +226,21 @@ export const SemanticVariants: Story = {
 export const Sizes: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '16px', alignItems: 'center' }}>
+      <Button size="xs">Extra Small</Button>
       <Button size="sm">Small</Button>
       <Button size="md">Medium</Button>
       <Button size="lg">Large</Button>
+      <Button size="xl">Extra Large</Button>
     </div>
   ),
-  parameters: { controls: { disable: true } },
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      description: {
+        story: 'All available button sizes from extra small to extra large.',
+      },
+    },
+  },
 };
 
 /**
@@ -148,7 +260,14 @@ export const WithIcons: Story = {
       </Button>
     </div>
   ),
-  parameters: { controls: { disable: true } },
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      description: {
+        story: 'Buttons with start and/or end icons to enhance visual communication.',
+      },
+    },
+  },
 };
 
 /**
@@ -166,7 +285,14 @@ export const Disabled: Story = {
       </Button>
     </div>
   ),
-  parameters: { controls: { disable: true } },
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      description: {
+        story: 'Disabled buttons that cannot be interacted with.',
+      },
+    },
+  },
 };
 
 /**
@@ -176,6 +302,14 @@ export const FullWidth: Story = {
   args: {
     children: 'Full Width Button',
     fullWidth: true,
+    onClick: action('clicked'),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Button that expands to fill its container width.',
+      },
+    },
   },
 };
 
@@ -195,7 +329,14 @@ export const Loading: Story = {
       <Button loading loadingPosition="center" style={{ minWidth: '100px' }} />
     </div>
   ),
-  parameters: { controls: { disable: true } },
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      description: {
+        story: 'Loading state with spinner displayed in different positions.',
+      },
+    },
+  },
 };
 
 /**
@@ -227,7 +368,14 @@ export const LoadingVariants: Story = {
       </Button>
     </div>
   ),
-  parameters: { controls: { disable: true } },
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      description: {
+        story: 'Loading state combined with different button variants.',
+      },
+    },
+  },
 };
 
 /**
@@ -253,7 +401,14 @@ export const LoadingSizes: Story = {
       </Button>
     </div>
   ),
-  parameters: { controls: { disable: true } },
+  parameters: {
+    controls: { disable: true },
+    docs: {
+      description: {
+        story: 'Loading state with spinner automatically sized for each button size.',
+      },
+    },
+  },
 };
 
 /**
@@ -269,5 +424,12 @@ export const Playground: Story = {
     loading: false,
     loadingPosition: 'start',
     onClick: action('clicked'),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Interactive playground with all button props available for experimentation.',
+      },
+    },
   },
 };

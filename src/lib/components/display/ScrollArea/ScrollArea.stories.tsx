@@ -8,6 +8,70 @@ const meta: Meta<typeof ScrollArea> = {
   title: 'Display/ScrollArea',
   component: ScrollArea,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+Custom scrollable container with styled scrollbars and scroll event callbacks.
+Supports vertical, horizontal, and bidirectional scrolling with optional shadow indicators.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--scroll-area-max-height</code></td>
+<td><code>auto</code></td>
+<td>Maximum height of scroll area</td>
+</tr>
+<tr>
+<td><code>--scroll-area-max-width</code></td>
+<td><code>auto</code></td>
+<td>Maximum width of scroll area</td>
+</tr>
+<tr>
+<td><code>--scrollbar-size</code></td>
+<td><code>8px</code></td>
+<td>Width/height of scrollbar thumb</td>
+</tr>
+<tr>
+<td><code>--scrollbar-thumb-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-neutral-400)</code></a></td>
+<td>Scrollbar thumb background color</td>
+</tr>
+<tr>
+<td><code>--scrollbar-thumb-bg-hover</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-neutral-500)</code></a></td>
+<td>Scrollbar thumb hover background</td>
+</tr>
+<tr>
+<td><code>--scrollbar-track-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-background-secondary)</code></a></td>
+<td>Scrollbar track background color</td>
+</tr>
+<tr>
+<td><code>--scrollbar-radius</code></td>
+<td><a href="?path=/story/theme-css-variables--borders"><code>var(--radius-sm)</code></a></td>
+<td>Border radius of scrollbar</td>
+</tr>
+<tr>
+<td><code>--transition-fast</code></td>
+<td><a href="?path=/story/theme-css-variables--transitions"><code>varies by theme</code></a></td>
+<td>Transition for shadow opacity</td>
+</tr>
+</tbody>
+</table>
+        `,
+      },
+    },
+  },
   argTypes: {
     direction: {
       control: 'select',
@@ -30,7 +94,6 @@ const meta: Meta<typeof ScrollArea> = {
       control: 'number',
       description: 'Threshold in pixels for scroll end callbacks',
     },
-    // Disable complex props
     onScroll: { table: { disable: true } },
     onScrollToTop: { table: { disable: true } },
     onScrollToBottom: { table: { disable: true } },

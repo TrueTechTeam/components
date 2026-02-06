@@ -238,7 +238,7 @@ const meta: Meta = {
     docs: {
       description: {
         component: `
-\`useUrlState\` synchronizes React state with URL search parameters, providing a typed \`useState\`-like API for managing URL query parameters.
+\`useUrlState\` is a React hook that synchronizes React state with URL search parameters, providing a typed useState-like API for managing URL query parameters with debounce support.
 
 ## Features
 - Built-in serializers for \`string\`, \`number\`, \`boolean\`, \`array\`, \`json\`

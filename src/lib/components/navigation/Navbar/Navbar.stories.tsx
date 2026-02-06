@@ -14,6 +14,92 @@ const meta: Meta<typeof Navbar> = {
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',
+    docs: {
+      description: {
+        component: `
+Flexible navigation bar with responsive mobile menu, support for blur effects, and multiple positioning options. Includes branded sections, navigation links, and action buttons.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--navbar-height-sm</code></td>
+<td>48px</td>
+<td>Height for small size variant</td>
+</tr>
+<tr>
+<td><code>--navbar-height-md</code></td>
+<td>64px</td>
+<td>Height for medium size variant</td>
+</tr>
+<tr>
+<td><code>--navbar-height-lg</code></td>
+<td>80px</td>
+<td>Height for large size variant</td>
+</tr>
+<tr>
+<td><code>--navbar-height</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--navbar-height-md)</code></a></td>
+<td>Current navbar height</td>
+</tr>
+<tr>
+<td><code>--navbar-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-background-primary)</code></a></td>
+<td>Background color</td>
+</tr>
+<tr>
+<td><code>--navbar-border-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-border-primary)</code></a></td>
+<td>Bottom border color</td>
+</tr>
+<tr>
+<td><code>--navbar-text-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-primary)</code></a></td>
+<td>Text color</td>
+</tr>
+<tr>
+<td><code>--navbar-blur-bg</code></td>
+<td>rgba(theme-surface-primary, 0.5)</td>
+<td>Background for blur variant</td>
+</tr>
+<tr>
+<td><code>--navbar-blur-amount</code></td>
+<td>12px</td>
+<td>Blur amount for blur variant</td>
+</tr>
+<tr>
+<td><code>--navbar-transition-duration</code></td>
+<td>250ms</td>
+<td>Duration for state transitions</td>
+</tr>
+<tr>
+<td><code>--navbar-z-index</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--z-sticky, 1100)</code></a></td>
+<td>Z-index stacking context</td>
+</tr>
+<tr>
+<td><code>--navbar-padding-x</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-lg)</code></a></td>
+<td>Horizontal padding</td>
+</tr>
+<tr>
+<td><code>--navbar-gap</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-lg)</code></a></td>
+<td>Gap between navbar sections</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
   },
   argTypes: {
     variant: {

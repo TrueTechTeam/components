@@ -7,7 +7,48 @@ const meta: Meta<typeof SortableList> = {
   title: 'DnD/SortableList',
   component: SortableList,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+SortableList component for creating reorderable list layouts with drag-and-drop functionality.
+
+## CSS Variables
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--sortable-gap</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-md)</code></a></td>
+<td>Gap between list items</td>
+</tr>
+<tr>
+<td><code>--shadow-md</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--shadow-md)</code></a></td>
+<td>Shadow for dragging items</td>
+</tr>
+<tr>
+<td><code>--theme-primary</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-primary)</code></a></td>
+<td>Color for drop indicator</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   argTypes: {
+    items: { table: { disable: true } },
+    onReorder: { table: { disable: true } },
+    onReorderComplete: { table: { disable: true } },
+    renderItem: { table: { disable: true } },
     direction: {
       control: 'select',
       options: ['vertical', 'horizontal'],
@@ -18,6 +59,10 @@ const meta: Meta<typeof SortableList> = {
       options: ['sm', 'md', 'lg'],
       description: 'Gap between items',
     },
+    groupId: {
+      control: 'text',
+      description: 'Group ID for cross-list drag',
+    },
     useDragHandle: {
       control: 'boolean',
       description: 'Whether to use drag handles',
@@ -25,6 +70,15 @@ const meta: Meta<typeof SortableList> = {
     disabled: {
       control: 'boolean',
       description: 'Whether the list is disabled',
+    },
+    className: {
+      table: { disable: true },
+    },
+    'data-testid': {
+      table: { disable: true },
+    },
+    style: {
+      table: { disable: true },
     },
   },
 };

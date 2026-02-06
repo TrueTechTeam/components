@@ -10,6 +10,54 @@ const meta: Meta<typeof ResponsiveStack> = {
   title: 'Layout/ResponsiveStack',
   component: ResponsiveStack,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+Flexbox stack that switches between row and column layout at a breakpoint. Supports different gap, alignment, and justification for each orientation.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--stack-direction</code></td>
+<td>row</td>
+<td>Flex direction for expanded layout (row, column, row-reverse, column-reverse)</td>
+</tr>
+<tr>
+<td><code>--stack-gap</code></td>
+<td>16px</td>
+<td>Gap between stack items in expanded layout</td>
+</tr>
+<tr>
+<td><code>--stack-align</code></td>
+<td>stretch</td>
+<td>Alignment of items in expanded layout</td>
+</tr>
+<tr>
+<td><code>--stack-justify</code></td>
+<td>flex-start</td>
+<td>Justification of items in expanded layout</td>
+</tr>
+<tr>
+<td><code>--stack-wrap</code></td>
+<td>nowrap</td>
+<td>Flex wrap behavior (nowrap, wrap, wrap-reverse)</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   argTypes: {
     breakpoint: {
       control: { type: 'number', min: 100, max: 1200 },

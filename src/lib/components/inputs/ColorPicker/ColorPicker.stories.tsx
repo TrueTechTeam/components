@@ -6,6 +6,104 @@ const meta: Meta<typeof ColorPicker> = {
   title: 'Inputs/ColorPicker',
   component: ColorPicker,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+ColorPicker component with interactive color selection via canvas, HSL/RGB sliders, and preset colors. Supports multiple output formats and alpha channel.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--spacing-xs</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-xs)</code></a></td>
+<td>Extra small spacing</td>
+</tr>
+<tr>
+<td><code>--spacing-sm</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-sm)</code></a></td>
+<td>Small spacing</td>
+</tr>
+<tr>
+<td><code>--spacing-md</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-md)</code></a></td>
+<td>Medium spacing</td>
+</tr>
+<tr>
+<td><code>--font-size-base</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-size-base)</code></a></td>
+<td>Base font size</td>
+</tr>
+<tr>
+<td><code>--font-size-sm</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-size-sm)</code></a></td>
+<td>Small font size</td>
+</tr>
+<tr>
+<td><code>--theme-text-primary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-primary)</code></a></td>
+<td>Primary text color</td>
+</tr>
+<tr>
+<td><code>--theme-text-secondary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-secondary)</code></a></td>
+<td>Secondary text color</td>
+</tr>
+<tr>
+<td><code>--theme-surface-elevated</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-surface-elevated)</code></a></td>
+<td>Elevated surface color</td>
+</tr>
+<tr>
+<td><code>--theme-control-border</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-control-border)</code></a></td>
+<td>Control border color</td>
+</tr>
+<tr>
+<td><code>--theme-primary</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-primary)</code></a></td>
+<td>Primary theme color</td>
+</tr>
+<tr>
+<td><code>--theme-error</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-error)</code></a></td>
+<td>Error color</td>
+</tr>
+<tr>
+<td><code>--theme-neutral-300</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-neutral-300)</code></a></td>
+<td>Neutral color 300</td>
+</tr>
+<tr>
+<td><code>--theme-neutral-600</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-neutral-600)</code></a></td>
+<td>Neutral color 600</td>
+</tr>
+<tr>
+<td><code>--radius-sm</code></td>
+<td><a href="?path=/story/theme-css-variables--borders"><code>var(--radius-sm)</code></a></td>
+<td>Small border radius</td>
+</tr>
+<tr>
+<td><code>--radius-md</code></td>
+<td><a href="?path=/story/theme-css-variables--borders"><code>var(--radius-md)</code></a></td>
+<td>Medium border radius</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   argTypes: {
     // Simple controls
     label: {

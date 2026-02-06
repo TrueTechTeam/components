@@ -7,6 +7,67 @@ const meta: Meta<typeof ToggleButton> = {
   title: 'Buttons/ToggleButton',
   component: ToggleButton,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+ToggleButton component - an icon button that toggles between two states.
+
+Perfect for like buttons, favorites, bookmarks, and similar toggle interactions.
+Displays different icons and colors for active and inactive states with optional animation.
+
+## CSS Variables
+
+<table>
+  <thead>
+    <tr>
+      <th>Variable</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>--toggle-button-active-color</code></td>
+      <td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-error)</code></a></td>
+      <td>Icon color when active</td>
+    </tr>
+    <tr>
+      <td><code>--toggle-button-inactive-color</code></td>
+      <td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-text-secondary)</code></a></td>
+      <td>Icon color when inactive</td>
+    </tr>
+    <tr>
+      <td><code>--toggle-button-bg</code></td>
+      <td><code>transparent</code></td>
+      <td>Background color</td>
+    </tr>
+    <tr>
+      <td><code>--toggle-button-bg-hover</code></td>
+      <td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-interactive-hover)</code></a></td>
+      <td>Background color on hover</td>
+    </tr>
+    <tr>
+      <td><code>--toggle-button-bg-active</code></td>
+      <td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-interactive-active)</code></a></td>
+      <td>Background color on active/pressed</td>
+    </tr>
+    <tr>
+      <td><code>--toggle-button-radius</code></td>
+      <td><a href="?path=/story/theme-css-variables--borders"><code>var(--radius-full)</code></a></td>
+      <td>Border radius</td>
+    </tr>
+    <tr>
+      <td><code>--toggle-button-disabled-opacity</code></td>
+      <td><code>0.5</code></td>
+      <td>Opacity when disabled</td>
+    </tr>
+  </tbody>
+</table>
+        `,
+      },
+    },
+  },
   argTypes: {
     active: {
       control: 'boolean',
@@ -18,7 +79,7 @@ const meta: Meta<typeof ToggleButton> = {
     },
     activeIcon: {
       control: 'select',
-      options: ['heart', 'star', 'bookmark', 'thumbs-up'],
+      options: ['heart-filled', 'star-filled', 'bookmark-filled', 'thumbs-up-filled'],
       description: 'Icon to display when active',
     },
     inactiveIcon: {
@@ -29,15 +90,15 @@ const meta: Meta<typeof ToggleButton> = {
     size: {
       control: 'select',
       options: ['xs', 'sm', 'md', 'lg', 'xl'],
-      description: 'Button size',
+      description: 'Button size (also determines icon size)',
     },
     activeColor: {
       control: 'color',
-      description: 'Color when active',
+      description: 'Color when active (CSS color value)',
     },
     inactiveColor: {
       control: 'color',
-      description: 'Color when inactive',
+      description: 'Color when inactive (CSS color value)',
     },
     disabled: {
       control: 'boolean',
@@ -49,9 +110,8 @@ const meta: Meta<typeof ToggleButton> = {
     },
     'aria-label': {
       control: 'text',
-      description: 'Accessible label (REQUIRED)',
+      description: 'Accessible label (REQUIRED for icon-only buttons)',
     },
-    // Disable complex props
     onChange: { table: { disable: true } },
     className: { table: { disable: true } },
     style: { table: { disable: true } },
@@ -69,7 +129,14 @@ type Story = StoryObj<typeof ToggleButton>;
 export const Default: Story = {
   args: {
     'aria-label': 'Like',
+    activeIcon: 'heart-filled',
+    inactiveIcon: 'heart',
     size: 'md',
+    activeColor: 'var(--theme-error)',
+    inactiveColor: 'var(--theme-text-secondary)',
+    defaultActive: false,
+    disabled: false,
+    animated: true,
     onChange: action('onChange'),
   },
 };
@@ -80,9 +147,20 @@ export const Default: Story = {
 export const DefaultActive: Story = {
   args: {
     'aria-label': 'Unlike',
+    activeIcon: 'heart-filled',
+    inactiveIcon: 'heart',
     defaultActive: true,
     size: 'md',
+    activeColor: 'var(--theme-error)',
+    inactiveColor: 'var(--theme-text-secondary)',
     onChange: action('onChange'),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Toggle button with active state as the default.',
+      },
+    },
   },
 };
 
@@ -101,6 +179,11 @@ export const Sizes: Story = {
   ),
   parameters: {
     controls: { disable: true },
+    docs: {
+      description: {
+        story: 'All available toggle button sizes from extra small to extra large.',
+      },
+    },
   },
 };
 
@@ -163,6 +246,12 @@ export const IconVariants: Story = {
   ),
   parameters: {
     controls: { disable: true },
+    docs: {
+      description: {
+        story:
+          'Different icon combinations for various use cases like/star/bookmark/thumbs-up with contextual colors.',
+      },
+    },
   },
 };
 
@@ -188,6 +277,11 @@ export const ActiveStates: Story = {
   ),
   parameters: {
     controls: { disable: true },
+    docs: {
+      description: {
+        story: 'Visual comparison of active and inactive toggle button states.',
+      },
+    },
   },
 };
 
@@ -231,6 +325,11 @@ export const CustomColors: Story = {
   ),
   parameters: {
     controls: { disable: true },
+    docs: {
+      description: {
+        story: 'Toggle buttons with custom colors for different semantic meanings.',
+      },
+    },
   },
 };
 
@@ -246,6 +345,11 @@ export const Disabled: Story = {
   ),
   parameters: {
     controls: { disable: true },
+    docs: {
+      description: {
+        story: 'Disabled toggle buttons that cannot be interacted with.',
+      },
+    },
   },
 };
 
@@ -271,6 +375,11 @@ export const Animation: Story = {
   ),
   parameters: {
     controls: { disable: true },
+    docs: {
+      description: {
+        story: 'Toggle button animation toggle showing animated and non-animated states.',
+      },
+    },
   },
 };
 
@@ -305,6 +414,11 @@ export const Controlled: Story = {
   render: () => <ControlledExample />,
   parameters: {
     controls: { disable: true },
+    docs: {
+      description: {
+        story: 'Controlled component example with value managed by parent state.',
+      },
+    },
   },
 };
 
@@ -350,6 +464,11 @@ export const SocialMediaActions: Story = {
   render: () => <SocialMediaExample />,
   parameters: {
     controls: { disable: true },
+    docs: {
+      description: {
+        story: 'Real-world example: social media post with like and bookmark actions.',
+      },
+    },
   },
 };
 
@@ -364,8 +483,16 @@ export const Playground: Story = {
     size: 'md',
     activeColor: 'var(--theme-error)',
     inactiveColor: 'var(--theme-text-secondary)',
+    defaultActive: false,
     disabled: false,
     animated: true,
     onChange: action('onChange'),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Interactive playground with all toggle button props available for experimentation.',
+      },
+    },
   },
 };

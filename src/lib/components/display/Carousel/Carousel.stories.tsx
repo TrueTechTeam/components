@@ -7,6 +7,81 @@ const meta: Meta<typeof Carousel> = {
   title: 'Display/Carousel',
   component: Carousel,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+Carousel component for displaying multiple slides with navigation controls.
+
+The Carousel component provides a flexible, accessible carousel/slider implementation with support for auto-play, multiple slides visible at once, customizable transitions, and both internal and external navigation arrows.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--carousel-transition-duration</code></td>
+<td><code>300ms</code></td>
+<td>Duration of slide transition animation</td>
+</tr>
+<tr>
+<td><code>--carousel-gap</code></td>
+<td><code>16px</code></td>
+<td>Gap between carousel slides</td>
+</tr>
+<tr>
+<td><code>--carousel-slides-to-show</code></td>
+<td><code>1</code></td>
+<td>Number of slides to display simultaneously</td>
+</tr>
+<tr>
+<td><code>--carousel-translate</code></td>
+<td><code>0</code></td>
+<td>CSS transform translateX value (auto-calculated)</td>
+</tr>
+<tr>
+<td><code>--carousel-arrow-width</code></td>
+<td><code>80px</code></td>
+<td>Width of navigation arrows</td>
+</tr>
+<tr>
+<td><code>--carousel-arrow-color</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-text-primary)</code></a></td>
+<td>Color of navigation arrows</td>
+</tr>
+<tr>
+<td><code>--carousel-dot-size</code></td>
+<td><code>8px</code></td>
+<td>Size of navigation dots</td>
+</tr>
+<tr>
+<td><code>--carousel-dot-gap</code></td>
+<td><code>8px</code></td>
+<td>Gap between navigation dots</td>
+</tr>
+<tr>
+<td><code>--carousel-dot-color</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-border-primary)</code></a></td>
+<td>Color of inactive navigation dots</td>
+</tr>
+<tr>
+<td><code>--carousel-dot-color-active</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-primary)</code></a></td>
+<td>Color of active navigation dot</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   argTypes: {
     autoPlay: {
       control: 'boolean',
@@ -57,12 +132,16 @@ const meta: Meta<typeof Carousel> = {
       options: ['bottom', 'top'],
       description: 'Position of navigation dots',
     },
+    prevIcon: { table: { disable: true } },
+    nextIcon: { table: { disable: true } },
     onChange: { table: { disable: true } },
     activeIndex: { table: { disable: true } },
     children: { table: { disable: true } },
     className: { table: { disable: true } },
     'data-testid': { table: { disable: true } },
+    'aria-label': { table: { disable: true } },
     style: { table: { disable: true } },
+    defaultIndex: { table: { disable: true } },
   },
 };
 

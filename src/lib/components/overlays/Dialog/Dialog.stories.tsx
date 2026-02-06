@@ -12,6 +12,97 @@ const meta: Meta<typeof Dialog> = {
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component: `
+Dialog component displays content in a modal overlay with customizable sizes and styling.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--dialog-backdrop-opacity</code></td>
+<td>0.5</td>
+<td>Backdrop overlay opacity</td>
+</tr>
+<tr>
+<td><code>--dialog-backdrop-blur</code></td>
+<td>4px</td>
+<td>Backdrop blur effect</td>
+</tr>
+<tr>
+<td><code>--dialog-animation-duration</code></td>
+<td>200ms</td>
+<td>Animation duration for open/close</td>
+</tr>
+<tr>
+<td><code>--dialog-animation-easing</code></td>
+<td>cubic-bezier(0.16, 1, 0.3, 1)</td>
+<td>Animation easing function</td>
+</tr>
+<tr>
+<td><code>--z-modal-backdrop</code></td>
+<td>1300</td>
+<td>Backdrop z-index layer</td>
+</tr>
+<tr>
+<td><code>--theme-surface-elevated</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-surface-elevated)</code></a></td>
+<td>Dialog background color</td>
+</tr>
+<tr>
+<td><code>--theme-shadow-xl</code></td>
+<td><a href="?path=/story/theme-css-variables--shadows"><code>var(--theme-shadow-xl)</code></a></td>
+<td>Dialog box shadow</td>
+</tr>
+<tr>
+<td><code>--theme-border-primary</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-border-primary)</code></a></td>
+<td>Dialog border color</td>
+</tr>
+<tr>
+<td><code>--radius-lg</code></td>
+<td><a href="?path=/story/theme-css-variables--borders"><code>var(--radius-lg)</code></a></td>
+<td>Dialog border radius</td>
+</tr>
+<tr>
+<td><code>--spacing-lg</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-lg)</code></a></td>
+<td>Dialog padding</td>
+</tr>
+<tr>
+<td><code>--spacing-md</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-md)</code></a></td>
+<td>Header/footer padding adjustments</td>
+</tr>
+<tr>
+<td><code>--theme-text-primary</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-text-primary)</code></a></td>
+<td>Title text color</td>
+</tr>
+<tr>
+<td><code>--theme-text-secondary</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-text-secondary)</code></a></td>
+<td>Body text color</td>
+</tr>
+<tr>
+<td><code>--z-modal</code></td>
+<td>1400</td>
+<td>Dialog content z-index layer</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
   },
   argTypes: {
     size: {

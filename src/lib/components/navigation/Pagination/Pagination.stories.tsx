@@ -6,6 +6,104 @@ const meta: Meta<typeof Pagination> = {
   title: 'Navigation/Pagination',
   component: Pagination,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+Pagination control for navigating between pages. Supports multiple variants (default, outlined, minimal), shapes (rounded, circular, square), and customizable sibling/boundary counts.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--pagination-button-size-sm</code></td>
+<td>28px</td>
+<td>Button size for small variant</td>
+</tr>
+<tr>
+<td><code>--pagination-button-size-md</code></td>
+<td>36px</td>
+<td>Button size for medium variant</td>
+</tr>
+<tr>
+<td><code>--pagination-button-size-lg</code></td>
+<td>44px</td>
+<td>Button size for large variant</td>
+</tr>
+<tr>
+<td><code>--pagination-button-size</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--pagination-button-size-md)</code></a></td>
+<td>Current button size</td>
+</tr>
+<tr>
+<td><code>--pagination-button-bg</code></td>
+<td>transparent</td>
+<td>Button background color</td>
+</tr>
+<tr>
+<td><code>--pagination-button-hover-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-background-secondary)</code></a></td>
+<td>Button background on hover</td>
+</tr>
+<tr>
+<td><code>--pagination-button-active-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-primary)</code></a></td>
+<td>Button background when active</td>
+</tr>
+<tr>
+<td><code>--pagination-button-text</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-primary)</code></a></td>
+<td>Button text color</td>
+</tr>
+<tr>
+<td><code>--pagination-button-active-text</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-on-primary)</code></a></td>
+<td>Button text color when active</td>
+</tr>
+<tr>
+<td><code>--pagination-button-disabled-text</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-tertiary)</code></a></td>
+<td>Button text color when disabled</td>
+</tr>
+<tr>
+<td><code>--pagination-button-border-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-border-primary)</code></a></td>
+<td>Button border color for outlined variant</td>
+</tr>
+<tr>
+<td><code>--pagination-button-radius</code></td>
+<td><a href="?path=/story/theme-css-variables--borders"><code>var(--radius-md)</code></a></td>
+<td>Button border radius</td>
+</tr>
+<tr>
+<td><code>--pagination-gap</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-xs)</code></a></td>
+<td>Gap between buttons</td>
+</tr>
+<tr>
+<td><code>--pagination-font-size</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-size-sm)</code></a></td>
+<td>Font size of pagination text</td>
+</tr>
+<tr>
+<td><code>--pagination-transition</code></td>
+<td><a href="?path=/story/theme-css-variables--transitions"><code>var(--transition-fast)</code></a></td>
+<td>Transition duration and easing</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   argTypes: {
     size: {
       control: 'select',

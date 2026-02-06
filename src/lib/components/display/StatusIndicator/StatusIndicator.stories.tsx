@@ -5,6 +5,53 @@ const meta: Meta<typeof StatusIndicator> = {
   title: 'Display/StatusIndicator',
   component: StatusIndicator,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+Visual colored dot indicator for displaying status with optional text and pulse animation.
+
+## CSS Variables
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--indicator-dot-size</code></td>
+<td><code>8px</code></td>
+<td>Size of the indicator dot</td>
+</tr>
+<tr>
+<td><code>--indicator-dot-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-neutral-500)</code></a></td>
+<td>Color of the indicator dot</td>
+</tr>
+<tr>
+<td><code>--indicator-gap</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-xs)</code></a></td>
+<td>Gap between dot and text</td>
+</tr>
+<tr>
+<td><code>--indicator-font-size</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-size-sm)</code></a></td>
+<td>Font size of the text</td>
+</tr>
+<tr>
+<td><code>--indicator-transition</code></td>
+<td><code>all 0.2s ease</code></td>
+<td>Transition property</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   argTypes: {
     status: {
       control: 'select',

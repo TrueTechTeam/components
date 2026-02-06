@@ -14,6 +14,30 @@ const meta: Meta<typeof ActiveFilters> = {
         component: `
 ActiveFilters displays currently applied filters as removable chips.
 Provides an easy way for users to see and remove active filters.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--active-filters-gap</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-sm, 8px)</code></a></td>
+<td>Gap between filter chips</td>
+</tr>
+<tr>
+<td><code>--active-filters-show-more-color</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-primary, #2563eb)</code></a></td>
+<td>Color of "show more" and "show less" buttons</td>
+</tr>
+</tbody>
+</table>
         `,
       },
     },

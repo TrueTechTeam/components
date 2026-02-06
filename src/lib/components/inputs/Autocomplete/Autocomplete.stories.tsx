@@ -10,8 +10,63 @@ const meta: Meta<typeof Autocomplete> = {
   parameters: {
     docs: {
       description: {
-        component:
-          'Autocomplete provides a filterable input with dropdown suggestions. Supports async loading, custom filtering, and multi-select.',
+        component: `
+Autocomplete provides a filterable input with dropdown suggestions. Supports async loading, custom filtering, and multi-select.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--spacing-xs</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-xs)</code></a></td>
+<td>Extra small spacing</td>
+</tr>
+<tr>
+<td><code>--font-size-sm</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-size-sm)</code></a></td>
+<td>Small font size</td>
+</tr>
+<tr>
+<td><code>--font-weight-semibold</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-weight-semibold)</code></a></td>
+<td>Semibold font weight</td>
+</tr>
+<tr>
+<td><code>--theme-text-secondary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-secondary)</code></a></td>
+<td>Secondary text color</td>
+</tr>
+<tr>
+<td><code>--theme-text-tertiary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-tertiary)</code></a></td>
+<td>Tertiary text color</td>
+</tr>
+<tr>
+<td><code>--theme-primary</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-primary)</code></a></td>
+<td>Primary theme color</td>
+</tr>
+<tr>
+<td><code>--theme-text-on-primary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-on-primary)</code></a></td>
+<td>Text color on primary background</td>
+</tr>
+<tr>
+<td><code>--radius-sm</code></td>
+<td><a href="?path=/story/theme-css-variables--borders"><code>var(--radius-sm)</code></a></td>
+<td>Small border radius</td>
+</tr>
+</tbody>
+</table>
+`,
       },
     },
   },

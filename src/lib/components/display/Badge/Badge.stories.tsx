@@ -5,6 +5,58 @@ const meta: Meta<typeof Badge> = {
   title: 'Display/Badge',
   component: Badge,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `Badge component - Small status or count indicator for displaying numerical information or brief status text
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--badge-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-primary-100)</code></a></td>
+<td>Background color</td>
+</tr>
+<tr>
+<td><code>--badge-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-primary-700)</code></a></td>
+<td>Text color</td>
+</tr>
+<tr>
+<td><code>--badge-padding</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-xs) var(--spacing-sm)</code></a></td>
+<td>Padding (vertical and horizontal)</td>
+</tr>
+<tr>
+<td><code>--badge-font-size</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-size-sm)</code></a></td>
+<td>Font size</td>
+</tr>
+<tr>
+<td><code>--badge-border-radius</code></td>
+<td><a href="?path=/story/theme-css-variables--borders"><code>var(--radius-sm)</code></a></td>
+<td>Border radius</td>
+</tr>
+<tr>
+<td><code>--badge-transition</code></td>
+<td><code>background-color 0.15s ease</code></td>
+<td>Transition property</td>
+</tr>
+</tbody>
+</table>
+        `,
+      },
+    },
+  },
   argTypes: {
     variant: {
       control: 'select',

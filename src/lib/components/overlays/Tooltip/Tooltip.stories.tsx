@@ -42,8 +42,58 @@ const meta: Meta<typeof Tooltip> = {
   parameters: {
     docs: {
       description: {
-        component:
-          'Tooltip displays helpful text when hovering or focusing an element. Automatically disabled on touch devices.',
+        component: `
+Tooltip displays helpful text when hovering or focusing an element. Automatically disabled on touch devices.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--popover-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-surface-elevated)</code></a></td>
+<td>Tooltip background color</td>
+</tr>
+<tr>
+<td><code>--popover-border</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-neutral-700)</code></a></td>
+<td>Tooltip border color</td>
+</tr>
+<tr>
+<td><code>--popover-shadow</code></td>
+<td><a href="?path=/story/theme-css-variables--shadows"><code>var(--theme-shadow-md)</code></a></td>
+<td>Tooltip box shadow</td>
+</tr>
+<tr>
+<td><code>--popover-radius</code></td>
+<td><a href="?path=/story/theme-css-variables--borders"><code>var(--radius-sm)</code></a></td>
+<td>Tooltip border radius</td>
+</tr>
+<tr>
+<td><code>--popover-z-index</code></td>
+<td><a href="?path=/story/theme-css-variables--css-variables--z-index"><code>var(--z-tooltip)</code></a></td>
+<td>Tooltip z-index layer</td>
+</tr>
+<tr>
+<td><code>--theme-text-primary</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-text-primary)</code></a></td>
+<td>Tooltip text color</td>
+</tr>
+<tr>
+<td><code>--font-size-sm</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-size-sm)</code></a></td>
+<td>Tooltip font size</td>
+</tr>
+</tbody>
+</table>
+`,
       },
     },
   },

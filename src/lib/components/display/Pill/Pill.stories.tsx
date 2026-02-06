@@ -6,6 +6,85 @@ const meta: Meta<typeof Pill> = {
   title: 'Display/Pill',
   component: Pill,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+Fully rounded badge-like component for status indicators, category tags, and filter pills.
+Supports multiple variants (filled, outlined, subtle) and color options.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--pill-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-primary-500)</code></a></td>
+<td>Background color</td>
+</tr>
+<tr>
+<td><code>--pill-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-on-primary)</code></a></td>
+<td>Text color</td>
+</tr>
+<tr>
+<td><code>--pill-border-color</code></td>
+<td><code>transparent</code></td>
+<td>Border color</td>
+</tr>
+<tr>
+<td><code>--pill-border-width</code></td>
+<td><code>0</code></td>
+<td>Border width</td>
+</tr>
+<tr>
+<td><code>--pill-padding</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-xs) var(--spacing-sm)</code></a></td>
+<td>Padding (default md size)</td>
+</tr>
+<tr>
+<td><code>--pill-font-size</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-size-sm)</code></a></td>
+<td>Font size</td>
+</tr>
+<tr>
+<td><code>--pill-border-radius</code></td>
+<td><a href="?path=/story/theme-css-variables--borders"><code>var(--radius-full)</code></a></td>
+<td>Border radius</td>
+</tr>
+<tr>
+<td><code>--pill-gap</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-xs)</code></a></td>
+<td>Gap between icon and text</td>
+</tr>
+<tr>
+<td><code>--pill-transition</code></td>
+<td><a href="?path=/story/theme-css-variables--transitions"><code>all 0.15s ease</code></a></td>
+<td>Transition property</td>
+</tr>
+<tr>
+<td><code>--pill-hover-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-primary-600)</code></a></td>
+<td>Background color on hover</td>
+</tr>
+<tr>
+<td><code>--theme-border-focus</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>varies by theme</code></a></td>
+<td>Focus outline color</td>
+</tr>
+</tbody>
+</table>
+        `,
+      },
+    },
+  },
   argTypes: {
     variant: {
       control: 'select',
@@ -29,6 +108,18 @@ const meta: Meta<typeof Pill> = {
     children: {
       control: 'text',
       description: 'Content to display inside the component',
+    },
+    onClick: {
+      table: { disable: true },
+    },
+    onRemove: {
+      table: { disable: true },
+    },
+    startIcon: {
+      table: { disable: true },
+    },
+    endIcon: {
+      table: { disable: true },
     },
     className: {
       table: { disable: true },

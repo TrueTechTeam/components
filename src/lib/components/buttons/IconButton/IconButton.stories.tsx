@@ -9,11 +9,88 @@ const meta: Meta<typeof IconButton> = {
   title: 'Buttons/IconButton',
   component: IconButton,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+IconButton component - a button that displays only an icon.
+
+Icon-only buttons are commonly used for compact UIs, toolbars, and actions like
+close, edit, delete, or settings. The component automatically scales the icon to match
+the button size and requires an aria-label for accessibility.
+
+## CSS Variables
+
+<table>
+  <thead>
+    <tr>
+      <th>Variable</th>
+      <th>Default</th>
+      <th>Description</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>--button-bg</code></td>
+      <td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-primary)</code></a></td>
+      <td>Background color</td>
+    </tr>
+    <tr>
+      <td><code>--button-bg-hover</code></td>
+      <td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-primary-hover)</code></a></td>
+      <td>Background color on hover</td>
+    </tr>
+    <tr>
+      <td><code>--button-bg-active</code></td>
+      <td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-primary-active)</code></a></td>
+      <td>Background color on active/pressed</td>
+    </tr>
+    <tr>
+      <td><code>--button-bg-disabled</code></td>
+      <td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-primary-disabled)</code></a></td>
+      <td>Background color when disabled</td>
+    </tr>
+    <tr>
+      <td><code>--button-color</code></td>
+      <td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-text-on-primary)</code></a></td>
+      <td>Icon color</td>
+    </tr>
+    <tr>
+      <td><code>--button-border-color</code></td>
+      <td><code>transparent</code></td>
+      <td>Border color</td>
+    </tr>
+    <tr>
+      <td><code>--button-border-color-hover</code></td>
+      <td><code>transparent</code></td>
+      <td>Border color on hover</td>
+    </tr>
+    <tr>
+      <td><code>--button-border-width</code></td>
+      <td><code>1px</code></td>
+      <td>Border width</td>
+    </tr>
+    <tr>
+      <td><code>--button-radius</code></td>
+      <td><a href="?path=/story/theme-css-variables--borders"><code>var(--radius-md)</code></a></td>
+      <td>Border radius</td>
+    </tr>
+    <tr>
+      <td><code>--button-disabled-opacity</code></td>
+      <td><code>0.5</code></td>
+      <td>Opacity when disabled</td>
+    </tr>
+  </tbody>
+</table>
+        `,
+      },
+    },
+  },
   argTypes: {
     icon: {
       control: 'select',
       options: iconOptions,
-      description: 'Icon to display',
+      description: 'Icon name to display (REQUIRED)',
     },
     variant: {
       control: 'select',
@@ -31,9 +108,8 @@ const meta: Meta<typeof IconButton> = {
     },
     'aria-label': {
       control: 'text',
-      description: 'Accessible label (REQUIRED)',
+      description: 'Accessible label (REQUIRED for icon-only buttons)',
     },
-    // Disable complex props
     onClick: { table: { disable: true } },
     className: { table: { disable: true } },
     style: { table: { disable: true } },
@@ -77,6 +153,11 @@ export const Variants: Story = {
   ),
   parameters: {
     controls: { disable: true },
+    docs: {
+      description: {
+        story: 'All available icon button variants showing different visual styles.',
+      },
+    },
   },
 };
 
@@ -95,6 +176,11 @@ export const Sizes: Story = {
   ),
   parameters: {
     controls: { disable: true },
+    docs: {
+      description: {
+        story: 'All available icon button sizes from extra small to extra large.',
+      },
+    },
   },
 };
 
@@ -114,6 +200,12 @@ export const CommonUseCases: Story = {
   ),
   parameters: {
     controls: { disable: true },
+    docs: {
+      description: {
+        story:
+          'Common icon button use cases including close, edit, delete, settings, info, and add.',
+      },
+    },
   },
 };
 
@@ -131,6 +223,11 @@ export const Disabled: Story = {
   ),
   parameters: {
     controls: { disable: true },
+    docs: {
+      description: {
+        story: 'Disabled icon buttons that cannot be interacted with.',
+      },
+    },
   },
 };
 
@@ -141,31 +238,31 @@ export const IconSizeCorrelation: Story = {
   render: () => (
     <div style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
       <div>
-        <p style={{ marginBottom: '8px', fontSize: '12px', color: '#666' }}>
+        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>
           XS (12px icon, 20px button)
         </p>
         <IconButton icon="check" aria-label="Extra Small" size="xs" variant="outline" />
       </div>
       <div>
-        <p style={{ marginBottom: '8px', fontSize: '12px', color: '#666' }}>
+        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>
           SM (16px icon, 28px button)
         </p>
         <IconButton icon="check" aria-label="Small" size="sm" variant="outline" />
       </div>
       <div>
-        <p style={{ marginBottom: '8px', fontSize: '12px', color: '#666' }}>
+        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>
           MD (20px icon, 36px button)
         </p>
         <IconButton icon="check" aria-label="Medium" size="md" variant="outline" />
       </div>
       <div>
-        <p style={{ marginBottom: '8px', fontSize: '12px', color: '#666' }}>
+        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>
           LG (24px icon, 48px button)
         </p>
         <IconButton icon="check" aria-label="Large" size="lg" variant="outline" />
       </div>
       <div>
-        <p style={{ marginBottom: '8px', fontSize: '12px', color: '#666' }}>
+        <p style={{ marginBottom: '8px', fontSize: '12px', color: 'var(--theme-text-secondary)' }}>
           XL (32px icon, 64px button)
         </p>
         <IconButton icon="check" aria-label="Extra Large" size="xl" variant="outline" />
@@ -174,6 +271,11 @@ export const IconSizeCorrelation: Story = {
   ),
   parameters: {
     controls: { disable: true },
+    docs: {
+      description: {
+        story: 'Icon size automatically scales with button size for visual consistency.',
+      },
+    },
   },
 };
 
@@ -188,5 +290,12 @@ export const Playground: Story = {
     size: 'md',
     disabled: false,
     onClick: action('onClick'),
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: 'Interactive playground with all icon button props available for experimentation.',
+      },
+    },
   },
 };

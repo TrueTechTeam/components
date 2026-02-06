@@ -49,8 +49,53 @@ const meta: Meta<typeof Popover> = {
   parameters: {
     docs: {
       description: {
-        component:
-          'Popover is a base component for creating positioned overlays. It handles positioning, portal rendering, and interaction behaviors like click-outside and escape key.',
+        component: `
+Popover is a base component for creating positioned overlays. It handles positioning, portal rendering, and interaction behaviors like click-outside and escape key.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--popover-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-surface-elevated)</code></a></td>
+<td>Popover background color</td>
+</tr>
+<tr>
+<td><code>--popover-shadow</code></td>
+<td><a href="?path=/story/theme-css-variables--shadows"><code>var(--theme-shadow-lg)</code></a></td>
+<td>Popover box shadow</td>
+</tr>
+<tr>
+<td><code>--popover-border</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-border-primary)</code></a></td>
+<td>Popover border color</td>
+</tr>
+<tr>
+<td><code>--popover-radius</code></td>
+<td><a href="?path=/story/theme-css-variables--borders"><code>var(--radius-md)</code></a></td>
+<td>Popover border radius</td>
+</tr>
+<tr>
+<td><code>--popover-z-index</code></td>
+<td><a href="?path=/story/theme-css-variables--css-variables--z-index"><code>var(--z-popover)</code></a></td>
+<td>Popover z-index layer</td>
+</tr>
+<tr>
+<td><code>--transition-normal</code></td>
+<td><a href="?path=/story/theme-css-variables--transitions"><code>var(--transition-normal)</code></a></td>
+<td>Open/close animation transition</td>
+</tr>
+</tbody>
+</table>
+`,
       },
     },
   },

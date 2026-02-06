@@ -8,6 +8,64 @@ const meta: Meta<typeof CheckboxGroup> = {
   title: 'Inputs/CheckboxGroup',
   component: CheckboxGroup,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+CheckboxGroup component manages multiple checkbox selections with support for min/max constraints, validation, and accessibility features.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--checkbox-group-gap</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-sm)</code></a></td>
+<td>Gap between checkboxes</td>
+</tr>
+<tr>
+<td><code>--checkbox-size</code></td>
+<td><code>18px</code></td>
+<td>Size of checkbox element</td>
+</tr>
+<tr>
+<td><code>--checkbox-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-background-primary)</code></a></td>
+<td>Background color of checkbox</td>
+</tr>
+<tr>
+<td><code>--checkbox-bg-checked</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-primary)</code></a></td>
+<td>Background color when checked</td>
+</tr>
+<tr>
+<td><code>--checkbox-border-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-border-primary)</code></a></td>
+<td>Border color of checkbox</td>
+</tr>
+<tr>
+<td><code>--checkbox-border-color-checked</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-primary)</code></a></td>
+<td>Border color when checked</td>
+</tr>
+<tr>
+<td><code>--checkbox-icon-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-on-primary)</code></a></td>
+<td>Color of check icon</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   argTypes: {
     value: {
       control: 'object',

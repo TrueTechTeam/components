@@ -18,8 +18,81 @@ const meta: Meta<typeof FilterSidebar> = {
     docs: {
       description: {
         component: `
-FilterSidebar provides a vertical sidebar layout for filter controls.
-Supports collapsible behavior, header/footer slots, and active filters display.
+FilterSidebar provides a vertical sidebar layout for filter controls. Supports collapsible behavior, header/footer slots, and active filters display.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--sidebar-width</code></td>
+<td><code>280px</code></td>
+<td>Width of the sidebar</td>
+</tr>
+<tr>
+<td><code>--sidebar-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-surface-primary, #ffffff)</code></a></td>
+<td>Background color</td>
+</tr>
+<tr>
+<td><code>--sidebar-border-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-border-primary, #e0e0e0)</code></a></td>
+<td>Border color</td>
+</tr>
+<tr>
+<td><code>--sidebar-header-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-surface-secondary, #f5f5f5)</code></a></td>
+<td>Header background color</td>
+</tr>
+<tr>
+<td><code>--sidebar-padding</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-md, 16px)</code></a></td>
+<td>Padding throughout sidebar</td>
+</tr>
+<tr>
+<td><code>--spacing-sm</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>8px</code></a></td>
+<td>Small padding in active filters container</td>
+</tr>
+<tr>
+<td><code>--radius-sm</code></td>
+<td><a href="?path=/story/theme-css-variables--borders"><code>4px</code></a></td>
+<td>Border radius for collapse button</td>
+</tr>
+<tr>
+<td><code>--theme-text-secondary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>#666666</code></a></td>
+<td>Collapse button icon color</td>
+</tr>
+<tr>
+<td><code>--theme-interactive-hover</code></td>
+<td><code>rgba(0, 0, 0, 0.04)</code></td>
+<td>Collapse button hover background</td>
+</tr>
+<tr>
+<td><code>--theme-primary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>#2563eb</code></a></td>
+<td>Collapse button focus outline color</td>
+</tr>
+<tr>
+<td><code>--font-size-base</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>1rem</code></a></td>
+<td>Header font size</td>
+</tr>
+<tr>
+<td><code>--font-weight-semibold</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>600</code></a></td>
+<td>Header font weight</td>
+</tr>
+</tbody>
+</table>
         `,
       },
     },
@@ -38,6 +111,10 @@ Supports collapsible behavior, header/footer slots, and active filters display.
       control: 'boolean',
       description: 'Whether the sidebar can be collapsed',
     },
+    defaultCollapsed: {
+      control: 'boolean',
+      description: 'Default collapsed state',
+    },
     showActiveFilters: {
       control: 'boolean',
       description: 'Show active filters display',
@@ -47,6 +124,10 @@ Supports collapsible behavior, header/footer slots, and active filters display.
       options: ['top', 'bottom'],
       description: 'Position of active filters within sidebar',
     },
+    showApplyButton: {
+      control: 'boolean',
+      description: 'Show apply button',
+    },
     showClearButton: {
       control: 'boolean',
       description: 'Show clear all button',
@@ -54,6 +135,18 @@ Supports collapsible behavior, header/footer slots, and active filters display.
     showResetButton: {
       control: 'boolean',
       description: 'Show reset button',
+    },
+    applyButtonLabel: {
+      control: 'text',
+      description: 'Label for apply button',
+    },
+    clearButtonLabel: {
+      control: 'text',
+      description: 'Label for clear button',
+    },
+    resetButtonLabel: {
+      control: 'text',
+      description: 'Label for reset button',
     },
     header: { table: { disable: true } },
     footer: { table: { disable: true } },

@@ -199,7 +199,7 @@ const meta: Meta = {
     docs: {
       description: {
         component: `
-\`useLocalStorage\` persists React state to localStorage with automatic serialization and cross-tab synchronization.
+\`useLocalStorage\` is a React hook that persists state to browser localStorage with automatic JSON serialization and cross-tab synchronization.
 
 ## Features
 - Automatic JSON serialization/deserialization

@@ -289,7 +289,7 @@ const meta: Meta = {
     docs: {
       description: {
         component: `
-\`useMediaQuery\` reacts to CSS media query changes, enabling responsive behavior in JavaScript.
+\`useMediaQuery\` is a React hook that reacts to CSS media query changes, enabling responsive behavior in JavaScript based on screen size and user preferences.
 
 ## Features
 - Supports all CSS media queries

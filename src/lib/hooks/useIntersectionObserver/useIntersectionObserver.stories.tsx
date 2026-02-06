@@ -296,7 +296,7 @@ const meta: Meta = {
     docs: {
       description: {
         component: `
-\`useIntersectionObserver\` provides an easy-to-use wrapper around the Intersection Observer API for detecting when elements enter or leave the viewport.
+\`useIntersectionObserver\` is a React hook that provides an easy-to-use wrapper around the Intersection Observer API for detecting when elements enter or leave the viewport.
 
 ## Features
 - Simple ref-based API

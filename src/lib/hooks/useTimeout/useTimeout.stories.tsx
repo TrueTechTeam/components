@@ -305,7 +305,7 @@ const meta: Meta = {
     docs: {
       description: {
         component: `
-\`useTimeout\` provides a declarative way to use setTimeout with automatic cleanup.
+\`useTimeout\` is a React hook that provides a declarative way to use setTimeout with automatic cleanup and reset/cancel controls.
 
 ## Features
 - Automatic cleanup on unmount

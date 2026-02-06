@@ -11,6 +11,137 @@ const meta: Meta<typeof Toast> = {
   tags: ['autodocs'],
   parameters: {
     layout: 'centered',
+    docs: {
+      description: {
+        component: `
+Toast component displays brief notifications with icons, titles, messages, and optional actions.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--toast-container-z-index</code></td>
+<td>1500</td>
+<td>Toast container z-index layer</td>
+</tr>
+<tr>
+<td><code>--toast-gap</code></td>
+<td>12px</td>
+<td>Gap between toasts</td>
+</tr>
+<tr>
+<td><code>--toast-offset</code></td>
+<td>16px</td>
+<td>Container offset from viewport edge</td>
+</tr>
+<tr>
+<td><code>--toast-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-surface-elevated)</code></a></td>
+<td>Toast background color</td>
+</tr>
+<tr>
+<td><code>--toast-shadow</code></td>
+<td><a href="?path=/story/theme-css-variables--shadows"><code>var(--theme-shadow-lg)</code></a></td>
+<td>Toast box shadow</td>
+</tr>
+<tr>
+<td><code>--toast-border</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-border-primary)</code></a></td>
+<td>Toast border color</td>
+</tr>
+<tr>
+<td><code>--toast-border-radius</code></td>
+<td><a href="?path=/story/theme-css-variables--borders"><code>var(--radius-md)</code></a></td>
+<td>Toast border radius</td>
+</tr>
+<tr>
+<td><code>--toast-padding</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-sm)</code></a></td>
+<td>Toast inner padding</td>
+</tr>
+<tr>
+<td><code>--toast-width</code></td>
+<td>360px</td>
+<td>Toast container width</td>
+</tr>
+<tr>
+<td><code>--toast-animation-duration</code></td>
+<td>200ms</td>
+<td>Slide in/out animation duration</td>
+</tr>
+<tr>
+<td><code>--toast-animation-easing</code></td>
+<td>cubic-bezier(0.16, 1, 0.3, 1)</td>
+<td>Animation easing function</td>
+</tr>
+<tr>
+<td><code>--spacing-sm</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-sm)</code></a></td>
+<td>Gap between icon and content</td>
+</tr>
+<tr>
+<td><code>--theme-text-secondary</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-text-secondary)</code></a></td>
+<td>Message text color</td>
+</tr>
+<tr>
+<td><code>--font-size-sm</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-size-sm)</code></a></td>
+<td>Title and message font size</td>
+</tr>
+<tr>
+<td><code>--font-weight-semibold</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-weight-semibold)</code></a></td>
+<td>Title font weight</td>
+</tr>
+<tr>
+<td><code>--theme-primary</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-primary)</code></a></td>
+<td>Action button color</td>
+</tr>
+<tr>
+<td><code>--radius-sm</code></td>
+<td><a href="?path=/story/theme-css-variables--borders"><code>var(--radius-sm)</code></a></td>
+<td>Action button border radius</td>
+</tr>
+<tr>
+<td><code>--theme-info</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-info)</code></a></td>
+<td>Info variant accent color</td>
+</tr>
+<tr>
+<td><code>--theme-success</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-success)</code></a></td>
+<td>Success variant accent color</td>
+</tr>
+<tr>
+<td><code>--theme-warning</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-warning)</code></a></td>
+<td>Warning variant accent color</td>
+</tr>
+<tr>
+<td><code>--theme-error</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-error)</code></a></td>
+<td>Error variant accent color</td>
+</tr>
+<tr>
+<td><code>--toast-progress</code></td>
+<td>100%</td>
+<td>Progress bar width percentage</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
   },
   argTypes: {
     variant: {

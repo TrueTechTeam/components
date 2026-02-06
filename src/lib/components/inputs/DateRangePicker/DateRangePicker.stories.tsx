@@ -6,6 +6,158 @@ const meta: Meta<typeof DateRangePicker> = {
   title: 'Inputs/DateRangePicker',
   component: DateRangePicker,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+Date range picker component for selecting a range of dates with an interactive dual-month calendar.
+
+## CSS Variables
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--spacing-xs</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-xs)</code></a></td>
+<td>Extra small spacing between flex items</td>
+</tr>
+<tr>
+<td><code>--font-size-base</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-size-base)</code></a></td>
+<td>Base font size for label</td>
+</tr>
+<tr>
+<td><code>--theme-text-primary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-primary)</code></a></td>
+<td>Primary text color for labels</td>
+</tr>
+<tr>
+<td><code>--theme-surface-elevated</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-surface-elevated)</code></a></td>
+<td>Background color for calendar popup</td>
+</tr>
+<tr>
+<td><code>--theme-input-border</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-input-border)</code></a></td>
+<td>Border color for calendar</td>
+</tr>
+<tr>
+<td><code>--radius-md</code></td>
+<td><a href="?path=/story/theme-css-variables--borders"><code>var(--radius-md)</code></a></td>
+<td>Medium border radius</td>
+</tr>
+<tr>
+<td><code>--spacing-md</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-md)</code></a></td>
+<td>Medium spacing in calendar</td>
+</tr>
+<tr>
+<td><code>--theme-secondary-400</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-secondary-400)</code></a></td>
+<td>Secondary variant border color</td>
+</tr>
+<tr>
+<td><code>--theme-tertiary-400</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-tertiary-400)</code></a></td>
+<td>Tertiary variant border color</td>
+</tr>
+<tr>
+<td><code>--font-size-sm</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-size-sm)</code></a></td>
+<td>Small font size for preset buttons and month labels</td>
+</tr>
+<tr>
+<td><code>--theme-neutral-100</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-neutral-100)</code></a></td>
+<td>Neutral background on hover</td>
+</tr>
+<tr>
+<td><code>--theme-neutral-200</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-neutral-200)</code></a></td>
+<td>Neutral background on active</td>
+</tr>
+<tr>
+<td><code>--radius-sm</code></td>
+<td><a href="?path=/story/theme-css-variables--borders"><code>var(--radius-sm)</code></a></td>
+<td>Small border radius</td>
+</tr>
+<tr>
+<td><code>--theme-text-secondary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-secondary)</code></a></td>
+<td>Secondary text color</td>
+</tr>
+<tr>
+<td><code>--font-size-xs</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-size-xs)</code></a></td>
+<td>Extra small font size for day headers</td>
+</tr>
+<tr>
+<td><code>--theme-text-disabled</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-disabled)</code></a></td>
+<td>Text color for disabled dates</td>
+</tr>
+<tr>
+<td><code>--theme-primary-500</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-primary-500)</code></a></td>
+<td>Border color for today marker</td>
+</tr>
+<tr>
+<td><code>--theme-primary-600</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-primary-600)</code></a></td>
+<td>Background for selected date</td>
+</tr>
+<tr>
+<td><code>--theme-white</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-white)</code></a></td>
+<td>Text color for selected date</td>
+</tr>
+<tr>
+<td><code>--theme-primary-700</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-primary-700)</code></a></td>
+<td>Background on hover for selected date</td>
+</tr>
+<tr>
+<td><code>--theme-primary-100</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-primary-100)</code></a></td>
+<td>Background for in-range dates</td>
+</tr>
+<tr>
+<td><code>--theme-primary-900</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-primary-900)</code></a></td>
+<td>Text color for in-range dates</td>
+</tr>
+<tr>
+<td><code>--theme-primary-200</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-primary-200)</code></a></td>
+<td>Background on hover for in-range dates</td>
+</tr>
+<tr>
+<td><code>--theme-primary-50</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-primary-50)</code></a></td>
+<td>Background for hover range dates</td>
+</tr>
+<tr>
+<td><code>--theme-primary-700</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-primary-700)</code></a></td>
+<td>Text color for hover range dates</td>
+</tr>
+<tr>
+<td><code>--theme-error</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-error)</code></a></td>
+<td>Color for required indicator and error message</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   argTypes: {
     // Simple controls
     label: {

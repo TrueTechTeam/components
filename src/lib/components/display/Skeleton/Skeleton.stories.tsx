@@ -5,22 +5,68 @@ const meta: Meta<typeof Skeleton> = {
   title: 'Display/Skeleton',
   component: Skeleton,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+Loading placeholder component that displays animated skeleton screens while content is being loaded.
+
+## CSS Variables
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--skeleton-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-neutral-200)</code></a></td>
+<td>Background color of the skeleton</td>
+</tr>
+<tr>
+<td><code>--skeleton-radius</code></td>
+<td><a href="?path=/story/theme-css-variables--borders"><code>var(--radius-sm)</code></a></td>
+<td>Border radius of the skeleton</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   argTypes: {
     variant: {
       control: 'select',
       options: ['text', 'circular', 'rectangular', 'rounded'],
+      description: 'Visual variant of the skeleton',
     },
     width: {
       control: 'text',
+      description: 'Width of the skeleton element',
     },
     height: {
       control: 'text',
+      description: 'Height of the skeleton element',
     },
     animated: {
       control: 'boolean',
+      description: 'Whether to show animation',
     },
     lines: {
       control: { type: 'number', min: 1, max: 10 },
+      description: 'Number of lines for text variant',
+    },
+    className: {
+      table: { disable: true },
+    },
+    style: {
+      table: { disable: true },
+    },
+    'data-testid': {
+      table: { disable: true },
     },
   },
 };

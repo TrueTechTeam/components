@@ -5,6 +5,44 @@ const meta: Meta<typeof MasonryLayout> = {
   title: 'Layout/MasonryLayout',
   component: MasonryLayout,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+Masonry grid layout that arranges items in columns with flexible heights. Items are distributed across columns to maintain visual balance.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--masonry-gap</code></td>
+<td>16px</td>
+<td>Gap between masonry items</td>
+</tr>
+<tr>
+<td><code>--masonry-animation-duration</code></td>
+<td><a href="?path=/story/theme-css-variables--transitions"><code>var(--transition-normal)</code></a></td>
+<td>Duration of layout animations when items reflow</td>
+</tr>
+<tr>
+<td><code>--masonry-animation-easing</code></td>
+<td>ease-out</td>
+<td>Easing function for layout animations</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   argTypes: {
     columnWidth: {
       control: { type: 'number', min: 100, max: 400 },

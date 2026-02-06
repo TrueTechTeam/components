@@ -7,6 +7,39 @@ const meta: Meta<typeof Rating> = {
   title: 'Inputs/Rating',
   component: Rating,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+Rating component for selecting a value from a visual scale.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--rating-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-warning-500)</code></a></td>
+<td>Color of filled rating icons</td>
+</tr>
+<tr>
+<td><code>--rating-size</code></td>
+<td><code>24px</code></td>
+<td>Size of rating icons</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   argTypes: {
     label: {
       control: 'text',

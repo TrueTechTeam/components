@@ -8,6 +8,59 @@ const meta: Meta<typeof RadioGroup> = {
   title: 'Inputs/Radio',
   component: RadioGroup,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+Radio button component for selecting a single option from a group.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--radio-size</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-lg)</code></a></td>
+<td>Size of the radio button</td>
+</tr>
+<tr>
+<td><code>--radio-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-control-bg)</code></a></td>
+<td>Background color of the radio</td>
+</tr>
+<tr>
+<td><code>--radio-border</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-control-border)</code></a></td>
+<td>Border color of the radio</td>
+</tr>
+<tr>
+<td><code>--radio-dot-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-primary)</code></a></td>
+<td>Color of the inner dot when checked</td>
+</tr>
+<tr>
+<td><code>--radio-focus-ring</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-interactive-focus)</code></a></td>
+<td>Focus ring color</td>
+</tr>
+<tr>
+<td><code>--radio-transition</code></td>
+<td><code>all 0.15s ease-in-out</code></td>
+<td>Transition timing</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   argTypes: {
     variant: {
       control: 'select',

@@ -5,13 +5,57 @@ const meta: Meta<typeof CountUp> = {
   title: 'Display/CountUp',
   component: CountUp,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+CountUp component for animated number counting.
+
+The CountUp component displays animated number counting from a start value to a target value. It supports various easing functions, custom formatting, thousands separators, and can be triggered on element visibility using Intersection Observer.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--countup-font-size</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-size-xl)</code></a></td>
+<td>Font size of the count value</td>
+</tr>
+<tr>
+<td><code>--countup-font-weight</code></td>
+<td><code>600</code></td>
+<td>Font weight of the count value</td>
+</tr>
+<tr>
+<td><code>--countup-color</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-text-primary)</code></a></td>
+<td>Color of the count value</td>
+</tr>
+<tr>
+<td><code>--countup-prefix-color</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-text-secondary)</code></a></td>
+<td>Color of the prefix text</td>
+</tr>
+<tr>
+<td><code>--countup-suffix-color</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-text-secondary)</code></a></td>
+<td>Color of the suffix text</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   argTypes: {
-    onStart: { table: { disable: true } },
-    onEnd: { table: { disable: true } },
-    formatFn: { table: { disable: true } },
-    autoStart: { table: { disable: true } },
-    visibilityThreshold: { table: { disable: true } },
-    decimalSeparator: { table: { disable: true } },
     value: {
       control: 'number',
       description: 'Target value to count to',
@@ -66,15 +110,16 @@ const meta: Meta<typeof CountUp> = {
       control: { type: 'range', min: 0, max: 2000, step: 100 },
       description: 'Delay before starting animation',
     },
-    className: {
-      table: { disable: true },
-    },
-    'data-testid': {
-      table: { disable: true },
-    },
-    style: {
-      table: { disable: true },
-    },
+    onStart: { table: { disable: true } },
+    onEnd: { table: { disable: true } },
+    formatFn: { table: { disable: true } },
+    autoStart: { table: { disable: true } },
+    visibilityThreshold: { table: { disable: true } },
+    decimalSeparator: { table: { disable: true } },
+    className: { table: { disable: true } },
+    'data-testid': { table: { disable: true } },
+    'aria-label': { table: { disable: true } },
+    style: { table: { disable: true } },
   },
 };
 

@@ -19,8 +19,28 @@ const meta: Meta<typeof Menu> = {
   parameters: {
     docs: {
       description: {
-        component:
-          'Menu component provides an interactive list of options with keyboard navigation and selection support.',
+        component: `
+Menu component provides an interactive list of options with keyboard navigation and selection support.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--spacing-md</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-md)</code></a></td>
+<td>Menu wrapper outline space</td>
+</tr>
+</tbody>
+</table>
+`,
       },
     },
   },

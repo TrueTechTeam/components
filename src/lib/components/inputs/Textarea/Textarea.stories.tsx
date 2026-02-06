@@ -7,6 +7,79 @@ const meta: Meta<typeof Textarea> = {
   title: 'Inputs/Textarea',
   component: Textarea,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+Textarea component for multi-line text input with auto-resize, character counting, and validation support.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--textarea-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-background-primary)</code></a></td>
+<td>Background color of textarea</td>
+</tr>
+<tr>
+<td><code>--textarea-border</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-neutral-400)</code></a></td>
+<td>Border color of textarea</td>
+</tr>
+<tr>
+<td><code>--textarea-text</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-primary)</code></a></td>
+<td>Text color</td>
+</tr>
+<tr>
+<td><code>--textarea-placeholder</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-tertiary)</code></a></td>
+<td>Placeholder text color</td>
+</tr>
+<tr>
+<td><code>--textarea-focus-border</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-primary-500)</code></a></td>
+<td>Border color when focused</td>
+</tr>
+<tr>
+<td><code>--textarea-focus-ring</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-primary-200)</code></a></td>
+<td>Focus ring color</td>
+</tr>
+<tr>
+<td><code>--textarea-padding</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-sm)</code></a></td>
+<td>Padding inside textarea</td>
+</tr>
+<tr>
+<td><code>--textarea-font-size</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-size-base)</code></a></td>
+<td>Font size of text</td>
+</tr>
+<tr>
+<td><code>--textarea-line-height</code></td>
+<td><code>1.5</code></td>
+<td>Line height</td>
+</tr>
+<tr>
+<td><code>--textarea-transition</code></td>
+<td><code>all 0.15s ease-in-out</code></td>
+<td>Transition timing</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   argTypes: {
     // Simple controls
     label: {

@@ -75,6 +75,49 @@ const meta: Meta<typeof Icon> = {
   title: 'Display/Icon',
   component: Icon,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+Icon component for rendering SVG icons from the icon registry. Supports flexible sizing with preset sizes or custom values, and color customization.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--icon-size</code></td>
+<td>24px</td>
+<td>Size of the icon</td>
+</tr>
+<tr>
+<td><code>--icon-color</code></td>
+<td>currentcolor</td>
+<td>Color of the icon</td>
+</tr>
+<tr>
+<td><code>--icon-fill</code></td>
+<td>none</td>
+<td>Fill property for the SVG</td>
+</tr>
+<tr>
+<td><code>--icon-stroke</code></td>
+<td>currentcolor</td>
+<td>Stroke color for the SVG</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   argTypes: {
     name: {
       control: 'select',
@@ -90,7 +133,6 @@ const meta: Meta<typeof Icon> = {
       control: 'color',
       description: 'Color of the icon (CSS color value or theme variable)',
     },
-    // Hide complex props
     className: { table: { disable: true } },
     style: { table: { disable: true } },
     'data-testid': { table: { disable: true } },

@@ -5,6 +5,53 @@ const meta: Meta<typeof DragHandle> = {
   title: 'DnD/DragHandle',
   component: DragHandle,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+DragHandle component provides visual feedback for draggable items in drag-and-drop interfaces.
+
+## CSS Variables
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--handle-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-secondary)</code></a></td>
+<td>Color of the handle icon</td>
+</tr>
+<tr>
+<td><code>--handle-color-hover</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-primary)</code></a></td>
+<td>Color on hover</td>
+</tr>
+<tr>
+<td><code>--handle-color-active</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-primary)</code></a></td>
+<td>Color when active</td>
+</tr>
+<tr>
+<td><code>--handle-bg-hover</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-interactive-hover)</code></a></td>
+<td>Background color on hover</td>
+</tr>
+<tr>
+<td><code>--handle-size</code></td>
+<td><code>24px</code></td>
+<td>Size of the handle</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   argTypes: {
     size: {
       control: 'select',
@@ -19,6 +66,19 @@ const meta: Meta<typeof DragHandle> = {
     disabled: {
       control: 'boolean',
       description: 'Whether the handle is disabled',
+    },
+    label: {
+      control: 'text',
+      description: 'Accessible label for the handle',
+    },
+    className: {
+      table: { disable: true },
+    },
+    'data-testid': {
+      table: { disable: true },
+    },
+    style: {
+      table: { disable: true },
     },
   },
 };

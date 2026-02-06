@@ -6,6 +6,95 @@ const meta: Meta<typeof PhoneInput> = {
   title: 'Inputs/PhoneInput',
   component: PhoneInput,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+Phone input component with country code selector and automatic formatting based on country.
+
+## CSS Variables
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--spacing-xs</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-xs)</code></a></td>
+<td>Small spacing between container elements</td>
+</tr>
+<tr>
+<td><code>--font-size-base</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-size-base)</code></a></td>
+<td>Font size for label text</td>
+</tr>
+<tr>
+<td><code>--theme-text-primary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-primary)</code></a></td>
+<td>Label text color</td>
+</tr>
+<tr>
+<td><code>--spacing-md</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-md)</code></a></td>
+<td>Medium spacing between label and input (left placement)</td>
+</tr>
+<tr>
+<td><code>--select-border-color</code></td>
+<td><code>transparent</code></td>
+<td>Country select border color override</td>
+</tr>
+<tr>
+<td><code>--select-background-color</code></td>
+<td><code>transparent</code></td>
+<td>Country select background override</td>
+</tr>
+<tr>
+<td><code>--spacing-sm</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-sm)</code></a></td>
+<td>Padding in country select</td>
+</tr>
+<tr>
+<td><code>--theme-background-secondary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-background-secondary)</code></a></td>
+<td>Country select hover background</td>
+</tr>
+<tr>
+<td><code>--theme-input-border-focus</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-input-border-focus)</code></a></td>
+<td>Country select focus outline color</td>
+</tr>
+<tr>
+<td><code>--input-padding-x</code></td>
+<td><code>0</code></td>
+<td>Phone number input horizontal padding override</td>
+</tr>
+<tr>
+<td><code>--input-padding-y</code></td>
+<td><code>0</code></td>
+<td>Phone number input vertical padding override</td>
+</tr>
+<tr>
+<td><code>--theme-text-secondary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-secondary)</code></a></td>
+<td>Dial code text color</td>
+</tr>
+<tr>
+<td><code>--theme-error</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-error)</code></a></td>
+<td>Required indicator color</td>
+</tr>
+</tbody>
+</table>
+
+**Note:** PhoneInput extends the Input component, so it inherits all Input CSS variables for styling the phone number field itself.
+`,
+      },
+    },
+  },
   argTypes: {
     // Simple text controls
     label: {

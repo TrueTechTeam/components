@@ -8,6 +8,50 @@ const meta: Meta<typeof Reveal> = {
   title: 'Display/Reveal',
   component: Reveal,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+Intersection Observer-based reveal animation component. Animates elements when they scroll into view.
+Supports multiple animation types, durations, and cascade effects for staggering children.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--reveal-duration</code></td>
+<td><code>500ms</code></td>
+<td>Animation duration</td>
+</tr>
+<tr>
+<td><code>--reveal-delay</code></td>
+<td><code>0ms</code></td>
+<td>Animation delay</td>
+</tr>
+<tr>
+<td><code>--reveal-easing</code></td>
+<td><code>ease-out</code></td>
+<td>CSS easing function</td>
+</tr>
+<tr>
+<td><code>--reveal-distance</code></td>
+<td><code>20px</code></td>
+<td>Distance for slide animations</td>
+</tr>
+</tbody>
+</table>
+        `,
+      },
+    },
+  },
   argTypes: {
     animation: {
       control: 'select',
@@ -30,6 +74,10 @@ const meta: Meta<typeof Reveal> = {
     delay: {
       control: { type: 'range', min: 0, max: 1000, step: 50 },
       description: 'Delay before animation starts',
+    },
+    easing: {
+      control: 'text',
+      description: 'CSS easing function',
     },
     threshold: {
       control: { type: 'range', min: 0, max: 1, step: 0.1 },
@@ -58,6 +106,10 @@ const meta: Meta<typeof Reveal> = {
     playOnMount: {
       control: 'boolean',
       description: 'Play animation immediately on mount without scroll',
+    },
+    rootMargin: {
+      control: 'text',
+      description: 'Root margin for Intersection Observer',
     },
     onReveal: { table: { disable: true } },
     children: { table: { disable: true } },

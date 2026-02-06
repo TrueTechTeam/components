@@ -11,8 +11,81 @@ const meta: Meta<typeof FilterBar> = {
     docs: {
       description: {
         component: `
-FilterBar provides a horizontal inline layout for filter controls.
-Supports overflow handling with a "More Filters" dropdown.
+FilterBar provides a horizontal inline layout for filter controls. Supports overflow handling with a "More Filters" dropdown.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--filter-bar-gap-sm</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-sm, 8px)</code></a></td>
+<td>Small gap between filters</td>
+</tr>
+<tr>
+<td><code>--filter-bar-gap-md</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-md, 16px)</code></a></td>
+<td>Medium gap between filters</td>
+</tr>
+<tr>
+<td><code>--filter-bar-gap-lg</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-lg, 24px)</code></a></td>
+<td>Large gap between filters</td>
+</tr>
+<tr>
+<td><code>--filter-bar-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-surface-primary, #ffffff)</code></a></td>
+<td>Background color</td>
+</tr>
+<tr>
+<td><code>--filter-bar-border-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-border-primary, #e0e0e0)</code></a></td>
+<td>Bottom border color</td>
+</tr>
+<tr>
+<td><code>--filter-bar-padding</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-md, 16px)</code></a></td>
+<td>Padding</td>
+</tr>
+<tr>
+<td><code>--spacing-xs</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>4px</code></a></td>
+<td>Extra small spacing</td>
+</tr>
+<tr>
+<td><code>--radius-full</code></td>
+<td><code>9999px</code></td>
+<td>Full border radius for badge</td>
+</tr>
+<tr>
+<td><code>--theme-primary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>#2563eb</code></a></td>
+<td>Badge background color</td>
+</tr>
+<tr>
+<td><code>--theme-text-on-primary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>#ffffff</code></a></td>
+<td>Badge text color</td>
+</tr>
+<tr>
+<td><code>--font-size-xs</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>0.75rem</code></a></td>
+<td>Badge font size</td>
+</tr>
+<tr>
+<td><code>--font-weight-semibold</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>600</code></a></td>
+<td>Badge font weight</td>
+</tr>
+</tbody>
+</table>
         `,
       },
     },
@@ -31,6 +104,10 @@ Supports overflow handling with a "More Filters" dropdown.
       control: 'boolean',
       description: 'Show "More Filters" dropdown for overflow',
     },
+    moreFiltersLabel: {
+      control: 'text',
+      description: 'Label for more filters button',
+    },
     showActiveFilters: {
       control: 'boolean',
       description: 'Show active filters display',
@@ -40,10 +117,31 @@ Supports overflow handling with a "More Filters" dropdown.
       options: ['top', 'bottom', 'inline'],
       description: 'Position of active filters',
     },
+    showApplyButton: {
+      control: 'boolean',
+      description: 'Show apply button',
+    },
     showClearButton: {
       control: 'boolean',
       description: 'Show clear all button',
     },
+    showResetButton: {
+      control: 'boolean',
+      description: 'Show reset button',
+    },
+    applyButtonLabel: {
+      control: 'text',
+      description: 'Label for apply button',
+    },
+    clearButtonLabel: {
+      control: 'text',
+      description: 'Label for clear button',
+    },
+    resetButtonLabel: {
+      control: 'text',
+      description: 'Label for reset button',
+    },
+    visibleFilters: { table: { disable: true } },
     children: { table: { disable: true } },
     className: { table: { disable: true } },
   },

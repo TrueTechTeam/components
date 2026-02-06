@@ -5,6 +5,68 @@ const meta: Meta<typeof Tag> = {
   title: 'Display/Tag',
   component: Tag,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+Tag component for displaying labeled content with optional removal or click actions.
+
+## CSS Variables
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--tag-padding</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-sm)</code></a></td>
+<td>Padding inside the tag</td>
+</tr>
+<tr>
+<td><code>--tag-font-size</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-size-sm)</code></a></td>
+<td>Font size of the tag text</td>
+</tr>
+<tr>
+<td><code>--tag-height</code></td>
+<td><code>28px</code></td>
+<td>Height of the tag</td>
+</tr>
+<tr>
+<td><code>--tag-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-primary-100)</code></a></td>
+<td>Background color</td>
+</tr>
+<tr>
+<td><code>--tag-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-primary-700)</code></a></td>
+<td>Text color</td>
+</tr>
+<tr>
+<td><code>--tag-border-radius</code></td>
+<td><a href="?path=/story/theme-css-variables--borders"><code>var(--radius-sm)</code></a></td>
+<td>Border radius of the tag</td>
+</tr>
+<tr>
+<td><code>--tag-gap</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-sm)</code></a></td>
+<td>Gap between tag text and remove button</td>
+</tr>
+<tr>
+<td><code>--tag-transition</code></td>
+<td><code>background-color 0.15s ease</code></td>
+<td>Transition effects</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   argTypes: {
     variant: {
       control: 'select',

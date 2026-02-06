@@ -10,6 +10,173 @@ const meta: Meta<typeof Input> = {
   title: 'Inputs/Input',
   component: Input,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+Comprehensive input component with support for various input types, icons, validation, and formatting.
+
+## CSS Variables
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--input-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-background-primary)</code></a></td>
+<td>Input background color</td>
+</tr>
+<tr>
+<td><code>--input-border-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-border-primary)</code></a></td>
+<td>Input border color</td>
+</tr>
+<tr>
+<td><code>--input-border-color-hover</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-primary)</code></a></td>
+<td>Input border color on hover</td>
+</tr>
+<tr>
+<td><code>--input-border-color-focus</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-primary)</code></a></td>
+<td>Input border color on focus</td>
+</tr>
+<tr>
+<td><code>--input-text-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-primary)</code></a></td>
+<td>Input text color</td>
+</tr>
+<tr>
+<td><code>--input-placeholder-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-tertiary)</code></a></td>
+<td>Placeholder text color</td>
+</tr>
+<tr>
+<td><code>--input-border-width</code></td>
+<td><code>1px</code></td>
+<td>Input border width</td>
+</tr>
+<tr>
+<td><code>--input-border-radius</code></td>
+<td><a href="?path=/story/theme-css-variables--borders"><code>var(--radius-md)</code></a></td>
+<td>Input border radius</td>
+</tr>
+<tr>
+<td><code>--input-padding-x</code></td>
+<td>calculated from spacing unit</td>
+<td>Horizontal padding</td>
+</tr>
+<tr>
+<td><code>--input-padding-y</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-sm)</code></a></td>
+<td>Vertical padding (md size)</td>
+</tr>
+<tr>
+<td><code>--input-gap</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-sm)</code></a></td>
+<td>Gap between elements in input container</td>
+</tr>
+<tr>
+<td><code>--font-family-primary</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-family-primary)</code></a></td>
+<td>Font family for input text</td>
+</tr>
+<tr>
+<td><code>--font-size-sm</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-size-sm)</code></a></td>
+<td>Font size for small variant</td>
+</tr>
+<tr>
+<td><code>--font-size-base</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-size-base)</code></a></td>
+<td>Font size for medium variant</td>
+</tr>
+<tr>
+<td><code>--font-size-lg</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-size-lg)</code></a></td>
+<td>Font size for large variant</td>
+</tr>
+<tr>
+<td><code>--theme-error</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-error)</code></a></td>
+<td>Error state border and text color</td>
+</tr>
+<tr>
+<td><code>--theme-interactive-disabled</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-interactive-disabled)</code></a></td>
+<td>Disabled state background</td>
+</tr>
+<tr>
+<td><code>--theme-text-disabled</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-disabled)</code></a></td>
+<td>Disabled state text color</td>
+</tr>
+<tr>
+<td><code>--theme-background-secondary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-background-secondary)</code></a></td>
+<td>Read-only state background</td>
+</tr>
+<tr>
+<td><code>--theme-background-secondary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-background-secondary)</code></a></td>
+<td>Secondary variant background</td>
+</tr>
+<tr>
+<td><code>--theme-border-secondary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-border-secondary)</code></a></td>
+<td>Secondary variant border</td>
+</tr>
+<tr>
+<td><code>--theme-interactive-hover</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-interactive-hover)</code></a></td>
+<td>Ghost variant hover background</td>
+</tr>
+<tr>
+<td><code>--theme-text-secondary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-secondary)</code></a></td>
+<td>Prefix/suffix text color</td>
+</tr>
+<tr>
+<td><code>--theme-primary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-primary)</code></a></td>
+<td>Spinner color</td>
+</tr>
+<tr>
+<td><code>--theme-warning</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-warning)</code></a></td>
+<td>Character counter warning color</td>
+</tr>
+<tr>
+<td><code>--theme-text-tertiary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-tertiary)</code></a></td>
+<td>Character counter color</td>
+</tr>
+<tr>
+<td><code>--font-weight-medium</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-weight-medium)</code></a></td>
+<td>Font weight for label</td>
+</tr>
+<tr>
+<td><code>--font-weight-semibold</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-weight-semibold)</code></a></td>
+<td>Font weight for required indicator</td>
+</tr>
+<tr>
+<td><code>--line-height-tight</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--line-height-tight)</code></a></td>
+<td>Line height for helper text and counter</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   argTypes: {
     type: {
       control: 'select',

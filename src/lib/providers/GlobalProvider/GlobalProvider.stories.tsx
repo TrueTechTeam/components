@@ -10,6 +10,15 @@ const meta: Meta<typeof GlobalProvider> = {
   tags: ['autodocs'],
   parameters: {
     layout: 'fullscreen',
+    docs: {
+      description: {
+        component: `
+GlobalProvider is a context provider that wraps your application with theme, alert, dialog, and toast functionality.
+
+It initializes the design system CSS variables and sets up the theme context for all child components to use CSS custom properties for styling.
+`,
+      },
+    },
   },
 };
 

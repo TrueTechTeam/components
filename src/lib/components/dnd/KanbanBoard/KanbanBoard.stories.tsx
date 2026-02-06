@@ -6,7 +6,49 @@ const meta: Meta<typeof KanbanBoard> = {
   title: 'DnD/KanbanBoard',
   component: KanbanBoard,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+KanbanBoard component for creating multi-column board layouts with drag-and-drop card management.
+
+## CSS Variables
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--kanban-column-gap</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-md)</code></a></td>
+<td>Gap between columns</td>
+</tr>
+<tr>
+<td><code>--kanban-card-gap</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-sm)</code></a></td>
+<td>Gap between cards within a column</td>
+</tr>
+<tr>
+<td><code>--kanban-min-column-height</code></td>
+<td><code>200px</code></td>
+<td>Minimum height of each column</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   argTypes: {
+    columns: { table: { disable: true } },
+    onCardMove: { table: { disable: true } },
+    onColumnReorder: { table: { disable: true } },
+    renderCard: { table: { disable: true } },
+    renderColumnHeader: { table: { disable: true } },
     columnWidth: {
       control: 'number',
       description: 'Width of each column in pixels',
@@ -21,13 +63,35 @@ const meta: Meta<typeof KanbanBoard> = {
       options: ['sm', 'md', 'lg'],
       description: 'Gap between cards',
     },
+    minColumnHeight: {
+      control: 'number',
+      description: 'Minimum column height',
+    },
     allowColumnReorder: {
       control: 'boolean',
       description: 'Whether columns can be reordered',
     },
+    useDragHandle: {
+      control: 'boolean',
+      description: 'Whether to use drag handles',
+    },
     disabled: {
       control: 'boolean',
       description: 'Whether the board is disabled',
+    },
+    overflowBehavior: {
+      control: 'select',
+      options: ['scroll', 'wrap', 'none'],
+      description: 'How columns overflow',
+    },
+    className: {
+      table: { disable: true },
+    },
+    'data-testid': {
+      table: { disable: true },
+    },
+    style: {
+      table: { disable: true },
     },
   },
 };

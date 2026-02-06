@@ -14,6 +14,25 @@ const meta: Meta<typeof FilterField> = {
 FilterField is a unified wrapper that automatically renders the appropriate filter
 component based on the filter definition's type. It reads the filter configuration
 from the FilterProvider context.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--filter-field-animation</code></td>
+<td><code>filterFieldFadeIn 0.2s ease-out</code></td>
+<td>Animation for visibility changes</td>
+</tr>
+</tbody>
+</table>
         `,
       },
     },

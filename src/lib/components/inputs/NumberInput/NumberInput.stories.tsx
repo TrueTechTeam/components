@@ -6,6 +6,55 @@ const meta: Meta<typeof NumberInput> = {
   title: 'Inputs/NumberInput',
   component: NumberInput,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+Number input component with increment/decrement buttons and optional display formatting.
+
+## CSS Variables
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--spacing-xs</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-xs)</code></a></td>
+<td>Small spacing between container elements</td>
+</tr>
+<tr>
+<td><code>--font-size-base</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-size-base)</code></a></td>
+<td>Font size for label text</td>
+</tr>
+<tr>
+<td><code>--theme-text-primary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-text-primary)</code></a></td>
+<td>Label text color</td>
+</tr>
+<tr>
+<td><code>--theme-error</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-error)</code></a></td>
+<td>Required indicator color</td>
+</tr>
+<tr>
+<td><code>--theme-background-primary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-background-primary)</code></a></td>
+<td>Button background when disabled</td>
+</tr>
+</tbody>
+</table>
+
+**Note:** NumberInput extends the Input component, so it inherits all Input CSS variables for styling the number field itself.
+`,
+      },
+    },
+  },
   argTypes: {
     // Simple controls
     label: {

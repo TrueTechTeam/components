@@ -8,7 +8,45 @@ const meta: Meta<typeof TruncatedList> = {
   title: 'Display/TruncatedList',
   component: TruncatedList,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+TruncatedList displays a limited number of items with a "+N more" indicator for hidden items.
+
+## CSS Variables
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--list-gap</code></td>
+<td><code>8px</code></td>
+<td>Gap between items</td>
+</tr>
+<tr>
+<td><code>--list-direction</code></td>
+<td><code>row</code></td>
+<td>Flex direction of the list</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   argTypes: {
+    items: { table: { disable: true } },
+    renderItem: { table: { disable: true } },
+    renderMore: { table: { disable: true } },
+    tooltipContent: { table: { disable: true } },
+    onMoreClick: { table: { disable: true } },
+    keyExtractor: { table: { disable: true } },
     maxVisible: {
       control: { type: 'number', min: 1, max: 10 },
     },
@@ -22,6 +60,18 @@ const meta: Meta<typeof TruncatedList> = {
     tooltipPosition: {
       control: 'select',
       options: ['top', 'bottom', 'left', 'right'],
+    },
+    showTooltip: {
+      control: 'boolean',
+    },
+    className: {
+      table: { disable: true },
+    },
+    'data-testid': {
+      table: { disable: true },
+    },
+    style: {
+      table: { disable: true },
     },
   },
 };

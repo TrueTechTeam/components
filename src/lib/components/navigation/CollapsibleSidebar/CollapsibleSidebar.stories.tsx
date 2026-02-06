@@ -6,6 +6,64 @@ const meta: Meta<typeof CollapsibleSidebar> = {
   title: 'Layout/CollapsibleSidebar',
   component: CollapsibleSidebar,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+Sidebar that can collapse to a narrower state with optional automatic collapsing at responsive breakpoints. Supports left and right positioning.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--sidebar-width</code></td>
+<td>240px</td>
+<td>Current width of sidebar (dynamic)</td>
+</tr>
+<tr>
+<td><code>--sidebar-expanded-width</code></td>
+<td>240px</td>
+<td>Width when expanded</td>
+</tr>
+<tr>
+<td><code>--sidebar-collapsed-width</code></td>
+<td>64px</td>
+<td>Width when collapsed</td>
+</tr>
+<tr>
+<td><code>--sidebar-animation-duration</code></td>
+<td>250ms</td>
+<td>Duration of expand/collapse animation</td>
+</tr>
+<tr>
+<td><code>--sidebar-animation-easing</code></td>
+<td>ease-in-out</td>
+<td>Easing for expand/collapse animation</td>
+</tr>
+<tr>
+<td><code>--sidebar-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-background-secondary)</code></a></td>
+<td>Background color of sidebar</td>
+</tr>
+<tr>
+<td><code>--sidebar-border-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-border-primary)</code></a></td>
+<td>Border color</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   argTypes: {
     expandedWidth: {
       control: { type: 'number', min: 100, max: 400 },

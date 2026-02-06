@@ -7,6 +7,75 @@ const meta: Meta<typeof ProgressBar> = {
   title: 'Display/ProgressBar',
   component: ProgressBar,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+Linear progress indicator for showing task completion, loading states, and buffering.
+Supports determinate and indeterminate modes, striped patterns, and buffer progress.
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--progress-bar-gap</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-xs)</code></a></td>
+<td>Gap between label/value and progress track</td>
+</tr>
+<tr>
+<td><code>--progress-bar-font-size</code></td>
+<td><a href="?path=/story/theme-css-variables--typography"><code>var(--font-size-sm)</code></a></td>
+<td>Font size for label and value (default md)</td>
+</tr>
+<tr>
+<td><code>--progress-track-height</code></td>
+<td><code>8px</code></td>
+<td>Height of the progress track (default md)</td>
+</tr>
+<tr>
+<td><code>--progress-track-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-neutral-200)</code></a></td>
+<td>Background color of track</td>
+</tr>
+<tr>
+<td><code>--progress-track-radius</code></td>
+<td><a href="?path=/story/theme-css-variables--borders"><code>var(--radius-full)</code></a></td>
+<td>Border radius of track</td>
+</tr>
+<tr>
+<td><code>--progress-fill-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-primary-500)</code></a></td>
+<td>Background color of fill bar</td>
+</tr>
+<tr>
+<td><code>--progress-fill-transition</code></td>
+<td><code>width 0.3s ease</code></td>
+<td>Transition for fill bar width</td>
+</tr>
+<tr>
+<td><code>--spacing-sm</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>8px</code></a></td>
+<td>Spacing in header area</td>
+</tr>
+<tr>
+<td><code>--theme-text-primary</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>#111827</code></a></td>
+<td>Color of label and value text</td>
+</tr>
+</tbody>
+</table>
+        `,
+      },
+    },
+  },
   argTypes: {
     variant: {
       control: 'select',

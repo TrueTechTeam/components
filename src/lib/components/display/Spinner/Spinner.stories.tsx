@@ -5,6 +5,43 @@ const meta: Meta<typeof Spinner> = {
   title: 'Display/Spinner',
   component: Spinner,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `
+Animated loading indicator with multiple configurable styles and sizes.
+
+## CSS Variables
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--spinner-size</code></td>
+<td><code>24px</code></td>
+<td>Size of the spinner element</td>
+</tr>
+<tr>
+<td><code>--spinner-color</code></td>
+<td><a href="?path=/story/theme-css-variables--color-palette"><code>var(--theme-primary-500)</code></a></td>
+<td>Color of the spinner</td>
+</tr>
+<tr>
+<td><code>--spinner-duration</code></td>
+<td><code>1s</code></td>
+<td>Animation duration</td>
+</tr>
+</tbody>
+</table>
+`,
+      },
+    },
+  },
   argTypes: {
     spinnerStyle: {
       control: 'select',
@@ -46,6 +83,18 @@ const meta: Meta<typeof Spinner> = {
     showSrText: {
       control: 'boolean',
       description: 'Show screen reader text visually',
+    },
+    className: {
+      table: { disable: true },
+    },
+    style: {
+      table: { disable: true },
+    },
+    'data-testid': {
+      table: { disable: true },
+    },
+    'aria-label': {
+      table: { disable: true },
     },
   },
 };

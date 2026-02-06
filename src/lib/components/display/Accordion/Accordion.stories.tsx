@@ -9,6 +9,83 @@ const meta: Meta<typeof Accordion> = {
   title: 'Display/Accordion',
   component: Accordion,
   tags: ['autodocs'],
+  parameters: {
+    docs: {
+      description: {
+        component: `Accordion component - Expandable/collapsible content panel with header
+
+## CSS Variables
+
+<table>
+<thead>
+<tr>
+<th>Variable</th>
+<th>Default</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>--accordion-border-color</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-border-primary, #e0e0e0)</code></a></td>
+<td>Border color</td>
+</tr>
+<tr>
+<td><code>--accordion-border-radius</code></td>
+<td><a href="?path=/story/theme-css-variables--borders"><code>var(--radius-md, 8px)</code></a></td>
+<td>Border radius</td>
+</tr>
+<tr>
+<td><code>--accordion-bg</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-surface-primary, #ffffff)</code></a></td>
+<td>Background color</td>
+</tr>
+<tr>
+<td><code>--accordion-header-bg</code></td>
+<td><code>transparent</code></td>
+<td>Header background color</td>
+</tr>
+<tr>
+<td><code>--accordion-header-bg-hover</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-interactive-hover, rgba(0, 0, 0, 0.04))</code></a></td>
+<td>Header background color on hover</td>
+</tr>
+<tr>
+<td><code>--accordion-header-color</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-text-primary, #1a1a1a)</code></a></td>
+<td>Header text color</td>
+</tr>
+<tr>
+<td><code>--accordion-header-color-disabled</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-text-disabled, #9e9e9e)</code></a></td>
+<td>Header text color when disabled</td>
+</tr>
+<tr>
+<td><code>--accordion-body-bg</code></td>
+<td><code>transparent</code></td>
+<td>Body background color</td>
+</tr>
+<tr>
+<td><code>--accordion-icon-color</code></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-text-secondary, #666666)</code></a></td>
+<td>Icon color</td>
+</tr>
+<tr>
+<td><code>--accordion-gap</code></td>
+<td><a href="?path=/story/theme-css-variables--spacing"><code>var(--spacing-sm, 8px)</code></a></td>
+<td>Gap between header elements</td>
+</tr>
+<tr>
+<td><code>--font-weight-medium</code></td>
+<td><code>500</code></td>
+<td>Font weight for header</td>
+</tr>
+</tbody>
+</table>
+        `,
+      },
+    },
+  },
   argTypes: {
     header: {
       control: 'text',

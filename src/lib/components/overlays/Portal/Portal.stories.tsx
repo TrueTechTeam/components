@@ -8,8 +8,11 @@ const meta: Meta<typeof Portal> = {
   parameters: {
     docs: {
       description: {
-        component:
-          'Portal component renders children into a DOM node outside the parent component hierarchy. Useful for modals, tooltips, and other overlay components.',
+        component: `
+Portal component renders children into a DOM node outside the parent component hierarchy. Useful for modals, tooltips, and other overlay components.
+
+Portal is a utility component without CSS styling - it handles DOM placement only. Content styling should be handled by child components.
+`,
       },
     },
   },
