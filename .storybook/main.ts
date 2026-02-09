@@ -1,18 +1,11 @@
 import type { StorybookConfig } from '@storybook/react-vite';
-import { join, dirname } from 'path';
 import { mergeConfig } from 'vite';
-import svgr from 'vite-plugin-svgr';
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.stories.@(js|jsx|ts|tsx|mdx)', '../src/**/*.mdx'],
-  addons: [
-    getAbsolutePath('@storybook/addon-essentials'),
-    getAbsolutePath('@storybook/addon-interactions'),
-    getAbsolutePath('@storybook/addon-links'),
-    getAbsolutePath('@storybook/addon-a11y'),
-  ],
+  addons: ['@storybook/addon-docs', '@storybook/addon-a11y', '@storybook/addon-links'],
   framework: {
-    name: getAbsolutePath('@storybook/react-vite'),
+    name: '@storybook/react-vite',
     options: {},
   },
   docs: {
@@ -21,7 +14,6 @@ const config: StorybookConfig = {
   staticDirs: ['../src/lib/assets'],
   viteFinal(config) {
     return mergeConfig(config, {
-      plugins: [svgr()],
       css: {
         preprocessorOptions: {
           scss: {
@@ -34,8 +26,3 @@ const config: StorybookConfig = {
 };
 
 export default config;
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function getAbsolutePath(value: string): any {
-  return dirname(require.resolve(join(value, 'package.json')));
-}

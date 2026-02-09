@@ -348,11 +348,4 @@ describe('Badge', () => {
       expect(element).toBeInTheDocument();
     });
   });
-
-  // 11. Display name
-  describe('display name', () => {
-    it('has correct display name', () => {
-      expect(Badge.displayName).toBe('Badge');
-    });
-  });
 });

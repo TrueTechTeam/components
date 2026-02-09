@@ -571,11 +571,7 @@ describe('Textarea', () => {
     });
   });
 
-  describe('displayName', () => {
-    it('should have correct displayName', () => {
-      expect(Textarea.displayName).toBe('Textarea');
-    });
-  });
+  describe('displayName', () => {});
 
   describe('edge cases', () => {
     it('should handle empty string value', () => {

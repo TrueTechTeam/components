@@ -1,4 +1,4 @@
-import React, { forwardRef, useId, useCallback } from 'react';
+import React, { useId, useCallback } from 'react';
 import { Icon } from '../../display/Icon';
 import type { IconName } from '../../display/Icon/icons';
 import { useRadioGroup } from './RadioGroup';
@@ -54,131 +54,127 @@ export interface RadioProps
  * <Radio value="option1" label="Option 1" />
  * ```
  */
-export const Radio = forwardRef<HTMLInputElement, RadioProps>(
-  (
-    {
-      value,
-      label,
-      labelPlacement = 'end',
-      helperText,
-      checkedIcon,
-      disabled: disabledProp,
-      readOnly: readOnlyProp,
-      id: providedId,
-      className,
-      'data-testid': dataTestId,
-      'aria-label': ariaLabel,
-      ...rest
+export const Radio = ({
+  ref,
+  value,
+  label,
+  labelPlacement = 'end',
+  helperText,
+  checkedIcon,
+  disabled: disabledProp,
+  readOnly: readOnlyProp,
+  id: providedId,
+  className,
+  'data-testid': dataTestId,
+  'aria-label': ariaLabel,
+  ...rest
+}: RadioProps & {
+  ref?: React.Ref<HTMLInputElement>;
+}) => {
+  const autoId = useId();
+  const id = providedId || autoId;
+
+  const group = useRadioGroup();
+  const {
+    name,
+    value: groupValue,
+    onChange,
+    disabled: groupDisabled,
+    readOnly: groupReadOnly,
+    size,
+    variant,
+  } = group;
+
+  const isChecked = groupValue === value;
+  const disabled = disabledProp ?? groupDisabled;
+  const readOnly = readOnlyProp ?? groupReadOnly;
+
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (disabled || readOnly) {
+        return;
+      }
+
+      onChange?.(value, event);
     },
-    ref
-  ) => {
-    const autoId = useId();
-    const id = providedId || autoId;
+    [value, disabled, readOnly, onChange]
+  );
 
-    const group = useRadioGroup();
-    const {
-      name,
-      value: groupValue,
-      onChange,
-      disabled: groupDisabled,
-      readOnly: groupReadOnly,
-      size,
-      variant,
-    } = group;
-
-    const isChecked = groupValue === value;
-    const disabled = disabledProp ?? groupDisabled;
-    const readOnly = readOnlyProp ?? groupReadOnly;
-
-    const handleChange = useCallback(
-      (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (disabled || readOnly) {
-          return;
-        }
-
-        onChange?.(value, event);
-      },
-      [value, disabled, readOnly, onChange]
-    );
-
-    const renderIcon = (icon: React.ReactNode | IconName | undefined) => {
-      if (!icon) {
-        return null;
-      }
-
-      if (typeof icon === 'string') {
-        return <Icon name={icon as IconName} className={styles.icon} />;
-      }
-
-      return <span className={styles.icon}>{icon}</span>;
-    };
-
-    const radioInput = (
-      <label
-        htmlFor={id}
-        className={styles.radio}
-        data-variant={variant}
-        data-size={size}
-        data-checked={isChecked || undefined}
-        data-disabled={disabled || undefined}
-        data-readonly={readOnly || undefined}
-        data-component="radio"
-      >
-        <input
-          ref={ref}
-          type="radio"
-          id={id}
-          name={name}
-          value={value}
-          checked={isChecked}
-          onChange={handleChange}
-          disabled={disabled}
-          readOnly={readOnly}
-          className={styles.input}
-          data-testid={dataTestId}
-          aria-label={ariaLabel || label}
-          aria-checked={isChecked}
-          aria-disabled={disabled}
-          aria-readonly={readOnly}
-          {...rest}
-        />
-
-        <span className={styles.circle}>{isChecked && renderIcon(checkedIcon)}</span>
-      </label>
-    );
-
-    if (!label) {
-      return (
-        <div
-          className={`${styles.container} ${className || ''}`}
-          data-testid={dataTestId && `${dataTestId}-container`}
-        >
-          {radioInput}
-          {helperText && <div className={styles.helperText}>{helperText}</div>}
-        </div>
-      );
+  const renderIcon = (icon: React.ReactNode | IconName | undefined) => {
+    if (!icon) {
+      return null;
     }
 
+    if (typeof icon === 'string') {
+      return <Icon name={icon as IconName} className={styles.icon} />;
+    }
+
+    return <span className={styles.icon}>{icon}</span>;
+  };
+
+  const radioInput = (
+    <label
+      htmlFor={id}
+      className={styles.radio}
+      data-variant={variant}
+      data-size={size}
+      data-checked={isChecked || undefined}
+      data-disabled={disabled || undefined}
+      data-readonly={readOnly || undefined}
+      data-component="radio"
+    >
+      <input
+        ref={ref}
+        type="radio"
+        id={id}
+        name={name}
+        value={value}
+        checked={isChecked}
+        onChange={handleChange}
+        disabled={disabled}
+        readOnly={readOnly}
+        className={styles.input}
+        data-testid={dataTestId}
+        aria-label={ariaLabel || label}
+        aria-checked={isChecked}
+        aria-disabled={disabled}
+        aria-readonly={readOnly}
+        {...rest}
+      />
+
+      <span className={styles.circle}>{isChecked && renderIcon(checkedIcon)}</span>
+    </label>
+  );
+
+  if (!label) {
     return (
       <div
         className={`${styles.container} ${className || ''}`}
         data-testid={dataTestId && `${dataTestId}-container`}
       >
-        <div className={styles.radioRow} data-label-placement={labelPlacement}>
-          {radioInput}
-          <label
-            htmlFor={id}
-            className={styles.labelText}
-            data-disabled={disabled || undefined}
-            data-readonly={readOnly || undefined}
-          >
-            {label}
-          </label>
-        </div>
+        {radioInput}
         {helperText && <div className={styles.helperText}>{helperText}</div>}
       </div>
     );
   }
-);
 
-Radio.displayName = 'Radio';
+  return (
+    <div
+      className={`${styles.container} ${className || ''}`}
+      data-testid={dataTestId && `${dataTestId}-container`}
+    >
+      <div className={styles.radioRow} data-label-placement={labelPlacement}>
+        {radioInput}
+        <label
+          htmlFor={id}
+          className={styles.labelText}
+          data-disabled={disabled || undefined}
+          data-readonly={readOnly || undefined}
+        >
+          {label}
+        </label>
+      </div>
+      {helperText && <div className={styles.helperText}>{helperText}</div>}
+    </div>
+  );
+};

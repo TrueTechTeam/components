@@ -40,5 +40,3 @@ export const MenuList: React.FC<MenuListProps> = ({
     </ul>
   );
 };
-
-MenuList.displayName = 'MenuList';

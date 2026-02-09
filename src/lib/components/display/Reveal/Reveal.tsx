@@ -1,12 +1,4 @@
-import React, {
-  forwardRef,
-  useState,
-  useEffect,
-  useRef,
-  useCallback,
-  Children,
-  isValidElement,
-} from 'react';
+import React, { useState, useEffect, useRef, useCallback, Children, isValidElement } from 'react';
 import styles from './Reveal.module.scss';
 import type { BaseComponentProps } from '../../../types/component.types';
 
@@ -137,159 +129,119 @@ export interface RevealProps extends BaseComponentProps {
  * </Reveal>
  * ```
  */
-export const Reveal = forwardRef<HTMLDivElement, RevealProps>(
-  (
-    {
-      animation = 'fade',
-      duration = 500,
-      delay = 0,
-      easing = 'ease-out',
-      threshold = 0.1,
-      triggerOnce = true,
-      distance = '20px',
-      cascade = false,
-      cascadeDelay = 100,
-      onReveal,
-      initiallyVisible = false,
-      rootMargin = '0px',
-      playOnMount = false,
-      children,
-      className,
-      style,
-      'data-testid': testId,
-      'aria-label': ariaLabel,
-      ...restProps
-    },
-    ref
-  ) => {
-    const [isRevealed, setIsRevealed] = useState(initiallyVisible && !playOnMount);
-    const elementRef = useRef<HTMLDivElement | null>(null);
-    const hasTriggeredRef = useRef(initiallyVisible && !playOnMount);
+export const Reveal = ({
+  ref,
+  animation = 'fade',
+  duration = 500,
+  delay = 0,
+  easing = 'ease-out',
+  threshold = 0.1,
+  triggerOnce = true,
+  distance = '20px',
+  cascade = false,
+  cascadeDelay = 100,
+  onReveal,
+  initiallyVisible = false,
+  rootMargin = '0px',
+  playOnMount = false,
+  children,
+  className,
+  style,
+  'data-testid': testId,
+  'aria-label': ariaLabel,
+  ...restProps
+}: RevealProps & {
+  ref?: React.Ref<HTMLDivElement>;
+}) => {
+  const [isRevealed, setIsRevealed] = useState(initiallyVisible && !playOnMount);
+  const elementRef = useRef<HTMLDivElement | null>(null);
+  const hasTriggeredRef = useRef(initiallyVisible && !playOnMount);
 
-    // Play animation on mount (for hero sections or elements visible without scroll)
-    useEffect(() => {
-      if (!playOnMount) {
-        return;
-      }
-
-      // Small delay to ensure CSS transition happens (element needs to render in hidden state first)
-      const timer = requestAnimationFrame(() => {
-        requestAnimationFrame(() => {
-          setIsRevealed(true);
-          hasTriggeredRef.current = true;
-          onReveal?.();
-        });
-      });
-
-      return () => cancelAnimationFrame(timer);
-    }, [playOnMount, onReveal]);
-
-    // Intersection Observer setup
-    useEffect(() => {
-      if (initiallyVisible || playOnMount) {
-        return;
-      }
-
-      const element = elementRef.current;
-      if (!element) {
-        return;
-      }
-
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              if (!hasTriggeredRef.current || !triggerOnce) {
-                hasTriggeredRef.current = true;
-                setIsRevealed(true);
-                onReveal?.();
-
-                if (triggerOnce) {
-                  observer.disconnect();
-                }
-              }
-            } else if (!triggerOnce) {
-              setIsRevealed(false);
-            }
-          });
-        },
-        {
-          threshold,
-          rootMargin,
-        }
-      );
-
-      observer.observe(element);
-
-      return () => {
-        observer.disconnect();
-      };
-    }, [threshold, rootMargin, triggerOnce, onReveal, initiallyVisible, playOnMount]);
-
-    // Combine refs
-    const setRefs = useCallback(
-      (node: HTMLDivElement | null) => {
-        elementRef.current = node;
-        if (typeof ref === 'function') {
-          ref(node);
-        } else if (ref) {
-          ref.current = node;
-        }
-      },
-      [ref]
-    );
-
-    const componentClasses = [styles.reveal, className].filter(Boolean).join(' ');
-
-    const cssVariables = {
-      '--reveal-duration': `${duration}ms`,
-      '--reveal-delay': `${delay}ms`,
-      '--reveal-easing': easing,
-      '--reveal-distance': distance,
-      ...style,
-    } as React.CSSProperties;
-
-    // Handle cascade mode
-    if (cascade && Children.count(children) > 1) {
-      return (
-        <div
-          ref={setRefs}
-          className={componentClasses}
-          data-component="reveal"
-          data-animation={animation}
-          data-revealed={isRevealed || undefined}
-          data-cascade="true"
-          data-testid={testId}
-          aria-label={ariaLabel}
-          style={cssVariables}
-          {...restProps}
-        >
-          {Children.map(children, (child, index) => {
-            if (!isValidElement(child)) {
-              return child;
-            }
-
-            const childDelay = delay + index * cascadeDelay;
-
-            return (
-              <div
-                className={styles.cascadeItem}
-                data-animation={animation}
-                data-revealed={isRevealed || undefined}
-                style={
-                  {
-                    '--reveal-delay': `${childDelay}ms`,
-                  } as React.CSSProperties
-                }
-              >
-                {child}
-              </div>
-            );
-          })}
-        </div>
-      );
+  // Play animation on mount (for hero sections or elements visible without scroll)
+  useEffect(() => {
+    if (!playOnMount) {
+      return;
     }
 
+    // Small delay to ensure CSS transition happens (element needs to render in hidden state first)
+    const timer = requestAnimationFrame(() => {
+      requestAnimationFrame(() => {
+        setIsRevealed(true);
+        hasTriggeredRef.current = true;
+        onReveal?.();
+      });
+    });
+
+    return () => cancelAnimationFrame(timer);
+  }, [playOnMount, onReveal]);
+
+  // Intersection Observer setup
+  useEffect(() => {
+    if (initiallyVisible || playOnMount) {
+      return;
+    }
+
+    const element = elementRef.current;
+    if (!element) {
+      return;
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            if (!hasTriggeredRef.current || !triggerOnce) {
+              hasTriggeredRef.current = true;
+              setIsRevealed(true);
+              onReveal?.();
+
+              if (triggerOnce) {
+                observer.disconnect();
+              }
+            }
+          } else if (!triggerOnce) {
+            setIsRevealed(false);
+          }
+        });
+      },
+      {
+        threshold,
+        rootMargin,
+      }
+    );
+
+    observer.observe(element);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [threshold, rootMargin, triggerOnce, onReveal, initiallyVisible, playOnMount]);
+
+  // Combine refs
+  const setRefs = useCallback(
+    (node: HTMLDivElement | null) => {
+      elementRef.current = node;
+      if (typeof ref === 'function') {
+        ref(node);
+      } else if (ref) {
+        ref.current = node;
+      }
+    },
+    [ref]
+  );
+
+  const componentClasses = [styles.reveal, className].filter(Boolean).join(' ');
+
+  const cssVariables = {
+    '--reveal-duration': `${duration}ms`,
+    '--reveal-delay': `${delay}ms`,
+    '--reveal-easing': easing,
+    '--reveal-distance': distance,
+    ...style,
+  } as React.CSSProperties;
+
+  // Handle cascade mode
+  if (cascade && Children.count(children) > 1) {
     return (
       <div
         ref={setRefs}
@@ -297,17 +249,53 @@ export const Reveal = forwardRef<HTMLDivElement, RevealProps>(
         data-component="reveal"
         data-animation={animation}
         data-revealed={isRevealed || undefined}
+        data-cascade="true"
         data-testid={testId}
         aria-label={ariaLabel}
         style={cssVariables}
         {...restProps}
       >
-        {children}
+        {Children.map(children, (child, index) => {
+          if (!isValidElement(child)) {
+            return child;
+          }
+
+          const childDelay = delay + index * cascadeDelay;
+
+          return (
+            <div
+              className={styles.cascadeItem}
+              data-animation={animation}
+              data-revealed={isRevealed || undefined}
+              style={
+                {
+                  '--reveal-delay': `${childDelay}ms`,
+                } as React.CSSProperties
+              }
+            >
+              {child}
+            </div>
+          );
+        })}
       </div>
     );
   }
-);
 
-Reveal.displayName = 'Reveal';
+  return (
+    <div
+      ref={setRefs}
+      className={componentClasses}
+      data-component="reveal"
+      data-animation={animation}
+      data-revealed={isRevealed || undefined}
+      data-testid={testId}
+      aria-label={ariaLabel}
+      style={cssVariables}
+      {...restProps}
+    >
+      {children}
+    </div>
+  );
+};
 
 export default Reveal;

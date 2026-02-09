@@ -408,77 +408,71 @@ describe('Button', () => {
       expect(ref2).toHaveBeenCalledWith(expect.any(HTMLButtonElement));
     });
   });
+});
 
-  describe('display name', () => {
-    it('has correct display name', () => {
-      expect(Button.displayName).toBe('Button');
-    });
+describe('additional HTML attributes', () => {
+  it('forwards additional HTML attributes', () => {
+    render(
+      <Button data-custom="value" id="custom-id">
+        Button
+      </Button>
+    );
+    const button = screen.getByRole('button');
+    expect(button).toHaveAttribute('data-custom', 'value');
+    expect(button).toHaveAttribute('id', 'custom-id');
   });
 
-  describe('additional HTML attributes', () => {
-    it('forwards additional HTML attributes', () => {
-      render(
-        <Button data-custom="value" id="custom-id">
-          Button
-        </Button>
-      );
-      const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('data-custom', 'value');
-      expect(button).toHaveAttribute('id', 'custom-id');
-    });
-
-    it('forwards form attribute', () => {
-      render(<Button form="my-form">Button</Button>);
-      expect(screen.getByRole('button')).toHaveAttribute('form', 'my-form');
-    });
-
-    it('forwards name attribute', () => {
-      render(<Button name="submit-button">Button</Button>);
-      expect(screen.getByRole('button')).toHaveAttribute('name', 'submit-button');
-    });
-
-    it('forwards value attribute', () => {
-      render(<Button value="action-value">Button</Button>);
-      expect(screen.getByRole('button')).toHaveAttribute('value', 'action-value');
-    });
+  it('forwards form attribute', () => {
+    render(<Button form="my-form">Button</Button>);
+    expect(screen.getByRole('button')).toHaveAttribute('form', 'my-form');
   });
 
-  describe('edge cases', () => {
-    it('renders without children', () => {
-      render(<Button />);
-      expect(screen.getByRole('button')).toBeInTheDocument();
-    });
+  it('forwards name attribute', () => {
+    render(<Button name="submit-button">Button</Button>);
+    expect(screen.getByRole('button')).toHaveAttribute('name', 'submit-button');
+  });
 
-    it('renders with null children', () => {
-      render(<Button>{null}</Button>);
-      expect(screen.getByRole('button')).toBeInTheDocument();
-    });
+  it('forwards value attribute', () => {
+    render(<Button value="action-value">Button</Button>);
+    expect(screen.getByRole('button')).toHaveAttribute('value', 'action-value');
+  });
+});
 
-    it('renders with undefined children', () => {
-      render(<Button>{undefined}</Button>);
-      expect(screen.getByRole('button')).toBeInTheDocument();
-    });
+describe('edge cases', () => {
+  it('renders without children', () => {
+    render(<Button />);
+    expect(screen.getByRole('button')).toBeInTheDocument();
+  });
 
-    it('renders with zero as children', () => {
-      render(<Button>{0}</Button>);
-      expect(screen.getByText('0')).toBeInTheDocument();
-    });
+  it('renders with null children', () => {
+    render(<Button>{null}</Button>);
+    expect(screen.getByRole('button')).toBeInTheDocument();
+  });
 
-    it('renders with empty string as children', () => {
-      render(<Button />);
-      expect(screen.getByRole('button')).toBeInTheDocument();
-    });
+  it('renders with undefined children', () => {
+    render(<Button>{undefined}</Button>);
+    expect(screen.getByRole('button')).toBeInTheDocument();
+  });
 
-    it('handles both disabled and loading props correctly', () => {
-      render(
-        <Button disabled loading>
-          Button
-        </Button>
-      );
-      const button = screen.getByRole('button');
-      expect(button).toBeDisabled();
-      expect(button).toHaveAttribute('data-loading', 'true');
-      expect(button).toHaveAttribute('aria-busy', 'true');
-    });
+  it('renders with zero as children', () => {
+    render(<Button>{0}</Button>);
+    expect(screen.getByText('0')).toBeInTheDocument();
+  });
+
+  it('renders with empty string as children', () => {
+    render(<Button />);
+    expect(screen.getByRole('button')).toBeInTheDocument();
+  });
+
+  it('handles both disabled and loading props correctly', () => {
+    render(
+      <Button disabled loading>
+        Button
+      </Button>
+    );
+    const button = screen.getByRole('button');
+    expect(button).toBeDisabled();
+    expect(button).toHaveAttribute('data-loading', 'true');
+    expect(button).toHaveAttribute('aria-busy', 'true');
   });
 });

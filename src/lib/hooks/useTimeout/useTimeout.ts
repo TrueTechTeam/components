@@ -76,7 +76,7 @@ export function useTimeout(options: UseTimeoutOptions): UseTimeoutReturn {
   const { callback, delay } = options;
 
   const callbackRef = useRef(callback);
-  const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
 
   // Keep callback ref up to date
   useEffect(() => {

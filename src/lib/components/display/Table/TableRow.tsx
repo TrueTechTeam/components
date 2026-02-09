@@ -146,5 +146,3 @@ export function TableRow<T extends Record<string, unknown>>({ row, rowIndex }: T
     </>
   );
 }
-
-TableRow.displayName = 'TableRow';

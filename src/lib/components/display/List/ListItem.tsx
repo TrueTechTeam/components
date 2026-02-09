@@ -1,5 +1,4 @@
 import React, {
-  forwardRef,
   useCallback,
   useMemo,
   useRef,
@@ -43,10 +42,12 @@ export interface ListItemProps<T extends Record<string, unknown> = Record<string
   filteredIndex: number;
 }
 
-function ListItemInner<T extends Record<string, unknown>>(
-  { item, index, filteredIndex }: ListItemProps<T>,
-  ref: React.ForwardedRef<HTMLDivElement>
-) {
+function ListItemInner<T extends Record<string, unknown>>({
+  ref,
+  item,
+  index,
+  filteredIndex,
+}: ListItemProps<T> & { ref?: React.Ref<HTMLDivElement> }) {
   const context = useListContextStrict<T>();
   const itemRef = useRef<HTMLDivElement>(null);
 
@@ -340,12 +341,10 @@ function ListItemInner<T extends Record<string, unknown>>(
   );
 }
 
-export const ListItem = forwardRef(ListItemInner) as <
+export const ListItem = ListItemInner as <
   T extends Record<string, unknown> = Record<string, unknown>,
 >(
-  props: ListItemProps<T> & { ref?: React.ForwardedRef<HTMLDivElement> }
+  props: ListItemProps<T> & { ref?: React.Ref<HTMLDivElement> }
 ) => React.ReactElement;
-
-(ListItem as React.FC).displayName = 'ListItem';
 
 export default ListItem;

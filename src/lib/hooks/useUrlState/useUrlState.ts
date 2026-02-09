@@ -176,7 +176,7 @@ export function useUrlState<T>(
   const { defaultValue, serializer, replace = false, debounce = 0 } = options;
 
   const resolvedSerializer = serializer ?? inferSerializer(defaultValue);
-  const debounceRef = useRef<ReturnType<typeof setTimeout>>();
+  const debounceRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const defaultValueRef = useRef(defaultValue);
 
   // Keep defaultValue ref up to date

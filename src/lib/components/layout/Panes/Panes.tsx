@@ -1,5 +1,4 @@
 import React, {
-  forwardRef,
   useState,
   useCallback,
   useMemo,
@@ -136,207 +135,132 @@ function calculateVisiblePanes(
  * </Panes>
  * ```
  */
-export const Panes = forwardRef<HTMLDivElement, PanesProps>(
-  (
-    {
-      gap = 16,
-      animationDuration = 250,
-      animationEasing = 'ease-in-out',
-      minContainerWidth = 200,
-      onVisiblePanesChange,
-      onPaneHidden,
-      children,
-      className,
-      style,
-      'data-testid': testId,
-      'aria-label': ariaLabel,
-      ...restProps
+export const Panes = ({
+  ref,
+  gap = 16,
+  animationDuration = 250,
+  animationEasing = 'ease-in-out',
+  minContainerWidth = 200,
+  onVisiblePanesChange,
+  onPaneHidden,
+  children,
+  className,
+  style,
+  'data-testid': testId,
+  'aria-label': ariaLabel,
+  ...restProps
+}: PanesProps & {
+  ref?: React.Ref<HTMLDivElement>;
+}) => {
+  // Track registered panes
+  const [paneConfigs, setPaneConfigs] = useState<Map<string, PaneConfig>>(new Map());
+
+  // Track visibility states
+  const [visiblePanes, setVisiblePanes] = useState<Set<string>>(new Set());
+  const [enteringPanes, setEnteringPanes] = useState<Set<string>>(new Set());
+  const [exitingPanes, setExitingPanes] = useState<Set<string>>(new Set());
+
+  // Refs for callbacks
+  const onVisiblePanesChangeRef = useRef(onVisiblePanesChange);
+  const onPaneHiddenRef = useRef(onPaneHidden);
+
+  useEffect(() => {
+    onVisiblePanesChangeRef.current = onVisiblePanesChange;
+    onPaneHiddenRef.current = onPaneHidden;
+  }, [onVisiblePanesChange, onPaneHidden]);
+
+  // Track animation timeouts
+  const animationTimeoutsRef = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map());
+
+  // Container size tracking
+  const { ref: containerRef, width: containerWidth } = useResizeObserver();
+
+  // Combined ref
+  const setRefs = useCallback(
+    (node: HTMLDivElement | null) => {
+      containerRef(node);
+      if (typeof ref === 'function') {
+        ref(node);
+      } else if (ref) {
+        ref.current = node;
+      }
     },
-    ref
-  ) => {
-    // Track registered panes
-    const [paneConfigs, setPaneConfigs] = useState<Map<string, PaneConfig>>(new Map());
+    [containerRef, ref]
+  );
 
-    // Track visibility states
-    const [visiblePanes, setVisiblePanes] = useState<Set<string>>(new Set());
-    const [enteringPanes, setEnteringPanes] = useState<Set<string>>(new Set());
-    const [exitingPanes, setExitingPanes] = useState<Set<string>>(new Set());
+  // Pane registration functions
+  const registerPane = useCallback((config: PaneConfig) => {
+    setPaneConfigs((prev) => {
+      const next = new Map(prev);
+      next.set(config.id, config);
+      return next;
+    });
+  }, []);
 
-    // Refs for callbacks
-    const onVisiblePanesChangeRef = useRef(onVisiblePanesChange);
-    const onPaneHiddenRef = useRef(onPaneHidden);
+  const unregisterPane = useCallback((id: string) => {
+    setPaneConfigs((prev) => {
+      const next = new Map(prev);
+      next.delete(id);
+      return next;
+    });
 
-    useEffect(() => {
-      onVisiblePanesChangeRef.current = onVisiblePanesChange;
-      onPaneHiddenRef.current = onPaneHidden;
-    }, [onVisiblePanesChange, onPaneHidden]);
+    // Clean up any pending animation timeouts
+    const timeout = animationTimeoutsRef.current.get(id);
+    if (timeout) {
+      clearTimeout(timeout);
+      animationTimeoutsRef.current.delete(id);
+    }
 
-    // Track animation timeouts
-    const animationTimeoutsRef = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map());
+    // Remove from all state sets
+    setVisiblePanes((prev) => {
+      const next = new Set(prev);
+      next.delete(id);
+      return next;
+    });
+    setEnteringPanes((prev) => {
+      const next = new Set(prev);
+      next.delete(id);
+      return next;
+    });
+    setExitingPanes((prev) => {
+      const next = new Set(prev);
+      next.delete(id);
+      return next;
+    });
+  }, []);
 
-    // Container size tracking
-    const { ref: containerRef, width: containerWidth } = useResizeObserver();
-
-    // Combined ref
-    const setRefs = useCallback(
-      (node: HTMLDivElement | null) => {
-        containerRef(node);
-        if (typeof ref === 'function') {
-          ref(node);
-        } else if (ref) {
-          ref.current = node;
-        }
-      },
-      [containerRef, ref]
-    );
-
-    // Pane registration functions
-    const registerPane = useCallback((config: PaneConfig) => {
-      setPaneConfigs((prev) => {
-        const next = new Map(prev);
-        next.set(config.id, config);
-        return next;
-      });
-    }, []);
-
-    const unregisterPane = useCallback((id: string) => {
-      setPaneConfigs((prev) => {
-        const next = new Map(prev);
-        next.delete(id);
-        return next;
-      });
-
-      // Clean up any pending animation timeouts
-      const timeout = animationTimeoutsRef.current.get(id);
-      if (timeout) {
-        clearTimeout(timeout);
-        animationTimeoutsRef.current.delete(id);
+  const updatePane = useCallback((id: string, updates: Partial<PaneConfig>) => {
+    setPaneConfigs((prev) => {
+      const existing = prev.get(id);
+      if (!existing) {
+        return prev;
       }
+      const next = new Map(prev);
+      next.set(id, { ...existing, ...updates });
+      return next;
+    });
+  }, []);
 
-      // Remove from all state sets
-      setVisiblePanes((prev) => {
-        const next = new Set(prev);
-        next.delete(id);
-        return next;
-      });
-      setEnteringPanes((prev) => {
-        const next = new Set(prev);
-        next.delete(id);
-        return next;
-      });
-      setExitingPanes((prev) => {
-        const next = new Set(prev);
-        next.delete(id);
-        return next;
-      });
-    }, []);
+  // Track the target visible panes (what should be visible based on current width)
+  const targetVisibleRef = useRef<Set<string>>(new Set());
 
-    const updatePane = useCallback((id: string, updates: Partial<PaneConfig>) => {
-      setPaneConfigs((prev) => {
-        const existing = prev.get(id);
-        if (!existing) {
-          return prev;
-        }
-        const next = new Map(prev);
-        next.set(id, { ...existing, ...updates });
-        return next;
-      });
-    }, []);
+  // Calculate which panes should be visible
+  useEffect(() => {
+    // Clear all pending timeouts when recalculating - this prevents stale state
+    animationTimeoutsRef.current.forEach((timeout) => clearTimeout(timeout));
+    animationTimeoutsRef.current.clear();
 
-    // Track the target visible panes (what should be visible based on current width)
-    const targetVisibleRef = useRef<Set<string>>(new Set());
-
-    // Calculate which panes should be visible
-    useEffect(() => {
-      // Clear all pending timeouts when recalculating - this prevents stale state
-      animationTimeoutsRef.current.forEach((timeout) => clearTimeout(timeout));
-      animationTimeoutsRef.current.clear();
-
-      if (containerWidth < minContainerWidth) {
-        // Hide all panes if container is too small
-        targetVisibleRef.current = new Set();
-
-        setVisiblePanes((currentVisible) => {
-          if (currentVisible.size > 0) {
-            // Start exit animations for all visible panes
-            setExitingPanes(new Set(currentVisible));
-            setEnteringPanes(new Set());
-
-            currentVisible.forEach((id) => {
-              const timeout = setTimeout(() => {
-                setVisiblePanes((prev) => {
-                  const next = new Set(prev);
-                  next.delete(id);
-                  return next;
-                });
-                setExitingPanes((prev) => {
-                  const next = new Set(prev);
-                  next.delete(id);
-                  return next;
-                });
-                animationTimeoutsRef.current.delete(id);
-              }, animationDuration);
-
-              animationTimeoutsRef.current.set(id, timeout);
-            });
-          }
-          return currentVisible;
-        });
-        return;
-      }
-
-      const newVisibleIds = calculateVisiblePanes(containerWidth, paneConfigs, gap);
-      const newVisibleSet = new Set(newVisibleIds);
-      targetVisibleRef.current = newVisibleSet;
+    if (containerWidth < minContainerWidth) {
+      // Hide all panes if container is too small
+      targetVisibleRef.current = new Set();
 
       setVisiblePanes((currentVisible) => {
-        // Find panes that are entering (newly visible)
-        const entering = newVisibleIds.filter((id) => !currentVisible.has(id));
+        if (currentVisible.size > 0) {
+          // Start exit animations for all visible panes
+          setExitingPanes(new Set(currentVisible));
+          setEnteringPanes(new Set());
 
-        // Find panes that are exiting (no longer visible) - exclude those already exiting
-        const exiting = Array.from(currentVisible).filter((id) => !newVisibleSet.has(id));
-
-        // Notify about hidden panes
-        exiting.forEach((id) => {
-          const config = paneConfigs.get(id);
-          if (config) {
-            onPaneHiddenRef.current?.(id, config.index);
-          }
-        });
-
-        // Start entering animations
-        if (entering.length > 0) {
-          setEnteringPanes((prev) => {
-            const next = new Set(prev);
-            entering.forEach((id) => next.add(id));
-            return next;
-          });
-
-          // Remove entering state after animation
-          entering.forEach((id) => {
-            // Use requestAnimationFrame to ensure the entering class is applied before removing
-            requestAnimationFrame(() => {
-              requestAnimationFrame(() => {
-                setEnteringPanes((prev) => {
-                  const next = new Set(prev);
-                  next.delete(id);
-                  return next;
-                });
-              });
-            });
-          });
-        }
-
-        // Start exiting animations
-        if (exiting.length > 0) {
-          setExitingPanes((prev) => {
-            const next = new Set(prev);
-            exiting.forEach((id) => next.add(id));
-            return next;
-          });
-
-          // Remove from visible after animation completes
-          exiting.forEach((id) => {
+          currentVisible.forEach((id) => {
             const timeout = setTimeout(() => {
               setVisiblePanes((prev) => {
                 const next = new Set(prev);
@@ -354,94 +278,165 @@ export const Panes = forwardRef<HTMLDivElement, PanesProps>(
             animationTimeoutsRef.current.set(id, timeout);
           });
         }
-
-        // Notify about visible panes change
-        if (entering.length > 0 || exiting.length > 0) {
-          const finalIndices = newVisibleIds.map((id) => paneConfigs.get(id)?.index ?? 0);
-          onVisiblePanesChangeRef.current?.(newVisibleIds, finalIndices);
-        }
-
-        // Return updated visible set (add entering panes immediately)
-        if (entering.length > 0) {
-          const next = new Set(currentVisible);
-          entering.forEach((id) => next.add(id));
-          return next;
-        }
         return currentVisible;
       });
-    }, [containerWidth, paneConfigs, gap, minContainerWidth, animationDuration]);
+      return;
+    }
 
-    // Clean up timeouts on unmount
-    useEffect(() => {
-      const timeoutsMap = animationTimeoutsRef.current;
-      return () => {
-        timeoutsMap.forEach((timeout) => clearTimeout(timeout));
-        timeoutsMap.clear();
-      };
-    }, []);
+    const newVisibleIds = calculateVisiblePanes(containerWidth, paneConfigs, gap);
+    const newVisibleSet = new Set(newVisibleIds);
+    targetVisibleRef.current = newVisibleSet;
 
-    // Context value
-    const contextValue = useMemo(
-      () => ({
-        registerPane,
-        unregisterPane,
-        updatePane,
-        visiblePanes,
-        enteringPanes,
-        exitingPanes,
-        animationDuration,
-        animationEasing,
-        gap,
-      }),
-      [
-        registerPane,
-        unregisterPane,
-        updatePane,
-        visiblePanes,
-        enteringPanes,
-        exitingPanes,
-        animationDuration,
-        animationEasing,
-        gap,
-      ]
-    );
+    setVisiblePanes((currentVisible) => {
+      // Find panes that are entering (newly visible)
+      const entering = newVisibleIds.filter((id) => !currentVisible.has(id));
 
-    // Clone children to inject index
-    const childrenWithIndex = Children.map(children, (child, index) => {
-      if (isValidElement<PaneProps & PaneInternalProps>(child)) {
-        return cloneElement(child, { _index: index });
+      // Find panes that are exiting (no longer visible) - exclude those already exiting
+      const exiting = Array.from(currentVisible).filter((id) => !newVisibleSet.has(id));
+
+      // Notify about hidden panes
+      exiting.forEach((id) => {
+        const config = paneConfigs.get(id);
+        if (config) {
+          onPaneHiddenRef.current?.(id, config.index);
+        }
+      });
+
+      // Start entering animations
+      if (entering.length > 0) {
+        setEnteringPanes((prev) => {
+          const next = new Set(prev);
+          entering.forEach((id) => next.add(id));
+          return next;
+        });
+
+        // Remove entering state after animation
+        entering.forEach((id) => {
+          // Use requestAnimationFrame to ensure the entering class is applied before removing
+          requestAnimationFrame(() => {
+            requestAnimationFrame(() => {
+              setEnteringPanes((prev) => {
+                const next = new Set(prev);
+                next.delete(id);
+                return next;
+              });
+            });
+          });
+        });
       }
-      return child;
+
+      // Start exiting animations
+      if (exiting.length > 0) {
+        setExitingPanes((prev) => {
+          const next = new Set(prev);
+          exiting.forEach((id) => next.add(id));
+          return next;
+        });
+
+        // Remove from visible after animation completes
+        exiting.forEach((id) => {
+          const timeout = setTimeout(() => {
+            setVisiblePanes((prev) => {
+              const next = new Set(prev);
+              next.delete(id);
+              return next;
+            });
+            setExitingPanes((prev) => {
+              const next = new Set(prev);
+              next.delete(id);
+              return next;
+            });
+            animationTimeoutsRef.current.delete(id);
+          }, animationDuration);
+
+          animationTimeoutsRef.current.set(id, timeout);
+        });
+      }
+
+      // Notify about visible panes change
+      if (entering.length > 0 || exiting.length > 0) {
+        const finalIndices = newVisibleIds.map((id) => paneConfigs.get(id)?.index ?? 0);
+        onVisiblePanesChangeRef.current?.(newVisibleIds, finalIndices);
+      }
+
+      // Return updated visible set (add entering panes immediately)
+      if (entering.length > 0) {
+        const next = new Set(currentVisible);
+        entering.forEach((id) => next.add(id));
+        return next;
+      }
+      return currentVisible;
     });
+  }, [containerWidth, paneConfigs, gap, minContainerWidth, animationDuration]);
 
-    const componentClasses = [styles.panes, className].filter(Boolean).join(' ');
+  // Clean up timeouts on unmount
+  useEffect(() => {
+    const timeoutsMap = animationTimeoutsRef.current;
+    return () => {
+      timeoutsMap.forEach((timeout) => clearTimeout(timeout));
+      timeoutsMap.clear();
+    };
+  }, []);
 
-    const cssVariables = {
-      '--panes-gap': `${gap}px`,
-      '--panes-animation-duration': `${animationDuration}ms`,
-      '--panes-animation-easing': animationEasing,
-      ...style,
-    } as React.CSSProperties;
+  // Context value
+  const contextValue = useMemo(
+    () => ({
+      registerPane,
+      unregisterPane,
+      updatePane,
+      visiblePanes,
+      enteringPanes,
+      exitingPanes,
+      animationDuration,
+      animationEasing,
+      gap,
+    }),
+    [
+      registerPane,
+      unregisterPane,
+      updatePane,
+      visiblePanes,
+      enteringPanes,
+      exitingPanes,
+      animationDuration,
+      animationEasing,
+      gap,
+    ]
+  );
 
-    return (
-      <PanesContext.Provider value={contextValue}>
-        <div
-          ref={setRefs}
-          className={componentClasses}
-          style={cssVariables}
-          data-component="panes"
-          data-testid={testId}
-          aria-label={ariaLabel}
-          role="group"
-          {...restProps}
-        >
-          {childrenWithIndex}
-        </div>
-      </PanesContext.Provider>
-    );
-  }
-);
+  // Clone children to inject index
+  const childrenWithIndex = Children.map(children, (child, index) => {
+    if (isValidElement<PaneProps & PaneInternalProps>(child)) {
+      return cloneElement(child, { _index: index });
+    }
+    return child;
+  });
 
-Panes.displayName = 'Panes';
+  const componentClasses = [styles.panes, className].filter(Boolean).join(' ');
+
+  const cssVariables = {
+    '--panes-gap': `${gap}px`,
+    '--panes-animation-duration': `${animationDuration}ms`,
+    '--panes-animation-easing': animationEasing,
+    ...style,
+  } as React.CSSProperties;
+
+  return (
+    <PanesContext.Provider value={contextValue}>
+      <div
+        ref={setRefs}
+        className={componentClasses}
+        style={cssVariables}
+        data-component="panes"
+        data-testid={testId}
+        aria-label={ariaLabel}
+        role="group"
+        {...restProps}
+      >
+        {childrenWithIndex}
+      </div>
+    </PanesContext.Provider>
+  );
+};
 
 export default Panes;

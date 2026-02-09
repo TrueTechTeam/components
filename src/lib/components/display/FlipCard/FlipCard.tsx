@@ -1,5 +1,4 @@
 import React, {
-  forwardRef,
   useState,
   useCallback,
   useRef,
@@ -150,173 +149,169 @@ export interface FlipCardProps extends Omit<BaseComponentProps, 'children'> {
  * />
  * ```
  */
-export const FlipCard = forwardRef<HTMLDivElement, FlipCardProps>(
-  (
-    {
-      front,
-      back,
-      isFlipped: controlledIsFlipped,
-      defaultFlipped = false,
-      onFlipChange,
-      flipTrigger = 'click',
-      flipDirection = 'horizontal',
-      duration = 600,
-      easing = 'ease-in-out',
-      onFlipStart,
-      onFlipEnd,
-      disabled = false,
-      height,
-      width,
-      perspective = 1000,
-      flipButtonAriaLabel = 'Flip card',
-      className,
-      style,
-      'data-testid': testId,
-      'aria-label': ariaLabel,
-      ...restProps
+export const FlipCard = ({
+  ref,
+  front,
+  back,
+  isFlipped: controlledIsFlipped,
+  defaultFlipped = false,
+  onFlipChange,
+  flipTrigger = 'click',
+  flipDirection = 'horizontal',
+  duration = 600,
+  easing = 'ease-in-out',
+  onFlipStart,
+  onFlipEnd,
+  disabled = false,
+  height,
+  width,
+  perspective = 1000,
+  flipButtonAriaLabel = 'Flip card',
+  className,
+  style,
+  'data-testid': testId,
+  'aria-label': ariaLabel,
+  ...restProps
+}: FlipCardProps & {
+  ref?: React.Ref<HTMLDivElement>;
+}) => {
+  // Controlled vs uncontrolled state
+  const isControlled = controlledIsFlipped !== undefined;
+  const [uncontrolledIsFlipped, setUncontrolledIsFlipped] = useState(defaultFlipped);
+  const isFlipped = isControlled ? controlledIsFlipped : uncontrolledIsFlipped;
+
+  // Track animation state
+  const [isAnimating, setIsAnimating] = useState(false);
+  const animationTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  // Cleanup timeout on unmount
+  useEffect(() => {
+    return () => {
+      if (animationTimeoutRef.current) {
+        clearTimeout(animationTimeoutRef.current);
+      }
+    };
+  }, []);
+
+  // Handle flip action
+  const handleFlip = useCallback(() => {
+    if (disabled || isAnimating) {
+      return;
+    }
+
+    const newIsFlipped = !isFlipped;
+
+    // Fire start callback
+    onFlipStart?.(newIsFlipped);
+    setIsAnimating(true);
+
+    // Update state
+    if (isControlled) {
+      onFlipChange?.(newIsFlipped);
+    } else {
+      setUncontrolledIsFlipped(newIsFlipped);
+      onFlipChange?.(newIsFlipped);
+    }
+
+    // Fire end callback after animation completes
+    animationTimeoutRef.current = setTimeout(() => {
+      setIsAnimating(false);
+      onFlipEnd?.(newIsFlipped);
+    }, duration);
+  }, [
+    disabled,
+    isAnimating,
+    isFlipped,
+    isControlled,
+    onFlipChange,
+    onFlipStart,
+    onFlipEnd,
+    duration,
+  ]);
+
+  // Click handler
+  const handleClick = useCallback(
+    (event: MouseEvent<HTMLDivElement>) => {
+      if (flipTrigger === 'click') {
+        handleFlip();
+      }
     },
-    ref
-  ) => {
-    // Controlled vs uncontrolled state
-    const isControlled = controlledIsFlipped !== undefined;
-    const [uncontrolledIsFlipped, setUncontrolledIsFlipped] = useState(defaultFlipped);
-    const isFlipped = isControlled ? controlledIsFlipped : uncontrolledIsFlipped;
+    [flipTrigger, handleFlip]
+  );
 
-    // Track animation state
-    const [isAnimating, setIsAnimating] = useState(false);
-    const animationTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
-
-    // Cleanup timeout on unmount
-    useEffect(() => {
-      return () => {
-        if (animationTimeoutRef.current) {
-          clearTimeout(animationTimeoutRef.current);
-        }
-      };
-    }, []);
-
-    // Handle flip action
-    const handleFlip = useCallback(() => {
-      if (disabled || isAnimating) {
+  // Keyboard handler (accessibility)
+  const handleKeyDown = useCallback(
+    (event: KeyboardEvent<HTMLDivElement>) => {
+      if (flipTrigger === 'manual') {
         return;
       }
-
-      const newIsFlipped = !isFlipped;
-
-      // Fire start callback
-      onFlipStart?.(newIsFlipped);
-      setIsAnimating(true);
-
-      // Update state
-      if (isControlled) {
-        onFlipChange?.(newIsFlipped);
-      } else {
-        setUncontrolledIsFlipped(newIsFlipped);
-        onFlipChange?.(newIsFlipped);
-      }
-
-      // Fire end callback after animation completes
-      animationTimeoutRef.current = setTimeout(() => {
-        setIsAnimating(false);
-        onFlipEnd?.(newIsFlipped);
-      }, duration);
-    }, [
-      disabled,
-      isAnimating,
-      isFlipped,
-      isControlled,
-      onFlipChange,
-      onFlipStart,
-      onFlipEnd,
-      duration,
-    ]);
-
-    // Click handler
-    const handleClick = useCallback(
-      (event: MouseEvent<HTMLDivElement>) => {
-        if (flipTrigger === 'click') {
-          handleFlip();
-        }
-      },
-      [flipTrigger, handleFlip]
-    );
-
-    // Keyboard handler (accessibility)
-    const handleKeyDown = useCallback(
-      (event: KeyboardEvent<HTMLDivElement>) => {
-        if (flipTrigger === 'manual') {
-          return;
-        }
-        if (event.key === 'Enter' || event.key === ' ') {
-          event.preventDefault();
-          handleFlip();
-        }
-      },
-      [flipTrigger, handleFlip]
-    );
-
-    // Hover handlers
-    const handleMouseEnter = useCallback(() => {
-      if (flipTrigger === 'hover' && !isFlipped && !disabled) {
+      if (event.key === 'Enter' || event.key === ' ') {
+        event.preventDefault();
         handleFlip();
       }
-    }, [flipTrigger, isFlipped, disabled, handleFlip]);
+    },
+    [flipTrigger, handleFlip]
+  );
 
-    const handleMouseLeave = useCallback(() => {
-      if (flipTrigger === 'hover' && isFlipped && !disabled) {
-        handleFlip();
-      }
-    }, [flipTrigger, isFlipped, disabled, handleFlip]);
+  // Hover handlers
+  const handleMouseEnter = useCallback(() => {
+    if (flipTrigger === 'hover' && !isFlipped && !disabled) {
+      handleFlip();
+    }
+  }, [flipTrigger, isFlipped, disabled, handleFlip]);
 
-    const componentClasses = [styles.flipCard, className].filter(Boolean).join(' ');
+  const handleMouseLeave = useCallback(() => {
+    if (flipTrigger === 'hover' && isFlipped && !disabled) {
+      handleFlip();
+    }
+  }, [flipTrigger, isFlipped, disabled, handleFlip]);
 
-    const cssVariables = {
-      '--flipcard-duration': `${duration}ms`,
-      '--flipcard-easing': easing,
-      '--flipcard-perspective': `${perspective}px`,
-      '--flipcard-height': typeof height === 'number' ? `${height}px` : height,
-      '--flipcard-width': typeof width === 'number' ? `${width}px` : width,
-      ...style,
-    } as React.CSSProperties;
+  const componentClasses = [styles.flipCard, className].filter(Boolean).join(' ');
 
-    const isInteractive = flipTrigger !== 'manual';
+  const cssVariables = {
+    '--flipcard-duration': `${duration}ms`,
+    '--flipcard-easing': easing,
+    '--flipcard-perspective': `${perspective}px`,
+    '--flipcard-height': typeof height === 'number' ? `${height}px` : height,
+    '--flipcard-width': typeof width === 'number' ? `${width}px` : width,
+    ...style,
+  } as React.CSSProperties;
 
-    return (
-      <div
-        ref={ref}
-        className={componentClasses}
-        data-component="flip-card"
-        data-flipped={isFlipped || undefined}
-        data-flip-direction={flipDirection}
-        data-animating={isAnimating || undefined}
-        data-disabled={disabled || undefined}
-        data-trigger={flipTrigger}
-        onClick={handleClick}
-        onKeyDown={isInteractive ? handleKeyDown : undefined}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        role={isInteractive ? 'button' : undefined}
-        tabIndex={isInteractive && !disabled ? 0 : undefined}
-        aria-pressed={isInteractive ? isFlipped : undefined}
-        aria-label={ariaLabel || flipButtonAriaLabel}
-        aria-disabled={disabled || undefined}
-        data-testid={testId}
-        style={cssVariables}
-        {...restProps}
-      >
-        <div className={styles.flipCardInner}>
-          <div className={styles.flipCardFront} aria-hidden={isFlipped}>
-            {front}
-          </div>
-          <div className={styles.flipCardBack} aria-hidden={!isFlipped}>
-            {back}
-          </div>
+  const isInteractive = flipTrigger !== 'manual';
+
+  return (
+    <div
+      ref={ref}
+      className={componentClasses}
+      data-component="flip-card"
+      data-flipped={isFlipped || undefined}
+      data-flip-direction={flipDirection}
+      data-animating={isAnimating || undefined}
+      data-disabled={disabled || undefined}
+      data-trigger={flipTrigger}
+      onClick={handleClick}
+      onKeyDown={isInteractive ? handleKeyDown : undefined}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      role={isInteractive ? 'button' : undefined}
+      tabIndex={isInteractive && !disabled ? 0 : undefined}
+      aria-pressed={isInteractive ? isFlipped : undefined}
+      aria-label={ariaLabel || flipButtonAriaLabel}
+      aria-disabled={disabled || undefined}
+      data-testid={testId}
+      style={cssVariables}
+      {...restProps}
+    >
+      <div className={styles.flipCardInner}>
+        <div className={styles.flipCardFront} aria-hidden={isFlipped}>
+          {front}
+        </div>
+        <div className={styles.flipCardBack} aria-hidden={!isFlipped}>
+          {back}
         </div>
       </div>
-    );
-  }
-);
-
-FlipCard.displayName = 'FlipCard';
+    </div>
+  );
+};
 
 export default FlipCard;

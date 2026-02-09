@@ -25,5 +25,3 @@ export function useListContextStrict<T = Record<string, unknown>>(): ListContext
   }
   return context;
 }
-
-ListContext.displayName = 'ListContext';

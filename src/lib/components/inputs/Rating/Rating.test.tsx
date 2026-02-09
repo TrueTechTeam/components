@@ -498,10 +498,4 @@ describe('Rating', () => {
       expect(handleChange).toHaveBeenCalledWith(3);
     });
   });
-
-  describe('Display Name', () => {
-    it('should have displayName set', () => {
-      expect(Rating.displayName).toBe('Rating');
-    });
-  });
 });

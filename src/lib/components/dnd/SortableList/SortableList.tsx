@@ -238,6 +238,4 @@ export function SortableList<T extends SortableListItem>(props: SortableListProp
   );
 }
 
-SortableList.displayName = 'SortableList';
-
 export default SortableList;

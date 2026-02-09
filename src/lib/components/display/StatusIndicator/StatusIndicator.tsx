@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
 import styles from './StatusIndicator.module.scss';
 import type { BaseComponentProps } from '../../../types/component.types';
 
@@ -68,41 +68,37 @@ export interface StatusIndicatorProps extends BaseComponentProps {
  * </StatusIndicator>
  * ```
  */
-export const StatusIndicator = forwardRef<HTMLSpanElement, StatusIndicatorProps>(
-  (
-    {
-      status = 'neutral',
-      size = 'md',
-      pulse = false,
-      withText = false,
-      className,
-      children,
-      ...restProps
-    },
-    ref
-  ) => {
-    // Merge className with component styles
-    const componentClasses = [styles.statusIndicator, className].filter(Boolean).join(' ');
+export const StatusIndicator = ({
+  ref,
+  status = 'neutral',
+  size = 'md',
+  pulse = false,
+  withText = false,
+  className,
+  children,
+  ...restProps
+}: StatusIndicatorProps & {
+  ref?: React.Ref<HTMLSpanElement>;
+}) => {
+  // Merge className with component styles
+  const componentClasses = [styles.statusIndicator, className].filter(Boolean).join(' ');
 
-    return (
-      <span
-        ref={ref}
-        className={componentClasses}
-        data-component="statusIndicator"
-        data-status={status}
-        data-size={size}
-        data-pulse={pulse || undefined}
-        data-with-text={withText || undefined}
-        aria-label={`Status: ${status}`}
-        {...restProps}
-      >
-        <span className={styles.dot} aria-hidden="true" />
-        {withText && children && <span className={styles.text}>{children}</span>}
-      </span>
-    );
-  }
-);
-
-StatusIndicator.displayName = 'StatusIndicator';
+  return (
+    <span
+      ref={ref}
+      className={componentClasses}
+      data-component="statusIndicator"
+      data-status={status}
+      data-size={size}
+      data-pulse={pulse || undefined}
+      data-with-text={withText || undefined}
+      aria-label={`Status: ${status}`}
+      {...restProps}
+    >
+      <span className={styles.dot} aria-hidden="true" />
+      {withText && children && <span className={styles.text}>{children}</span>}
+    </span>
+  );
+};
 
 export default StatusIndicator;

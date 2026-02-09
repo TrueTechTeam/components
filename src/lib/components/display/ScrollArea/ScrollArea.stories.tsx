@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { action } from '@storybook/addon-actions';
+import { action } from 'storybook/actions';
 import { useRef, useState } from 'react';
 import { ScrollArea, type ScrollAreaRef } from './ScrollArea';
 import { Button } from '../../buttons/Button';

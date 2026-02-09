@@ -35,5 +35,3 @@ export function TableCell<T extends Record<string, unknown>>({
     </div>
   );
 }
-
-TableCell.displayName = 'TableCell';

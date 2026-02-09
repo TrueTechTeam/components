@@ -913,11 +913,4 @@ describe('DragOverlay', () => {
       expect(screen.getByTestId('drag-overlay')).toBeInTheDocument();
     });
   });
-
-  // 11. Display name
-  describe('display name', () => {
-    it('should have correct display name', () => {
-      expect(DragOverlay.displayName).toBe('DragOverlay');
-    });
-  });
 });

@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, {
-  forwardRef,
   createContext,
   useContext,
   useCallback,
@@ -308,165 +307,161 @@ const renderField = (
  * </FormBuilder>
  * ```
  */
-export const FormBuilder = forwardRef<HTMLFormElement, FormBuilderProps>(
-  (
-    {
-      variant = 'primary',
-      size = 'md',
-      fields,
-      children,
-      defaultValues = {},
-      onSubmit,
-      onChange,
-      onValidate,
-      validateOn = 'blur',
-      showSubmitButton = true,
-      submitButtonText = 'Submit',
-      submitButtonVariant,
-      showResetButton = false,
-      resetButtonText = 'Reset',
-      layout = 'vertical',
-      columns = 2,
-      gap,
-      loading = false,
-      disabled = false,
-      className,
-      'data-testid': dataTestId,
-      style,
-      ...rest
+export const FormBuilder = ({
+  ref,
+  variant = 'primary',
+  size = 'md',
+  fields,
+  children,
+  defaultValues = {},
+  onSubmit,
+  onChange,
+  onValidate,
+  validateOn = 'blur',
+  showSubmitButton = true,
+  submitButtonText = 'Submit',
+  submitButtonVariant,
+  showResetButton = false,
+  resetButtonText = 'Reset',
+  layout = 'vertical',
+  columns = 2,
+  gap,
+  loading = false,
+  disabled = false,
+  className,
+  'data-testid': dataTestId,
+  style,
+  ...rest
+}: FormBuilderProps & {
+  ref?: React.Ref<HTMLFormElement>;
+}) => {
+  // Initialize form state
+  const formOptions: UseFormStateOptions = {
+    initialValues: defaultValues,
+    fields,
+    validateOn,
+    onSubmit,
+    onChange,
+    onValidate,
+  };
+
+  const formContext = useFormState(formOptions);
+
+  // Handle form submit
+  const handleSubmit = useCallback(
+    (e: React.FormEvent) => {
+      e.preventDefault();
+      formContext.submitForm();
     },
-    ref
-  ) => {
-    // Initialize form state
-    const formOptions: UseFormStateOptions = {
-      initialValues: defaultValues,
-      fields,
-      validateOn,
-      onSubmit,
-      onChange,
-      onValidate,
-    };
+    [formContext]
+  );
 
-    const formContext = useFormState(formOptions);
-
-    // Handle form submit
-    const handleSubmit = useCallback(
-      (e: React.FormEvent) => {
-        e.preventDefault();
-        formContext.submitForm();
-      },
-      [formContext]
-    );
-
-    // Wrap children with form context (for children mode)
-    const enhancedChildren = children
-      ? Children.map(children, (child) => {
-          if (!isValidElement(child)) {
-            return child;
-          }
-
-          const childProps = child.props as any;
-          const name = childProps.name;
-
-          // If child has a name prop, enhance it with form context
-          if (name) {
-            // Enhanced props
-            const value = formContext.values[name];
-            const error = formContext.errors[name];
-            const touched = formContext.touched[name];
-
-            return cloneElement(child, {
-              ...childProps,
-              value: value !== undefined ? value : childProps.value,
-              checked: value !== undefined ? value : childProps.checked,
-              error: touched && !!error,
-              errorMessage: error,
-              disabled: disabled || loading,
-              onChange: (e: any) => {
-                // Call original onChange
-                childProps.onChange?.(e);
-
-                // Update form state
-                const newValue = e?.target?.value !== undefined ? e.target.value : e;
-                formContext.setFieldValue(name, newValue);
-              },
-              onBlur: () => {
-                childProps.onBlur?.();
-                formContext.setFieldTouched(name, true);
-              },
-            });
-          }
-
+  // Wrap children with form context (for children mode)
+  const enhancedChildren = children
+    ? Children.map(children, (child) => {
+        if (!isValidElement(child)) {
           return child;
-        })
-      : null;
+        }
 
-    // Container classes
-    const containerClasses = [
-      styles.form,
-      layout === 'grid' && styles.grid,
-      layout === 'horizontal' && styles.horizontal,
-      className,
-    ]
-      .filter(Boolean)
-      .join(' ');
+        const childProps = child.props as any;
+        const name = childProps.name;
 
-    const containerStyle = {
-      ...style,
-      ...(layout === 'grid' && columns && { gridTemplateColumns: `repeat(${columns}, 1fr)` }),
-      ...(gap !== undefined && { gap: `${gap * 4}px` }),
-    };
+        // If child has a name prop, enhance it with form context
+        if (name) {
+          // Enhanced props
+          const value = formContext.values[name];
+          const error = formContext.errors[name];
+          const touched = formContext.touched[name];
 
-    return (
-      <FormContext.Provider value={formContext}>
-        <form
-          {...rest}
-          ref={ref}
-          className={containerClasses}
-          style={containerStyle}
-          onSubmit={handleSubmit}
-          data-testid={dataTestId}
-        >
-          {/* Config mode: render fields from config */}
-          {fields &&
-            fields.map((field) => (
-              <div key={field.name} className={styles.field}>
-                {renderField(field, formContext, variant, size, disabled || loading)}
-              </div>
-            ))}
+          return cloneElement(child, {
+            ...childProps,
+            value: value !== undefined ? value : childProps.value,
+            checked: value !== undefined ? value : childProps.checked,
+            error: touched && !!error,
+            errorMessage: error,
+            disabled: disabled || loading,
+            onChange: (e: any) => {
+              // Call original onChange
+              childProps.onChange?.(e);
 
-          {/* Children mode: render enhanced children */}
-          {enhancedChildren}
+              // Update form state
+              const newValue = e?.target?.value !== undefined ? e.target.value : e;
+              formContext.setFieldValue(name, newValue);
+            },
+            onBlur: () => {
+              childProps.onBlur?.();
+              formContext.setFieldTouched(name, true);
+            },
+          });
+        }
 
-          {/* Form actions */}
-          {(showSubmitButton || showResetButton) && (
-            <div className={styles.actions}>
-              {showResetButton && (
-                <Button
-                  type="button"
-                  variant="secondary"
-                  onClick={formContext.resetForm}
-                  disabled={disabled || loading || !formContext.isDirty}
-                >
-                  {resetButtonText}
-                </Button>
-              )}
+        return child;
+      })
+    : null;
 
-              {showSubmitButton && (
-                <Button
-                  type="submit"
-                  variant={submitButtonVariant || variant}
-                  disabled={disabled || loading || formContext.isSubmitting}
-                >
-                  {submitButtonText}
-                </Button>
-              )}
+  // Container classes
+  const containerClasses = [
+    styles.form,
+    layout === 'grid' && styles.grid,
+    layout === 'horizontal' && styles.horizontal,
+    className,
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+  const containerStyle = {
+    ...style,
+    ...(layout === 'grid' && columns && { gridTemplateColumns: `repeat(${columns}, 1fr)` }),
+    ...(gap !== undefined && { gap: `${gap * 4}px` }),
+  };
+
+  return (
+    <FormContext.Provider value={formContext}>
+      <form
+        {...rest}
+        ref={ref}
+        className={containerClasses}
+        style={containerStyle}
+        onSubmit={handleSubmit}
+        data-testid={dataTestId}
+      >
+        {/* Config mode: render fields from config */}
+        {fields &&
+          fields.map((field) => (
+            <div key={field.name} className={styles.field}>
+              {renderField(field, formContext, variant, size, disabled || loading)}
             </div>
-          )}
-        </form>
-      </FormContext.Provider>
-    );
-  }
-);
+          ))}
 
-FormBuilder.displayName = 'FormBuilder';
+        {/* Children mode: render enhanced children */}
+        {enhancedChildren}
+
+        {/* Form actions */}
+        {(showSubmitButton || showResetButton) && (
+          <div className={styles.actions}>
+            {showResetButton && (
+              <Button
+                type="button"
+                variant="secondary"
+                onClick={formContext.resetForm}
+                disabled={disabled || loading || !formContext.isDirty}
+              >
+                {resetButtonText}
+              </Button>
+            )}
+
+            {showSubmitButton && (
+              <Button
+                type="submit"
+                variant={submitButtonVariant || variant}
+                disabled={disabled || loading || formContext.isSubmitting}
+              >
+                {submitButtonText}
+              </Button>
+            )}
+          </div>
+        )}
+      </form>
+    </FormContext.Provider>
+  );
+};

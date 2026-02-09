@@ -2,7 +2,7 @@
  * RatingFilter - Star rating filter
  */
 
-import React, { forwardRef } from 'react';
+import React from 'react';
 import { Rating } from '../../inputs/Rating';
 import { useFilter } from '../hooks/useFilter';
 import type { BaseComponentProps, ComponentSize } from '../../../types';
@@ -25,62 +25,58 @@ export interface RatingFilterProps extends BaseComponentProps {
 /**
  * RatingFilter wraps the Rating component for star-based filters
  */
-export const RatingFilter = forwardRef<HTMLDivElement, RatingFilterProps>(
-  (
-    {
-      filterId,
-      label: labelOverride,
-      showLabel = true,
-      size = 'md',
-      ratingProps,
-      className,
-      ...restProps
-    },
-    ref
-  ) => {
-    const { filter, value, setValue, isEnabled, error } = useFilter<number>({ filterId });
+export const RatingFilter = ({
+  ref,
+  filterId,
+  label: labelOverride,
+  showLabel = true,
+  size = 'md',
+  ratingProps,
+  className,
+  ...restProps
+}: RatingFilterProps & {
+  ref?: React.Ref<HTMLDivElement>;
+}) => {
+  const { filter, value, setValue, isEnabled, error } = useFilter<number>({ filterId });
 
-    if (!filter) {
-      console.warn(`RatingFilter: Filter "${filterId}" not found`);
-      return null;
-    }
-
-    const config = filter.config as RatingFilterConfig | undefined;
-    const label = labelOverride ?? filter.label;
-
-    const handleChange = (newValue: number) => {
-      // Allow clearing by clicking the same value
-      if (config?.allowClear && newValue === value) {
-        setValue(0);
-      } else {
-        setValue(newValue);
-      }
-    };
-
-    const componentClasses = [styles.ratingFilter, className].filter(Boolean).join(' ');
-
-    return (
-      <div ref={ref} className={componentClasses} {...restProps}>
-        {showLabel && <label className={styles.label}>{label}</label>}
-
-        <Rating
-          value={value ?? 0}
-          onChange={handleChange}
-          max={config?.max ?? 5}
-          disabled={!isEnabled}
-          icon={config?.icon}
-          emptyIcon={config?.emptyIcon}
-          size={size}
-          {...ratingProps}
-        />
-
-        {filter.helperText && <span className={styles.helperText}>{filter.helperText}</span>}
-        {error && <span className={styles.errorMessage}>{error}</span>}
-      </div>
-    );
+  if (!filter) {
+    console.warn(`RatingFilter: Filter "${filterId}" not found`);
+    return null;
   }
-);
 
-RatingFilter.displayName = 'RatingFilter';
+  const config = filter.config as RatingFilterConfig | undefined;
+  const label = labelOverride ?? filter.label;
+
+  const handleChange = (newValue: number) => {
+    // Allow clearing by clicking the same value
+    if (config?.allowClear && newValue === value) {
+      setValue(0);
+    } else {
+      setValue(newValue);
+    }
+  };
+
+  const componentClasses = [styles.ratingFilter, className].filter(Boolean).join(' ');
+
+  return (
+    <div ref={ref} className={componentClasses} {...restProps}>
+      {showLabel && <label className={styles.label}>{label}</label>}
+
+      <Rating
+        value={value ?? 0}
+        onChange={handleChange}
+        max={config?.max ?? 5}
+        disabled={!isEnabled}
+        icon={config?.icon}
+        emptyIcon={config?.emptyIcon}
+        size={size}
+        {...ratingProps}
+      />
+
+      {filter.helperText && <span className={styles.helperText}>{filter.helperText}</span>}
+      {error && <span className={styles.errorMessage}>{error}</span>}
+    </div>
+  );
+};
 
 export default RatingFilter;

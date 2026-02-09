@@ -1,4 +1,4 @@
-import React, { forwardRef, useState, useCallback, useMemo } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import type { BaseComponentProps } from '../../../types';
 import {
   BottomNavigationContext,
@@ -61,70 +61,66 @@ export interface BottomNavigationProps extends BaseComponentProps {
  * </BottomNavigation>
  * ```
  */
-export const BottomNavigation = forwardRef<HTMLElement, BottomNavigationProps>(
-  (
-    {
-      value: controlledValue,
-      defaultValue,
-      onChange,
-      showLabels = true,
-      showSelectedLabel = false,
-      children,
-      className,
-      'data-testid': testId,
-      'aria-label': ariaLabel,
-      style,
-      ...restProps
+export const BottomNavigation = ({
+  ref,
+  value: controlledValue,
+  defaultValue,
+  onChange,
+  showLabels = true,
+  showSelectedLabel = false,
+  children,
+  className,
+  'data-testid': testId,
+  'aria-label': ariaLabel,
+  style,
+  ...restProps
+}: BottomNavigationProps & {
+  ref?: React.Ref<HTMLElement>;
+}) => {
+  const isControlled = controlledValue !== undefined;
+  const [internalValue, setInternalValue] = useState<string | null>(defaultValue ?? null);
+
+  const selectedValue = isControlled ? controlledValue : internalValue;
+
+  const handleSelect = useCallback(
+    (value: string) => {
+      if (!isControlled) {
+        setInternalValue(value);
+      }
+      onChange?.(value);
     },
-    ref
-  ) => {
-    const isControlled = controlledValue !== undefined;
-    const [internalValue, setInternalValue] = useState<string | null>(defaultValue ?? null);
+    [isControlled, onChange]
+  );
 
-    const selectedValue = isControlled ? controlledValue : internalValue;
+  const contextValue: BottomNavigationContextValue = useMemo(
+    () => ({
+      selectedValue,
+      onSelect: handleSelect,
+      showLabels,
+      showSelectedLabel,
+    }),
+    [selectedValue, handleSelect, showLabels, showSelectedLabel]
+  );
 
-    const handleSelect = useCallback(
-      (value: string) => {
-        if (!isControlled) {
-          setInternalValue(value);
-        }
-        onChange?.(value);
-      },
-      [isControlled, onChange]
-    );
+  const componentClasses = [styles.bottomNavigation, className].filter(Boolean).join(' ');
 
-    const contextValue: BottomNavigationContextValue = useMemo(
-      () => ({
-        selectedValue,
-        onSelect: handleSelect,
-        showLabels,
-        showSelectedLabel,
-      }),
-      [selectedValue, handleSelect, showLabels, showSelectedLabel]
-    );
-
-    const componentClasses = [styles.bottomNavigation, className].filter(Boolean).join(' ');
-
-    return (
-      <nav
-        ref={ref}
-        className={componentClasses}
-        data-component="bottom-navigation"
-        data-show-labels={showLabels || undefined}
-        data-show-selected-label={showSelectedLabel || undefined}
-        data-testid={testId}
-        aria-label={ariaLabel || 'Bottom navigation'}
-        style={style}
-        {...restProps}
-      >
-        <BottomNavigationContext.Provider value={contextValue}>
-          {children}
-        </BottomNavigationContext.Provider>
-      </nav>
-    );
-  }
-);
-
-BottomNavigation.displayName = 'BottomNavigation';
+  return (
+    <nav
+      ref={ref}
+      className={componentClasses}
+      data-component="bottom-navigation"
+      data-show-labels={showLabels || undefined}
+      data-show-selected-label={showSelectedLabel || undefined}
+      data-testid={testId}
+      aria-label={ariaLabel || 'Bottom navigation'}
+      style={style}
+      {...restProps}
+    >
+      <BottomNavigationContext.Provider value={contextValue}>
+        {children}
+      </BottomNavigationContext.Provider>
+    </nav>
+  );
+};
 
 export default BottomNavigation;

@@ -88,6 +88,4 @@ export const ToastContainer: React.FC<ToastContainerProps> = ({
   );
 };
 
-ToastContainer.displayName = 'ToastContainer';
-
 export default ToastContainer;

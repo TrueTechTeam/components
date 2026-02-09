@@ -598,9 +598,5 @@ describe('Slider', () => {
     });
   });
 
-  describe('displayName', () => {
-    it('should have correct displayName', () => {
-      expect(Slider.displayName).toBe('Slider');
-    });
-  });
+  describe('displayName', () => {});
 });

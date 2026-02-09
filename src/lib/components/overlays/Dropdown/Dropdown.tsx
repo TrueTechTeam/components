@@ -124,7 +124,7 @@ function extractMenuItems(children: ReactNode): Map<string, ReactNode> {
       return;
     }
 
-    const element = child as ReactElement;
+    const element = child as ReactElement<{ itemKey?: string; children?: ReactNode }>;
     if (element?.type === MenuItem && element.props?.itemKey) {
       itemsMap.set(element.props.itemKey, element.props.children);
     }
@@ -270,5 +270,3 @@ export const Dropdown: React.FC<DropdownProps> = ({
     </Menu>
   );
 };
-
-Dropdown.displayName = 'Dropdown';

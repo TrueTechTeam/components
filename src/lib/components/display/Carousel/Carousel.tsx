@@ -1,12 +1,4 @@
-import React, {
-  forwardRef,
-  useState,
-  useCallback,
-  useEffect,
-  useRef,
-  type ReactNode,
-  Children,
-} from 'react';
+import React, { useState, useCallback, useEffect, useRef, type ReactNode, Children } from 'react';
 import styles from './Carousel.module.scss';
 import type { BaseComponentProps } from '../../../types/component.types';
 import { Icon, type IconName } from '../Icon';
@@ -150,302 +142,298 @@ export interface CarouselProps extends Omit<BaseComponentProps, 'children'> {
  * </Carousel>
  * ```
  */
-export const Carousel = forwardRef<HTMLDivElement, CarouselProps>(
-  (
-    {
-      children,
-      autoPlay = false,
-      autoPlayInterval = 5000,
-      pauseOnHover = true,
-      showDots = true,
-      showArrows = true,
-      infinite = true,
-      slidesToShow = 1,
-      slidesToScroll = 1,
-      gap = '16px',
-      transitionDuration = 300,
-      activeIndex: controlledIndex,
-      defaultIndex = 0,
-      onChange,
-      prevIcon = 'chevron-left',
-      nextIcon = 'chevron-right',
-      arrowsOutside = false,
-      dotsPosition = 'bottom',
-      className,
-      style,
-      'data-testid': testId,
-      'aria-label': ariaLabel,
-      ...restProps
+export const Carousel = ({
+  ref,
+  children,
+  autoPlay = false,
+  autoPlayInterval = 5000,
+  pauseOnHover = true,
+  showDots = true,
+  showArrows = true,
+  infinite = true,
+  slidesToShow = 1,
+  slidesToScroll = 1,
+  gap = '16px',
+  transitionDuration = 300,
+  activeIndex: controlledIndex,
+  defaultIndex = 0,
+  onChange,
+  prevIcon = 'chevron-left',
+  nextIcon = 'chevron-right',
+  arrowsOutside = false,
+  dotsPosition = 'bottom',
+  className,
+  style,
+  'data-testid': testId,
+  'aria-label': ariaLabel,
+  ...restProps
+}: CarouselProps & {
+  ref?: React.Ref<HTMLDivElement>;
+}) => {
+  const slides = Children.toArray(children);
+  const slideCount = slides.length;
+  const maxIndex = Math.max(0, slideCount - slidesToShow);
+
+  // Controlled vs uncontrolled state
+  const isControlled = controlledIndex !== undefined;
+  const [uncontrolledIndex, setUncontrolledIndex] = useState(defaultIndex);
+  const currentIndex = isControlled ? controlledIndex : uncontrolledIndex;
+
+  // Auto-play pause state
+  const [isPaused, setIsPaused] = useState(false);
+  const autoPlayTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+
+  // Touch handling
+  const [touchStart, setTouchStart] = useState<number | null>(null);
+  const [touchEnd, setTouchEnd] = useState<number | null>(null);
+  const minSwipeDistance = 50;
+
+  // Navigate to specific slide
+  const goToSlide = useCallback(
+    (index: number) => {
+      let newIndex = index;
+
+      if (infinite) {
+        if (newIndex < 0) {
+          newIndex = maxIndex;
+        } else if (newIndex > maxIndex) {
+          newIndex = 0;
+        }
+      } else {
+        newIndex = Math.max(0, Math.min(newIndex, maxIndex));
+      }
+
+      if (isControlled) {
+        onChange?.(newIndex);
+      } else {
+        setUncontrolledIndex(newIndex);
+        onChange?.(newIndex);
+      }
     },
-    ref
-  ) => {
-    const slides = Children.toArray(children);
-    const slideCount = slides.length;
-    const maxIndex = Math.max(0, slideCount - slidesToShow);
+    [infinite, maxIndex, isControlled, onChange]
+  );
 
-    // Controlled vs uncontrolled state
-    const isControlled = controlledIndex !== undefined;
-    const [uncontrolledIndex, setUncontrolledIndex] = useState(defaultIndex);
-    const currentIndex = isControlled ? controlledIndex : uncontrolledIndex;
+  // Navigate to next slide
+  const goToNext = useCallback(() => {
+    goToSlide(currentIndex + slidesToScroll);
+  }, [goToSlide, currentIndex, slidesToScroll]);
 
-    // Auto-play pause state
-    const [isPaused, setIsPaused] = useState(false);
-    const autoPlayTimerRef = useRef<ReturnType<typeof setInterval> | null>(null);
+  // Navigate to previous slide
+  const goToPrev = useCallback(() => {
+    goToSlide(currentIndex - slidesToScroll);
+  }, [goToSlide, currentIndex, slidesToScroll]);
 
-    // Touch handling
-    const [touchStart, setTouchStart] = useState<number | null>(null);
-    const [touchEnd, setTouchEnd] = useState<number | null>(null);
-    const minSwipeDistance = 50;
-
-    // Navigate to specific slide
-    const goToSlide = useCallback(
-      (index: number) => {
-        let newIndex = index;
-
-        if (infinite) {
-          if (newIndex < 0) {
-            newIndex = maxIndex;
-          } else if (newIndex > maxIndex) {
-            newIndex = 0;
-          }
-        } else {
-          newIndex = Math.max(0, Math.min(newIndex, maxIndex));
-        }
-
-        if (isControlled) {
-          onChange?.(newIndex);
-        } else {
-          setUncontrolledIndex(newIndex);
-          onChange?.(newIndex);
-        }
-      },
-      [infinite, maxIndex, isControlled, onChange]
-    );
-
-    // Navigate to next slide
-    const goToNext = useCallback(() => {
-      goToSlide(currentIndex + slidesToScroll);
-    }, [goToSlide, currentIndex, slidesToScroll]);
-
-    // Navigate to previous slide
-    const goToPrev = useCallback(() => {
-      goToSlide(currentIndex - slidesToScroll);
-    }, [goToSlide, currentIndex, slidesToScroll]);
-
-    // Auto-play effect
-    useEffect(() => {
-      if (autoPlay && !isPaused && slideCount > slidesToShow) {
-        autoPlayTimerRef.current = setInterval(() => {
-          goToNext();
-        }, autoPlayInterval);
-      }
-
-      return () => {
-        if (autoPlayTimerRef.current) {
-          clearInterval(autoPlayTimerRef.current);
-        }
-      };
-    }, [autoPlay, autoPlayInterval, isPaused, goToNext, slideCount, slidesToShow]);
-
-    // Pause on hover handlers
-    const handleMouseEnter = useCallback(() => {
-      if (pauseOnHover && autoPlay) {
-        setIsPaused(true);
-      }
-    }, [pauseOnHover, autoPlay]);
-
-    const handleMouseLeave = useCallback(() => {
-      if (pauseOnHover && autoPlay) {
-        setIsPaused(false);
-      }
-    }, [pauseOnHover, autoPlay]);
-
-    // Touch handlers
-    const handleTouchStart = useCallback((e: React.TouchEvent) => {
-      setTouchEnd(null);
-      setTouchStart(e.targetTouches[0].clientX);
-    }, []);
-
-    const handleTouchMove = useCallback((e: React.TouchEvent) => {
-      setTouchEnd(e.targetTouches[0].clientX);
-    }, []);
-
-    const handleTouchEnd = useCallback(() => {
-      if (!touchStart || !touchEnd) {
-        return;
-      }
-
-      const distance = touchStart - touchEnd;
-      const isLeftSwipe = distance > minSwipeDistance;
-      const isRightSwipe = distance < -minSwipeDistance;
-
-      if (isLeftSwipe) {
+  // Auto-play effect
+  useEffect(() => {
+    if (autoPlay && !isPaused && slideCount > slidesToShow) {
+      autoPlayTimerRef.current = setInterval(() => {
         goToNext();
-      } else if (isRightSwipe) {
-        goToPrev();
+      }, autoPlayInterval);
+    }
+
+    return () => {
+      if (autoPlayTimerRef.current) {
+        clearInterval(autoPlayTimerRef.current);
       }
-
-      setTouchStart(null);
-      setTouchEnd(null);
-    }, [touchStart, touchEnd, goToNext, goToPrev]);
-
-    // Keyboard navigation
-    const handleKeyDown = useCallback(
-      (e: React.KeyboardEvent) => {
-        if (e.key === 'ArrowLeft') {
-          e.preventDefault();
-          goToPrev();
-        } else if (e.key === 'ArrowRight') {
-          e.preventDefault();
-          goToNext();
-        }
-      },
-      [goToPrev, goToNext]
-    );
-
-    // Render icon
-    const renderIcon = (icon: ReactNode | IconName) => {
-      if (typeof icon === 'string') {
-        return <Icon name={icon as IconName} />;
-      }
-      return icon;
     };
+  }, [autoPlay, autoPlayInterval, isPaused, goToNext, slideCount, slidesToShow]);
 
-    // Calculate dots
-    const dotCount = Math.ceil((slideCount - slidesToShow + 1) / slidesToScroll);
-    const dots = Array.from({ length: Math.max(1, dotCount) }, (_, i) => i);
+  // Pause on hover handlers
+  const handleMouseEnter = useCallback(() => {
+    if (pauseOnHover && autoPlay) {
+      setIsPaused(true);
+    }
+  }, [pauseOnHover, autoPlay]);
 
-    const componentClasses = [styles.carousel, className].filter(Boolean).join(' ');
+  const handleMouseLeave = useCallback(() => {
+    if (pauseOnHover && autoPlay) {
+      setIsPaused(false);
+    }
+  }, [pauseOnHover, autoPlay]);
 
-    const cssVariables = {
-      '--carousel-transition-duration': `${transitionDuration}ms`,
-      '--carousel-gap': gap,
-      '--carousel-slides-to-show': slidesToShow,
-      '--carousel-translate': `calc(-${currentIndex * (100 / slidesToShow)}% - ${currentIndex} * var(--carousel-gap) / ${slidesToShow})`,
-      ...style,
-    } as React.CSSProperties;
+  // Touch handlers
+  const handleTouchStart = useCallback((e: React.TouchEvent) => {
+    setTouchEnd(null);
+    setTouchStart(e.targetTouches[0].clientX);
+  }, []);
 
-    const canGoPrev = infinite || currentIndex > 0;
-    const canGoNext = infinite || currentIndex < maxIndex;
+  const handleTouchMove = useCallback((e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  }, []);
 
-    const showOutsideArrows = showArrows && arrowsOutside && slideCount > slidesToShow;
-    const showInnerArrows = showArrows && !arrowsOutside && slideCount > slidesToShow;
+  const handleTouchEnd = useCallback(() => {
+    if (!touchStart || !touchEnd) {
+      return;
+    }
 
-    return (
+    const distance = touchStart - touchEnd;
+    const isLeftSwipe = distance > minSwipeDistance;
+    const isRightSwipe = distance < -minSwipeDistance;
+
+    if (isLeftSwipe) {
+      goToNext();
+    } else if (isRightSwipe) {
+      goToPrev();
+    }
+
+    setTouchStart(null);
+    setTouchEnd(null);
+  }, [touchStart, touchEnd, goToNext, goToPrev]);
+
+  // Keyboard navigation
+  const handleKeyDown = useCallback(
+    (e: React.KeyboardEvent) => {
+      if (e.key === 'ArrowLeft') {
+        e.preventDefault();
+        goToPrev();
+      } else if (e.key === 'ArrowRight') {
+        e.preventDefault();
+        goToNext();
+      }
+    },
+    [goToPrev, goToNext]
+  );
+
+  // Render icon
+  const renderIcon = (icon: ReactNode | IconName) => {
+    if (typeof icon === 'string') {
+      return <Icon name={icon as IconName} />;
+    }
+    return icon;
+  };
+
+  // Calculate dots
+  const dotCount = Math.ceil((slideCount - slidesToShow + 1) / slidesToScroll);
+  const dots = Array.from({ length: Math.max(1, dotCount) }, (_, i) => i);
+
+  const componentClasses = [styles.carousel, className].filter(Boolean).join(' ');
+
+  const cssVariables = {
+    '--carousel-transition-duration': `${transitionDuration}ms`,
+    '--carousel-gap': gap,
+    '--carousel-slides-to-show': slidesToShow,
+    '--carousel-translate': `calc(-${currentIndex * (100 / slidesToShow)}% - ${currentIndex} * var(--carousel-gap) / ${slidesToShow})`,
+    ...style,
+  } as React.CSSProperties;
+
+  const canGoPrev = infinite || currentIndex > 0;
+  const canGoNext = infinite || currentIndex < maxIndex;
+
+  const showOutsideArrows = showArrows && arrowsOutside && slideCount > slidesToShow;
+  const showInnerArrows = showArrows && !arrowsOutside && slideCount > slidesToShow;
+
+  return (
+    <div
+      ref={ref}
+      className={componentClasses}
+      data-component="carousel"
+      data-arrows-outside={arrowsOutside || undefined}
+      data-dots-position={dotsPosition}
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      onKeyDown={handleKeyDown}
+      tabIndex={0}
+      role="region"
+      aria-roledescription="carousel"
+      aria-label={ariaLabel || 'Carousel'}
+      data-testid={testId}
+      style={cssVariables}
+      {...restProps}
+    >
+      {/* Outside Previous Arrow */}
+      {showOutsideArrows && (
+        <IconButton
+          icon={typeof prevIcon === 'string' ? (prevIcon as IconName) : 'chevron-left'}
+          onClick={goToPrev}
+          disabled={!canGoPrev}
+          aria-label="Previous slide"
+          variant="outline"
+        />
+      )}
+
+      {/* Slides Container */}
       <div
-        ref={ref}
-        className={componentClasses}
-        data-component="carousel"
-        data-arrows-outside={arrowsOutside || undefined}
-        data-dots-position={dotsPosition}
-        onMouseEnter={handleMouseEnter}
-        onMouseLeave={handleMouseLeave}
-        onKeyDown={handleKeyDown}
-        tabIndex={0}
-        role="region"
-        aria-roledescription="carousel"
-        aria-label={ariaLabel || 'Carousel'}
-        data-testid={testId}
-        style={cssVariables}
-        {...restProps}
+        className={styles.viewport}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
       >
-        {/* Outside Previous Arrow */}
-        {showOutsideArrows && (
-          <IconButton
-            icon={typeof prevIcon === 'string' ? (prevIcon as IconName) : 'chevron-left'}
-            onClick={goToPrev}
-            disabled={!canGoPrev}
-            aria-label="Previous slide"
-            variant="outline"
-          />
-        )}
-
-        {/* Slides Container */}
-        <div
-          className={styles.viewport}
-          onTouchStart={handleTouchStart}
-          onTouchMove={handleTouchMove}
-          onTouchEnd={handleTouchEnd}
-        >
-          <div className={styles.track} aria-live="polite">
-            {slides.map((slide, index) => (
-              <div
-                key={index}
-                className={styles.slide}
-                role="group"
-                aria-roledescription="slide"
-                aria-label={`Slide ${index + 1} of ${slideCount}`}
-                aria-hidden={index < currentIndex || index >= currentIndex + slidesToShow}
-              >
-                {slide}
-              </div>
-            ))}
-          </div>
-
-          {/* Inner Navigation Arrows */}
-          {showInnerArrows && (
-            <>
-              <button
-                className={`${styles.arrow} ${styles.arrowPrev}`}
-                onClick={goToPrev}
-                disabled={!canGoPrev}
-                aria-label="Previous slide"
-                type="button"
-              >
-                {renderIcon(prevIcon)}
-              </button>
-              <button
-                className={`${styles.arrow} ${styles.arrowNext}`}
-                onClick={goToNext}
-                disabled={!canGoNext}
-                aria-label="Next slide"
-                type="button"
-              >
-                {renderIcon(nextIcon)}
-              </button>
-            </>
-          )}
+        <div className={styles.track} aria-live="polite">
+          {slides.map((slide, index) => (
+            <div
+              key={index}
+              className={styles.slide}
+              role="group"
+              aria-roledescription="slide"
+              aria-label={`Slide ${index + 1} of ${slideCount}`}
+              aria-hidden={index < currentIndex || index >= currentIndex + slidesToShow}
+            >
+              {slide}
+            </div>
+          ))}
         </div>
 
-        {/* Outside Next Arrow */}
-        {showOutsideArrows && (
-          <IconButton
-            icon={typeof nextIcon === 'string' ? (nextIcon as IconName) : 'chevron-right'}
-            onClick={goToNext}
-            disabled={!canGoNext}
-            aria-label="Next slide"
-            variant="outline"
-          />
-        )}
-
-        {/* Navigation Dots */}
-        {showDots && slideCount > slidesToShow && (
-          <div className={styles.dots} role="tablist" aria-label="Carousel navigation">
-            {dots.map((dotIndex) => {
-              const slideIndex = dotIndex * slidesToScroll;
-              const isActive =
-                currentIndex >= slideIndex && currentIndex < slideIndex + slidesToScroll;
-
-              return (
-                <button
-                  key={dotIndex}
-                  className={styles.dot}
-                  onClick={() => goToSlide(slideIndex)}
-                  role="tab"
-                  aria-selected={isActive}
-                  aria-label={`Go to slide ${slideIndex + 1}`}
-                  data-active={isActive || undefined}
-                  type="button"
-                />
-              );
-            })}
-          </div>
+        {/* Inner Navigation Arrows */}
+        {showInnerArrows && (
+          <>
+            <button
+              className={`${styles.arrow} ${styles.arrowPrev}`}
+              onClick={goToPrev}
+              disabled={!canGoPrev}
+              aria-label="Previous slide"
+              type="button"
+            >
+              {renderIcon(prevIcon)}
+            </button>
+            <button
+              className={`${styles.arrow} ${styles.arrowNext}`}
+              onClick={goToNext}
+              disabled={!canGoNext}
+              aria-label="Next slide"
+              type="button"
+            >
+              {renderIcon(nextIcon)}
+            </button>
+          </>
         )}
       </div>
-    );
-  }
-);
 
-Carousel.displayName = 'Carousel';
+      {/* Outside Next Arrow */}
+      {showOutsideArrows && (
+        <IconButton
+          icon={typeof nextIcon === 'string' ? (nextIcon as IconName) : 'chevron-right'}
+          onClick={goToNext}
+          disabled={!canGoNext}
+          aria-label="Next slide"
+          variant="outline"
+        />
+      )}
+
+      {/* Navigation Dots */}
+      {showDots && slideCount > slidesToShow && (
+        <div className={styles.dots} role="tablist" aria-label="Carousel navigation">
+          {dots.map((dotIndex) => {
+            const slideIndex = dotIndex * slidesToScroll;
+            const isActive =
+              currentIndex >= slideIndex && currentIndex < slideIndex + slidesToScroll;
+
+            return (
+              <button
+                key={dotIndex}
+                className={styles.dot}
+                onClick={() => goToSlide(slideIndex)}
+                role="tab"
+                aria-selected={isActive}
+                aria-label={`Go to slide ${slideIndex + 1}`}
+                data-active={isActive || undefined}
+                type="button"
+              />
+            );
+          })}
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default Carousel;

@@ -880,13 +880,6 @@ describe('SortableGrid', () => {
     });
   });
 
-  // 13. Display name
-  describe('display name', () => {
-    it('has correct display name', () => {
-      expect(SortableGrid.displayName).toBe('SortableGrid');
-    });
-  });
-
   // 14. Item data passing tests
   describe('item data passing', () => {
     it('passes item data to SortableGridItem', () => {

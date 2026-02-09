@@ -1,4 +1,4 @@
-import React, { forwardRef, useState, useCallback, useMemo, useId, useEffect } from 'react';
+import React, { useState, useCallback, useMemo, useId, useEffect } from 'react';
 import type { BaseComponentProps, ComponentSize } from '../../../types';
 import {
   NavbarContext,
@@ -93,109 +93,105 @@ export interface NavbarProps extends BaseComponentProps {
  * </Navbar>
  * ```
  */
-export const Navbar = forwardRef<HTMLElement, NavbarProps>(
-  (
-    {
-      variant = 'solid',
-      position = 'sticky',
-      size = 'md',
-      alignment = 'left',
-      expanded: controlledExpanded,
-      defaultExpanded = false,
-      onExpandedChange,
-      collapseBreakpoint = 768,
-      children,
-      className,
-      'data-testid': testId,
-      'aria-label': ariaLabel,
-      style,
-      ...restProps
+export const Navbar = ({
+  ref,
+  variant = 'solid',
+  position = 'sticky',
+  size = 'md',
+  alignment = 'left',
+  expanded: controlledExpanded,
+  defaultExpanded = false,
+  onExpandedChange,
+  collapseBreakpoint = 768,
+  children,
+  className,
+  'data-testid': testId,
+  'aria-label': ariaLabel,
+  style,
+  ...restProps
+}: NavbarProps & {
+  ref?: React.Ref<HTMLElement>;
+}) => {
+  const navbarId = useId();
+  const isControlled = controlledExpanded !== undefined;
+  const [internalExpanded, setInternalExpanded] = useState(defaultExpanded);
+  const [isMobile, setIsMobile] = useState(false);
+
+  const isExpanded = isControlled ? controlledExpanded : internalExpanded;
+
+  // Handle responsive breakpoint and close menu when switching to desktop
+  useEffect(() => {
+    const checkMobile = () => {
+      const mobile = window.innerWidth < collapseBreakpoint;
+      setIsMobile(mobile);
+
+      // Close menu when switching from mobile to desktop
+      if (!mobile) {
+        setInternalExpanded(false);
+        onExpandedChange?.(false);
+      }
+    };
+
+    checkMobile();
+    window.addEventListener('resize', checkMobile);
+
+    return () => {
+      window.removeEventListener('resize', checkMobile);
+    };
+  }, [collapseBreakpoint, onExpandedChange]);
+
+  const setExpanded = useCallback(
+    (expanded: boolean) => {
+      if (!isControlled) {
+        setInternalExpanded(expanded);
+      }
+      onExpandedChange?.(expanded);
     },
-    ref
-  ) => {
-    const navbarId = useId();
-    const isControlled = controlledExpanded !== undefined;
-    const [internalExpanded, setInternalExpanded] = useState(defaultExpanded);
-    const [isMobile, setIsMobile] = useState(false);
+    [isControlled, onExpandedChange]
+  );
 
-    const isExpanded = isControlled ? controlledExpanded : internalExpanded;
+  const toggle = useCallback(() => {
+    setExpanded(!isExpanded);
+  }, [isExpanded, setExpanded]);
 
-    // Handle responsive breakpoint and close menu when switching to desktop
-    useEffect(() => {
-      const checkMobile = () => {
-        const mobile = window.innerWidth < collapseBreakpoint;
-        setIsMobile(mobile);
+  const contextValue: NavbarContextValue = useMemo(
+    () => ({
+      navbarId,
+      variant,
+      size,
+      position,
+      isExpanded,
+      setExpanded,
+      toggle,
+      alignment,
+      isMobile,
+    }),
+    [navbarId, variant, size, position, isExpanded, setExpanded, toggle, alignment, isMobile]
+  );
 
-        // Close menu when switching from mobile to desktop
-        if (!mobile) {
-          setInternalExpanded(false);
-          onExpandedChange?.(false);
-        }
-      };
+  const componentClasses = [styles.navbar, className].filter(Boolean).join(' ');
 
-      checkMobile();
-      window.addEventListener('resize', checkMobile);
-
-      return () => {
-        window.removeEventListener('resize', checkMobile);
-      };
-    }, [collapseBreakpoint, onExpandedChange]);
-
-    const setExpanded = useCallback(
-      (expanded: boolean) => {
-        if (!isControlled) {
-          setInternalExpanded(expanded);
-        }
-        onExpandedChange?.(expanded);
-      },
-      [isControlled, onExpandedChange]
-    );
-
-    const toggle = useCallback(() => {
-      setExpanded(!isExpanded);
-    }, [isExpanded, setExpanded]);
-
-    const contextValue: NavbarContextValue = useMemo(
-      () => ({
-        navbarId,
-        variant,
-        size,
-        position,
-        isExpanded,
-        setExpanded,
-        toggle,
-        alignment,
-        isMobile,
-      }),
-      [navbarId, variant, size, position, isExpanded, setExpanded, toggle, alignment, isMobile]
-    );
-
-    const componentClasses = [styles.navbar, className].filter(Boolean).join(' ');
-
-    return (
-      <header
-        ref={ref}
-        className={componentClasses}
-        data-component="navbar"
-        data-variant={variant}
-        data-position={position}
-        data-size={size}
-        data-alignment={alignment}
-        data-expanded={isExpanded || undefined}
-        data-mobile={isMobile || undefined}
-        data-testid={testId}
-        aria-label={ariaLabel || 'Main navigation'}
-        style={style}
-        {...restProps}
-      >
-        <NavbarContext.Provider value={contextValue}>
-          <div className={styles.container}>{children}</div>
-        </NavbarContext.Provider>
-      </header>
-    );
-  }
-);
-
-Navbar.displayName = 'Navbar';
+  return (
+    <header
+      ref={ref}
+      className={componentClasses}
+      data-component="navbar"
+      data-variant={variant}
+      data-position={position}
+      data-size={size}
+      data-alignment={alignment}
+      data-expanded={isExpanded || undefined}
+      data-mobile={isMobile || undefined}
+      data-testid={testId}
+      aria-label={ariaLabel || 'Main navigation'}
+      style={style}
+      {...restProps}
+    >
+      <NavbarContext.Provider value={contextValue}>
+        <div className={styles.container}>{children}</div>
+      </NavbarContext.Provider>
+    </header>
+  );
+};
 
 export default Navbar;

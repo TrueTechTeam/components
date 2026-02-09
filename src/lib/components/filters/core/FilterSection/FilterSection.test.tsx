@@ -747,11 +747,4 @@ describe('FilterSection', () => {
       expect(screen.queryByText(/\d+/)).not.toBeInTheDocument();
     });
   });
-
-  // 13. Display name test
-  describe('display name', () => {
-    it('has correct display name', () => {
-      expect(FilterSection.displayName).toBe('FilterSection');
-    });
-  });
 });

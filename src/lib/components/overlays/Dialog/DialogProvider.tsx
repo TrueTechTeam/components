@@ -155,5 +155,3 @@ export function DialogProvider({ children, defaultDialogProps }: DialogProviderP
     </DialogContext.Provider>
   );
 }
-
-DialogProvider.displayName = 'DialogProvider';

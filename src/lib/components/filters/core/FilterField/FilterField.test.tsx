@@ -872,11 +872,4 @@ describe('FilterField', () => {
       });
     });
   });
-
-  // 16. Display name
-  describe('display name', () => {
-    it('has correct display name', () => {
-      expect(FilterField.displayName).toBe('FilterField');
-    });
-  });
 });

@@ -166,5 +166,3 @@ export function AlertProvider({ children, defaultAlertProps }: AlertProviderProp
     </AlertContext.Provider>
   );
 }
-
-AlertProvider.displayName = 'AlertProvider';

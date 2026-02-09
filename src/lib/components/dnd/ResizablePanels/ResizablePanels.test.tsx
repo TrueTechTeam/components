@@ -836,11 +836,4 @@ describe('ResizablePanels', () => {
       }).not.toThrow();
     });
   });
-
-  // 14. Display name tests
-  describe('display name', () => {
-    it('has correct display name', () => {
-      expect(ResizablePanels.displayName).toBe('ResizablePanels');
-    });
-  });
 });

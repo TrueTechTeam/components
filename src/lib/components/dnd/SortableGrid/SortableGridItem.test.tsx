@@ -1090,251 +1090,244 @@ describe('SortableGridItem', () => {
       expect(screen.getByText('Index: 5')).toBeInTheDocument();
     });
   });
+});
 
-  // 13. Display name
-  describe('display name', () => {
-    it('has correct display name', () => {
-      expect(SortableGridItem.displayName).toBe('SortableGridItem');
+// 14. Integration with useSortable hook
+describe('useSortable hook integration', () => {
+  it('calls useSortable with correct options', () => {
+    const { useSortable } = require('../hooks');
+    render(
+      <SortableGridItem id="item-1" index={3} disabled data={{ foo: 'bar' }}>
+        Content
+      </SortableGridItem>
+    );
+
+    expect(useSortable).toHaveBeenCalledWith({
+      id: 'item-1',
+      index: 3,
+      data: { foo: 'bar', type: 'grid-item' },
+      disabled: true,
+      groupId: 'sortable-grid',
     });
   });
 
-  // 14. Integration with useSortable hook
-  describe('useSortable hook integration', () => {
-    it('calls useSortable with correct options', () => {
-      const { useSortable } = require('../hooks');
-      render(
-        <SortableGridItem id="item-1" index={3} disabled data={{ foo: 'bar' }}>
-          Content
-        </SortableGridItem>
-      );
-
-      expect(useSortable).toHaveBeenCalledWith({
-        id: 'item-1',
-        index: 3,
-        data: { foo: 'bar', type: 'grid-item' },
-        disabled: true,
-        groupId: 'sortable-grid',
-      });
-    });
-
-    it('applies styles from useSortable', () => {
-      const { useSortable } = require('../hooks');
-      useSortable.mockImplementationOnce(() => ({
-        isDragging: true,
-        isOver: false,
-        active: null,
-        setNodeRef: jest.fn(),
-        attributes: {
-          draggable: true,
-          'aria-grabbed': true,
-          'data-dragging': true,
-          'data-over': false,
-          'data-sortable-id': 'item-1',
-          role: 'listitem',
-          tabIndex: 0,
-        },
-        listeners: {
-          onDragStart: jest.fn(),
-          onDragEnd: jest.fn(),
-          onDragEnter: jest.fn(),
-          onDragLeave: jest.fn(),
-          onDragOver: jest.fn(),
-          onDrop: jest.fn(),
-          onKeyDown: jest.fn(),
-        },
-        style: {
-          transition: 'transform 200ms ease, opacity 200ms ease',
-          opacity: 0.5,
-        },
-        getNode: jest.fn(() => null),
-      }));
-
-      render(
-        <SortableGridItem id="item-1" index={0} data-testid="item">
-          Content
-        </SortableGridItem>
-      );
-
-      const element = screen.getByTestId('item');
-      expect(element).toHaveStyle({
+  it('applies styles from useSortable', () => {
+    const { useSortable } = require('../hooks');
+    useSortable.mockImplementationOnce(() => ({
+      isDragging: true,
+      isOver: false,
+      active: null,
+      setNodeRef: jest.fn(),
+      attributes: {
+        draggable: true,
+        'aria-grabbed': true,
+        'data-dragging': true,
+        'data-over': false,
+        'data-sortable-id': 'item-1',
+        role: 'listitem',
+        tabIndex: 0,
+      },
+      listeners: {
+        onDragStart: jest.fn(),
+        onDragEnd: jest.fn(),
+        onDragEnter: jest.fn(),
+        onDragLeave: jest.fn(),
+        onDragOver: jest.fn(),
+        onDrop: jest.fn(),
+        onKeyDown: jest.fn(),
+      },
+      style: {
         transition: 'transform 200ms ease, opacity 200ms ease',
         opacity: 0.5,
-      });
-    });
+      },
+      getNode: jest.fn(() => null),
+    }));
 
-    it('applies attributes from useSortable', () => {
-      const { useSortable } = require('../hooks');
-      useSortable.mockImplementationOnce(() => ({
-        isDragging: true,
-        isOver: true,
-        active: null,
-        setNodeRef: jest.fn(),
-        attributes: {
-          draggable: true,
-          'aria-grabbed': true,
-          'data-dragging': true,
-          'data-over': true,
-          'data-sortable-id': 'item-1',
-          role: 'listitem',
-          tabIndex: 0,
-        },
-        listeners: {
-          onDragStart: jest.fn(),
-          onDragEnd: jest.fn(),
-          onDragEnter: jest.fn(),
-          onDragLeave: jest.fn(),
-          onDragOver: jest.fn(),
-          onDrop: jest.fn(),
-          onKeyDown: jest.fn(),
-        },
-        style: { transition: 'transform 200ms ease, opacity 200ms ease', opacity: 0.5 },
-        getNode: jest.fn(() => null),
-      }));
+    render(
+      <SortableGridItem id="item-1" index={0} data-testid="item">
+        Content
+      </SortableGridItem>
+    );
 
-      render(
-        <SortableGridItem id="item-1" index={0} data-testid="item">
-          Content
-        </SortableGridItem>
-      );
-
-      const element = screen.getByTestId('item');
-      expect(element).toHaveAttribute('draggable', 'true');
-      expect(element).toHaveAttribute('aria-grabbed', 'true');
-      expect(element).toHaveAttribute('data-dragging', 'true');
-      expect(element).toHaveAttribute('data-over', 'true');
-      expect(element).toHaveAttribute('data-sortable-id', 'item-1');
-      expect(element).toHaveAttribute('tabIndex', '0');
+    const element = screen.getByTestId('item');
+    expect(element).toHaveStyle({
+      transition: 'transform 200ms ease, opacity 200ms ease',
+      opacity: 0.5,
     });
   });
 
-  // 15. Complex rendering scenarios
-  describe('complex rendering scenarios', () => {
-    it('renders with nested components in render function', () => {
-      render(
-        <SortableGridItem id="item-1" index={0}>
-          {({ isDragging, isOver }) => (
+  it('applies attributes from useSortable', () => {
+    const { useSortable } = require('../hooks');
+    useSortable.mockImplementationOnce(() => ({
+      isDragging: true,
+      isOver: true,
+      active: null,
+      setNodeRef: jest.fn(),
+      attributes: {
+        draggable: true,
+        'aria-grabbed': true,
+        'data-dragging': true,
+        'data-over': true,
+        'data-sortable-id': 'item-1',
+        role: 'listitem',
+        tabIndex: 0,
+      },
+      listeners: {
+        onDragStart: jest.fn(),
+        onDragEnd: jest.fn(),
+        onDragEnter: jest.fn(),
+        onDragLeave: jest.fn(),
+        onDragOver: jest.fn(),
+        onDrop: jest.fn(),
+        onKeyDown: jest.fn(),
+      },
+      style: { transition: 'transform 200ms ease, opacity 200ms ease', opacity: 0.5 },
+      getNode: jest.fn(() => null),
+    }));
+
+    render(
+      <SortableGridItem id="item-1" index={0} data-testid="item">
+        Content
+      </SortableGridItem>
+    );
+
+    const element = screen.getByTestId('item');
+    expect(element).toHaveAttribute('draggable', 'true');
+    expect(element).toHaveAttribute('aria-grabbed', 'true');
+    expect(element).toHaveAttribute('data-dragging', 'true');
+    expect(element).toHaveAttribute('data-over', 'true');
+    expect(element).toHaveAttribute('data-sortable-id', 'item-1');
+    expect(element).toHaveAttribute('tabIndex', '0');
+  });
+});
+
+// 15. Complex rendering scenarios
+describe('complex rendering scenarios', () => {
+  it('renders with nested components in render function', () => {
+    render(
+      <SortableGridItem id="item-1" index={0}>
+        {({ isDragging, isOver }) => (
+          <div>
+            <h3>Title</h3>
             <div>
-              <h3>Title</h3>
-              <div>
-                <button>Edit</button>
-                <button>Delete</button>
-              </div>
-              {isDragging && <span>Dragging...</span>}
-              {isOver && <span>Drop here</span>}
+              <button>Edit</button>
+              <button>Delete</button>
             </div>
-          )}
-        </SortableGridItem>
-      );
+            {isDragging && <span>Dragging...</span>}
+            {isOver && <span>Drop here</span>}
+          </div>
+        )}
+      </SortableGridItem>
+    );
 
-      expect(screen.getByText('Title')).toBeInTheDocument();
-      expect(screen.getByText('Edit')).toBeInTheDocument();
-      expect(screen.getByText('Delete')).toBeInTheDocument();
-    });
+    expect(screen.getByText('Title')).toBeInTheDocument();
+    expect(screen.getByText('Edit')).toBeInTheDocument();
+    expect(screen.getByText('Delete')).toBeInTheDocument();
+  });
 
-    it('renders conditional content based on isDragging', () => {
-      const { useSortable } = require('../hooks');
-      useSortable.mockImplementationOnce(() => ({
-        isDragging: true,
-        isOver: false,
-        active: null,
-        setNodeRef: jest.fn(),
-        attributes: {
-          draggable: true,
-          'aria-grabbed': true,
-          'data-dragging': true,
-          'data-over': false,
-          'data-sortable-id': 'item-1',
-          role: 'listitem',
-          tabIndex: 0,
-        },
-        listeners: {
-          onDragStart: jest.fn(),
-          onDragEnd: jest.fn(),
-          onDragEnter: jest.fn(),
-          onDragLeave: jest.fn(),
-          onDragOver: jest.fn(),
-          onDrop: jest.fn(),
-          onKeyDown: jest.fn(),
-        },
-        style: { transition: 'transform 200ms ease, opacity 200ms ease', opacity: 0.5 },
-        getNode: jest.fn(() => null),
-      }));
+  it('renders conditional content based on isDragging', () => {
+    const { useSortable } = require('../hooks');
+    useSortable.mockImplementationOnce(() => ({
+      isDragging: true,
+      isOver: false,
+      active: null,
+      setNodeRef: jest.fn(),
+      attributes: {
+        draggable: true,
+        'aria-grabbed': true,
+        'data-dragging': true,
+        'data-over': false,
+        'data-sortable-id': 'item-1',
+        role: 'listitem',
+        tabIndex: 0,
+      },
+      listeners: {
+        onDragStart: jest.fn(),
+        onDragEnd: jest.fn(),
+        onDragEnter: jest.fn(),
+        onDragLeave: jest.fn(),
+        onDragOver: jest.fn(),
+        onDrop: jest.fn(),
+        onKeyDown: jest.fn(),
+      },
+      style: { transition: 'transform 200ms ease, opacity 200ms ease', opacity: 0.5 },
+      getNode: jest.fn(() => null),
+    }));
 
-      render(
-        <SortableGridItem id="item-1" index={0}>
-          {({ isDragging }) => (
-            <div>{isDragging ? <span>Dragging</span> : <span>Not dragging</span>}</div>
-          )}
-        </SortableGridItem>
-      );
+    render(
+      <SortableGridItem id="item-1" index={0}>
+        {({ isDragging }) => (
+          <div>{isDragging ? <span>Dragging</span> : <span>Not dragging</span>}</div>
+        )}
+      </SortableGridItem>
+    );
 
-      expect(screen.getByText('Dragging')).toBeInTheDocument();
-      expect(screen.queryByText('Not dragging')).not.toBeInTheDocument();
-    });
+    expect(screen.getByText('Dragging')).toBeInTheDocument();
+    expect(screen.queryByText('Not dragging')).not.toBeInTheDocument();
+  });
 
-    it('renders conditional content based on isOver', () => {
-      const { useSortable } = require('../hooks');
-      useSortable.mockImplementationOnce(() => ({
-        isDragging: false,
-        isOver: true,
-        active: null,
-        setNodeRef: jest.fn(),
-        attributes: {
-          draggable: true,
-          'aria-grabbed': false,
-          'data-dragging': false,
-          'data-over': true,
-          'data-sortable-id': 'item-1',
-          role: 'listitem',
-          tabIndex: 0,
-        },
-        listeners: {
-          onDragStart: jest.fn(),
-          onDragEnd: jest.fn(),
-          onDragEnter: jest.fn(),
-          onDragLeave: jest.fn(),
-          onDragOver: jest.fn(),
-          onDrop: jest.fn(),
-          onKeyDown: jest.fn(),
-        },
-        style: { transition: 'transform 200ms ease, opacity 200ms ease', opacity: 1 },
-        getNode: jest.fn(() => null),
-      }));
+  it('renders conditional content based on isOver', () => {
+    const { useSortable } = require('../hooks');
+    useSortable.mockImplementationOnce(() => ({
+      isDragging: false,
+      isOver: true,
+      active: null,
+      setNodeRef: jest.fn(),
+      attributes: {
+        draggable: true,
+        'aria-grabbed': false,
+        'data-dragging': false,
+        'data-over': true,
+        'data-sortable-id': 'item-1',
+        role: 'listitem',
+        tabIndex: 0,
+      },
+      listeners: {
+        onDragStart: jest.fn(),
+        onDragEnd: jest.fn(),
+        onDragEnter: jest.fn(),
+        onDragLeave: jest.fn(),
+        onDragOver: jest.fn(),
+        onDrop: jest.fn(),
+        onKeyDown: jest.fn(),
+      },
+      style: { transition: 'transform 200ms ease, opacity 200ms ease', opacity: 1 },
+      getNode: jest.fn(() => null),
+    }));
 
-      render(
-        <SortableGridItem id="item-1" index={0}>
-          {({ isOver }) => <div>{isOver ? <span>Drop here</span> : <span>Normal</span>}</div>}
-        </SortableGridItem>
-      );
+    render(
+      <SortableGridItem id="item-1" index={0}>
+        {({ isOver }) => <div>{isOver ? <span>Drop here</span> : <span>Normal</span>}</div>}
+      </SortableGridItem>
+    );
 
-      expect(screen.getByText('Drop here')).toBeInTheDocument();
-      expect(screen.queryByText('Normal')).not.toBeInTheDocument();
-    });
+    expect(screen.getByText('Drop here')).toBeInTheDocument();
+    expect(screen.queryByText('Normal')).not.toBeInTheDocument();
+  });
 
-    it('renders with image content', () => {
-      render(
-        <SortableGridItem id="item-1" index={0}>
-          <img src="test.jpg" alt="Sample item" />
-        </SortableGridItem>
-      );
+  it('renders with image content', () => {
+    render(
+      <SortableGridItem id="item-1" index={0}>
+        <img src="test.jpg" alt="Sample item" />
+      </SortableGridItem>
+    );
 
-      const img = screen.getByAltText('Sample item');
-      expect(img).toBeInTheDocument();
-      expect(img).toHaveAttribute('src', 'test.jpg');
-    });
+    const img = screen.getByAltText('Sample item');
+    expect(img).toBeInTheDocument();
+    expect(img).toHaveAttribute('src', 'test.jpg');
+  });
 
-    it('renders with form elements', () => {
-      render(
-        <SortableGridItem id="item-1" index={0}>
-          <form>
-            <input type="text" placeholder="Enter text" />
-            <button type="submit">Submit</button>
-          </form>
-        </SortableGridItem>
-      );
+  it('renders with form elements', () => {
+    render(
+      <SortableGridItem id="item-1" index={0}>
+        <form>
+          <input type="text" placeholder="Enter text" />
+          <button type="submit">Submit</button>
+        </form>
+      </SortableGridItem>
+    );
 
-      expect(screen.getByPlaceholderText('Enter text')).toBeInTheDocument();
-      expect(screen.getByText('Submit')).toBeInTheDocument();
-    });
+    expect(screen.getByPlaceholderText('Enter text')).toBeInTheDocument();
+    expect(screen.getByText('Submit')).toBeInTheDocument();
   });
 });

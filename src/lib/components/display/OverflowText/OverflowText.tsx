@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef, useCallback } from 'react';
+import React, { useRef, useCallback } from 'react';
 import { Tooltip } from '../../overlays/Tooltip';
 import type { PopoverPosition } from '../../../utils/positioning';
 import type { BaseComponentProps } from '../../../types';
@@ -89,87 +89,83 @@ export interface OverflowTextProps extends Omit<BaseComponentProps, 'children'> 
  * </OverflowText>
  * ```
  */
-export const OverflowText = forwardRef<HTMLElement, OverflowTextProps>(
-  (
-    {
-      children,
-      lines = 1,
-      tooltipPosition = 'bottom',
-      tooltipDelay = 200,
-      disableTooltip = false,
-      tooltipContent,
-      tooltipMaxWidth = 300,
-      as: Component = 'span',
-      onOverflowChange,
-      className,
-      style,
-      'data-testid': testId,
-      'aria-label': ariaLabel,
-      ...restProps
+export const OverflowText = ({
+  ref,
+  children,
+  lines = 1,
+  tooltipPosition = 'bottom',
+  tooltipDelay = 200,
+  disableTooltip = false,
+  tooltipContent,
+  tooltipMaxWidth = 300,
+  as: Component = 'span',
+  onOverflowChange,
+  className,
+  style,
+  'data-testid': testId,
+  'aria-label': ariaLabel,
+  ...restProps
+}: OverflowTextProps & {
+  ref?: React.Ref<HTMLElement>;
+}) => {
+  const textRef = useRef<HTMLElement>(null);
+
+  // Merge refs
+  const setRefs = useCallback(
+    (node: HTMLElement | null) => {
+      (textRef as React.MutableRefObject<HTMLElement | null>).current = node;
+      if (typeof ref === 'function') {
+        ref(node);
+      } else if (ref) {
+        ref.current = node;
+      }
     },
-    ref
-  ) => {
-    const textRef = useRef<HTMLElement>(null);
+    [ref]
+  );
 
-    // Merge refs
-    const setRefs = useCallback(
-      (node: HTMLElement | null) => {
-        (textRef as React.MutableRefObject<HTMLElement | null>).current = node;
-        if (typeof ref === 'function') {
-          ref(node);
-        } else if (ref) {
-          ref.current = node;
-        }
-      },
-      [ref]
-    );
+  const componentClasses = [styles.overflowText, className].filter(Boolean).join(' ');
 
-    const componentClasses = [styles.overflowText, className].filter(Boolean).join(' ');
+  const cssVariables = {
+    '--overflow-text-lines': lines,
+    '--overflow-text-tooltip-max-width': `${tooltipMaxWidth}px`,
+    ...style,
+  } as React.CSSProperties;
 
-    const cssVariables = {
-      '--overflow-text-lines': lines,
-      '--overflow-text-tooltip-max-width': `${tooltipMaxWidth}px`,
-      ...style,
-    } as React.CSSProperties;
+  const textElement = (
+    <Component
+      ref={setRefs}
+      className={componentClasses}
+      style={cssVariables}
+      data-component="overflow-text"
+      data-lines={lines}
+      data-testid={testId}
+      aria-label={ariaLabel || String(children)}
+      title={disableTooltip ? String(children) : undefined}
+      {...restProps}
+    >
+      {children}
+    </Component>
+  );
 
-    const textElement = (
-      <Component
-        ref={setRefs}
-        className={componentClasses}
-        style={cssVariables}
-        data-component="overflow-text"
-        data-lines={lines}
-        data-testid={testId}
-        aria-label={ariaLabel || String(children)}
-        title={disableTooltip ? String(children) : undefined}
-        {...restProps}
-      >
-        {children}
-      </Component>
-    );
-
-    // If tooltip disabled, just render the text
-    if (disableTooltip) {
-      return textElement;
-    }
-
-    // Wrap with Tooltip when overflowing
-    return (
-      <Tooltip
-        content={
-          <span className={styles.tooltipContent} style={{ maxWidth: tooltipMaxWidth }}>
-            {tooltipContent ?? children}
-          </span>
-        }
-        position={tooltipPosition}
-        delayShow={tooltipDelay}
-      >
-        {textElement}
-      </Tooltip>
-    );
+  // If tooltip disabled, just render the text
+  if (disableTooltip) {
+    return textElement;
   }
-);
 
-OverflowText.displayName = 'OverflowText';
+  // Wrap with Tooltip when overflowing
+  return (
+    <Tooltip
+      content={
+        <span className={styles.tooltipContent} style={{ maxWidth: tooltipMaxWidth }}>
+          {tooltipContent ?? children}
+        </span>
+      }
+      position={tooltipPosition}
+      delayShow={tooltipDelay}
+    >
+      {textElement}
+    </Tooltip>
+  );
+};
 
 export default OverflowText;

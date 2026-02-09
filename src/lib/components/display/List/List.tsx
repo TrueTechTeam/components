@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { forwardRef, useMemo, useId, useCallback, type KeyboardEvent } from 'react';
+import React, { useMemo, useId, useCallback, type KeyboardEvent } from 'react';
 import type { ListProps, ListContextValue } from './types';
 import { ListContext } from './ListContext';
 import { ListItem } from './ListItem';
@@ -17,98 +17,96 @@ import { useInfiniteScroll } from '../Table/hooks/useInfiniteScroll';
 import { Spinner } from '../Spinner';
 import styles from './List.module.scss';
 
-function ListInner<T extends Record<string, any>>(
-  {
-    // Data
-    data,
-    itemKey = 'id' as keyof T,
-    isItemDisabled: isItemDisabledProp,
+function ListInner<T extends Record<string, any>>({
+  ref,
+  // Data
+  data,
+  itemKey = 'id' as keyof T,
+  isItemDisabled: isItemDisabledProp,
 
-    // Rendering
-    renderItem,
-    primaryTextField,
-    secondaryTextField,
-    avatarField,
+  // Rendering
+  renderItem,
+  primaryTextField,
+  secondaryTextField,
+  avatarField,
 
-    // Sizing & Variants
-    size = 'md',
-    variant = 'default',
-    spacing = 'md',
+  // Sizing & Variants
+  size = 'md',
+  variant = 'default',
+  spacing = 'md',
 
-    // Selection
-    selectionMode = 'none',
-    selectedKeys: controlledSelectedKeys,
-    defaultSelectedKeys,
-    onSelectionChange,
-    showSelectionControls = selectionMode !== 'none',
-    selectionControlPosition = 'start',
+  // Selection
+  selectionMode = 'none',
+  selectedKeys: controlledSelectedKeys,
+  defaultSelectedKeys,
+  onSelectionChange,
+  showSelectionControls = selectionMode !== 'none',
+  selectionControlPosition = 'start',
 
-    // Bulk Actions
-    bulkActions,
-    bulkActionsPosition = 'top',
-    renderBulkActions,
+  // Bulk Actions
+  bulkActions,
+  bulkActionsPosition = 'top',
+  renderBulkActions,
 
-    // Item Actions
-    itemActions,
-    itemActionsPosition = 'end',
-    itemActionsTrigger = 'hover',
+  // Item Actions
+  itemActions,
+  itemActionsPosition = 'end',
+  itemActionsTrigger = 'hover',
 
-    // Grouping
-    groupBy,
-    renderGroupHeader,
-    collapsibleGroups = false,
-    defaultCollapsedGroups,
-    collapsedGroups: controlledCollapsedGroups,
-    onCollapsedGroupsChange,
+  // Grouping
+  groupBy,
+  renderGroupHeader,
+  collapsibleGroups = false,
+  defaultCollapsedGroups,
+  collapsedGroups: controlledCollapsedGroups,
+  onCollapsedGroupsChange,
 
-    // Expandable Items
-    renderExpandedContent,
-    expandedKeys: controlledExpandedKeys,
-    defaultExpandedKeys,
-    onExpandChange,
-    expandTrigger = 'icon',
+  // Expandable Items
+  renderExpandedContent,
+  expandedKeys: controlledExpandedKeys,
+  defaultExpandedKeys,
+  onExpandChange,
+  expandTrigger = 'icon',
 
-    // Search/Filter
-    searchable = false,
-    searchPlaceholder = 'Search...',
-    searchFields,
-    searchFn,
-    searchQuery: controlledSearchQuery,
-    onSearchChange,
-    searchDebounce = 300,
+  // Search/Filter
+  searchable = false,
+  searchPlaceholder = 'Search...',
+  searchFields,
+  searchFn,
+  searchQuery: controlledSearchQuery,
+  onSearchChange,
+  searchDebounce = 300,
 
-    // Infinite Scroll
-    infiniteScroll,
+  // Infinite Scroll
+  infiniteScroll,
 
-    // Interaction
-    onItemClick,
-    onItemAction,
-    keyboardNavigation = true,
+  // Interaction
+  onItemClick,
+  onItemAction,
+  keyboardNavigation = true,
 
-    // Loading & Empty States
-    loading = false,
-    loadingContent,
-    skeleton,
-    emptyContent = 'No items to display',
-    renderEmpty,
+  // Loading & Empty States
+  loading = false,
+  loadingContent,
+  skeleton,
+  emptyContent = 'No items to display',
+  renderEmpty,
 
-    // Responsive
-    maxHeight,
-    columns = 1,
+  // Responsive
+  maxHeight,
+  columns = 1,
 
-    // Accessibility
-    role: roleProp,
-    'aria-label': ariaLabel,
-    'aria-labelledby': ariaLabelledBy,
+  // Accessibility
+  role: roleProp,
+  'aria-label': ariaLabel,
+  'aria-labelledby': ariaLabelledBy,
 
-    // Base props
-    className,
-    style,
-    'data-testid': testId,
-    ...restProps
-  }: ListProps<T>,
-  ref: React.ForwardedRef<HTMLDivElement>
-) {
+  // Base props
+  className,
+  style,
+  'data-testid': testId,
+  ...restProps
+}: ListProps<T> & { ref?: React.Ref<HTMLDivElement> }) {
   const listId = useId();
 
   // Item key getter
@@ -481,12 +479,8 @@ function ListInner<T extends Record<string, any>>(
   );
 }
 
-// Wrap with forwardRef while preserving generic type
-export const List = forwardRef(ListInner) as <T extends Record<string, any> = Record<string, any>>(
-  props: ListProps<T> & { ref?: React.ForwardedRef<HTMLDivElement> }
+export const List = ListInner as <T extends Record<string, any> = Record<string, any>>(
+  props: ListProps<T> & { ref?: React.Ref<HTMLDivElement> }
 ) => React.ReactElement;
-
-// Add displayName
-(List as React.FC).displayName = 'List';
 
 export default List;

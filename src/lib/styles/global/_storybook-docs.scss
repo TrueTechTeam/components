@@ -1,4 +1,24 @@
 // =============================================================================
+// DOCS PAGE CONTAINER & BASE STYLES
+// =============================================================================
+
+.sbdocs {
+  background: var(--theme-surface-primary);
+  color: var(--theme-text-secondary);
+  font-family: var(--font-family-primary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
+}
+
+.sbdocs-wrapper {
+  background: var(--theme-surface-primary);
+}
+
+.sbdocs-content {
+  background: var(--theme-surface-primary);
+}
+
+// =============================================================================
 // TABLES - ArgTypes and Controls tables
 // =============================================================================
 
@@ -207,11 +227,43 @@
 .sbdocs h5,
 .sbdocs h6 {
   color: var(--theme-text-primary);
+  font-family: var(--font-family-primary);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-tight);
+  margin-top: var(--spacing-lg);
+  margin-bottom: var(--spacing-sm);
+}
+
+.sbdocs h1 {
+  font-size: var(--font-size-4xl);
+  font-weight: var(--font-weight-bold);
+  margin-top: 0;
+  margin-bottom: var(--spacing-md);
+  padding-bottom: var(--spacing-sm);
+  border-bottom: 1px solid var(--theme-border-primary);
+}
+
+.sbdocs h2 {
+  font-size: var(--font-size-2xl);
+  margin-top: var(--spacing-xl);
+  padding-bottom: var(--spacing-xs);
+  border-bottom: 1px solid var(--theme-border-primary);
+}
+
+.sbdocs h3 {
+  font-size: var(--font-size-xl);
+}
+
+.sbdocs h4 {
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
 }
 
 // Paragraphs
 .sbdocs p {
   color: var(--theme-text-secondary);
+  line-height: var(--line-height-normal);
+  margin-bottom: var(--spacing-sm);
 }
 
 // Control action buttons (reset, etc)
@@ -428,36 +480,64 @@ hr {
 // MARKDOWN CONTENT IN DOCS
 // =============================================================================
 
-.sbdocs-content {
-  // Lists
-  ul,
-  ol {
-    color: var(--theme-text-secondary);
+// Lists (scoped to both .sbdocs and .sbdocs-content)
+.sbdocs ul,
+.sbdocs ol {
+  color: var(--theme-text-secondary);
+  padding-left: var(--spacing-lg);
+  margin-bottom: var(--spacing-sm);
 
-    li {
-      color: var(--theme-text-secondary);
+  li {
+    color: var(--theme-text-secondary);
+    margin-bottom: var(--spacing-xs);
+    line-height: var(--line-height-normal);
+
+    &::marker {
+      color: var(--theme-text-tertiary);
     }
   }
+}
 
-  // Blockquotes
-  blockquote {
-    border-left: 4px solid var(--theme-primary);
-    background: var(--theme-surface-secondary);
-    color: var(--theme-text-secondary);
-    padding: var(--spacing-sm) var(--spacing-md);
-    margin: var(--spacing-md) 0;
-  }
+.sbdocs ul {
+  list-style-type: disc;
 
-  // Horizontal rules
-  hr {
-    border-color: var(--theme-border-primary);
+  ul {
+    list-style-type: circle;
+    margin-top: var(--spacing-xs);
   }
+}
 
-  // Strong/bold
-  strong,
-  b {
-    color: var(--theme-text-primary);
-  }
+.sbdocs ol {
+  list-style-type: decimal;
+}
+
+// Blockquotes
+.sbdocs blockquote {
+  border-left: 4px solid var(--theme-primary);
+  background: var(--theme-surface-secondary);
+  color: var(--theme-text-secondary);
+  padding: var(--spacing-sm) var(--spacing-md);
+  margin: var(--spacing-md) 0;
+  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+}
+
+// Horizontal rules
+.sbdocs hr {
+  border: none;
+  border-top: 1px solid var(--theme-border-primary);
+  margin: var(--spacing-lg) 0;
+}
+
+// Strong/bold
+.sbdocs strong,
+.sbdocs b {
+  color: var(--theme-text-primary);
+  font-weight: var(--font-weight-semibold);
+}
+
+// Emphasis
+.sbdocs em {
+  color: var(--theme-text-secondary);
 }
 
 // =============================================================================

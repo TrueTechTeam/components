@@ -1,4 +1,4 @@
-import React, { forwardRef, useState, useCallback, useId, useEffect } from 'react';
+import React, { useState, useCallback, useId, useEffect } from 'react';
 import type { BaseComponentProps } from '../../../types/component.types';
 import { IconButton } from '../../buttons/IconButton';
 import { Select } from '../Select';
@@ -114,326 +114,322 @@ export interface DatePickerProps extends Omit<BaseComponentProps, 'children'> {
 /**
  * DatePicker component with custom calendar UI built from scratch
  */
-export const DatePicker = forwardRef<HTMLInputElement, DatePickerProps>(
-  (
-    {
-      value: controlledValue,
-      defaultValue = null,
-      onChange,
-      onBlur,
-      minDate,
-      maxDate,
-      disabledDates,
-      format = 'MM/DD/YYYY',
-      showCalendar = true,
-      showClearButton = true,
-      startIcon = 'calendar',
-      label,
-      helperText,
-      errorMessage,
-      error = false,
-      required = false,
-      disabled = false,
-      placeholder = 'MM/DD/YYYY',
-      className,
-      'data-testid': dataTestId,
-      'aria-label': ariaLabel,
-      style,
-      ...rest
-    },
-    ref
-  ) => {
-    const id = useId();
+export const DatePicker = ({
+  ref,
+  value: controlledValue,
+  defaultValue = null,
+  onChange,
+  onBlur,
+  minDate,
+  maxDate,
+  disabledDates,
+  format = 'MM/DD/YYYY',
+  showCalendar = true,
+  showClearButton = true,
+  startIcon = 'calendar',
+  label,
+  helperText,
+  errorMessage,
+  error = false,
+  required = false,
+  disabled = false,
+  placeholder = 'MM/DD/YYYY',
+  className,
+  'data-testid': dataTestId,
+  'aria-label': ariaLabel,
+  style,
+  ...rest
+}: DatePickerProps & {
+  ref?: React.Ref<HTMLInputElement>;
+}) => {
+  const id = useId();
 
-    // State
-    const [internalValue, setInternalValue] = useState<Date | null>(defaultValue);
-    const [inputValue, setInputValue] = useState(
-      defaultValue ? formatDate(defaultValue, format) : ''
-    );
-    const [viewDate, setViewDate] = useState(controlledValue || defaultValue || new Date());
-    const [isPopoverOpen, setIsPopoverOpen] = useState(false);
+  // State
+  const [internalValue, setInternalValue] = useState<Date | null>(defaultValue);
+  const [inputValue, setInputValue] = useState(
+    defaultValue ? formatDate(defaultValue, format) : ''
+  );
+  const [viewDate, setViewDate] = useState(controlledValue || defaultValue || new Date());
+  const [isPopoverOpen, setIsPopoverOpen] = useState(false);
 
-    // Get current date
-    const currentDate = controlledValue !== undefined ? controlledValue : internalValue;
+  // Get current date
+  const currentDate = controlledValue !== undefined ? controlledValue : internalValue;
 
-    // Sync inputValue with controlledValue when it changes
-    useEffect(() => {
-      if (controlledValue !== undefined) {
-        setInputValue(controlledValue ? formatDate(controlledValue, format) : '');
-        setViewDate(controlledValue || new Date());
-      }
-    }, [controlledValue, format]);
+  // Sync inputValue with controlledValue when it changes
+  useEffect(() => {
+    if (controlledValue !== undefined) {
+      setInputValue(controlledValue ? formatDate(controlledValue, format) : '');
+      setViewDate(controlledValue || new Date());
+    }
+  }, [controlledValue, format]);
 
-    // Handle input change
-    const handleInputChange = useCallback(
-      (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = e.target.value;
-        setInputValue(value);
+  // Handle input change
+  const handleInputChange = useCallback(
+    (e: React.ChangeEvent<HTMLInputElement>) => {
+      const value = e.target.value;
+      setInputValue(value);
 
-        // Try to parse the date
-        const parsed = parseDate(value, format);
-        if (parsed) {
-          const date = startOfDay(parsed);
+      // Try to parse the date
+      const parsed = parseDate(value, format);
+      if (parsed) {
+        const date = startOfDay(parsed);
 
-          // Check if date is disabled
-          if (!isDateDisabled(date, minDate, maxDate, disabledDates)) {
-            if (controlledValue === undefined) {
-              setInternalValue(date);
-            }
-            setViewDate(date);
-            onChange?.(date);
+        // Check if date is disabled
+        if (!isDateDisabled(date, minDate, maxDate, disabledDates)) {
+          if (controlledValue === undefined) {
+            setInternalValue(date);
           }
+          setViewDate(date);
+          onChange?.(date);
         }
-      },
-      [format, minDate, maxDate, disabledDates, controlledValue, onChange]
-    );
+      }
+    },
+    [format, minDate, maxDate, disabledDates, controlledValue, onChange]
+  );
 
-    // Handle date selection from calendar
-    const handleDateSelect = useCallback(
-      (date: Date) => {
-        const selectedDate = startOfDay(date);
+  // Handle date selection from calendar
+  const handleDateSelect = useCallback(
+    (date: Date) => {
+      const selectedDate = startOfDay(date);
 
-        if (controlledValue === undefined) {
-          setInternalValue(selectedDate);
-        }
-
-        setInputValue(formatDate(selectedDate, format));
-        setViewDate(selectedDate);
-        onChange?.(selectedDate);
-        setIsPopoverOpen(false); // Close popover after selection
-      },
-      [format, controlledValue, onChange]
-    );
-
-    // Handle clear
-    const handleClear = useCallback(() => {
       if (controlledValue === undefined) {
-        setInternalValue(null);
+        setInternalValue(selectedDate);
       }
 
-      setInputValue('');
-      onChange?.(null);
-    }, [controlledValue, onChange]);
+      setInputValue(formatDate(selectedDate, format));
+      setViewDate(selectedDate);
+      onChange?.(selectedDate);
+      setIsPopoverOpen(false); // Close popover after selection
+    },
+    [format, controlledValue, onChange]
+  );
 
-    // Navigate to previous month
-    const handlePrevMonth = useCallback(() => {
-      setViewDate((prev) => addMonths(prev, -1));
-    }, []);
+  // Handle clear
+  const handleClear = useCallback(() => {
+    if (controlledValue === undefined) {
+      setInternalValue(null);
+    }
 
-    // Navigate to next month
-    const handleNextMonth = useCallback(() => {
-      setViewDate((prev) => addMonths(prev, 1));
-    }, []);
+    setInputValue('');
+    onChange?.(null);
+  }, [controlledValue, onChange]);
 
-    // Handle year change
-    const handleYearChange = useCallback(
-      (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const year = parseInt(e.target.value, 10);
-        const newDate = new Date(viewDate);
-        newDate.setFullYear(year);
-        setViewDate(newDate);
-      },
-      [viewDate]
-    );
+  // Navigate to previous month
+  const handlePrevMonth = useCallback(() => {
+    setViewDate((prev) => addMonths(prev, -1));
+  }, []);
 
-    // Handle month change
-    const handleMonthChange = useCallback(
-      (e: React.ChangeEvent<HTMLSelectElement>) => {
-        const month = parseInt(e.target.value, 10);
-        const newDate = new Date(viewDate);
-        newDate.setMonth(month);
-        setViewDate(newDate);
-      },
-      [viewDate]
-    );
+  // Navigate to next month
+  const handleNextMonth = useCallback(() => {
+    setViewDate((prev) => addMonths(prev, 1));
+  }, []);
 
-    // Get calendar days for current view
-    const calendarDays = getCalendarDays(viewDate.getFullYear(), viewDate.getMonth());
+  // Handle year change
+  const handleYearChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      const year = parseInt(e.target.value, 10);
+      const newDate = new Date(viewDate);
+      newDate.setFullYear(year);
+      setViewDate(newDate);
+    },
+    [viewDate]
+  );
 
-    // Year range for selector
-    const currentYear = new Date().getFullYear();
-    const years = Array.from({ length: 201 }, (_, i) => currentYear - 100 + i);
+  // Handle month change
+  const handleMonthChange = useCallback(
+    (e: React.ChangeEvent<HTMLSelectElement>) => {
+      const month = parseInt(e.target.value, 10);
+      const newDate = new Date(viewDate);
+      newDate.setMonth(month);
+      setViewDate(newDate);
+    },
+    [viewDate]
+  );
 
-    // Container classes
-    const containerClasses = [styles.container, className].filter(Boolean).join(' ');
+  // Get calendar days for current view
+  const calendarDays = getCalendarDays(viewDate.getFullYear(), viewDate.getMonth());
 
-    // Display error message or helper text
-    const displayHelperText = error && errorMessage ? errorMessage : helperText;
+  // Year range for selector
+  const currentYear = new Date().getFullYear();
+  const years = Array.from({ length: 201 }, (_, i) => currentYear - 100 + i);
 
-    // Convert date format to input mask format
-    const formatMask = format.replace(/M/g, '#').replace(/D/g, '#').replace(/Y/g, '#');
+  // Container classes
+  const containerClasses = [styles.container, className].filter(Boolean).join(' ');
 
-    return (
-      <div className={containerClasses} style={style} data-testid={dataTestId}>
-        {label && (
-          <label className={styles.label} data-required={required || undefined} htmlFor={id}>
-            {label}
-            {required && <span className={styles.required}>*</span>}
-          </label>
-        )}
+  // Display error message or helper text
+  const displayHelperText = error && errorMessage ? errorMessage : helperText;
 
-        {showCalendar ? (
-          <Popover
-            isOpen={isPopoverOpen && !disabled}
-            onOpenChange={setIsPopoverOpen}
-            trigger={({ ref: popoverRef }) => (
-              <div
-                ref={popoverRef as React.RefObject<HTMLDivElement>}
-                onClick={() => {
-                  if (!disabled) {
-                    setIsPopoverOpen(true);
-                  }
-                }}
-              >
-                <Input
-                  {...rest}
-                  ref={ref}
-                  id={id}
-                  type="text"
-                  value={inputValue}
-                  onChange={handleInputChange}
-                  onBlur={onBlur}
-                  disabled={disabled}
-                  placeholder={placeholder}
-                  aria-label={ariaLabel || label || 'Date picker'}
-                  error={error}
-                  startIcon={startIcon}
-                  showClearButton={showClearButton}
-                  onClear={handleClear}
-                  formatMask={formatMask}
-                  inputFilter={/^[0-9/\-.\s]*$/}
-                />
-              </div>
-            )}
-            position="bottom-left"
-            offset={8}
-            width="auto"
-            closeOnClickOutside
-            closeOnEscape
-          >
-            <div className={styles.calendar} onMouseDown={(e) => e.stopPropagation()}>
-              {/* Calendar header */}
-              <div className={styles.calendarHeader}>
-                <IconButton
-                  variant="ghost"
-                  size="sm"
-                  icon="chevron-left"
-                  onClick={handlePrevMonth}
-                  aria-label="Previous month"
-                  className={styles.navButton}
-                />
+  // Convert date format to input mask format
+  const formatMask = format.replace(/M/g, '#').replace(/D/g, '#').replace(/Y/g, '#');
 
-                <div className={styles.monthYearSelectors}>
-                  <Select
-                    options={Array.from({ length: 12 }, (_, i) => ({
-                      value: i.toString(),
-                      label: getMonthName(i, true),
-                    }))}
-                    value={viewDate.getMonth().toString()}
-                    onChange={(value) =>
-                      handleMonthChange({
-                        target: { value },
-                      } as React.ChangeEvent<HTMLSelectElement>)
-                    }
-                    className={styles.monthSelect}
-                    enableTypeAhead
-                  />
+  return (
+    <div className={containerClasses} style={style} data-testid={dataTestId}>
+      {label && (
+        <label className={styles.label} data-required={required || undefined} htmlFor={id}>
+          {label}
+          {required && <span className={styles.required}>*</span>}
+        </label>
+      )}
 
-                  <Select
-                    options={years.map((year) => ({
-                      value: year.toString(),
-                      label: year.toString(),
-                    }))}
-                    value={viewDate.getFullYear().toString()}
-                    onChange={(value) =>
-                      handleYearChange({
-                        target: { value },
-                      } as React.ChangeEvent<HTMLSelectElement>)
-                    }
-                    className={styles.yearSelect}
-                    enableTypeAhead
-                  />
-                </div>
-
-                <IconButton
-                  variant="ghost"
-                  size="sm"
-                  icon="chevron-right"
-                  onClick={handleNextMonth}
-                  aria-label="Next month"
-                  className={styles.navButton}
-                />
-              </div>
-
-              {/* Day headers */}
-              <div className={styles.dayHeaders}>
-                {Array.from({ length: 7 }, (_, i) => (
-                  <div key={i} className={styles.dayHeader}>
-                    {getDayName(i)}
-                  </div>
-                ))}
-              </div>
-
-              {/* Calendar grid */}
-              <div className={styles.calendarGrid}>
-                {calendarDays.map(({ date, isCurrentMonth }, index) => {
-                  const isSelected = currentDate && isSameDay(date, currentDate);
-                  const isTodayDate = isToday(date);
-                  const isDisabled = isDateDisabled(date, minDate, maxDate, disabledDates);
-
-                  return (
-                    <Button
-                      key={index}
-                      variant={isSelected ? 'primary' : 'ghost'}
-                      size="sm"
-                      onClick={() => !isDisabled && handleDateSelect(date)}
-                      disabled={isDisabled}
-                      aria-label={formatDate(date, format)}
-                      type="button"
-                      className={styles.dayCell}
-                      data-current-month={isCurrentMonth || undefined}
-                      data-today={isTodayDate || undefined}
-                      data-selected={isSelected || undefined}
-                    >
-                      <span className={styles.dayCellContent}>
-                        {date.getDate()}
-                        {isSelected && <span className={styles.selectedIndicator} />}
-                      </span>
-                    </Button>
-                  );
-                })}
-              </div>
+      {showCalendar ? (
+        <Popover
+          isOpen={isPopoverOpen && !disabled}
+          onOpenChange={setIsPopoverOpen}
+          trigger={({ ref: popoverRef }) => (
+            <div
+              ref={popoverRef as React.RefObject<HTMLDivElement>}
+              onClick={() => {
+                if (!disabled) {
+                  setIsPopoverOpen(true);
+                }
+              }}
+            >
+              <Input
+                {...rest}
+                ref={ref}
+                id={id}
+                type="text"
+                value={inputValue}
+                onChange={handleInputChange}
+                onBlur={onBlur}
+                disabled={disabled}
+                placeholder={placeholder}
+                aria-label={ariaLabel || label || 'Date picker'}
+                error={error}
+                startIcon={startIcon}
+                showClearButton={showClearButton}
+                onClear={handleClear}
+                formatMask={formatMask}
+                inputFilter={/^[0-9/\-.\s]*$/}
+              />
             </div>
-          </Popover>
-        ) : (
-          <Input
-            {...rest}
-            ref={ref}
-            id={id}
-            type="text"
-            value={inputValue}
-            onChange={handleInputChange}
-            onBlur={onBlur}
-            disabled={disabled}
-            placeholder={placeholder}
-            aria-label={ariaLabel || label || 'Date picker'}
-            error={error}
-            startIcon={startIcon}
-            showClearButton={showClearButton}
-            onClear={handleClear}
-            formatMask={formatMask}
-            inputFilter={/^[0-9/\-.\s]*$/}
-          />
-        )}
+          )}
+          position="bottom-left"
+          offset={8}
+          width="auto"
+          closeOnClickOutside
+          closeOnEscape
+        >
+          <div className={styles.calendar} onMouseDown={(e) => e.stopPropagation()}>
+            {/* Calendar header */}
+            <div className={styles.calendarHeader}>
+              <IconButton
+                variant="ghost"
+                size="sm"
+                icon="chevron-left"
+                onClick={handlePrevMonth}
+                aria-label="Previous month"
+                className={styles.navButton}
+              />
 
-        {displayHelperText && (
-          <div className={styles.helperText} data-error={error || undefined}>
-            {displayHelperText}
+              <div className={styles.monthYearSelectors}>
+                <Select
+                  options={Array.from({ length: 12 }, (_, i) => ({
+                    value: i.toString(),
+                    label: getMonthName(i, true),
+                  }))}
+                  value={viewDate.getMonth().toString()}
+                  onChange={(value) =>
+                    handleMonthChange({
+                      target: { value },
+                    } as React.ChangeEvent<HTMLSelectElement>)
+                  }
+                  className={styles.monthSelect}
+                  enableTypeAhead
+                />
+
+                <Select
+                  options={years.map((year) => ({
+                    value: year.toString(),
+                    label: year.toString(),
+                  }))}
+                  value={viewDate.getFullYear().toString()}
+                  onChange={(value) =>
+                    handleYearChange({
+                      target: { value },
+                    } as React.ChangeEvent<HTMLSelectElement>)
+                  }
+                  className={styles.yearSelect}
+                  enableTypeAhead
+                />
+              </div>
+
+              <IconButton
+                variant="ghost"
+                size="sm"
+                icon="chevron-right"
+                onClick={handleNextMonth}
+                aria-label="Next month"
+                className={styles.navButton}
+              />
+            </div>
+
+            {/* Day headers */}
+            <div className={styles.dayHeaders}>
+              {Array.from({ length: 7 }, (_, i) => (
+                <div key={i} className={styles.dayHeader}>
+                  {getDayName(i)}
+                </div>
+              ))}
+            </div>
+
+            {/* Calendar grid */}
+            <div className={styles.calendarGrid}>
+              {calendarDays.map(({ date, isCurrentMonth }, index) => {
+                const isSelected = currentDate && isSameDay(date, currentDate);
+                const isTodayDate = isToday(date);
+                const isDisabled = isDateDisabled(date, minDate, maxDate, disabledDates);
+
+                return (
+                  <Button
+                    key={index}
+                    variant={isSelected ? 'primary' : 'ghost'}
+                    size="sm"
+                    onClick={() => !isDisabled && handleDateSelect(date)}
+                    disabled={isDisabled}
+                    aria-label={formatDate(date, format)}
+                    type="button"
+                    className={styles.dayCell}
+                    data-current-month={isCurrentMonth || undefined}
+                    data-today={isTodayDate || undefined}
+                    data-selected={isSelected || undefined}
+                  >
+                    <span className={styles.dayCellContent}>
+                      {date.getDate()}
+                      {isSelected && <span className={styles.selectedIndicator} />}
+                    </span>
+                  </Button>
+                );
+              })}
+            </div>
           </div>
-        )}
-      </div>
-    );
-  }
-);
+        </Popover>
+      ) : (
+        <Input
+          {...rest}
+          ref={ref}
+          id={id}
+          type="text"
+          value={inputValue}
+          onChange={handleInputChange}
+          onBlur={onBlur}
+          disabled={disabled}
+          placeholder={placeholder}
+          aria-label={ariaLabel || label || 'Date picker'}
+          error={error}
+          startIcon={startIcon}
+          showClearButton={showClearButton}
+          onClear={handleClear}
+          formatMask={formatMask}
+          inputFilter={/^[0-9/\-.\s]*$/}
+        />
+      )}
 
-DatePicker.displayName = 'DatePicker';
+      {displayHelperText && (
+        <div className={styles.helperText} data-error={error || undefined}>
+          {displayHelperText}
+        </div>
+      )}
+    </div>
+  );
+};

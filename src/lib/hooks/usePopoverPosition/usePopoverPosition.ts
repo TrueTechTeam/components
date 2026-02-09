@@ -52,12 +52,12 @@ export interface UsePopoverPositionReturn {
   /**
    * Ref to attach to popover element
    */
-  popoverRef: RefObject<HTMLDivElement>;
+  popoverRef: RefObject<HTMLDivElement | null>;
 
   /**
    * Ref to attach to trigger element
    */
-  triggerRef: RefObject<HTMLElement>;
+  triggerRef: RefObject<HTMLElement | null>;
 
   /**
    * Style object to apply to popover

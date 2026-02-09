@@ -971,50 +971,43 @@ describe('NumberRangeFilter', () => {
       expect(separator).toBeNull();
     });
   });
+});
 
-  // 17. Display name
-  describe('display name', () => {
-    it('has correct display name', () => {
-      expect(NumberRangeFilter.displayName).toBe('NumberRangeFilter');
+// 18. Data attributes
+describe('data attributes', () => {
+  it('sets data-mode attribute for slider', () => {
+    const filter = createNumberRangeFilter('price', 'Price Range', {
+      displayMode: 'slider',
     });
+    const context = createMockContext([filter]);
+
+    const { container } = renderWithContext(<NumberRangeFilter filterId="price" />, context);
+
+    const element = container.querySelector('[data-mode="slider"]');
+    expect(element).toBeInTheDocument();
   });
 
-  // 18. Data attributes
-  describe('data attributes', () => {
-    it('sets data-mode attribute for slider', () => {
-      const filter = createNumberRangeFilter('price', 'Price Range', {
-        displayMode: 'slider',
-      });
-      const context = createMockContext([filter]);
-
-      const { container } = renderWithContext(<NumberRangeFilter filterId="price" />, context);
-
-      const element = container.querySelector('[data-mode="slider"]');
-      expect(element).toBeInTheDocument();
+  it('sets data-mode attribute for inputs', () => {
+    const filter = createNumberRangeFilter('price', 'Price Range', {
+      displayMode: 'inputs',
     });
+    const context = createMockContext([filter]);
 
-    it('sets data-mode attribute for inputs', () => {
-      const filter = createNumberRangeFilter('price', 'Price Range', {
-        displayMode: 'inputs',
-      });
-      const context = createMockContext([filter]);
+    const { container } = renderWithContext(<NumberRangeFilter filterId="price" />, context);
 
-      const { container } = renderWithContext(<NumberRangeFilter filterId="price" />, context);
+    const element = container.querySelector('[data-mode="inputs"]');
+    expect(element).toBeInTheDocument();
+  });
 
-      const element = container.querySelector('[data-mode="inputs"]');
-      expect(element).toBeInTheDocument();
+  it('sets data-mode attribute for both', () => {
+    const filter = createNumberRangeFilter('price', 'Price Range', {
+      displayMode: 'both',
     });
+    const context = createMockContext([filter]);
 
-    it('sets data-mode attribute for both', () => {
-      const filter = createNumberRangeFilter('price', 'Price Range', {
-        displayMode: 'both',
-      });
-      const context = createMockContext([filter]);
+    const { container } = renderWithContext(<NumberRangeFilter filterId="price" />, context);
 
-      const { container } = renderWithContext(<NumberRangeFilter filterId="price" />, context);
-
-      const element = container.querySelector('[data-mode="both"]');
-      expect(element).toBeInTheDocument();
-    });
+    const element = container.querySelector('[data-mode="both"]');
+    expect(element).toBeInTheDocument();
   });
 });

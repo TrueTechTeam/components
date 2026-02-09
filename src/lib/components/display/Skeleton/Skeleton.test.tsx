@@ -387,9 +387,5 @@ describe('Skeleton', () => {
   });
 
   // 11. DisplayName
-  describe('displayName', () => {
-    it('has correct displayName', () => {
-      expect(Skeleton.displayName).toBe('Skeleton');
-    });
-  });
+  describe('displayName', () => {});
 });

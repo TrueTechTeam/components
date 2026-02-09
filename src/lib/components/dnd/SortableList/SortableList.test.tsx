@@ -894,142 +894,135 @@ describe('SortableList', () => {
       expect(screen.getByText('Item 1')).toBeInTheDocument();
     });
   });
+});
 
-  // 14. Display name tests
-  describe('display name', () => {
-    it('has correct display name', () => {
-      expect(SortableList.displayName).toBe('SortableList');
-    });
+// 15. DndProvider integration tests
+describe('DndProvider integration', () => {
+  it('wraps children in DndProvider', () => {
+    render(<SortableList items={mockItems} renderItem={(item) => <div>{item.name}</div>} />);
+
+    // Should render without errors, DndProvider is internal
+    expect(screen.getByText('Item 1')).toBeInTheDocument();
   });
 
-  // 15. DndProvider integration tests
-  describe('DndProvider integration', () => {
-    it('wraps children in DndProvider', () => {
-      render(<SortableList items={mockItems} renderItem={(item) => <div>{item.name}</div>} />);
+  it('provides drag context to items', () => {
+    const renderItem = jest.fn((item) => <div>{item.name}</div>);
 
-      // Should render without errors, DndProvider is internal
-      expect(screen.getByText('Item 1')).toBeInTheDocument();
-    });
+    render(<SortableList items={mockItems} renderItem={renderItem} />);
 
-    it('provides drag context to items', () => {
-      const renderItem = jest.fn((item) => <div>{item.name}</div>);
-
-      render(<SortableList items={mockItems} renderItem={renderItem} />);
-
-      // RenderItem should be called with proper context
-      expect(renderItem).toHaveBeenCalled();
-    });
+    // RenderItem should be called with proper context
+    expect(renderItem).toHaveBeenCalled();
   });
+});
 
-  // 16. Complex rendering scenarios
-  describe('complex rendering scenarios', () => {
-    it('renders items with nested components', () => {
-      render(
-        <SortableList
-          items={mockItems}
-          renderItem={(item, { isDragging }) => (
-            <div data-dragging={isDragging}>
+// 16. Complex rendering scenarios
+describe('complex rendering scenarios', () => {
+  it('renders items with nested components', () => {
+    render(
+      <SortableList
+        items={mockItems}
+        renderItem={(item, { isDragging }) => (
+          <div data-dragging={isDragging}>
+            <div>
+              <h3>{item.name}</h3>
               <div>
-                <h3>{item.name}</h3>
-                <div>
-                  <button>Edit</button>
-                  <button>Delete</button>
-                </div>
+                <button>Edit</button>
+                <button>Delete</button>
               </div>
             </div>
-          )}
-        />
-      );
+          </div>
+        )}
+      />
+    );
 
-      expect(screen.getByText('Item 1')).toBeInTheDocument();
-      expect(screen.getAllByText('Edit')).toHaveLength(3);
-      expect(screen.getAllByText('Delete')).toHaveLength(3);
-    });
-
-    it('renders items with conditional content', () => {
-      interface ConditionalItem extends SortableListItem {
-        id: string;
-        name: string;
-        showBadge?: boolean;
-      }
-
-      const conditionalItems: ConditionalItem[] = [
-        { id: '1', name: 'Item 1', showBadge: true },
-        { id: '2', name: 'Item 2', showBadge: false },
-        { id: '3', name: 'Item 3', showBadge: true },
-      ];
-
-      render(
-        <SortableList
-          items={conditionalItems}
-          renderItem={(item) => (
-            <div>
-              <span>{item.name}</span>
-              {item.showBadge && <span>Badge</span>}
-            </div>
-          )}
-        />
-      );
-
-      const badges = screen.getAllByText('Badge');
-      expect(badges).toHaveLength(2);
-    });
-
-    it('renders items with different drag handle variants', () => {
-      render(
-        <SortableList
-          items={mockItems}
-          useDragHandle
-          renderItem={(item, { dragHandleProps, index }) => (
-            <div>
-              {dragHandleProps && (
-                <DragHandle
-                  {...dragHandleProps}
-                  variant={index === 0 ? 'dots' : index === 1 ? 'lines' : 'grip'}
-                />
-              )}
-              <span>{item.name}</span>
-            </div>
-          )}
-        />
-      );
-
-      const handles = document.querySelectorAll('[role="button"]');
-      expect(handles).toHaveLength(3);
-      expect(handles[0]).toHaveAttribute('data-variant', 'dots');
-      expect(handles[1]).toHaveAttribute('data-variant', 'lines');
-      expect(handles[2]).toHaveAttribute('data-variant', 'grip');
-    });
+    expect(screen.getByText('Item 1')).toBeInTheDocument();
+    expect(screen.getAllByText('Edit')).toHaveLength(3);
+    expect(screen.getAllByText('Delete')).toHaveLength(3);
   });
 
-  // 17. Performance tests
-  describe('performance', () => {
-    it('renders large lists efficiently', () => {
-      const largeItemList = Array.from({ length: 100 }, (_, i) => ({
-        id: `${i}`,
-        name: `Item ${i}`,
-      }));
+  it('renders items with conditional content', () => {
+    interface ConditionalItem extends SortableListItem {
+      id: string;
+      name: string;
+      showBadge?: boolean;
+    }
 
-      render(<SortableList items={largeItemList} renderItem={(item) => <div>{item.name}</div>} />);
+    const conditionalItems: ConditionalItem[] = [
+      { id: '1', name: 'Item 1', showBadge: true },
+      { id: '2', name: 'Item 2', showBadge: false },
+      { id: '3', name: 'Item 3', showBadge: true },
+    ];
 
-      expect(screen.getByText('Item 0')).toBeInTheDocument();
-      expect(screen.getByText('Item 99')).toBeInTheDocument();
-    });
+    render(
+      <SortableList
+        items={conditionalItems}
+        renderItem={(item) => (
+          <div>
+            <span>{item.name}</span>
+            {item.showBadge && <span>Badge</span>}
+          </div>
+        )}
+      />
+    );
 
-    it('handles multiple rerenders efficiently', () => {
-      const { rerender } = render(
-        <SortableList items={mockItems} renderItem={(item) => <div>{item.name}</div>} gap="sm" />
-      );
+    const badges = screen.getAllByText('Badge');
+    expect(badges).toHaveLength(2);
+  });
 
-      rerender(
-        <SortableList items={mockItems} renderItem={(item) => <div>{item.name}</div>} gap="md" />
-      );
+  it('renders items with different drag handle variants', () => {
+    render(
+      <SortableList
+        items={mockItems}
+        useDragHandle
+        renderItem={(item, { dragHandleProps, index }) => (
+          <div>
+            {dragHandleProps && (
+              <DragHandle
+                {...dragHandleProps}
+                variant={index === 0 ? 'dots' : index === 1 ? 'lines' : 'grip'}
+              />
+            )}
+            <span>{item.name}</span>
+          </div>
+        )}
+      />
+    );
 
-      rerender(
-        <SortableList items={mockItems} renderItem={(item) => <div>{item.name}</div>} gap="lg" />
-      );
+    const handles = document.querySelectorAll('[role="button"]');
+    expect(handles).toHaveLength(3);
+    expect(handles[0]).toHaveAttribute('data-variant', 'dots');
+    expect(handles[1]).toHaveAttribute('data-variant', 'lines');
+    expect(handles[2]).toHaveAttribute('data-variant', 'grip');
+  });
+});
 
-      expect(screen.getByText('Item 1')).toBeInTheDocument();
-    });
+// 17. Performance tests
+describe('performance', () => {
+  it('renders large lists efficiently', () => {
+    const largeItemList = Array.from({ length: 100 }, (_, i) => ({
+      id: `${i}`,
+      name: `Item ${i}`,
+    }));
+
+    render(<SortableList items={largeItemList} renderItem={(item) => <div>{item.name}</div>} />);
+
+    expect(screen.getByText('Item 0')).toBeInTheDocument();
+    expect(screen.getByText('Item 99')).toBeInTheDocument();
+  });
+
+  it('handles multiple rerenders efficiently', () => {
+    const { rerender } = render(
+      <SortableList items={mockItems} renderItem={(item) => <div>{item.name}</div>} gap="sm" />
+    );
+
+    rerender(
+      <SortableList items={mockItems} renderItem={(item) => <div>{item.name}</div>} gap="md" />
+    );
+
+    rerender(
+      <SortableList items={mockItems} renderItem={(item) => <div>{item.name}</div>} gap="lg" />
+    );
+
+    expect(screen.getByText('Item 1')).toBeInTheDocument();
   });
 });

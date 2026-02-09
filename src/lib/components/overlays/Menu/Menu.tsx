@@ -426,5 +426,3 @@ export const Menu: React.FC<MenuProps> = ({
     </Popover>
   );
 };
-
-Menu.displayName = 'Menu';

@@ -1,4 +1,4 @@
-import type { ReactNode, CSSProperties } from 'react';
+import type { ReactNode, CSSProperties, JSX } from 'react';
 
 /**
  * Base props that all components should accept

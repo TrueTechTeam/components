@@ -384,6 +384,4 @@ export function KanbanBoard<T extends KanbanCardData>(props: KanbanBoardProps<T>
   );
 }
 
-KanbanBoard.displayName = 'KanbanBoard';
-
 export default KanbanBoard;

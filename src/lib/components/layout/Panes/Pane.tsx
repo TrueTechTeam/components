@@ -1,4 +1,4 @@
-import React, { forwardRef, useEffect, useId, useMemo } from 'react';
+import React, { useEffect, useId, useMemo } from 'react';
 import { usePanesContext } from './PanesContext';
 import type { BaseComponentProps } from '../../../types';
 import styles from './Panes.module.scss';
@@ -80,139 +80,126 @@ export interface PaneInternalProps {
  * </Panes>
  * ```
  */
-export const Pane = forwardRef<HTMLDivElement, PaneProps & PaneInternalProps>(
-  (
-    {
-      minWidth = 200,
-      maxWidth,
-      preferredWidth = 'auto',
-      grow = 1,
-      shrink = 1,
-      priority,
-      id: providedId,
-      children,
-      className,
-      style,
-      'data-testid': testId,
-      'aria-label': ariaLabel,
-      _index = 0,
-      ...restProps
-    },
-    ref
-  ) => {
-    const generatedId = useId();
-    const id = providedId ?? generatedId;
+export const Pane = ({
+  ref,
+  minWidth = 200,
+  maxWidth,
+  preferredWidth = 'auto',
+  grow = 1,
+  shrink = 1,
+  priority,
+  id: providedId,
+  children,
+  className,
+  style,
+  'data-testid': testId,
+  'aria-label': ariaLabel,
+  _index = 0,
+  ...restProps
+}: PaneProps & PaneInternalProps & { ref?: React.Ref<HTMLDivElement> }) => {
+  const generatedId = useId();
+  const id = providedId ?? generatedId;
 
-    const {
-      registerPane,
-      unregisterPane,
-      updatePane,
-      visiblePanes,
-      enteringPanes,
-      exitingPanes,
-      animationDuration,
-      animationEasing,
-    } = usePanesContext();
+  const {
+    registerPane,
+    unregisterPane,
+    updatePane,
+    visiblePanes,
+    enteringPanes,
+    exitingPanes,
+    animationDuration,
+    animationEasing,
+  } = usePanesContext();
 
-    // Calculate effective priority (higher index = higher priority by default)
-    const effectivePriority = priority ?? _index;
+  // Calculate effective priority (higher index = higher priority by default)
+  const effectivePriority = priority ?? _index;
 
-    // Register/unregister pane - only re-run when id or registration functions change
-    // Other prop updates are handled by the second useEffect below
-    useEffect(() => {
-      registerPane({
-        id,
-        minWidth,
-        maxWidth,
-        preferredWidth,
-        grow,
-        shrink,
-        priority: effectivePriority,
-        index: _index,
-      });
-
-      return () => {
-        unregisterPane(id);
-      };
-      // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [id, registerPane, unregisterPane]);
-
-    // Update pane config when props change
-    useEffect(() => {
-      updatePane(id, {
-        minWidth,
-        maxWidth,
-        preferredWidth,
-        grow,
-        shrink,
-        priority: effectivePriority,
-        index: _index,
-      });
-    }, [
+  // Register/unregister pane - only re-run when id or registration functions change
+  // Other prop updates are handled by the second useEffect below
+  useEffect(() => {
+    registerPane({
       id,
       minWidth,
       maxWidth,
       preferredWidth,
       grow,
       shrink,
-      effectivePriority,
-      _index,
-      updatePane,
-    ]);
+      priority: effectivePriority,
+      index: _index,
+    });
 
-    const isVisible = visiblePanes.has(id);
-    const isEntering = enteringPanes.has(id);
-    const isExiting = exitingPanes.has(id);
+    return () => {
+      unregisterPane(id);
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id, registerPane, unregisterPane]);
 
-    const componentClasses = [styles.pane, className].filter(Boolean).join(' ');
+  // Update pane config when props change
+  useEffect(() => {
+    updatePane(id, {
+      minWidth,
+      maxWidth,
+      preferredWidth,
+      grow,
+      shrink,
+      priority: effectivePriority,
+      index: _index,
+    });
+  }, [id, minWidth, maxWidth, preferredWidth, grow, shrink, effectivePriority, _index, updatePane]);
 
-    // useMemo must be called before any early returns to comply with React's Rules of Hooks
-    const cssVariables = useMemo(
-      () =>
-        ({
-          '--pane-min-width': typeof minWidth === 'number' ? `${minWidth}px` : minWidth,
-          '--pane-max-width': maxWidth
-            ? typeof maxWidth === 'number'
-              ? `${maxWidth}px`
-              : maxWidth
-            : 'none',
-          '--pane-preferred-width':
-            typeof preferredWidth === 'number' ? `${preferredWidth}px` : preferredWidth,
-          '--pane-grow': grow,
-          '--pane-shrink': shrink,
-          '--pane-animation-duration': `${animationDuration}ms`,
-          '--pane-animation-easing': animationEasing,
-          ...style,
-        }) as React.CSSProperties,
-      [minWidth, maxWidth, preferredWidth, grow, shrink, animationDuration, animationEasing, style]
-    );
+  const isVisible = visiblePanes.has(id);
+  const isEntering = enteringPanes.has(id);
+  const isExiting = exitingPanes.has(id);
 
-    // Don't render if not visible and not animating
-    if (!isVisible && !isEntering && !isExiting) {
-      return null;
-    }
+  const componentClasses = [styles.pane, className].filter(Boolean).join(' ');
 
-    return (
-      <div
-        ref={ref}
-        className={componentClasses}
-        style={cssVariables}
-        data-component="pane"
-        data-pane-id={id}
-        data-visible={isVisible || undefined}
-        data-entering={isEntering || undefined}
-        data-exiting={isExiting || undefined}
-        data-testid={testId}
-        aria-label={ariaLabel}
-        aria-hidden={!isVisible && !isEntering}
-        {...restProps}
-      >
-        {children}
-      </div>
-    );
+  // useMemo must be called before any early returns to comply with React's Rules of Hooks
+  const cssVariables = useMemo(
+    () =>
+      ({
+        '--pane-min-width': typeof minWidth === 'number' ? `${minWidth}px` : minWidth,
+
+        '--pane-max-width': maxWidth
+          ? typeof maxWidth === 'number'
+            ? `${maxWidth}px`
+            : maxWidth
+          : 'none',
+
+        '--pane-preferred-width':
+          typeof preferredWidth === 'number' ? `${preferredWidth}px` : preferredWidth,
+
+        '--pane-grow': grow,
+        '--pane-shrink': shrink,
+        '--pane-animation-duration': `${animationDuration}ms`,
+        '--pane-animation-easing': animationEasing,
+        ...style,
+      }) as React.CSSProperties,
+    [minWidth, maxWidth, preferredWidth, grow, shrink, animationDuration, animationEasing, style]
+  );
+
+  // Don't render if not visible and not animating
+  if (!isVisible && !isEntering && !isExiting) {
+    return null;
   }
-);
 
-Pane.displayName = 'Pane';
+  return (
+    <div
+      ref={ref}
+      className={componentClasses}
+      style={cssVariables}
+      data-component="pane"
+      data-pane-id={id}
+      data-visible={isVisible || undefined}
+      data-entering={isEntering || undefined}
+      data-exiting={isExiting || undefined}
+      data-testid={testId}
+      aria-label={ariaLabel}
+      aria-hidden={!isVisible && !isEntering}
+      {...restProps}
+    >
+      {children}
+    </div>
+  );
+};
 
 export default Pane;

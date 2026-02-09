@@ -2,7 +2,7 @@
  * Dialog component - Modal dialog for user interactions
  */
 
-import React, { forwardRef, useState, useCallback, useEffect, useRef, type ReactNode } from 'react';
+import React, { useState, useCallback, useEffect, useRef, type ReactNode } from 'react';
 import { Portal } from '../Portal';
 import { useEscapeKey, useFocusTrap } from '../../../hooks';
 import { IconButton } from '../../buttons/IconButton';
@@ -262,8 +262,6 @@ export const DialogHeader: React.FC<DialogHeaderProps> = ({
   );
 };
 
-DialogHeader.displayName = 'DialogHeader';
-
 /**
  * Dialog Body compound component
  */
@@ -290,8 +288,6 @@ export const DialogBody: React.FC<DialogBodyProps> = ({
     </div>
   );
 };
-
-DialogBody.displayName = 'DialogBody';
 
 /**
  * Dialog Footer compound component
@@ -320,242 +316,236 @@ export const DialogFooter: React.FC<DialogFooterProps> = ({
   );
 };
 
-DialogFooter.displayName = 'DialogFooter';
-
 /**
  * Dialog component
  * Modal dialog for user interactions with customizable content
  */
-export const Dialog = forwardRef<HTMLDivElement, DialogProps>(
-  (
-    {
-      isOpen: controlledIsOpen,
-      defaultOpen = false,
-      onOpenChange,
-      onClose,
-      title,
-      children,
-      actions,
-      size = 'md',
-      width,
-      maxHeight,
-      closeOnBackdropClick = true,
-      closeOnEscape = true,
-      showCloseButton = true,
-      trapFocus = true,
-      blockScroll = true,
-      blurBackdrop = false,
-      backdropOpacity = 0.5,
-      zIndex,
-      animationDuration = 200,
-      role = 'dialog',
-      'aria-labelledby': ariaLabelledby,
-      'aria-describedby': ariaDescribedby,
-      modal = true,
-      renderHeader,
-      renderFooter,
-      backdropClassName,
-      contentClassName,
-      onOpenComplete,
-      onCloseComplete,
-      className,
-      'data-testid': testId,
-      style: customStyle,
-      ...restProps
+export const Dialog = ({
+  ref,
+  isOpen: controlledIsOpen,
+  defaultOpen = false,
+  onOpenChange,
+  onClose,
+  title,
+  children,
+  actions,
+  size = 'md',
+  width,
+  maxHeight,
+  closeOnBackdropClick = true,
+  closeOnEscape = true,
+  showCloseButton = true,
+  trapFocus = true,
+  blockScroll = true,
+  blurBackdrop = false,
+  backdropOpacity = 0.5,
+  zIndex,
+  animationDuration = 200,
+  role = 'dialog',
+  'aria-labelledby': ariaLabelledby,
+  'aria-describedby': ariaDescribedby,
+  modal = true,
+  renderHeader,
+  renderFooter,
+  backdropClassName,
+  contentClassName,
+  onOpenComplete,
+  onCloseComplete,
+  className,
+  'data-testid': testId,
+  style: customStyle,
+  ...restProps
+}: DialogProps & {
+  ref?: React.Ref<HTMLDivElement>;
+}) => {
+  // Controlled/uncontrolled state management
+  const [uncontrolledIsOpen, setUncontrolledIsOpen] = useState(defaultOpen);
+  const isOpen = controlledIsOpen ?? uncontrolledIsOpen;
+
+  // Animation state
+  const [animationState, setAnimationState] = useState<AnimationState>('exited');
+
+  // Refs
+  const dialogRef = useRef<HTMLDivElement>(null);
+  const previousActiveElement = useRef<HTMLElement | null>(null);
+
+  // Generate unique IDs for accessibility
+  const [dialogId] = useState(generateDialogId);
+  const titleId = ariaLabelledby || `${dialogId}-title`;
+  const bodyId = ariaDescribedby || `${dialogId}-body`;
+
+  // Merge refs
+  const setRefs = useCallback(
+    (element: HTMLDivElement | null) => {
+      (dialogRef as React.MutableRefObject<HTMLDivElement | null>).current = element;
+      if (typeof ref === 'function') {
+        ref(element);
+      } else if (ref) {
+        (ref as React.MutableRefObject<HTMLDivElement | null>).current = element;
+      }
     },
-    ref
-  ) => {
-    // Controlled/uncontrolled state management
-    const [uncontrolledIsOpen, setUncontrolledIsOpen] = useState(defaultOpen);
-    const isOpen = controlledIsOpen ?? uncontrolledIsOpen;
+    [ref]
+  );
 
-    // Animation state
-    const [animationState, setAnimationState] = useState<AnimationState>('exited');
-
-    // Refs
-    const dialogRef = useRef<HTMLDivElement>(null);
-    const previousActiveElement = useRef<HTMLElement | null>(null);
-
-    // Generate unique IDs for accessibility
-    const [dialogId] = useState(generateDialogId);
-    const titleId = ariaLabelledby || `${dialogId}-title`;
-    const bodyId = ariaDescribedby || `${dialogId}-body`;
-
-    // Merge refs
-    const setRefs = useCallback(
-      (element: HTMLDivElement | null) => {
-        (dialogRef as React.MutableRefObject<HTMLDivElement | null>).current = element;
-        if (typeof ref === 'function') {
-          ref(element);
-        } else if (ref) {
-          (ref as React.MutableRefObject<HTMLDivElement | null>).current = element;
-        }
-      },
-      [ref]
-    );
-
-    // Handle open state change
-    const handleOpenChange = useCallback(
-      (newIsOpen: boolean) => {
-        if (controlledIsOpen === undefined) {
-          setUncontrolledIsOpen(newIsOpen);
-        }
-        onOpenChange?.(newIsOpen);
-        if (!newIsOpen) {
-          onClose?.();
-        }
-      },
-      [controlledIsOpen, onOpenChange, onClose]
-    );
-
-    // Handle close
-    const handleClose = useCallback(() => {
-      handleOpenChange(false);
-    }, [handleOpenChange]);
-
-    // Handle backdrop click
-    const handleBackdropClick = useCallback(
-      (event: React.MouseEvent) => {
-        if (closeOnBackdropClick && event.target === event.currentTarget) {
-          handleClose();
-        }
-      },
-      [closeOnBackdropClick, handleClose]
-    );
-
-    // Focus trap
-    useFocusTrap(dialogRef, animationState === 'entered' && trapFocus);
-
-    // Escape key handling
-    useEscapeKey(handleClose, isOpen && closeOnEscape);
-
-    // Body scroll lock
-    useEffect(() => {
-      if (isOpen && blockScroll) {
-        const originalOverflow = document.body.style.overflow;
-        const originalPaddingRight = document.body.style.paddingRight;
-        const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
-
-        document.body.style.overflow = 'hidden';
-        if (scrollbarWidth > 0) {
-          document.body.style.paddingRight = `${scrollbarWidth}px`;
-        }
-
-        return () => {
-          document.body.style.overflow = originalOverflow;
-          document.body.style.paddingRight = originalPaddingRight;
-        };
+  // Handle open state change
+  const handleOpenChange = useCallback(
+    (newIsOpen: boolean) => {
+      if (controlledIsOpen === undefined) {
+        setUncontrolledIsOpen(newIsOpen);
       }
-    }, [isOpen, blockScroll]);
-
-    // Focus management - save and restore focus
-    useEffect(() => {
-      if (isOpen) {
-        previousActiveElement.current = document.activeElement as HTMLElement;
-      } else if (previousActiveElement.current) {
-        previousActiveElement.current.focus();
-        previousActiveElement.current = null;
+      onOpenChange?.(newIsOpen);
+      if (!newIsOpen) {
+        onClose?.();
       }
-    }, [isOpen]);
+    },
+    [controlledIsOpen, onOpenChange, onClose]
+  );
 
-    // Animation handling
-    useEffect(() => {
-      if (isOpen) {
-        setAnimationState('entering');
-        const timer = setTimeout(() => {
-          setAnimationState('entered');
-          onOpenComplete?.();
-        }, animationDuration);
-        return () => clearTimeout(timer);
-      } else if (animationState !== 'exited') {
-        setAnimationState('exiting');
-        const timer = setTimeout(() => {
-          setAnimationState('exited');
-          onCloseComplete?.();
-        }, animationDuration);
-        return () => clearTimeout(timer);
+  // Handle close
+  const handleClose = useCallback(() => {
+    handleOpenChange(false);
+  }, [handleOpenChange]);
+
+  // Handle backdrop click
+  const handleBackdropClick = useCallback(
+    (event: React.MouseEvent) => {
+      if (closeOnBackdropClick && event.target === event.currentTarget) {
+        handleClose();
       }
-    }, [isOpen, animationDuration, onOpenComplete, onCloseComplete, animationState]);
+    },
+    [closeOnBackdropClick, handleClose]
+  );
 
-    // Don't render if fully closed
-    if (animationState === 'exited' && !isOpen) {
-      return null;
+  // Focus trap
+  useFocusTrap(dialogRef, animationState === 'entered' && trapFocus);
+
+  // Escape key handling
+  useEscapeKey(handleClose, isOpen && closeOnEscape);
+
+  // Body scroll lock
+  useEffect(() => {
+    if (isOpen && blockScroll) {
+      const originalOverflow = document.body.style.overflow;
+      const originalPaddingRight = document.body.style.paddingRight;
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+
+      document.body.style.overflow = 'hidden';
+      if (scrollbarWidth > 0) {
+        document.body.style.paddingRight = `${scrollbarWidth}px`;
+      }
+
+      return () => {
+        document.body.style.overflow = originalOverflow;
+        document.body.style.paddingRight = originalPaddingRight;
+      };
     }
+  }, [isOpen, blockScroll]);
 
-    // CSS Variables
-    const cssVariables = {
-      '--dialog-animation-duration': `${animationDuration}ms`,
-      '--dialog-backdrop-opacity': backdropOpacity,
-      ...(width && { '--dialog-width': typeof width === 'number' ? `${width}px` : width }),
-      ...(maxHeight && {
-        '--dialog-max-height': typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight,
-      }),
-      ...(zIndex && { '--dialog-z-index': zIndex }),
-    } as React.CSSProperties;
+  // Focus management - save and restore focus
+  useEffect(() => {
+    if (isOpen) {
+      previousActiveElement.current = document.activeElement as HTMLElement;
+    } else if (previousActiveElement.current) {
+      previousActiveElement.current.focus();
+      previousActiveElement.current = null;
+    }
+  }, [isOpen]);
 
-    const backdropClasses = [styles.dialogBackdrop, backdropClassName].filter(Boolean).join(' ');
-    const contentClasses = [styles.dialogContent, contentClassName, className]
-      .filter(Boolean)
-      .join(' ');
+  // Animation handling
+  useEffect(() => {
+    if (isOpen) {
+      setAnimationState('entering');
+      const timer = setTimeout(() => {
+        setAnimationState('entered');
+        onOpenComplete?.();
+      }, animationDuration);
+      return () => clearTimeout(timer);
+    } else if (animationState !== 'exited') {
+      setAnimationState('exiting');
+      const timer = setTimeout(() => {
+        setAnimationState('exited');
+        onCloseComplete?.();
+      }, animationDuration);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen, animationDuration, onOpenComplete, onCloseComplete, animationState]);
 
-    // Render header
-    const headerContent = renderHeader ? (
-      renderHeader({ title, onClose: handleClose })
-    ) : title ? (
-      <DialogHeader showCloseButton={showCloseButton} onClose={handleClose}>
-        <h2 id={titleId} className={styles.dialogTitle}>
-          {title}
-        </h2>
-      </DialogHeader>
-    ) : showCloseButton ? (
-      <DialogHeader showCloseButton={showCloseButton} onClose={handleClose} />
-    ) : null;
-
-    // Render footer
-    const footerContent = renderFooter ? (
-      renderFooter({ actions, onClose: handleClose })
-    ) : actions ? (
-      <DialogFooter>{actions}</DialogFooter>
-    ) : null;
-
-    return (
-      <Portal zIndex={zIndex}>
-        <div
-          className={backdropClasses}
-          data-component="dialog-backdrop"
-          data-state={animationState}
-          data-blur={blurBackdrop || undefined}
-          onClick={handleBackdropClick}
-          style={cssVariables}
-        >
-          <div
-            ref={setRefs}
-            className={contentClasses}
-            data-component="dialog"
-            data-size={size}
-            data-state={animationState}
-            data-testid={testId || 'dialog'}
-            role={role}
-            aria-modal={modal}
-            aria-labelledby={title ? titleId : undefined}
-            aria-describedby={children ? bodyId : undefined}
-            style={customStyle}
-            {...restProps}
-          >
-            {headerContent}
-            {children && (
-              <DialogBody>
-                <div id={bodyId}>{children}</div>
-              </DialogBody>
-            )}
-            {footerContent}
-          </div>
-        </div>
-      </Portal>
-    );
+  // Don't render if fully closed
+  if (animationState === 'exited' && !isOpen) {
+    return null;
   }
-);
 
-Dialog.displayName = 'Dialog';
+  // CSS Variables
+  const cssVariables = {
+    '--dialog-animation-duration': `${animationDuration}ms`,
+    '--dialog-backdrop-opacity': backdropOpacity,
+    ...(width && { '--dialog-width': typeof width === 'number' ? `${width}px` : width }),
+    ...(maxHeight && {
+      '--dialog-max-height': typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight,
+    }),
+    ...(zIndex && { '--dialog-z-index': zIndex }),
+  } as React.CSSProperties;
+
+  const backdropClasses = [styles.dialogBackdrop, backdropClassName].filter(Boolean).join(' ');
+  const contentClasses = [styles.dialogContent, contentClassName, className]
+    .filter(Boolean)
+    .join(' ');
+
+  // Render header
+  const headerContent = renderHeader ? (
+    renderHeader({ title, onClose: handleClose })
+  ) : title ? (
+    <DialogHeader showCloseButton={showCloseButton} onClose={handleClose}>
+      <h2 id={titleId} className={styles.dialogTitle}>
+        {title}
+      </h2>
+    </DialogHeader>
+  ) : showCloseButton ? (
+    <DialogHeader showCloseButton={showCloseButton} onClose={handleClose} />
+  ) : null;
+
+  // Render footer
+  const footerContent = renderFooter ? (
+    renderFooter({ actions, onClose: handleClose })
+  ) : actions ? (
+    <DialogFooter>{actions}</DialogFooter>
+  ) : null;
+
+  return (
+    <Portal zIndex={zIndex}>
+      <div
+        className={backdropClasses}
+        data-component="dialog-backdrop"
+        data-state={animationState}
+        data-blur={blurBackdrop || undefined}
+        onClick={handleBackdropClick}
+        style={cssVariables}
+      >
+        <div
+          ref={setRefs}
+          className={contentClasses}
+          data-component="dialog"
+          data-size={size}
+          data-state={animationState}
+          data-testid={testId || 'dialog'}
+          role={role}
+          aria-modal={modal}
+          aria-labelledby={title ? titleId : undefined}
+          aria-describedby={children ? bodyId : undefined}
+          style={customStyle}
+          {...restProps}
+        >
+          {headerContent}
+          {children && (
+            <DialogBody>
+              <div id={bodyId}>{children}</div>
+            </DialogBody>
+          )}
+          {footerContent}
+        </div>
+      </div>
+    </Portal>
+  );
+};
 
 export default Dialog;

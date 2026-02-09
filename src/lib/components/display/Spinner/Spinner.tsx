@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
 import styles from './Spinner.module.scss';
 import type { BaseComponentProps, ExtendedComponentSize } from '../../../types/component.types';
 
@@ -95,108 +95,104 @@ export interface SpinnerProps extends Omit<BaseComponentProps, 'children'> {
  * <Spinner spinnerStyle="pulse" size="xl" />
  * ```
  */
-export const Spinner = forwardRef<HTMLDivElement, SpinnerProps>(
-  (
-    {
-      spinnerStyle = 'circular',
-      size = 'md',
-      variant = 'primary',
-      speed = 'normal',
-      strokeWidth = 3,
-      srText = 'Loading...',
-      showSrText = false,
-      className,
-      'aria-label': ariaLabel,
-      'data-testid': testId,
-      style,
-      ...restProps
-    },
-    ref
-  ) => {
-    const componentClasses = [styles.spinner, className].filter(Boolean).join(' ');
+export const Spinner = ({
+  ref,
+  spinnerStyle = 'circular',
+  size = 'md',
+  variant = 'primary',
+  speed = 'normal',
+  strokeWidth = 3,
+  srText = 'Loading...',
+  showSrText = false,
+  className,
+  'aria-label': ariaLabel,
+  'data-testid': testId,
+  style,
+  ...restProps
+}: SpinnerProps & {
+  ref?: React.Ref<HTMLDivElement>;
+}) => {
+  const componentClasses = [styles.spinner, className].filter(Boolean).join(' ');
 
-    const renderCircular = () => (
-      <svg className={styles.spinnerCircular} viewBox="0 0 50 50">
-        <circle
-          className={styles.spinnerCircularTrack}
-          cx="25"
-          cy="25"
-          r="20"
-          fill="none"
-          strokeWidth={strokeWidth}
-        />
-        <circle
-          className={styles.spinnerCircularPath}
-          cx="25"
-          cy="25"
-          r="20"
-          fill="none"
-          strokeWidth={strokeWidth}
-          strokeLinecap="round"
-        />
-      </svg>
-    );
+  const renderCircular = () => (
+    <svg className={styles.spinnerCircular} viewBox="0 0 50 50">
+      <circle
+        className={styles.spinnerCircularTrack}
+        cx="25"
+        cy="25"
+        r="20"
+        fill="none"
+        strokeWidth={strokeWidth}
+      />
+      <circle
+        className={styles.spinnerCircularPath}
+        cx="25"
+        cy="25"
+        r="20"
+        fill="none"
+        strokeWidth={strokeWidth}
+        strokeLinecap="round"
+      />
+    </svg>
+  );
 
-    const renderDots = () => (
-      <div className={styles.spinnerDots}>
-        <span className={styles.spinnerDot} />
-        <span className={styles.spinnerDot} />
-        <span className={styles.spinnerDot} />
-      </div>
-    );
+  const renderDots = () => (
+    <div className={styles.spinnerDots}>
+      <span className={styles.spinnerDot} />
+      <span className={styles.spinnerDot} />
+      <span className={styles.spinnerDot} />
+    </div>
+  );
 
-    const renderBars = () => (
-      <div className={styles.spinnerBars}>
-        <span className={styles.spinnerBar} />
-        <span className={styles.spinnerBar} />
-        <span className={styles.spinnerBar} />
-        <span className={styles.spinnerBar} />
-      </div>
-    );
+  const renderBars = () => (
+    <div className={styles.spinnerBars}>
+      <span className={styles.spinnerBar} />
+      <span className={styles.spinnerBar} />
+      <span className={styles.spinnerBar} />
+      <span className={styles.spinnerBar} />
+    </div>
+  );
 
-    const renderPulse = () => <div className={styles.spinnerPulse} />;
+  const renderPulse = () => <div className={styles.spinnerPulse} />;
 
-    const renderSpinner = () => {
-      switch (spinnerStyle) {
-        case 'dots':
-          return renderDots();
-        case 'bars':
-          return renderBars();
-        case 'pulse':
-          return renderPulse();
-        case 'circular':
-        default:
-          return renderCircular();
-      }
-    };
+  const renderSpinner = () => {
+    switch (spinnerStyle) {
+      case 'dots':
+        return renderDots();
+      case 'bars':
+        return renderBars();
+      case 'pulse':
+        return renderPulse();
+      case 'circular':
+      default:
+        return renderCircular();
+    }
+  };
 
-    return (
-      <div
-        ref={ref}
-        className={componentClasses}
-        data-component="spinner"
-        data-style={spinnerStyle}
-        data-size={size}
-        data-variant={variant}
-        data-speed={speed}
-        data-show-text={showSrText ? 'true' : undefined}
-        data-testid={testId || 'spinner'}
-        role="status"
-        aria-label={ariaLabel || srText}
-        style={style}
-        {...restProps}
-      >
-        {showSrText ? (
-          <span className={styles.spinnerGraphic}>{renderSpinner()}</span>
-        ) : (
-          renderSpinner()
-        )}
-        <span className={showSrText ? styles.spinnerText : styles.srOnly}>{srText}</span>
-      </div>
-    );
-  }
-);
-
-Spinner.displayName = 'Spinner';
+  return (
+    <div
+      ref={ref}
+      className={componentClasses}
+      data-component="spinner"
+      data-style={spinnerStyle}
+      data-size={size}
+      data-variant={variant}
+      data-speed={speed}
+      data-show-text={showSrText ? 'true' : undefined}
+      data-testid={testId || 'spinner'}
+      role="status"
+      aria-label={ariaLabel || srText}
+      style={style}
+      {...restProps}
+    >
+      {showSrText ? (
+        <span className={styles.spinnerGraphic}>{renderSpinner()}</span>
+      ) : (
+        renderSpinner()
+      )}
+      <span className={showSrText ? styles.spinnerText : styles.srOnly}>{srText}</span>
+    </div>
+  );
+};
 
 export default Spinner;

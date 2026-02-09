@@ -110,5 +110,3 @@ export function TableHeader() {
     </div>
   );
 }
-
-TableHeader.displayName = 'TableHeader';

@@ -57,6 +57,4 @@ export function ListSkeleton({
   );
 }
 
-ListSkeleton.displayName = 'ListSkeleton';
-
 export default ListSkeleton;

@@ -183,6 +183,4 @@ export const ResizablePanels: React.FC<ResizablePanelsProps> = ({
   );
 };
 
-ResizablePanels.displayName = 'ResizablePanels';
-
 export default ResizablePanels;

@@ -1,4 +1,4 @@
-import React, { forwardRef, createContext, useContext, useState, useCallback, useId } from 'react';
+import React, { createContext, useContext, useState, useCallback, useId } from 'react';
 import type { ComponentSize, ComponentVariant, InputBaseProps } from '../../../types';
 import styles from './RadioGroup.module.scss';
 
@@ -110,111 +110,107 @@ export interface RadioGroupProps
  * </RadioGroup>
  * ```
  */
-export const RadioGroup = forwardRef<HTMLFieldSetElement, RadioGroupProps>(
-  (
-    {
-      variant = 'primary',
-      size = 'md',
-      value,
-      defaultValue,
-      onChange,
-      orientation = 'vertical',
-      label,
-      helperText,
-      errorMessage,
-      error = false,
-      children,
-      gap = 2,
-      disabled = false,
-      readOnly = false,
-      required = false,
-      name: providedName,
-      id: providedId,
-      className,
-      'data-testid': dataTestId,
-      ...rest
+export const RadioGroup = ({
+  ref,
+  variant = 'primary',
+  size = 'md',
+  value,
+  defaultValue,
+  onChange,
+  orientation = 'vertical',
+  label,
+  helperText,
+  errorMessage,
+  error = false,
+  children,
+  gap = 2,
+  disabled = false,
+  readOnly = false,
+  required = false,
+  name: providedName,
+  id: providedId,
+  className,
+  'data-testid': dataTestId,
+  ...rest
+}: RadioGroupProps & {
+  ref?: React.Ref<HTMLFieldSetElement>;
+}) => {
+  const autoId = useId();
+  const autoName = useId();
+  const id = providedId || autoId;
+  const name = providedName || autoName;
+
+  // Internal state for uncontrolled component
+  const [internalValue, setInternalValue] = useState(defaultValue);
+
+  // Use controlled value if provided, otherwise use internal state
+  const selectedValue = value !== undefined ? value : internalValue;
+
+  const handleChange = useCallback(
+    (newValue: string, event: React.ChangeEvent<HTMLInputElement>) => {
+      // Update internal state if uncontrolled
+      if (value === undefined) {
+        setInternalValue(newValue);
+      }
+
+      // Call onChange callback
+      onChange?.(newValue, event);
     },
-    ref
-  ) => {
-    const autoId = useId();
-    const autoName = useId();
-    const id = providedId || autoId;
-    const name = providedName || autoName;
+    [value, onChange]
+  );
 
-    // Internal state for uncontrolled component
-    const [internalValue, setInternalValue] = useState(defaultValue);
+  const contextValue: RadioGroupContextValue = {
+    name,
+    value: selectedValue,
+    onChange: handleChange,
+    disabled,
+    readOnly,
+    size,
+    variant,
+  };
 
-    // Use controlled value if provided, otherwise use internal state
-    const selectedValue = value !== undefined ? value : internalValue;
+  const gapStyle = {
+    '--radio-group-gap': `var(--spacing-${['xs', 'sm', 'md', 'lg', 'xl', 'xxl'][gap] || 'sm'})`,
+  } as React.CSSProperties;
 
-    const handleChange = useCallback(
-      (newValue: string, event: React.ChangeEvent<HTMLInputElement>) => {
-        // Update internal state if uncontrolled
-        if (value === undefined) {
-          setInternalValue(newValue);
-        }
+  return (
+    <fieldset
+      ref={ref}
+      id={id}
+      className={`${styles.radioGroup} ${className || ''}`}
+      data-orientation={orientation}
+      data-error={error || undefined}
+      data-component="radio-group"
+      data-testid={dataTestId}
+      disabled={disabled}
+      aria-invalid={error}
+      aria-required={required}
+      style={gapStyle}
+      {...rest}
+    >
+      {label && (
+        <legend className={styles.legend} data-required={required || undefined}>
+          {label}
+          {required && <span className={styles.required}>*</span>}
+        </legend>
+      )}
 
-        // Call onChange callback
-        onChange?.(newValue, event);
-      },
-      [value, onChange]
-    );
+      <RadioGroupContext.Provider value={contextValue}>
+        <div className={styles.radioList} data-orientation={orientation}>
+          {children}
+        </div>
+      </RadioGroupContext.Provider>
 
-    const contextValue: RadioGroupContextValue = {
-      name,
-      value: selectedValue,
-      onChange: handleChange,
-      disabled,
-      readOnly,
-      size,
-      variant,
-    };
-
-    const gapStyle = {
-      '--radio-group-gap': `var(--spacing-${['xs', 'sm', 'md', 'lg', 'xl', 'xxl'][gap] || 'sm'})`,
-    } as React.CSSProperties;
-
-    return (
-      <fieldset
-        ref={ref}
-        id={id}
-        className={`${styles.radioGroup} ${className || ''}`}
-        data-orientation={orientation}
-        data-error={error || undefined}
-        data-component="radio-group"
-        data-testid={dataTestId}
-        disabled={disabled}
-        aria-invalid={error}
-        aria-required={required}
-        style={gapStyle}
-        {...rest}
-      >
-        {label && (
-          <legend className={styles.legend} data-required={required || undefined}>
-            {label}
-            {required && <span className={styles.required}>*</span>}
-          </legend>
-        )}
-
-        <RadioGroupContext.Provider value={contextValue}>
-          <div className={styles.radioList} data-orientation={orientation}>
-            {children}
-          </div>
-        </RadioGroupContext.Provider>
-
-        {(helperText || (error && errorMessage)) && (
-          <div
-            className={styles.helperText}
-            data-error={error || undefined}
-            role={error ? 'alert' : undefined}
-            aria-live={error ? 'polite' : undefined}
-          >
-            {error && errorMessage ? errorMessage : helperText}
-          </div>
-        )}
-      </fieldset>
-    );
-  }
-);
-
-RadioGroup.displayName = 'RadioGroup';
+      {(helperText || (error && errorMessage)) && (
+        <div
+          className={styles.helperText}
+          data-error={error || undefined}
+          role={error ? 'alert' : undefined}
+          aria-live={error ? 'polite' : undefined}
+        >
+          {error && errorMessage ? errorMessage : helperText}
+        </div>
+      )}
+    </fieldset>
+  );
+};

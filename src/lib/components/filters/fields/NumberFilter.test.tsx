@@ -996,11 +996,4 @@ describe('NumberFilter', () => {
       expect(isFilterEnabled).toHaveBeenCalledWith('age');
     });
   });
-
-  // 19. Display name test
-  describe('display name', () => {
-    it('has correct display name', () => {
-      expect(NumberFilter.displayName).toBe('NumberFilter');
-    });
-  });
 });

@@ -14,5 +14,3 @@ export function TableBody() {
     </div>
   );
 }
-
-TableBody.displayName = 'TableBody';

@@ -44,6 +44,4 @@ export function ListEmpty({
   );
 }
 
-ListEmpty.displayName = 'ListEmpty';
-
 export default ListEmpty;

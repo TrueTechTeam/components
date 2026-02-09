@@ -837,11 +837,4 @@ describe('FilterModal', () => {
       expect(handleOpenChange).toHaveBeenCalledWith(false);
     });
   });
-
-  // 15. Display name
-  describe('display name', () => {
-    it('has correct display name', () => {
-      expect(FilterModal.displayName).toBe('FilterModal');
-    });
-  });
 });

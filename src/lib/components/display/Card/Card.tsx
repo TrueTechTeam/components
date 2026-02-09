@@ -1,4 +1,4 @@
-import React, { forwardRef, type ReactNode, type MouseEvent, type KeyboardEvent } from 'react';
+import React, { type ReactNode, type MouseEvent, type KeyboardEvent } from 'react';
 import styles from './Card.module.scss';
 import type { BaseComponentProps, ComponentSize } from '../../../types/component.types';
 
@@ -113,88 +113,84 @@ export interface CardProps extends BaseComponentProps {
  * </Card>
  * ```
  */
-export const Card = forwardRef<HTMLDivElement, CardProps>(
-  (
-    {
-      variant = 'outlined',
-      size = 'md',
-      padding = 'md',
-      interactive = false,
-      disabled = false,
-      onClick,
-      header,
-      footer,
-      headerDivider = true,
-      footerDivider = true,
-      hoverable = false,
-      fullWidth = false,
-      className,
-      children,
-      style,
-      'data-testid': testId,
-      'aria-label': ariaLabel,
-      ...restProps
-    },
-    ref
-  ) => {
-    const isHoverable = hoverable || interactive;
-    const componentClasses = [styles.card, className].filter(Boolean).join(' ');
+export const Card = ({
+  ref,
+  variant = 'outlined',
+  size = 'md',
+  padding = 'md',
+  interactive = false,
+  disabled = false,
+  onClick,
+  header,
+  footer,
+  headerDivider = true,
+  footerDivider = true,
+  hoverable = false,
+  fullWidth = false,
+  className,
+  children,
+  style,
+  'data-testid': testId,
+  'aria-label': ariaLabel,
+  ...restProps
+}: CardProps & {
+  ref?: React.Ref<HTMLDivElement>;
+}) => {
+  const isHoverable = hoverable || interactive;
+  const componentClasses = [styles.card, className].filter(Boolean).join(' ');
 
-    const handleClick = (event: MouseEvent<HTMLDivElement>) => {
-      if (disabled || !interactive) {
-        return;
-      }
-      onClick?.(event);
-    };
+  const handleClick = (event: MouseEvent<HTMLDivElement>) => {
+    if (disabled || !interactive) {
+      return;
+    }
+    onClick?.(event);
+  };
 
-    const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-      if (disabled || !interactive) {
-        return;
-      }
-      if (event.key === 'Enter' || event.key === ' ') {
-        event.preventDefault();
-        onClick?.(event as unknown as MouseEvent<HTMLDivElement>);
-      }
-    };
+  const handleKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
+    if (disabled || !interactive) {
+      return;
+    }
+    if (event.key === 'Enter' || event.key === ' ') {
+      event.preventDefault();
+      onClick?.(event as unknown as MouseEvent<HTMLDivElement>);
+    }
+  };
 
-    return (
-      <div
-        ref={ref}
-        className={componentClasses}
-        data-component="card"
-        data-variant={variant}
-        data-size={size}
-        data-padding={padding}
-        data-interactive={interactive || undefined}
-        data-disabled={disabled || undefined}
-        data-hoverable={isHoverable || undefined}
-        data-full-width={fullWidth || undefined}
-        onClick={handleClick}
-        onKeyDown={interactive ? handleKeyDown : undefined}
-        role={interactive ? 'button' : undefined}
-        tabIndex={interactive && !disabled ? 0 : undefined}
-        aria-disabled={interactive && disabled ? true : undefined}
-        aria-label={ariaLabel}
-        data-testid={testId}
-        style={style}
-        {...restProps}
-      >
-        {header && (
-          <div className={styles.cardHeader} data-divider={headerDivider || undefined}>
-            {header}
-          </div>
-        )}
-        <div className={styles.cardBody}>{children}</div>
-        {footer && (
-          <div className={styles.cardFooter} data-divider={footerDivider || undefined}>
-            {footer}
-          </div>
-        )}
-      </div>
-    );
-  }
-);
-
-Card.displayName = 'Card';
+  return (
+    <div
+      ref={ref}
+      className={componentClasses}
+      data-component="card"
+      data-variant={variant}
+      data-size={size}
+      data-padding={padding}
+      data-interactive={interactive || undefined}
+      data-disabled={disabled || undefined}
+      data-hoverable={isHoverable || undefined}
+      data-full-width={fullWidth || undefined}
+      onClick={handleClick}
+      onKeyDown={interactive ? handleKeyDown : undefined}
+      role={interactive ? 'button' : undefined}
+      tabIndex={interactive && !disabled ? 0 : undefined}
+      aria-disabled={interactive && disabled ? true : undefined}
+      aria-label={ariaLabel}
+      data-testid={testId}
+      style={style}
+      {...restProps}
+    >
+      {header && (
+        <div className={styles.cardHeader} data-divider={headerDivider || undefined}>
+          {header}
+        </div>
+      )}
+      <div className={styles.cardBody}>{children}</div>
+      {footer && (
+        <div className={styles.cardFooter} data-divider={footerDivider || undefined}>
+          {footer}
+        </div>
+      )}
+    </div>
+  );
+};
 
 export default Card;

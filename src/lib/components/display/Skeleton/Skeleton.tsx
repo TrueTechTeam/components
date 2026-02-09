@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
 import styles from './Skeleton.module.scss';
 import type { BaseComponentProps } from '../../../types/component.types';
 
@@ -54,81 +54,77 @@ export interface SkeletonProps extends Omit<BaseComponentProps, 'children'> {
  * <Skeleton variant="rectangular" width="100%" height="200px" />
  * ```
  */
-export const Skeleton = forwardRef<HTMLDivElement, SkeletonProps>(
-  (
-    {
-      variant = 'text',
-      width = '100%',
-      height,
-      animated = true,
-      lines = 1,
-      className,
-      style,
-      ...restProps
-    },
-    ref
-  ) => {
-    // Merge className with component styles
-    const componentClasses = [styles.skeleton, className].filter(Boolean).join(' ');
+export const Skeleton = ({
+  ref,
+  variant = 'text',
+  width = '100%',
+  height,
+  animated = true,
+  lines = 1,
+  className,
+  style,
+  ...restProps
+}: SkeletonProps & {
+  ref?: React.Ref<HTMLDivElement>;
+}) => {
+  // Merge className with component styles
+  const componentClasses = [styles.skeleton, className].filter(Boolean).join(' ');
 
-    // Default heights based on variant
-    const defaultHeight =
-      height ||
-      (variant === 'text'
-        ? '1em'
-        : variant === 'circular'
-          ? width
-          : variant === 'rounded'
-            ? '200px'
-            : '100px');
+  // Default heights based on variant
+  const defaultHeight =
+    height ||
+    (variant === 'text'
+      ? '1em'
+      : variant === 'circular'
+        ? width
+        : variant === 'rounded'
+          ? '200px'
+          : '100px');
 
-    // Merge styles
-    const mergedStyle: React.CSSProperties = {
-      width,
-      height: defaultHeight,
-      ...style,
-    };
+  // Merge styles
+  const mergedStyle: React.CSSProperties = {
+    width,
+    height: defaultHeight,
+    ...style,
+  };
 
-    // Render multiple lines for text variant
-    if (variant === 'text' && lines > 1) {
-      return (
-        <div
-          ref={ref}
-          className={styles.skeletonGroup}
-          data-component="skeleton-group"
-          {...restProps}
-        >
-          {Array.from({ length: lines }).map((_, index) => (
-            <div
-              key={index}
-              className={componentClasses}
-              data-component="skeleton"
-              data-variant={variant}
-              data-animated={animated || undefined}
-              style={{
-                width: index === lines - 1 ? '80%' : '100%',
-                height: defaultHeight,
-              }}
-            />
-          ))}
-        </div>
-      );
-    }
-
+  // Render multiple lines for text variant
+  if (variant === 'text' && lines > 1) {
     return (
       <div
         ref={ref}
-        className={componentClasses}
-        data-component="skeleton"
-        data-variant={variant}
-        data-animated={animated || undefined}
-        style={mergedStyle}
+        className={styles.skeletonGroup}
+        data-component="skeleton-group"
         {...restProps}
-      />
+      >
+        {Array.from({ length: lines }).map((_, index) => (
+          <div
+            key={index}
+            className={componentClasses}
+            data-component="skeleton"
+            data-variant={variant}
+            data-animated={animated || undefined}
+            style={{
+              width: index === lines - 1 ? '80%' : '100%',
+              height: defaultHeight,
+            }}
+          />
+        ))}
+      </div>
     );
   }
-);
 
-Skeleton.displayName = 'Skeleton';
+  return (
+    <div
+      ref={ref}
+      className={componentClasses}
+      data-component="skeleton"
+      data-variant={variant}
+      data-animated={animated || undefined}
+      style={mergedStyle}
+      {...restProps}
+    />
+  );
+};
 
 export default Skeleton;

@@ -1,4 +1,4 @@
-import React, { forwardRef, useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { Select, type SelectOption } from '../Select/Select';
 import { Input } from '../Input';
 import styles from './PhoneInput.module.scss';
@@ -156,162 +156,158 @@ const formatPhoneNumber = (value: string, format?: string): string => {
  * />
  * ```
  */
-export const PhoneInput = forwardRef<HTMLInputElement, PhoneInputProps>(
-  (
-    {
-      value: controlledValue,
-      defaultValue = '',
-      defaultCountry = 'US',
-      onChange,
-      onBlur,
-      label,
-      labelPlacement = 'top',
-      helperText,
-      errorMessage,
-      error = false,
-      required = false,
-      disabled = false,
-      showCountrySearch = true,
-      countrySearchPlaceholder = 'Search countries...',
-      countries = DEFAULT_COUNTRIES,
-      autoFormat = true,
-      className,
-      'data-testid': dataTestId,
-      'aria-label': ariaLabel,
-      style,
-      ...rest
-    },
-    ref
-  ) => {
-    // Find default country from list
-    const defaultCountryData = countries.find((c) => c.code === defaultCountry) || countries[0];
+export const PhoneInput = ({
+  ref,
+  value: controlledValue,
+  defaultValue = '',
+  defaultCountry = 'US',
+  onChange,
+  onBlur,
+  label,
+  labelPlacement = 'top',
+  helperText,
+  errorMessage,
+  error = false,
+  required = false,
+  disabled = false,
+  showCountrySearch = true,
+  countrySearchPlaceholder = 'Search countries...',
+  countries = DEFAULT_COUNTRIES,
+  autoFormat = true,
+  className,
+  'data-testid': dataTestId,
+  'aria-label': ariaLabel,
+  style,
+  ...rest
+}: PhoneInputProps & {
+  ref?: React.Ref<HTMLInputElement>;
+}) => {
+  // Find default country from list
+  const defaultCountryData = countries.find((c) => c.code === defaultCountry) || countries[0];
 
-    // State
-    const [internalValue, setInternalValue] = useState(defaultValue);
-    const [selectedCountry, setSelectedCountry] = useState<Country>(defaultCountryData);
+  // State
+  const [internalValue, setInternalValue] = useState(defaultValue);
+  const [selectedCountry, setSelectedCountry] = useState<Country>(defaultCountryData);
 
-    // Controlled vs uncontrolled
-    const phoneValue = controlledValue !== undefined ? controlledValue : internalValue;
+  // Controlled vs uncontrolled
+  const phoneValue = controlledValue !== undefined ? controlledValue : internalValue;
 
-    // Convert countries to Select options
-    const countryOptions = useMemo<SelectOption[]>(() => {
-      return countries.map((country) => ({
-        value: country.code,
-        label: (
-          <div className={styles.countryOption}>
-            <span className={styles.flag}>{country.flag}</span>
-            <span className={styles.dialCode}>{country.dialCode}</span>
-          </div>
-        ),
-      }));
-    }, [countries]);
-
-    // Handle phone number change
-    const handlePhoneChange = useCallback(
-      (event: React.ChangeEvent<HTMLInputElement>) => {
-        let newValue = event.target.value;
-
-        // Apply formatting if enabled
-        if (autoFormat && selectedCountry.format) {
-          newValue = formatPhoneNumber(newValue, selectedCountry.format);
-        }
-
-        // Update internal state if uncontrolled
-        if (controlledValue === undefined) {
-          setInternalValue(newValue);
-        }
-
-        // Build full phone number with country code
-        const fullPhone = `${selectedCountry.dialCode}${newValue.replace(/\D/g, '')}`;
-
-        // Call onChange callback
-        onChange?.(fullPhone, selectedCountry);
-      },
-      [controlledValue, onChange, selectedCountry, autoFormat]
-    );
-
-    // Handle country selection
-    const handleCountrySelect = useCallback(
-      (countryCode: string) => {
-        const country = countries.find((c) => c.code === countryCode);
-        if (!country) {
-          return;
-        }
-
-        setSelectedCountry(country);
-
-        // Reformat existing phone number with new country format
-        if (phoneValue && autoFormat && country.format) {
-          const formatted = formatPhoneNumber(phoneValue, country.format);
-          if (controlledValue === undefined) {
-            setInternalValue(formatted);
-          }
-          const fullPhone = `${country.dialCode}${formatted.replace(/\D/g, '')}`;
-          onChange?.(fullPhone, country);
-        }
-      },
-      [countries, phoneValue, autoFormat, controlledValue, onChange]
-    );
-
-    // Placeholder text based on country format
-    const placeholder = selectedCountry.format
-      ? selectedCountry.format.replace(/#/g, '0')
-      : 'Enter phone number';
-
-    // Container classes
-    const containerClasses = [
-      styles.container,
-      labelPlacement === 'left' && styles.horizontal,
-      className,
-    ]
-      .filter(Boolean)
-      .join(' ');
-
-    return (
-      <div className={containerClasses} style={style} data-testid={dataTestId}>
-        {label && (
-          <label className={styles.label} data-required={required || undefined}>
-            {label}
-            {required && <span className={styles.required}>*</span>}
-          </label>
-        )}
-
-        <div className={styles.inputContainer}>
-          {/* Phone number input with country code in startIcon */}
-          <Input
-            {...rest}
-            ref={ref}
-            type="tel"
-            value={phoneValue}
-            onChange={handlePhoneChange}
-            onBlur={onBlur}
-            disabled={disabled}
-            required={required}
-            placeholder={placeholder}
-            aria-label={ariaLabel || label || 'Phone number'}
-            error={error}
-            helperText={helperText}
-            errorMessage={errorMessage}
-            startIcon={
-              <div className={styles.countrySelectWrapper}>
-                <Select
-                  options={countryOptions}
-                  value={selectedCountry.code}
-                  onChange={handleCountrySelect}
-                  disabled={disabled}
-                  searchable={showCountrySearch}
-                  searchPlaceholder={countrySearchPlaceholder}
-                  aria-label="Select country"
-                  className={styles.countrySelect}
-                />
-              </div>
-            }
-            className={styles.phoneNumberInput}
-          />
+  // Convert countries to Select options
+  const countryOptions = useMemo<SelectOption[]>(() => {
+    return countries.map((country) => ({
+      value: country.code,
+      label: (
+        <div className={styles.countryOption}>
+          <span className={styles.flag}>{country.flag}</span>
+          <span className={styles.dialCode}>{country.dialCode}</span>
         </div>
-      </div>
-    );
-  }
-);
+      ),
+    }));
+  }, [countries]);
 
-PhoneInput.displayName = 'PhoneInput';
+  // Handle phone number change
+  const handlePhoneChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      let newValue = event.target.value;
+
+      // Apply formatting if enabled
+      if (autoFormat && selectedCountry.format) {
+        newValue = formatPhoneNumber(newValue, selectedCountry.format);
+      }
+
+      // Update internal state if uncontrolled
+      if (controlledValue === undefined) {
+        setInternalValue(newValue);
+      }
+
+      // Build full phone number with country code
+      const fullPhone = `${selectedCountry.dialCode}${newValue.replace(/\D/g, '')}`;
+
+      // Call onChange callback
+      onChange?.(fullPhone, selectedCountry);
+    },
+    [controlledValue, onChange, selectedCountry, autoFormat]
+  );
+
+  // Handle country selection
+  const handleCountrySelect = useCallback(
+    (countryCode: string) => {
+      const country = countries.find((c) => c.code === countryCode);
+      if (!country) {
+        return;
+      }
+
+      setSelectedCountry(country);
+
+      // Reformat existing phone number with new country format
+      if (phoneValue && autoFormat && country.format) {
+        const formatted = formatPhoneNumber(phoneValue, country.format);
+        if (controlledValue === undefined) {
+          setInternalValue(formatted);
+        }
+        const fullPhone = `${country.dialCode}${formatted.replace(/\D/g, '')}`;
+        onChange?.(fullPhone, country);
+      }
+    },
+    [countries, phoneValue, autoFormat, controlledValue, onChange]
+  );
+
+  // Placeholder text based on country format
+  const placeholder = selectedCountry.format
+    ? selectedCountry.format.replace(/#/g, '0')
+    : 'Enter phone number';
+
+  // Container classes
+  const containerClasses = [
+    styles.container,
+    labelPlacement === 'left' && styles.horizontal,
+    className,
+  ]
+    .filter(Boolean)
+    .join(' ');
+
+  return (
+    <div className={containerClasses} style={style} data-testid={dataTestId}>
+      {label && (
+        <label className={styles.label} data-required={required || undefined}>
+          {label}
+          {required && <span className={styles.required}>*</span>}
+        </label>
+      )}
+
+      <div className={styles.inputContainer}>
+        {/* Phone number input with country code in startIcon */}
+        <Input
+          {...rest}
+          ref={ref}
+          type="tel"
+          value={phoneValue}
+          onChange={handlePhoneChange}
+          onBlur={onBlur}
+          disabled={disabled}
+          required={required}
+          placeholder={placeholder}
+          aria-label={ariaLabel || label || 'Phone number'}
+          error={error}
+          helperText={helperText}
+          errorMessage={errorMessage}
+          startIcon={
+            <div className={styles.countrySelectWrapper}>
+              <Select
+                options={countryOptions}
+                value={selectedCountry.code}
+                onChange={handleCountrySelect}
+                disabled={disabled}
+                searchable={showCountrySearch}
+                searchPlaceholder={countrySearchPlaceholder}
+                aria-label="Select country"
+                className={styles.countrySelect}
+              />
+            </div>
+          }
+          className={styles.phoneNumberInput}
+        />
+      </div>
+    </div>
+  );
+};

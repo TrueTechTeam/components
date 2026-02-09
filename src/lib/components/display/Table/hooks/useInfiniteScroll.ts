@@ -9,7 +9,7 @@ export interface UseInfiniteScrollOptions {
 }
 
 export interface UseInfiniteScrollReturn {
-  sentinelRef: React.RefObject<HTMLDivElement>;
+  sentinelRef: React.RefObject<HTMLDivElement | null>;
 }
 
 export function useInfiniteScroll({

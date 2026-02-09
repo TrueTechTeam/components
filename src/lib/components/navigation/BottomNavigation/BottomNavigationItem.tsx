@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
 import type { BaseComponentProps } from '../../../types';
 import { Icon, type IconName } from '../../display/Icon';
 import { useBottomNavigationContextStrict } from './BottomNavigationContext';
@@ -65,96 +65,92 @@ export interface BottomNavigationItemProps extends BaseComponentProps {
  * />
  * ```
  */
-export const BottomNavigationItem = forwardRef<HTMLElement, BottomNavigationItemProps>(
-  (
-    {
-      value,
-      label,
-      icon,
-      badge,
-      disabled = false,
-      href,
-      onClick,
-      className,
-      'data-testid': testId,
-      style,
-      ...restProps
-    },
-    ref
-  ) => {
-    const { selectedValue, onSelect, showLabels, showSelectedLabel } =
-      useBottomNavigationContextStrict();
+export const BottomNavigationItem = ({
+  ref,
+  value,
+  label,
+  icon,
+  badge,
+  disabled = false,
+  href,
+  onClick,
+  className,
+  'data-testid': testId,
+  style,
+  ...restProps
+}: BottomNavigationItemProps & {
+  ref?: React.Ref<HTMLElement>;
+}) => {
+  const { selectedValue, onSelect, showLabels, showSelectedLabel } =
+    useBottomNavigationContextStrict();
 
-    const isSelected = selectedValue === value;
-    const shouldShowLabel = showLabels || (showSelectedLabel && isSelected);
+  const isSelected = selectedValue === value;
+  const shouldShowLabel = showLabels || (showSelectedLabel && isSelected);
 
-    const handleClick = (e: React.MouseEvent) => {
-      if (disabled) {
-        e.preventDefault();
-        return;
-      }
-
-      if (!href) {
-        e.preventDefault();
-      }
-
-      onSelect(value);
-      onClick?.(e);
-    };
-
-    const renderIcon = () => {
-      if (typeof icon === 'string') {
-        return <Icon name={icon as IconName} size={24} />;
-      }
-      return icon;
-    };
-
-    const componentClasses = [styles.item, className].filter(Boolean).join(' ');
-
-    const content = (
-      <>
-        <span className={styles.iconWrapper}>
-          {renderIcon()}
-          {badge && <span className={styles.badge}>{badge}</span>}
-        </span>
-        {shouldShowLabel && <span className={styles.label}>{label}</span>}
-      </>
-    );
-
-    const commonProps = {
-      className: componentClasses,
-      onClick: handleClick,
-      'data-component': 'bottom-navigation-item',
-      'data-selected': isSelected || undefined,
-      'data-disabled': disabled || undefined,
-      'data-testid': testId,
-      'aria-current': isSelected ? ('page' as const) : undefined,
-      'aria-disabled': disabled || undefined,
-      style,
-    };
-
-    if (href && !disabled) {
-      return (
-        <a ref={ref as React.Ref<HTMLAnchorElement>} href={href} {...commonProps} {...restProps}>
-          {content}
-        </a>
-      );
+  const handleClick = (e: React.MouseEvent) => {
+    if (disabled) {
+      e.preventDefault();
+      return;
     }
 
+    if (!href) {
+      e.preventDefault();
+    }
+
+    onSelect(value);
+    onClick?.(e);
+  };
+
+  const renderIcon = () => {
+    if (typeof icon === 'string') {
+      return <Icon name={icon as IconName} size={24} />;
+    }
+    return icon;
+  };
+
+  const componentClasses = [styles.item, className].filter(Boolean).join(' ');
+
+  const content = (
+    <>
+      <span className={styles.iconWrapper}>
+        {renderIcon()}
+        {badge && <span className={styles.badge}>{badge}</span>}
+      </span>
+      {shouldShowLabel && <span className={styles.label}>{label}</span>}
+    </>
+  );
+
+  const commonProps = {
+    className: componentClasses,
+    onClick: handleClick,
+    'data-component': 'bottom-navigation-item',
+    'data-selected': isSelected || undefined,
+    'data-disabled': disabled || undefined,
+    'data-testid': testId,
+    'aria-current': isSelected ? ('page' as const) : undefined,
+    'aria-disabled': disabled || undefined,
+    style,
+  };
+
+  if (href && !disabled) {
     return (
-      <button
-        ref={ref as React.Ref<HTMLButtonElement>}
-        type="button"
-        disabled={disabled}
-        {...commonProps}
-        {...restProps}
-      >
+      <a ref={ref as React.Ref<HTMLAnchorElement>} href={href} {...commonProps} {...restProps}>
         {content}
-      </button>
+      </a>
     );
   }
-);
 
-BottomNavigationItem.displayName = 'BottomNavigationItem';
+  return (
+    <button
+      ref={ref as React.Ref<HTMLButtonElement>}
+      type="button"
+      disabled={disabled}
+      {...commonProps}
+      {...restProps}
+    >
+      {content}
+    </button>
+  );
+};
 
 export default BottomNavigationItem;

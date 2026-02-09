@@ -2,7 +2,7 @@
  * SortableItem component - Individual item within a SortableList
  */
 
-import React, { forwardRef, type ReactNode, useCallback, type DragEvent } from 'react';
+import React, { type ReactNode, useCallback, type DragEvent } from 'react';
 import type { BaseComponentProps } from '../../../types/component.types';
 import { useSortableListContextOptional } from './SortableListContext';
 import { useSortable } from '../hooks';
@@ -90,114 +90,110 @@ export interface SortableItemProps extends Omit<BaseComponentProps, 'children'> 
  * </SortableItem>
  * ```
  */
-export const SortableItem = forwardRef<HTMLElement, SortableItemProps>(
-  (
-    {
-      id,
-      index,
-      disabled = false,
-      as: Component = 'div',
-      children,
-      className,
-      'data-testid': dataTestId,
-      'aria-label': ariaLabel,
-      style,
-      data = {},
+export const SortableItem = ({
+  ref,
+  id,
+  index,
+  disabled = false,
+  as: Component = 'div',
+  children,
+  className,
+  'data-testid': dataTestId,
+  'aria-label': ariaLabel,
+  style,
+  data = {},
+}: SortableItemProps & {
+  ref?: React.Ref<HTMLElement>;
+}) => {
+  const listContext = useSortableListContextOptional();
+  const isDisabled = disabled || listContext?.disabled;
+
+  const {
+    isDragging,
+    isOver,
+    setNodeRef,
+    attributes,
+    listeners,
+    style: sortableStyle,
+  } = useSortable({
+    id,
+    index,
+    data: { ...data, type: 'sortable-item' },
+    disabled: isDisabled,
+    groupId: listContext?.groupId,
+  });
+
+  // Create ref callback that handles both refs
+  const handleRef = useCallback(
+    (node: HTMLElement | null) => {
+      setNodeRef(node);
+      if (typeof ref === 'function') {
+        ref(node);
+      } else if (ref) {
+        (ref as React.MutableRefObject<HTMLElement | null>).current = node;
+      }
     },
-    ref
-  ) => {
-    const listContext = useSortableListContextOptional();
-    const isDisabled = disabled || listContext?.disabled;
+    [ref, setNodeRef]
+  );
 
-    const {
-      isDragging,
-      isOver,
-      setNodeRef,
-      attributes,
-      listeners,
-      style: sortableStyle,
-    } = useSortable({
-      id,
-      index,
-      data: { ...data, type: 'sortable-item' },
-      disabled: isDisabled,
-      groupId: listContext?.groupId,
-    });
+  // Drag handle props for when useDragHandle is true
+  const dragHandleProps = listContext?.useDragHandle
+    ? {
+        draggable: !isDisabled,
+        onDragStart: listeners.onDragStart,
+        onDragEnd: listeners.onDragEnd,
+        onKeyDown: listeners.onKeyDown,
+        role: 'button',
+        tabIndex: isDisabled ? -1 : 0,
+        'aria-grabbed': isDragging,
+      }
+    : undefined;
 
-    // Create ref callback that handles both refs
-    const handleRef = useCallback(
-      (node: HTMLElement | null) => {
-        setNodeRef(node);
-        if (typeof ref === 'function') {
-          ref(node);
-        } else if (ref) {
-          (ref as React.MutableRefObject<HTMLElement | null>).current = node;
-        }
-      },
-      [ref, setNodeRef]
-    );
+  // If using drag handles, don't make the whole item draggable
+  const itemListeners = listContext?.useDragHandle
+    ? {
+        onDragEnter: listeners.onDragEnter,
+        onDragLeave: listeners.onDragLeave,
+        onDragOver: listeners.onDragOver,
+        onDrop: listeners.onDrop,
+      }
+    : listeners;
 
-    // Drag handle props for when useDragHandle is true
-    const dragHandleProps = listContext?.useDragHandle
-      ? {
-          draggable: !isDisabled,
-          onDragStart: listeners.onDragStart,
-          onDragEnd: listeners.onDragEnd,
-          onKeyDown: listeners.onKeyDown,
-          role: 'button',
-          tabIndex: isDisabled ? -1 : 0,
-          'aria-grabbed': isDragging,
-        }
-      : undefined;
+  const itemAttributes = listContext?.useDragHandle
+    ? {
+        ...attributes,
+        draggable: false,
+      }
+    : attributes;
 
-    // If using drag handles, don't make the whole item draggable
-    const itemListeners = listContext?.useDragHandle
-      ? {
-          onDragEnter: listeners.onDragEnter,
-          onDragLeave: listeners.onDragLeave,
-          onDragOver: listeners.onDragOver,
-          onDrop: listeners.onDrop,
-        }
-      : listeners;
+  // Render children with render props
+  const renderProps: SortableItemRenderProps = {
+    isDragging,
+    isOver,
+    dragHandleProps,
+    index,
+  };
 
-    const itemAttributes = listContext?.useDragHandle
-      ? {
-          ...attributes,
-          draggable: false,
-        }
-      : attributes;
+  const content =
+    typeof children === 'function'
+      ? (children as (props: SortableItemRenderProps) => ReactNode)(renderProps)
+      : children;
 
-    // Render children with render props
-    const renderProps: SortableItemRenderProps = {
-      isDragging,
-      isOver,
-      dragHandleProps,
-      index,
-    };
+  const containerClasses = [styles.sortableItem, className].filter(Boolean).join(' ');
 
-    const content =
-      typeof children === 'function'
-        ? (children as (props: SortableItemRenderProps) => ReactNode)(renderProps)
-        : children;
-
-    const containerClasses = [styles.sortableItem, className].filter(Boolean).join(' ');
-
-    return (
-      <Component
-        ref={handleRef}
-        className={containerClasses}
-        style={{ ...style, ...sortableStyle }}
-        data-testid={dataTestId}
-        aria-label={ariaLabel}
-        {...itemAttributes}
-        {...itemListeners}
-      >
-        {content}
-      </Component>
-    );
-  }
-);
-
-SortableItem.displayName = 'SortableItem';
+  return (
+    <Component
+      ref={handleRef}
+      className={containerClasses}
+      style={{ ...style, ...sortableStyle }}
+      data-testid={dataTestId}
+      aria-label={ariaLabel}
+      {...itemAttributes}
+      {...itemListeners}
+    >
+      {content}
+    </Component>
+  );
+};
 
 export default SortableItem;

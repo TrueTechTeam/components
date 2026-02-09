@@ -1,4 +1,4 @@
-import React, { forwardRef, useState, useId, useCallback } from 'react';
+import React, { useState, useId, useCallback } from 'react';
 import type { ComponentSize } from '../../../types';
 import { Icon } from '../../display/Icon';
 import type { IconName } from '../../display/Icon/icons';
@@ -24,121 +24,116 @@ export interface RatingProps
   'data-testid'?: string;
 }
 
-export const Rating = forwardRef<HTMLDivElement, RatingProps>(
-  (
-    {
-      size = 'md',
-      value: controlledValue,
-      defaultValue = 0,
-      onChange,
-      onBlur,
-      max = 5,
-      precision = 1,
-      icon = '★',
-      emptyIcon = '☆',
-      label,
-      helperText,
-      readOnly = false,
-      disabled = false,
-      required = false,
-      id: providedId,
-      className,
-      'data-testid': dataTestId,
-      ...rest
-    },
-    ref
-  ) => {
-    const autoId = useId();
-    const id = providedId || autoId;
-    const [internalValue, setInternalValue] = useState(defaultValue);
-    const [hoverValue, setHoverValue] = useState<number | null>(null);
+export const Rating = ({
+  ref,
+  size = 'md',
+  value: controlledValue,
+  defaultValue = 0,
+  onChange,
+  onBlur,
+  max = 5,
+  precision = 1,
+  icon = '★',
+  emptyIcon = '☆',
+  label,
+  helperText,
+  readOnly = false,
+  disabled = false,
+  required = false,
+  id: providedId,
+  className,
+  'data-testid': dataTestId,
+  ...rest
+}: RatingProps & {
+  ref?: React.Ref<HTMLDivElement>;
+}) => {
+  const autoId = useId();
+  const id = providedId || autoId;
+  const [internalValue, setInternalValue] = useState(defaultValue);
+  const [hoverValue, setHoverValue] = useState<number | null>(null);
 
-    const value = controlledValue !== undefined ? controlledValue : internalValue;
-    const displayValue = hoverValue !== null ? hoverValue : value;
+  const value = controlledValue !== undefined ? controlledValue : internalValue;
+  const displayValue = hoverValue !== null ? hoverValue : value;
 
-    const handleClick = useCallback(
-      (newValue: number) => {
-        if (disabled || readOnly) {
-          return;
-        }
-
-        if (controlledValue === undefined) {
-          setInternalValue(newValue);
-        }
-        onChange?.(newValue);
-      },
-      [controlledValue, disabled, readOnly, onChange]
-    );
-
-    const renderIcon = (iconProp: React.ReactNode | IconName) => {
-      if (typeof iconProp === 'string') {
-        if (iconProp.length === 1) {
-          return iconProp; // Single character like ★
-        }
-        return <Icon name={iconProp as IconName} />;
+  const handleClick = useCallback(
+    (newValue: number) => {
+      if (disabled || readOnly) {
+        return;
       }
-      return iconProp;
-    };
 
-    const items = [];
-    for (let i = 1; i <= max; i++) {
-      const itemValue = i;
-      const isFilled = displayValue >= itemValue;
-      const isHalfFilled =
-        precision < 1 && displayValue > itemValue - 1 && displayValue < itemValue;
+      if (controlledValue === undefined) {
+        setInternalValue(newValue);
+      }
+      onChange?.(newValue);
+    },
+    [controlledValue, disabled, readOnly, onChange]
+  );
 
-      items.push(
-        <button
-          key={i}
-          type="button"
-          className={styles.item}
-          data-filled={isFilled || undefined}
-          data-half={isHalfFilled || undefined}
-          onClick={() => handleClick(itemValue)}
-          onMouseEnter={() => !disabled && !readOnly && setHoverValue(itemValue)}
-          onMouseLeave={() => setHoverValue(null)}
-          disabled={disabled}
-          aria-label={`${itemValue} ${max === 1 ? 'star' : 'stars'}`}
-        >
-          <span className={styles.iconWrapper}>
-            {isFilled || isHalfFilled ? renderIcon(icon) : renderIcon(emptyIcon)}
-          </span>
-        </button>
-      );
+  const renderIcon = (iconProp: React.ReactNode | IconName) => {
+    if (typeof iconProp === 'string') {
+      if (iconProp.length === 1) {
+        return iconProp; // Single character like ★
+      }
+      return <Icon name={iconProp as IconName} />;
     }
+    return iconProp;
+  };
 
-    return (
-      <div
-        className={`${styles.container} ${className || ''}`}
-        data-testid={dataTestId && `${dataTestId}-container`}
+  const items = [];
+  for (let i = 1; i <= max; i++) {
+    const itemValue = i;
+    const isFilled = displayValue >= itemValue;
+    const isHalfFilled = precision < 1 && displayValue > itemValue - 1 && displayValue < itemValue;
+
+    items.push(
+      <button
+        key={i}
+        type="button"
+        className={styles.item}
+        data-filled={isFilled || undefined}
+        data-half={isHalfFilled || undefined}
+        onClick={() => handleClick(itemValue)}
+        onMouseEnter={() => !disabled && !readOnly && setHoverValue(itemValue)}
+        onMouseLeave={() => setHoverValue(null)}
+        disabled={disabled}
+        aria-label={`${itemValue} ${max === 1 ? 'star' : 'stars'}`}
       >
-        {label && (
-          <label htmlFor={id} className={styles.label} data-required={required || undefined}>
-            {label}
-            {required && <span className={styles.required}>*</span>}
-          </label>
-        )}
-
-        <div
-          ref={ref}
-          id={id}
-          className={styles.rating}
-          data-size={size}
-          data-readonly={readOnly || undefined}
-          data-disabled={disabled || undefined}
-          data-component="rating"
-          role="radiogroup"
-          aria-label={label}
-          onBlur={onBlur}
-          {...rest}
-        >
-          {items}
-        </div>
-
-        {helperText && <div className={styles.helperText}>{helperText}</div>}
-      </div>
+        <span className={styles.iconWrapper}>
+          {isFilled || isHalfFilled ? renderIcon(icon) : renderIcon(emptyIcon)}
+        </span>
+      </button>
     );
   }
-);
 
-Rating.displayName = 'Rating';
+  return (
+    <div
+      className={`${styles.container} ${className || ''}`}
+      data-testid={dataTestId && `${dataTestId}-container`}
+    >
+      {label && (
+        <label htmlFor={id} className={styles.label} data-required={required || undefined}>
+          {label}
+          {required && <span className={styles.required}>*</span>}
+        </label>
+      )}
+
+      <div
+        ref={ref}
+        id={id}
+        className={styles.rating}
+        data-size={size}
+        data-readonly={readOnly || undefined}
+        data-disabled={disabled || undefined}
+        data-component="rating"
+        role="radiogroup"
+        aria-label={label}
+        onBlur={onBlur}
+        {...rest}
+      >
+        {items}
+      </div>
+
+      {helperText && <div className={styles.helperText}>{helperText}</div>}
+    </div>
+  );
+};

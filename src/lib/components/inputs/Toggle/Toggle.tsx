@@ -1,4 +1,4 @@
-import React, { forwardRef, useState, useId, useCallback } from 'react';
+import React, { useState, useId, useCallback } from 'react';
 import type { ComponentSize, ComponentVariant, InputBaseProps } from '../../../types';
 import styles from './Toggle.module.scss';
 
@@ -85,149 +85,145 @@ export interface ToggleProps extends Omit<InputBaseProps, 'value' | 'onChange' |
  * />
  * ```
  */
-export const Toggle = forwardRef<HTMLInputElement, ToggleProps>(
-  (
-    {
-      variant = 'primary',
-      size = 'md',
-      loading = false,
-      checked,
-      defaultChecked = false,
-      onChange,
-      label,
-      labelPlacement = 'end',
-      helperText,
-      errorMessage,
-      error = false,
-      disabled = false,
-      readOnly = false,
-      required = false,
-      name,
-      id: providedId,
-      className,
-      'data-testid': dataTestId,
-      'aria-label': ariaLabel,
-      ...rest
+export const Toggle = ({
+  ref,
+  variant = 'primary',
+  size = 'md',
+  loading = false,
+  checked,
+  defaultChecked = false,
+  onChange,
+  label,
+  labelPlacement = 'end',
+  helperText,
+  errorMessage,
+  error = false,
+  disabled = false,
+  readOnly = false,
+  required = false,
+  name,
+  id: providedId,
+  className,
+  'data-testid': dataTestId,
+  'aria-label': ariaLabel,
+  ...rest
+}: ToggleProps & {
+  ref?: React.Ref<HTMLInputElement>;
+}) => {
+  const autoId = useId();
+  const id = providedId || autoId;
+
+  // Internal state for uncontrolled component
+  const [internalChecked, setInternalChecked] = useState(defaultChecked);
+
+  // Use controlled value if provided, otherwise use internal state
+  const isChecked = checked !== undefined ? checked : internalChecked;
+
+  const isDisabled = disabled || loading;
+
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (isDisabled || readOnly) {
+        return;
+      }
+
+      const newChecked = event.target.checked;
+
+      // Update internal state if uncontrolled
+      if (checked === undefined) {
+        setInternalChecked(newChecked);
+      }
+
+      // Call onChange callback
+      onChange?.(newChecked, event);
     },
-    ref
-  ) => {
-    const autoId = useId();
-    const id = providedId || autoId;
+    [checked, isDisabled, readOnly, onChange]
+  );
 
-    // Internal state for uncontrolled component
-    const [internalChecked, setInternalChecked] = useState(defaultChecked);
+  const toggleSwitch = (
+    <label
+      htmlFor={id}
+      className={styles.toggle}
+      data-variant={variant}
+      data-size={size}
+      data-checked={isChecked || undefined}
+      data-error={error || undefined}
+      data-disabled={isDisabled || undefined}
+      data-loading={loading || undefined}
+      data-readonly={readOnly || undefined}
+      data-component="toggle"
+    >
+      <input
+        ref={ref}
+        type="checkbox"
+        id={id}
+        name={name}
+        checked={isChecked}
+        onChange={handleChange}
+        disabled={isDisabled}
+        readOnly={readOnly}
+        required={required}
+        className={styles.input}
+        data-testid={dataTestId}
+        aria-label={ariaLabel || label}
+        aria-checked={isChecked}
+        aria-disabled={isDisabled}
+        aria-readonly={readOnly}
+        aria-invalid={error}
+        {...rest}
+      />
 
-    // Use controlled value if provided, otherwise use internal state
-    const isChecked = checked !== undefined ? checked : internalChecked;
+      <span className={styles.track}>
+        <span className={styles.thumb} />
+      </span>
+    </label>
+  );
 
-    const isDisabled = disabled || loading;
-
-    const handleChange = useCallback(
-      (event: React.ChangeEvent<HTMLInputElement>) => {
-        if (isDisabled || readOnly) {
-          return;
-        }
-
-        const newChecked = event.target.checked;
-
-        // Update internal state if uncontrolled
-        if (checked === undefined) {
-          setInternalChecked(newChecked);
-        }
-
-        // Call onChange callback
-        onChange?.(newChecked, event);
-      },
-      [checked, isDisabled, readOnly, onChange]
-    );
-
-    const toggleSwitch = (
-      <label
-        htmlFor={id}
-        className={styles.toggle}
-        data-variant={variant}
-        data-size={size}
-        data-checked={isChecked || undefined}
-        data-error={error || undefined}
-        data-disabled={isDisabled || undefined}
-        data-loading={loading || undefined}
-        data-readonly={readOnly || undefined}
-        data-component="toggle"
-      >
-        <input
-          ref={ref}
-          type="checkbox"
-          id={id}
-          name={name}
-          checked={isChecked}
-          onChange={handleChange}
-          disabled={isDisabled}
-          readOnly={readOnly}
-          required={required}
-          className={styles.input}
-          data-testid={dataTestId}
-          aria-label={ariaLabel || label}
-          aria-checked={isChecked}
-          aria-disabled={isDisabled}
-          aria-readonly={readOnly}
-          aria-invalid={error}
-          {...rest}
-        />
-
-        <span className={styles.track}>
-          <span className={styles.thumb} />
-        </span>
-      </label>
-    );
-
-    if (!label) {
-      return (
-        <div className={className} data-testid={dataTestId && `${dataTestId}-container`}>
-          <div className={styles.toggleWrapper}>
-            {toggleSwitch}
-            {(helperText || (error && errorMessage)) && (
-              <div
-                className={styles.helperText}
-                data-error={error || undefined}
-                role={error ? 'alert' : undefined}
-                aria-live={error ? 'polite' : undefined}
-              >
-                {error && errorMessage ? errorMessage : helperText}
-              </div>
-            )}
-          </div>
-        </div>
-      );
-    }
-
+  if (!label) {
     return (
-      <div
-        className={`${styles.container} ${className || ''}`}
-        data-label-placement={labelPlacement}
-        data-disabled={disabled || undefined}
-        data-readonly={readOnly || undefined}
-        data-testid={dataTestId && `${dataTestId}-container`}
-      >
-        <div className={styles.toggleWithLabel}>
+      <div className={className} data-testid={dataTestId && `${dataTestId}-container`}>
+        <div className={styles.toggleWrapper}>
           {toggleSwitch}
-          <label htmlFor={id} className={styles.labelText} data-required={required || undefined}>
-            {label}
-            {required && <span className={styles.required}>*</span>}
-          </label>
+          {(helperText || (error && errorMessage)) && (
+            <div
+              className={styles.helperText}
+              data-error={error || undefined}
+              role={error ? 'alert' : undefined}
+              aria-live={error ? 'polite' : undefined}
+            >
+              {error && errorMessage ? errorMessage : helperText}
+            </div>
+          )}
         </div>
-        {(helperText || (error && errorMessage)) && (
-          <div
-            className={styles.helperText}
-            data-error={error || undefined}
-            role={error ? 'alert' : undefined}
-            aria-live={error ? 'polite' : undefined}
-          >
-            {error && errorMessage ? errorMessage : helperText}
-          </div>
-        )}
       </div>
     );
   }
-);
 
-Toggle.displayName = 'Toggle';
+  return (
+    <div
+      className={`${styles.container} ${className || ''}`}
+      data-label-placement={labelPlacement}
+      data-disabled={disabled || undefined}
+      data-readonly={readOnly || undefined}
+      data-testid={dataTestId && `${dataTestId}-container`}
+    >
+      <div className={styles.toggleWithLabel}>
+        {toggleSwitch}
+        <label htmlFor={id} className={styles.labelText} data-required={required || undefined}>
+          {label}
+          {required && <span className={styles.required}>*</span>}
+        </label>
+      </div>
+      {(helperText || (error && errorMessage)) && (
+        <div
+          className={styles.helperText}
+          data-error={error || undefined}
+          role={error ? 'alert' : undefined}
+          aria-live={error ? 'polite' : undefined}
+        >
+          {error && errorMessage ? errorMessage : helperText}
+        </div>
+      )}
+    </div>
+  );
+};

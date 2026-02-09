@@ -30,7 +30,7 @@ function getFocusableElements(container: HTMLElement): HTMLElement[] {
  * @param autoFocus - Whether to automatically focus the first element on mount
  */
 export function useFocusTrap<T extends HTMLElement>(
-  ref: RefObject<T>,
+  ref: RefObject<T | null>,
   enabled = true,
   autoFocus = true
 ): void {

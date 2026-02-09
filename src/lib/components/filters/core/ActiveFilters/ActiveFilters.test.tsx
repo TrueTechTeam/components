@@ -888,26 +888,19 @@ describe('ActiveFilters', () => {
       expect(chips).toHaveLength(2);
     });
   });
+});
 
-  // 11. Display name
-  describe('display name', () => {
-    it('has correct display name', () => {
-      expect(ActiveFilters.displayName).toBe('ActiveFilters');
-    });
-  });
+// 12. Context error handling
+describe('context error handling', () => {
+  it('throws error when used outside FilterProvider', () => {
+    // Suppress console.error for this test
+    const originalError = console.error;
+    console.error = jest.fn();
 
-  // 12. Context error handling
-  describe('context error handling', () => {
-    it('throws error when used outside FilterProvider', () => {
-      // Suppress console.error for this test
-      const originalError = console.error;
-      console.error = jest.fn();
+    expect(() => {
+      render(<ActiveFilters />);
+    }).toThrow('useFilterContextStrict must be used within a FilterProvider');
 
-      expect(() => {
-        render(<ActiveFilters />);
-      }).toThrow('useFilterContextStrict must be used within a FilterProvider');
-
-      console.error = originalError;
-    });
+    console.error = originalError;
   });
 });

@@ -865,6 +865,4 @@ export const FilterProvider: React.FC<FilterProviderProps> = ({
   return <FilterContext.Provider value={contextValue}>{children}</FilterContext.Provider>;
 };
 
-FilterProvider.displayName = 'FilterProvider';
-
 export default FilterProvider;

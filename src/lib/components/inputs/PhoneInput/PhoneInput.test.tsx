@@ -442,61 +442,53 @@ describe('PhoneInput', () => {
       expect(screen.getByRole('textbox')).toHaveFocus();
     });
   });
+});
 
-  describe('display name', () => {
-    it('should have correct display name', () => {
-      expect(PhoneInput.displayName).toBe('PhoneInput');
-    });
+describe('formatPhoneNumber edge cases', () => {
+  it('should handle empty value', () => {
+    render(<PhoneInput defaultCountry="US" autoFormat />);
+
+    const input = screen.getByRole('textbox') as HTMLInputElement;
+    fireEvent.change(input, { target: { value: '' } });
+
+    expect(input.value).toBe('');
   });
 
-  describe('formatPhoneNumber edge cases', () => {
-    it('should handle empty value', () => {
-      render(<PhoneInput defaultCountry="US" autoFormat />);
+  it('should strip non-digit characters before formatting', () => {
+    render(<PhoneInput defaultCountry="US" autoFormat />);
 
-      const input = screen.getByRole('textbox') as HTMLInputElement;
-      fireEvent.change(input, { target: { value: '' } });
+    const input = screen.getByRole('textbox') as HTMLInputElement;
+    fireEvent.change(input, { target: { value: 'abc555def1234ghi567' } });
 
-      expect(input.value).toBe('');
-    });
+    expect(input.value).toBe('(555) 123-4567');
+  });
 
-    it('should strip non-digit characters before formatting', () => {
-      render(<PhoneInput defaultCountry="US" autoFormat />);
+  it('should format different country formats correctly - UK', () => {
+    render(<PhoneInput defaultCountry="GB" autoFormat />);
 
-      const input = screen.getByRole('textbox') as HTMLInputElement;
-      fireEvent.change(input, { target: { value: 'abc555def1234ghi567' } });
+    const input = screen.getByRole('textbox') as HTMLInputElement;
+    fireEvent.change(input, { target: { value: '20123456789' } });
 
-      expect(input.value).toBe('(555) 123-4567');
-    });
+    // UK format is #### ### #### (11 digits)
+    expect(input.value).toMatch(/\d{4} \d{3} \d{4}/);
+  });
 
-    it('should format different country formats correctly - UK', () => {
-      render(<PhoneInput defaultCountry="GB" autoFormat />);
+  it('should format different country formats correctly - Japan', () => {
+    render(<PhoneInput defaultCountry="JP" autoFormat />);
 
-      const input = screen.getByRole('textbox') as HTMLInputElement;
-      fireEvent.change(input, { target: { value: '20123456789' } });
+    const input = screen.getByRole('textbox') as HTMLInputElement;
+    fireEvent.change(input, { target: { value: '9012345678' } });
 
-      // UK format is #### ### #### (11 digits)
-      expect(input.value).toMatch(/\d{4} \d{3} \d{4}/);
-    });
+    expect(input.value).toMatch(/\d{2}-\d{4}-\d{4}/);
+  });
 
-    it('should format different country formats correctly - Japan', () => {
-      render(<PhoneInput defaultCountry="JP" autoFormat />);
+  it('should not format when country has no format mask', () => {
+    const customCountries: Country[] = [{ code: 'XX', name: 'Test', dialCode: '+999', flag: '🏳️' }];
+    render(<PhoneInput countries={customCountries} defaultCountry="XX" autoFormat />);
 
-      const input = screen.getByRole('textbox') as HTMLInputElement;
-      fireEvent.change(input, { target: { value: '9012345678' } });
+    const input = screen.getByRole('textbox') as HTMLInputElement;
+    fireEvent.change(input, { target: { value: '1234567890' } });
 
-      expect(input.value).toMatch(/\d{2}-\d{4}-\d{4}/);
-    });
-
-    it('should not format when country has no format mask', () => {
-      const customCountries: Country[] = [
-        { code: 'XX', name: 'Test', dialCode: '+999', flag: '🏳️' },
-      ];
-      render(<PhoneInput countries={customCountries} defaultCountry="XX" autoFormat />);
-
-      const input = screen.getByRole('textbox') as HTMLInputElement;
-      fireEvent.change(input, { target: { value: '1234567890' } });
-
-      expect(input.value).toBe('1234567890');
-    });
+    expect(input.value).toBe('1234567890');
   });
 });

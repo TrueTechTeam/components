@@ -310,8 +310,6 @@ export const Autocomplete: React.FC<AutocompleteProps> = ({
   );
 };
 
-Autocomplete.displayName = 'Autocomplete';
-
 /**
  * Highlighted text component
  */

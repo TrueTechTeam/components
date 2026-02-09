@@ -665,10 +665,4 @@ describe('CheckboxFilter', () => {
       expect(screen.queryByText('Original')).not.toBeInTheDocument();
     });
   });
-
-  describe('display name', () => {
-    it('has correct display name', () => {
-      expect(CheckboxFilter.displayName).toBe('CheckboxFilter');
-    });
-  });
 });

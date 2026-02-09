@@ -1,4 +1,4 @@
-import React, { forwardRef, useCallback, useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useResizeObserver } from '../../../hooks';
 import type { BaseComponentProps } from '../../../types';
 import styles from './AdaptiveGrid.module.scss';
@@ -110,114 +110,110 @@ export interface AdaptiveGridProps extends BaseComponentProps {
  * </AdaptiveGrid>
  * ```
  */
-export const AdaptiveGrid = forwardRef<HTMLDivElement, AdaptiveGridProps>(
-  (
-    {
-      minItemWidth = 200,
-      maxColumns,
-      minColumns = 1,
-      gap = 16,
-      rowGap,
-      columnGap,
-      fillMode = 'auto-fill',
-      alignItems = 'stretch',
-      justifyItems = 'start',
-      onColumnCountChange,
-      children,
-      className,
-      style,
-      'data-testid': testId,
-      'aria-label': ariaLabel,
-      ...restProps
-    },
-    ref
-  ) => {
-    const [columnCount, setColumnCount] = useState(1);
-    const onColumnCountChangeRef = useRef(onColumnCountChange);
+export const AdaptiveGrid = ({
+  ref,
+  minItemWidth = 200,
+  maxColumns,
+  minColumns = 1,
+  gap = 16,
+  rowGap,
+  columnGap,
+  fillMode = 'auto-fill',
+  alignItems = 'stretch',
+  justifyItems = 'start',
+  onColumnCountChange,
+  children,
+  className,
+  style,
+  'data-testid': testId,
+  'aria-label': ariaLabel,
+  ...restProps
+}: AdaptiveGridProps & {
+  ref?: React.Ref<HTMLDivElement>;
+}) => {
+  const [columnCount, setColumnCount] = useState(1);
+  const onColumnCountChangeRef = useRef(onColumnCountChange);
 
-    useEffect(() => {
-      onColumnCountChangeRef.current = onColumnCountChange;
-    }, [onColumnCountChange]);
+  useEffect(() => {
+    onColumnCountChangeRef.current = onColumnCountChange;
+  }, [onColumnCountChange]);
 
-    const { ref: containerRef, width } = useResizeObserver();
+  const { ref: containerRef, width } = useResizeObserver();
 
-    // Calculate column count
-    useEffect(() => {
-      if (width <= 0) {
-        return;
-      }
+  // Calculate column count
+  useEffect(() => {
+    if (width <= 0) {
+      return;
+    }
 
-      const effectiveColumnGap = columnGap ?? gap;
-      // Calculate how many columns can fit
-      // Formula: width >= n * minItemWidth + (n-1) * gap
-      // Solving for n: n <= (width + gap) / (minItemWidth + gap)
-      let calculatedColumns = Math.floor(
-        (width + effectiveColumnGap) / (minItemWidth + effectiveColumnGap)
-      );
-
-      // Apply min/max constraints
-      calculatedColumns = Math.max(minColumns, calculatedColumns);
-      if (maxColumns !== undefined) {
-        calculatedColumns = Math.min(maxColumns, calculatedColumns);
-      }
-
-      // Ensure at least 1 column
-      calculatedColumns = Math.max(1, calculatedColumns);
-
-      if (calculatedColumns !== columnCount) {
-        setColumnCount(calculatedColumns);
-        onColumnCountChangeRef.current?.(calculatedColumns);
-      }
-    }, [width, minItemWidth, gap, columnGap, minColumns, maxColumns, columnCount]);
-
-    // Combine refs
-    const setRefs = useCallback(
-      (node: HTMLDivElement | null) => {
-        containerRef(node);
-        if (typeof ref === 'function') {
-          ref(node);
-        } else if (ref) {
-          ref.current = node;
-        }
-      },
-      [containerRef, ref]
-    );
-
-    const componentClasses = [styles.adaptiveGrid, className].filter(Boolean).join(' ');
-
-    const effectiveRowGap = rowGap ?? gap;
     const effectiveColumnGap = columnGap ?? gap;
-
-    const cssVariables = {
-      '--grid-min-item-width': `${minItemWidth}px`,
-      '--grid-gap': `${gap}px`,
-      '--grid-row-gap': `${effectiveRowGap}px`,
-      '--grid-column-gap': `${effectiveColumnGap}px`,
-      '--grid-fill-mode': fillMode,
-      '--grid-align-items': alignItems,
-      '--grid-justify-items': justifyItems,
-      '--grid-max-columns': maxColumns ?? 'none',
-      ...style,
-    } as React.CSSProperties;
-
-    return (
-      <div
-        ref={setRefs}
-        className={componentClasses}
-        style={cssVariables}
-        data-component="adaptive-grid"
-        data-columns={columnCount}
-        data-fill-mode={fillMode}
-        data-testid={testId}
-        aria-label={ariaLabel}
-        {...restProps}
-      >
-        {children}
-      </div>
+    // Calculate how many columns can fit
+    // Formula: width >= n * minItemWidth + (n-1) * gap
+    // Solving for n: n <= (width + gap) / (minItemWidth + gap)
+    let calculatedColumns = Math.floor(
+      (width + effectiveColumnGap) / (minItemWidth + effectiveColumnGap)
     );
-  }
-);
 
-AdaptiveGrid.displayName = 'AdaptiveGrid';
+    // Apply min/max constraints
+    calculatedColumns = Math.max(minColumns, calculatedColumns);
+    if (maxColumns !== undefined) {
+      calculatedColumns = Math.min(maxColumns, calculatedColumns);
+    }
+
+    // Ensure at least 1 column
+    calculatedColumns = Math.max(1, calculatedColumns);
+
+    if (calculatedColumns !== columnCount) {
+      setColumnCount(calculatedColumns);
+      onColumnCountChangeRef.current?.(calculatedColumns);
+    }
+  }, [width, minItemWidth, gap, columnGap, minColumns, maxColumns, columnCount]);
+
+  // Combine refs
+  const setRefs = useCallback(
+    (node: HTMLDivElement | null) => {
+      containerRef(node);
+      if (typeof ref === 'function') {
+        ref(node);
+      } else if (ref) {
+        ref.current = node;
+      }
+    },
+    [containerRef, ref]
+  );
+
+  const componentClasses = [styles.adaptiveGrid, className].filter(Boolean).join(' ');
+
+  const effectiveRowGap = rowGap ?? gap;
+  const effectiveColumnGap = columnGap ?? gap;
+
+  const cssVariables = {
+    '--grid-min-item-width': `${minItemWidth}px`,
+    '--grid-gap': `${gap}px`,
+    '--grid-row-gap': `${effectiveRowGap}px`,
+    '--grid-column-gap': `${effectiveColumnGap}px`,
+    '--grid-fill-mode': fillMode,
+    '--grid-align-items': alignItems,
+    '--grid-justify-items': justifyItems,
+    '--grid-max-columns': maxColumns ?? 'none',
+    ...style,
+  } as React.CSSProperties;
+
+  return (
+    <div
+      ref={setRefs}
+      className={componentClasses}
+      style={cssVariables}
+      data-component="adaptive-grid"
+      data-columns={columnCount}
+      data-fill-mode={fillMode}
+      data-testid={testId}
+      aria-label={ariaLabel}
+      {...restProps}
+    >
+      {children}
+    </div>
+  );
+};
 
 export default AdaptiveGrid;

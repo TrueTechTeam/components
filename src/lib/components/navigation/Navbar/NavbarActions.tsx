@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
 import type { BaseComponentProps } from '../../../types';
 import styles from './Navbar.module.scss';
 
@@ -20,25 +20,30 @@ export interface NavbarActionsProps extends BaseComponentProps {
  * </NavbarActions>
  * ```
  */
-export const NavbarActions = forwardRef<HTMLDivElement, NavbarActionsProps>(
-  ({ children, className, 'data-testid': testId, style, ...restProps }, ref) => {
-    const componentClasses = [styles.actions, className].filter(Boolean).join(' ');
+export const NavbarActions = ({
+  ref,
+  children,
+  className,
+  'data-testid': testId,
+  style,
+  ...restProps
+}: NavbarActionsProps & {
+  ref?: React.Ref<HTMLDivElement>;
+}) => {
+  const componentClasses = [styles.actions, className].filter(Boolean).join(' ');
 
-    return (
-      <div
-        ref={ref}
-        className={componentClasses}
-        data-component="navbar-actions"
-        data-testid={testId}
-        style={style}
-        {...restProps}
-      >
-        {children}
-      </div>
-    );
-  }
-);
-
-NavbarActions.displayName = 'NavbarActions';
+  return (
+    <div
+      ref={ref}
+      className={componentClasses}
+      data-component="navbar-actions"
+      data-testid={testId}
+      style={style}
+      {...restProps}
+    >
+      {children}
+    </div>
+  );
+};
 
 export default NavbarActions;

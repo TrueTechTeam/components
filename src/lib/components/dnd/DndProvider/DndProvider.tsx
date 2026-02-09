@@ -121,6 +121,4 @@ export const DndProvider: React.FC<DndProviderProps> = ({
   return <DndContext.Provider value={contextValue}>{children}</DndContext.Provider>;
 };
 
-DndProvider.displayName = 'DndProvider';
-
 export default DndProvider;

@@ -162,6 +162,4 @@ export const DragOverlay: React.FC<DragOverlayProps> = ({
   return createPortal(content, document.body);
 };
 
-DragOverlay.displayName = 'DragOverlay';
-
 export default DragOverlay;

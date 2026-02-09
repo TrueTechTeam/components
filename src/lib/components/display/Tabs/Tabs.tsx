@@ -1,4 +1,4 @@
-import React, { forwardRef, useState, useCallback, useMemo, useId } from 'react';
+import React, { useState, useCallback, useMemo, useId } from 'react';
 import type { BaseComponentProps, ComponentSize } from '../../../types';
 import { TabsContext, type TabsContextValue, type TabsVariant } from './TabsContext';
 import styles from './Tabs.module.scss';
@@ -99,109 +99,105 @@ export interface TabsProps extends Omit<BaseComponentProps, 'onChange'> {
  * </Tabs>
  * ```
  */
-export const Tabs = forwardRef<HTMLDivElement, TabsProps>(
-  (
-    {
-      value,
-      defaultValue = '',
-      onChange,
-      variant = 'line',
-      size = 'md',
-      orientation = 'horizontal',
-      disabled = false,
-      lazyMount = false,
-      keepMounted = false,
-      fitted = false,
-      children,
-      className,
-      'data-testid': testId,
-      style,
-      ...restProps
+export const Tabs = ({
+  ref,
+  value,
+  defaultValue = '',
+  onChange,
+  variant = 'line',
+  size = 'md',
+  orientation = 'horizontal',
+  disabled = false,
+  lazyMount = false,
+  keepMounted = false,
+  fitted = false,
+  children,
+  className,
+  'data-testid': testId,
+  style,
+  ...restProps
+}: TabsProps & {
+  ref?: React.Ref<HTMLDivElement>;
+}) => {
+  // Unique ID for this tabs instance
+  const tabsId = useId();
+
+  // Internal state for uncontrolled component
+  const [internalValue, setInternalValue] = useState(defaultValue);
+
+  // Use controlled value if provided, otherwise use internal state
+  const selectedValue = value !== undefined ? value : internalValue;
+
+  // Track which panels have been activated (for keepMounted feature)
+  const [activatedPanels] = useState(() => new Set<string>());
+
+  const handleChange = useCallback(
+    (newValue: string) => {
+      // Update internal state if uncontrolled
+      if (value === undefined) {
+        setInternalValue(newValue);
+      }
+
+      onChange?.(newValue);
     },
-    ref
-  ) => {
-    // Unique ID for this tabs instance
-    const tabsId = useId();
+    [value, onChange]
+  );
 
-    // Internal state for uncontrolled component
-    const [internalValue, setInternalValue] = useState(defaultValue);
+  const markPanelActivated = useCallback(
+    (panelValue: string) => {
+      activatedPanels.add(panelValue);
+    },
+    [activatedPanels]
+  );
 
-    // Use controlled value if provided, otherwise use internal state
-    const selectedValue = value !== undefined ? value : internalValue;
+  const contextValue: TabsContextValue = useMemo(
+    () => ({
+      tabsId,
+      selectedValue,
+      onChange: handleChange,
+      orientation,
+      variant,
+      size,
+      disabled,
+      fitted,
+      lazyMount,
+      keepMounted,
+      activatedPanels,
+      markPanelActivated,
+    }),
+    [
+      tabsId,
+      selectedValue,
+      handleChange,
+      orientation,
+      variant,
+      size,
+      disabled,
+      fitted,
+      lazyMount,
+      keepMounted,
+      activatedPanels,
+      markPanelActivated,
+    ]
+  );
 
-    // Track which panels have been activated (for keepMounted feature)
-    const [activatedPanels] = useState(() => new Set<string>());
+  const tabsClasses = [styles.tabs, className].filter(Boolean).join(' ');
 
-    const handleChange = useCallback(
-      (newValue: string) => {
-        // Update internal state if uncontrolled
-        if (value === undefined) {
-          setInternalValue(newValue);
-        }
-
-        onChange?.(newValue);
-      },
-      [value, onChange]
-    );
-
-    const markPanelActivated = useCallback(
-      (panelValue: string) => {
-        activatedPanels.add(panelValue);
-      },
-      [activatedPanels]
-    );
-
-    const contextValue: TabsContextValue = useMemo(
-      () => ({
-        tabsId,
-        selectedValue,
-        onChange: handleChange,
-        orientation,
-        variant,
-        size,
-        disabled,
-        fitted,
-        lazyMount,
-        keepMounted,
-        activatedPanels,
-        markPanelActivated,
-      }),
-      [
-        tabsId,
-        selectedValue,
-        handleChange,
-        orientation,
-        variant,
-        size,
-        disabled,
-        fitted,
-        lazyMount,
-        keepMounted,
-        activatedPanels,
-        markPanelActivated,
-      ]
-    );
-
-    const tabsClasses = [styles.tabs, className].filter(Boolean).join(' ');
-
-    return (
-      <div
-        ref={ref}
-        className={tabsClasses}
-        data-orientation={orientation}
-        data-variant={variant}
-        data-size={size}
-        data-component="tabs"
-        data-testid={testId || 'tabs'}
-        style={style}
-        {...restProps}
-      >
-        <TabsContext.Provider value={contextValue}>{children}</TabsContext.Provider>
-      </div>
-    );
-  }
-);
-
-Tabs.displayName = 'Tabs';
+  return (
+    <div
+      ref={ref}
+      className={tabsClasses}
+      data-orientation={orientation}
+      data-variant={variant}
+      data-size={size}
+      data-component="tabs"
+      data-testid={testId || 'tabs'}
+      style={style}
+      {...restProps}
+    >
+      <TabsContext.Provider value={contextValue}>{children}</TabsContext.Provider>
+    </div>
+  );
+};
 
 export default Tabs;

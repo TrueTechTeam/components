@@ -48,5 +48,3 @@ export const MenuGroup: React.FC<MenuGroupProps> = ({
     </div>
   );
 };
-
-MenuGroup.displayName = 'MenuGroup';

@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
 import { usePageMessagesConfig } from '../../../contexts/PageMessagesContext';
 import { PageMessageContent } from './PageMessageContent';
 import { DEFAULT_CONFIGS } from './defaultConfigs';
@@ -71,7 +71,12 @@ function mergeConfig<T extends PageMessageStateConfig | LoadingStateConfig>(
  * </PageMessages>
  * ```
  */
-export const PageMessages = forwardRef<HTMLDivElement, PageMessagesProps>((props, ref) => {
+export const PageMessages = ({
+  ref,
+  ...props
+}: PageMessagesProps & {
+  ref?: React.Ref<HTMLDivElement>;
+}) => {
   const {
     children,
     loading,
@@ -194,8 +199,6 @@ export const PageMessages = forwardRef<HTMLDivElement, PageMessagesProps>((props
       />
     </div>
   );
-});
-
-PageMessages.displayName = 'PageMessages';
+};
 
 export default PageMessages;

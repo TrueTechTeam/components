@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
 import type { BaseComponentProps } from '../../../types';
 import { Icon, type IconName } from '../../display/Icon';
 import { Tooltip } from '../../overlays/Tooltip';
@@ -81,125 +81,121 @@ export interface SideNavItemProps extends BaseComponentProps {
  * />
  * ```
  */
-export const SideNavItem = forwardRef<HTMLElement, SideNavItemProps>(
-  (
-    {
-      value,
-      icon,
-      label,
-      tooltip,
-      disabled = false,
-      href,
-      onClick,
-      badge,
-      endAdornment,
-      level = 0,
-      className,
-      'data-testid': testId,
-      style,
-      ...restProps
-    },
-    ref
-  ) => {
-    const { collapsed, selectedValue, onSelect } = useSideNavContextStrict();
+export const SideNavItem = ({
+  ref,
+  value,
+  icon,
+  label,
+  tooltip,
+  disabled = false,
+  href,
+  onClick,
+  badge,
+  endAdornment,
+  level = 0,
+  className,
+  'data-testid': testId,
+  style,
+  ...restProps
+}: SideNavItemProps & {
+  ref?: React.Ref<HTMLElement>;
+}) => {
+  const { collapsed, selectedValue, onSelect } = useSideNavContextStrict();
 
-    const isSelected = selectedValue === value;
+  const isSelected = selectedValue === value;
 
-    const handleClick = (e: React.MouseEvent<HTMLElement>) => {
-      if (disabled) {
-        e.preventDefault();
-        return;
-      }
-
-      if (!href) {
-        e.preventDefault();
-      }
-
-      onSelect(value);
-      onClick?.(e);
-    };
-
-    const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        if (!disabled) {
-          onSelect(value);
-        }
-      }
-    };
-
-    const renderIcon = () => {
-      if (!icon) {
-        return null;
-      }
-
-      if (typeof icon === 'string') {
-        return <Icon name={icon as IconName} size={20} />;
-      }
-
-      return icon;
-    };
-
-    const componentClasses = [styles.item, className].filter(Boolean).join(' ');
-
-    const itemStyle = {
-      '--sidenav-item-level': level,
-      ...style,
-    } as React.CSSProperties;
-
-    const content = (
-      <>
-        {icon && <span className={styles.itemIcon}>{renderIcon()}</span>}
-        <span className={styles.itemLabel}>{label}</span>
-        {badge && <span className={styles.itemBadge}>{badge}</span>}
-        {endAdornment && <span className={styles.itemEndAdornment}>{endAdornment}</span>}
-      </>
-    );
-
-    const commonProps = {
-      className: componentClasses,
-      style: itemStyle,
-      onClick: handleClick,
-      onKeyDown: handleKeyDown,
-      'data-component': 'side-nav-item',
-      'data-selected': isSelected || undefined,
-      'data-disabled': disabled || undefined,
-      'data-collapsed': collapsed || undefined,
-      'data-testid': testId,
-      'aria-current': isSelected ? ('page' as const) : undefined,
-      'aria-disabled': disabled || undefined,
-      tabIndex: disabled ? -1 : 0,
-      role: 'menuitem',
-    };
-
-    const element = href ? (
-      <a
-        ref={ref as React.Ref<HTMLAnchorElement>}
-        href={disabled ? undefined : href}
-        {...commonProps}
-        {...restProps}
-      >
-        {content}
-      </a>
-    ) : (
-      <div ref={ref as React.Ref<HTMLDivElement>} {...commonProps} {...restProps}>
-        {content}
-      </div>
-    );
-
-    // Wrap with tooltip when collapsed
-    if (collapsed) {
-      return (
-        <Tooltip content={tooltip || label} position="right">
-          {element}
-        </Tooltip>
-      );
+  const handleClick = (e: React.MouseEvent<HTMLElement>) => {
+    if (disabled) {
+      e.preventDefault();
+      return;
     }
 
-    return element;
-  }
-);
+    if (!href) {
+      e.preventDefault();
+    }
 
-SideNavItem.displayName = 'SideNavItem';
+    onSelect(value);
+    onClick?.(e);
+  };
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
+    if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      if (!disabled) {
+        onSelect(value);
+      }
+    }
+  };
+
+  const renderIcon = () => {
+    if (!icon) {
+      return null;
+    }
+
+    if (typeof icon === 'string') {
+      return <Icon name={icon as IconName} size={20} />;
+    }
+
+    return icon;
+  };
+
+  const componentClasses = [styles.item, className].filter(Boolean).join(' ');
+
+  const itemStyle = {
+    '--sidenav-item-level': level,
+    ...style,
+  } as React.CSSProperties;
+
+  const content = (
+    <>
+      {icon && <span className={styles.itemIcon}>{renderIcon()}</span>}
+      <span className={styles.itemLabel}>{label}</span>
+      {badge && <span className={styles.itemBadge}>{badge}</span>}
+      {endAdornment && <span className={styles.itemEndAdornment}>{endAdornment}</span>}
+    </>
+  );
+
+  const commonProps = {
+    className: componentClasses,
+    style: itemStyle,
+    onClick: handleClick,
+    onKeyDown: handleKeyDown,
+    'data-component': 'side-nav-item',
+    'data-selected': isSelected || undefined,
+    'data-disabled': disabled || undefined,
+    'data-collapsed': collapsed || undefined,
+    'data-testid': testId,
+    'aria-current': isSelected ? ('page' as const) : undefined,
+    'aria-disabled': disabled || undefined,
+    tabIndex: disabled ? -1 : 0,
+    role: 'menuitem',
+  };
+
+  const element = href ? (
+    <a
+      ref={ref as React.Ref<HTMLAnchorElement>}
+      href={disabled ? undefined : href}
+      {...commonProps}
+      {...restProps}
+    >
+      {content}
+    </a>
+  ) : (
+    <div ref={ref as React.Ref<HTMLDivElement>} {...commonProps} {...restProps}>
+      {content}
+    </div>
+  );
+
+  // Wrap with tooltip when collapsed
+  if (collapsed) {
+    return (
+      <Tooltip content={tooltip || label} position="right">
+        {element}
+      </Tooltip>
+    );
+  }
+
+  return element;
+};
 
 export default SideNavItem;

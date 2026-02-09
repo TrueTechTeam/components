@@ -1,4 +1,4 @@
-import React, { forwardRef, useState, useCallback, useId } from 'react';
+import React, { useState, useCallback, useId } from 'react';
 import type { BaseComponentProps, ComponentSize, ComponentVariant } from '../../../types';
 import { CheckboxGroupContext, type CheckboxGroupContextValue } from './CheckboxGroupContext';
 import styles from './CheckboxGroup.module.scss';
@@ -140,134 +140,130 @@ export interface CheckboxGroupProps extends Omit<BaseComponentProps, 'onChange'>
  * </CheckboxGroup>
  * ```
  */
-export const CheckboxGroup = forwardRef<HTMLFieldSetElement, CheckboxGroupProps>(
-  (
-    {
-      value,
-      defaultValue = [],
-      onChange,
-      variant = 'primary',
-      size = 'md',
-      orientation = 'vertical',
-      label,
-      helperText,
-      errorMessage,
-      error = false,
-      disabled = false,
-      readOnly = false,
-      required = false,
-      min,
-      max,
-      gap = 2,
-      name: providedName,
-      id: providedId,
-      children,
-      className,
-      'data-testid': testId,
-      style,
-      ...restProps
+export const CheckboxGroup = ({
+  ref,
+  value,
+  defaultValue = [],
+  onChange,
+  variant = 'primary',
+  size = 'md',
+  orientation = 'vertical',
+  label,
+  helperText,
+  errorMessage,
+  error = false,
+  disabled = false,
+  readOnly = false,
+  required = false,
+  min,
+  max,
+  gap = 2,
+  name: providedName,
+  id: providedId,
+  children,
+  className,
+  'data-testid': testId,
+  style,
+  ...restProps
+}: CheckboxGroupProps & {
+  ref?: React.Ref<HTMLFieldSetElement>;
+}) => {
+  const autoId = useId();
+  const autoName = useId();
+  const id = providedId || autoId;
+  const name = providedName || autoName;
+
+  // Internal state for uncontrolled component
+  const [internalValues, setInternalValues] = useState<string[]>(defaultValue);
+
+  // Use controlled value if provided, otherwise use internal state
+  const selectedValues = value !== undefined ? value : internalValues;
+
+  const handleChange = useCallback(
+    (itemValue: string, checked: boolean, event: React.ChangeEvent<HTMLInputElement>) => {
+      let newValues: string[];
+
+      if (checked) {
+        // Check max constraint before adding
+        if (max !== undefined && selectedValues.length >= max) {
+          return;
+        }
+        newValues = [...selectedValues, itemValue];
+      } else {
+        // Check min constraint before removing
+        if (min !== undefined && selectedValues.length <= min) {
+          return;
+        }
+        newValues = selectedValues.filter((v) => v !== itemValue);
+      }
+
+      // Update internal state if uncontrolled
+      if (value === undefined) {
+        setInternalValues(newValues);
+      }
+
+      onChange?.(newValues);
     },
-    ref
-  ) => {
-    const autoId = useId();
-    const autoName = useId();
-    const id = providedId || autoId;
-    const name = providedName || autoName;
+    [value, selectedValues, min, max, onChange]
+  );
 
-    // Internal state for uncontrolled component
-    const [internalValues, setInternalValues] = useState<string[]>(defaultValue);
+  const contextValue: CheckboxGroupContextValue = {
+    name,
+    values: selectedValues,
+    onChange: handleChange,
+    disabled,
+    readOnly,
+    size,
+    variant,
+  };
 
-    // Use controlled value if provided, otherwise use internal state
-    const selectedValues = value !== undefined ? value : internalValues;
+  const gapStyle = {
+    '--checkbox-group-gap': `var(--spacing-${['xs', 'sm', 'md', 'lg', 'xl', 'xxl'][gap] || 'sm'})`,
+    ...style,
+  } as React.CSSProperties;
 
-    const handleChange = useCallback(
-      (itemValue: string, checked: boolean, event: React.ChangeEvent<HTMLInputElement>) => {
-        let newValues: string[];
+  const groupClasses = [styles.checkboxGroup, className].filter(Boolean).join(' ');
 
-        if (checked) {
-          // Check max constraint before adding
-          if (max !== undefined && selectedValues.length >= max) {
-            return;
-          }
-          newValues = [...selectedValues, itemValue];
-        } else {
-          // Check min constraint before removing
-          if (min !== undefined && selectedValues.length <= min) {
-            return;
-          }
-          newValues = selectedValues.filter((v) => v !== itemValue);
-        }
+  return (
+    <fieldset
+      ref={ref}
+      id={id}
+      className={groupClasses}
+      data-orientation={orientation}
+      data-error={error || undefined}
+      data-component="checkbox-group"
+      data-testid={testId || 'checkbox-group'}
+      disabled={disabled}
+      aria-invalid={error}
+      aria-required={required}
+      style={gapStyle}
+      {...restProps}
+    >
+      {label && (
+        <legend className={styles.legend} data-required={required || undefined}>
+          {label}
+          {required && <span className={styles.required}>*</span>}
+        </legend>
+      )}
 
-        // Update internal state if uncontrolled
-        if (value === undefined) {
-          setInternalValues(newValues);
-        }
+      <CheckboxGroupContext.Provider value={contextValue}>
+        <div className={styles.checkboxList} data-orientation={orientation}>
+          {children}
+        </div>
+      </CheckboxGroupContext.Provider>
 
-        onChange?.(newValues);
-      },
-      [value, selectedValues, min, max, onChange]
-    );
-
-    const contextValue: CheckboxGroupContextValue = {
-      name,
-      values: selectedValues,
-      onChange: handleChange,
-      disabled,
-      readOnly,
-      size,
-      variant,
-    };
-
-    const gapStyle = {
-      '--checkbox-group-gap': `var(--spacing-${['xs', 'sm', 'md', 'lg', 'xl', 'xxl'][gap] || 'sm'})`,
-      ...style,
-    } as React.CSSProperties;
-
-    const groupClasses = [styles.checkboxGroup, className].filter(Boolean).join(' ');
-
-    return (
-      <fieldset
-        ref={ref}
-        id={id}
-        className={groupClasses}
-        data-orientation={orientation}
-        data-error={error || undefined}
-        data-component="checkbox-group"
-        data-testid={testId || 'checkbox-group'}
-        disabled={disabled}
-        aria-invalid={error}
-        aria-required={required}
-        style={gapStyle}
-        {...restProps}
-      >
-        {label && (
-          <legend className={styles.legend} data-required={required || undefined}>
-            {label}
-            {required && <span className={styles.required}>*</span>}
-          </legend>
-        )}
-
-        <CheckboxGroupContext.Provider value={contextValue}>
-          <div className={styles.checkboxList} data-orientation={orientation}>
-            {children}
-          </div>
-        </CheckboxGroupContext.Provider>
-
-        {(helperText || (error && errorMessage)) && (
-          <div
-            className={styles.helperText}
-            data-error={error || undefined}
-            role={error ? 'alert' : undefined}
-            aria-live={error ? 'polite' : undefined}
-          >
-            {error && errorMessage ? errorMessage : helperText}
-          </div>
-        )}
-      </fieldset>
-    );
-  }
-);
-
-CheckboxGroup.displayName = 'CheckboxGroup';
+      {(helperText || (error && errorMessage)) && (
+        <div
+          className={styles.helperText}
+          data-error={error || undefined}
+          role={error ? 'alert' : undefined}
+          aria-live={error ? 'polite' : undefined}
+        >
+          {error && errorMessage ? errorMessage : helperText}
+        </div>
+      )}
+    </fieldset>
+  );
+};
 
 export default CheckboxGroup;

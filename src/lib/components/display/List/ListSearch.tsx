@@ -82,6 +82,4 @@ export function ListSearch({
   );
 }
 
-ListSearch.displayName = 'ListSearch';
-
 export default ListSearch;

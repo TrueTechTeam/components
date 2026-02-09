@@ -1,12 +1,4 @@
-import React, {
-  forwardRef,
-  useState,
-  useId,
-  useCallback,
-  useRef,
-  useImperativeHandle,
-  useMemo,
-} from 'react';
+import React, { useState, useId, useCallback, useRef, useImperativeHandle, useMemo } from 'react';
 import { Icon } from '../../display/Icon';
 import { IconButton } from '../../buttons/IconButton';
 import { Input } from '../Input';
@@ -182,250 +174,258 @@ export interface SelectProps extends Omit<React.HTMLAttributes<HTMLDivElement>, 
  * />
  * ```
  */
-export const Select = forwardRef<HTMLDivElement, SelectProps>(
-  (
-    {
-      options,
-      value: controlledValue,
-      defaultValue,
-      onChange,
-      onBlur,
-      label,
-      helperText,
-      errorMessage,
-      error = false,
-      showClearButton = false,
-      startIcon,
-      endIcon,
-      placeholder = 'Select an option',
-      disabled = false,
-      readOnly = false,
-      required = false,
-      id: providedId,
-      searchable = false,
-      searchPlaceholder = 'Search...',
-      scrollToSelected = true,
-      enableTypeAhead = false,
-      typeAheadDelay = 500,
-      className,
-      'aria-label': ariaLabel,
-      ...rest
+export const Select = ({
+  ref,
+  options,
+  value: controlledValue,
+  defaultValue,
+  onChange,
+  onBlur,
+  label,
+  helperText,
+  errorMessage,
+  error = false,
+  showClearButton = false,
+  startIcon,
+  endIcon,
+  placeholder = 'Select an option',
+  disabled = false,
+  readOnly = false,
+  required = false,
+  id: providedId,
+  searchable = false,
+  searchPlaceholder = 'Search...',
+  scrollToSelected = true,
+  enableTypeAhead = false,
+  typeAheadDelay = 500,
+  className,
+  'aria-label': ariaLabel,
+  ...rest
+}: SelectProps & {
+  ref?: React.Ref<HTMLDivElement>;
+}) => {
+  const autoId = useId();
+  const id = providedId || autoId;
+
+  const [internalValue, setInternalValue] = useState(defaultValue || '');
+  const value = controlledValue !== undefined ? controlledValue : internalValue;
+
+  const [isOpen, setIsOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState('');
+  const triggerRef = useRef<HTMLDivElement>(null);
+  const searchInputRef = useRef<HTMLInputElement>(null);
+
+  // Expose the trigger element via the forwarded ref
+  useImperativeHandle(ref, () => triggerRef.current as HTMLDivElement);
+
+  const handleSelectionChange = useCallback(
+    (keys: string[]) => {
+      const newValue = keys[0] || '';
+
+      if (controlledValue === undefined) {
+        setInternalValue(newValue);
+      }
+
+      // Create a synthetic event for backward compatibility
+      const syntheticEvent = {
+        target: { value: newValue },
+      } as React.ChangeEvent<HTMLSelectElement>;
+
+      onChange?.(newValue, syntheticEvent);
+      setIsOpen(false);
+      setSearchQuery('');
     },
-    ref
-  ) => {
-    const autoId = useId();
-    const id = providedId || autoId;
+    [controlledValue, onChange]
+  );
 
-    const [internalValue, setInternalValue] = useState(defaultValue || '');
-    const value = controlledValue !== undefined ? controlledValue : internalValue;
+  const handleClear = useCallback(
+    (e: React.MouseEvent) => {
+      e.stopPropagation();
+      const emptyValue = '';
+      if (controlledValue === undefined) {
+        setInternalValue(emptyValue);
+      }
+      const syntheticEvent = {
+        target: { value: emptyValue },
+      } as React.ChangeEvent<HTMLSelectElement>;
+      onChange?.(emptyValue, syntheticEvent);
+    },
+    [controlledValue, onChange]
+  );
 
-    const [isOpen, setIsOpen] = useState(false);
-    const [searchQuery, setSearchQuery] = useState('');
-    const triggerRef = useRef<HTMLDivElement>(null);
-    const searchInputRef = useRef<HTMLInputElement>(null);
-
-    // Expose the trigger element via the forwarded ref
-    useImperativeHandle(ref, () => triggerRef.current as HTMLDivElement);
-
-    const handleSelectionChange = useCallback(
-      (keys: string[]) => {
-        const newValue = keys[0] || '';
-
-        if (controlledValue === undefined) {
-          setInternalValue(newValue);
-        }
-
-        // Create a synthetic event for backward compatibility
-        const syntheticEvent = {
-          target: { value: newValue },
-        } as React.ChangeEvent<HTMLSelectElement>;
-
-        onChange?.(newValue, syntheticEvent);
-        setIsOpen(false);
+  const handleOpenChange = useCallback(
+    (open: boolean) => {
+      setIsOpen(open);
+      if (!open) {
         setSearchQuery('');
-      },
-      [controlledValue, onChange]
-    );
+      } else if (searchable && searchInputRef.current) {
+        // Focus search input when menu opens
+        setTimeout(() => searchInputRef.current?.focus(), 0);
+      }
+    },
+    [searchable]
+  );
 
-    const handleClear = useCallback(
-      (e: React.MouseEvent) => {
-        e.stopPropagation();
-        const emptyValue = '';
-        if (controlledValue === undefined) {
-          setInternalValue(emptyValue);
+  const handleTriggerClick = useCallback(() => {
+    if (disabled || readOnly) {
+      return;
+    }
+    setIsOpen((prev) => !prev);
+  }, [disabled, readOnly]);
+
+  const renderIcon = (icon: React.ReactNode | IconName | undefined) => {
+    if (!icon) {
+      return null;
+    }
+
+    if (typeof icon === 'string') {
+      return <Icon name={icon as IconName} className={styles.icon} />;
+    }
+
+    return <span className={styles.icon}>{icon}</span>;
+  };
+
+  // Filter options based on search query
+  const filteredOptions = useMemo(() => {
+    if (!searchable || !searchQuery.trim()) {
+      return options;
+    }
+
+    const query = searchQuery.toLowerCase();
+    return options.filter((option) => {
+      const label = typeof option.label === 'string' ? option.label : '';
+      return label.toLowerCase().includes(query) || option.value.toLowerCase().includes(query);
+    });
+  }, [options, searchQuery, searchable]);
+
+  // Group options by group property
+  const groupedOptions = useMemo(() => {
+    return filteredOptions.reduce(
+      (acc, option) => {
+        const groupName = option.group || '__ungrouped__';
+        if (!acc[groupName]) {
+          acc[groupName] = [];
         }
-        const syntheticEvent = {
-          target: { value: emptyValue },
-        } as React.ChangeEvent<HTMLSelectElement>;
-        onChange?.(emptyValue, syntheticEvent);
+        acc[groupName].push(option);
+        return acc;
       },
-      [controlledValue, onChange]
+      {} as Record<string, SelectOption[]>
     );
+  }, [filteredOptions]);
 
-    const handleOpenChange = useCallback(
-      (open: boolean) => {
-        setIsOpen(open);
-        if (!open) {
-          setSearchQuery('');
-        } else if (searchable && searchInputRef.current) {
-          // Focus search input when menu opens
-          setTimeout(() => searchInputRef.current?.focus(), 0);
-        }
-      },
-      [searchable]
-    );
+  const hasGroups = Object.keys(groupedOptions).length > 1 || !groupedOptions['__ungrouped__'];
 
-    const handleTriggerClick = useCallback(() => {
-      if (disabled || readOnly) {
-        return;
-      }
-      setIsOpen((prev) => !prev);
-    }, [disabled, readOnly]);
+  // Get selected option label
+  const selectedOption = options.find((opt) => opt.value === value);
+  const displayValue = selectedOption?.label || placeholder;
 
-    const renderIcon = (icon: React.ReactNode | IconName | undefined) => {
-      if (!icon) {
-        return null;
-      }
+  return (
+    <div className={`${styles.container} ${className || ''}`}>
+      {label && (
+        <label htmlFor={id} className={styles.label} data-required={required || undefined}>
+          {label}
+          {required && <span className={styles.required}>*</span>}
+        </label>
+      )}
 
-      if (typeof icon === 'string') {
-        return <Icon name={icon as IconName} className={styles.icon} />;
-      }
+      <Menu
+        trigger={
+          <div
+            ref={triggerRef}
+            id={id}
+            className={styles.selectTrigger}
+            data-error={error || undefined}
+            data-has-start-icon={!!startIcon || undefined}
+            data-has-end-icon={!!(endIcon || showClearButton) || undefined}
+            data-component="select"
+            data-disabled={disabled || readOnly || undefined}
+            data-open={isOpen || undefined}
+            aria-label={ariaLabel || label}
+            aria-invalid={error}
+            aria-describedby={
+              helperText || (error && errorMessage) ? `${id}-helper-text` : undefined
+            }
+            aria-disabled={disabled || readOnly}
+            aria-required={required}
+            role="button"
+            tabIndex={disabled || readOnly ? -1 : 0}
+            onClick={handleTriggerClick}
+            onBlur={onBlur}
+            {...rest}
+          >
+            {startIcon && <div className={styles.startIcon}>{renderIcon(startIcon)}</div>}
 
-      return <span className={styles.icon}>{icon}</span>;
-    };
+            <span className={styles.selectValue} data-placeholder={!selectedOption || undefined}>
+              {displayValue}
+            </span>
 
-    // Filter options based on search query
-    const filteredOptions = useMemo(() => {
-      if (!searchable || !searchQuery.trim()) {
-        return options;
-      }
-
-      const query = searchQuery.toLowerCase();
-      return options.filter((option) => {
-        const label = typeof option.label === 'string' ? option.label : '';
-        return label.toLowerCase().includes(query) || option.value.toLowerCase().includes(query);
-      });
-    }, [options, searchQuery, searchable]);
-
-    // Group options by group property
-    const groupedOptions = useMemo(() => {
-      return filteredOptions.reduce(
-        (acc, option) => {
-          const groupName = option.group || '__ungrouped__';
-          if (!acc[groupName]) {
-            acc[groupName] = [];
-          }
-          acc[groupName].push(option);
-          return acc;
-        },
-        {} as Record<string, SelectOption[]>
-      );
-    }, [filteredOptions]);
-
-    const hasGroups = Object.keys(groupedOptions).length > 1 || !groupedOptions['__ungrouped__'];
-
-    // Get selected option label
-    const selectedOption = options.find((opt) => opt.value === value);
-    const displayValue = selectedOption?.label || placeholder;
-
-    return (
-      <div className={`${styles.container} ${className || ''}`}>
-        {label && (
-          <label htmlFor={id} className={styles.label} data-required={required || undefined}>
-            {label}
-            {required && <span className={styles.required}>*</span>}
-          </label>
-        )}
-
-        <Menu
-          trigger={
-            <div
-              ref={triggerRef}
-              id={id}
-              className={styles.selectTrigger}
-              data-error={error || undefined}
-              data-has-start-icon={!!startIcon || undefined}
-              data-has-end-icon={!!(endIcon || showClearButton) || undefined}
-              data-component="select"
-              data-disabled={disabled || readOnly || undefined}
-              data-open={isOpen || undefined}
-              aria-label={ariaLabel || label}
-              aria-invalid={error}
-              aria-describedby={
-                helperText || (error && errorMessage) ? `${id}-helper-text` : undefined
-              }
-              aria-disabled={disabled || readOnly}
-              aria-required={required}
-              role="button"
-              tabIndex={disabled || readOnly ? -1 : 0}
-              onClick={handleTriggerClick}
-              onBlur={onBlur}
-              {...rest}
-            >
-              {startIcon && <div className={styles.startIcon}>{renderIcon(startIcon)}</div>}
-
-              <span className={styles.selectValue} data-placeholder={!selectedOption || undefined}>
-                {displayValue}
-              </span>
-
-              <div className={styles.endIcon}>
-                {showClearButton && value && !disabled && !readOnly ? (
-                  <IconButton
-                    variant="ghost"
-                    size="sm"
-                    icon="close"
-                    onClick={handleClear}
-                    aria-label="Clear selection"
-                    type="button"
-                    className={styles.clearButton}
-                  />
-                ) : endIcon ? (
-                  renderIcon(endIcon)
-                ) : (
-                  <Icon
-                    name="chevron-down"
-                    className={styles.dropdownArrow}
-                    data-open={isOpen || undefined}
-                  />
-                )}
-              </div>
-            </div>
-          }
-          selectionMode="single"
-          selectedKeys={value ? [value] : []}
-          onSelectionChange={handleSelectionChange}
-          isOpen={isOpen}
-          onOpenChange={handleOpenChange}
-          position="bottom-left"
-          scrollToSelected={scrollToSelected}
-          enableTypeAhead={enableTypeAhead}
-          typeAheadDelay={typeAheadDelay}
-        >
-          <div className={styles.menuContent}>
-            {searchable && (
-              <div className={styles.searchWrapper}>
-                <Input
-                  ref={searchInputRef}
-                  type="search"
-                  placeholder={searchPlaceholder}
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  startIcon="search"
-                  showClearButton
-                  onClear={() => setSearchQuery('')}
+            <div className={styles.endIcon}>
+              {showClearButton && value && !disabled && !readOnly ? (
+                <IconButton
+                  variant="ghost"
+                  size="sm"
+                  icon="close"
+                  onClick={handleClear}
+                  aria-label="Clear selection"
+                  type="button"
+                  className={styles.clearButton}
                 />
-              </div>
-            )}
+              ) : endIcon ? (
+                renderIcon(endIcon)
+              ) : (
+                <Icon
+                  name="chevron-down"
+                  className={styles.dropdownArrow}
+                  data-open={isOpen || undefined}
+                />
+              )}
+            </div>
+          </div>
+        }
+        selectionMode="single"
+        selectedKeys={value ? [value] : []}
+        onSelectionChange={handleSelectionChange}
+        isOpen={isOpen}
+        onOpenChange={handleOpenChange}
+        position="bottom-left"
+        scrollToSelected={scrollToSelected}
+        enableTypeAhead={enableTypeAhead}
+        typeAheadDelay={typeAheadDelay}
+      >
+        <div className={styles.menuContent}>
+          {searchable && (
+            <div className={styles.searchWrapper}>
+              <Input
+                ref={searchInputRef}
+                type="search"
+                placeholder={searchPlaceholder}
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                startIcon="search"
+                showClearButton
+                onClear={() => setSearchQuery('')}
+              />
+            </div>
+          )}
 
-            <MenuList>
-              {filteredOptions.length === 0 ? (
-                <div className={styles.noResults}>
-                  {searchQuery ? 'No results found' : 'No options available'}
-                </div>
-              ) : hasGroups ? (
-                Object.entries(groupedOptions).map(([groupName, groupOptions]) => {
-                  if (groupName === '__ungrouped__') {
-                    return groupOptions.map((option) => (
+          <MenuList>
+            {filteredOptions.length === 0 ? (
+              <div className={styles.noResults}>
+                {searchQuery ? 'No results found' : 'No options available'}
+              </div>
+            ) : hasGroups ? (
+              Object.entries(groupedOptions).map(([groupName, groupOptions]) => {
+                if (groupName === '__ungrouped__') {
+                  return groupOptions.map((option) => (
+                    <MenuItem key={option.value} itemKey={option.value} disabled={option.disabled}>
+                      {option.label}
+                    </MenuItem>
+                  ));
+                }
+
+                return (
+                  <MenuGroup key={groupName} label={groupName}>
+                    {groupOptions.map((option) => (
                       <MenuItem
                         key={option.value}
                         itemKey={option.value}
@@ -433,48 +433,32 @@ export const Select = forwardRef<HTMLDivElement, SelectProps>(
                       >
                         {option.label}
                       </MenuItem>
-                    ));
-                  }
+                    ))}
+                  </MenuGroup>
+                );
+              })
+            ) : (
+              filteredOptions.map((option) => (
+                <MenuItem key={option.value} itemKey={option.value} disabled={option.disabled}>
+                  {option.label}
+                </MenuItem>
+              ))
+            )}
+          </MenuList>
+        </div>
+      </Menu>
 
-                  return (
-                    <MenuGroup key={groupName} label={groupName}>
-                      {groupOptions.map((option) => (
-                        <MenuItem
-                          key={option.value}
-                          itemKey={option.value}
-                          disabled={option.disabled}
-                        >
-                          {option.label}
-                        </MenuItem>
-                      ))}
-                    </MenuGroup>
-                  );
-                })
-              ) : (
-                filteredOptions.map((option) => (
-                  <MenuItem key={option.value} itemKey={option.value} disabled={option.disabled}>
-                    {option.label}
-                  </MenuItem>
-                ))
-              )}
-            </MenuList>
-          </div>
-        </Menu>
-
-        {(helperText || (error && errorMessage)) && (
-          <div
-            id={`${id}-helper-text`}
-            className={styles.helperText}
-            data-error={error || undefined}
-            role={error ? 'alert' : undefined}
-            aria-live={error ? 'polite' : undefined}
-          >
-            {error && errorMessage ? errorMessage : helperText}
-          </div>
-        )}
-      </div>
-    );
-  }
-);
-
-Select.displayName = 'Select';
+      {(helperText || (error && errorMessage)) && (
+        <div
+          id={`${id}-helper-text`}
+          className={styles.helperText}
+          data-error={error || undefined}
+          role={error ? 'alert' : undefined}
+          aria-live={error ? 'polite' : undefined}
+        >
+          {error && errorMessage ? errorMessage : helperText}
+        </div>
+      )}
+    </div>
+  );
+};

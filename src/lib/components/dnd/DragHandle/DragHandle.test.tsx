@@ -464,75 +464,68 @@ describe('DragHandle', () => {
       expect(element).toHaveAttribute('data-size', 'xl');
     });
   });
+});
 
-  // 11. Display name
-  describe('display name', () => {
-    it('has correct display name', () => {
-      expect(DragHandle.displayName).toBe('DragHandle');
-    });
+// 12. Icon rendering tests
+describe('icon rendering', () => {
+  it('only renders dots icon when variant is dots', () => {
+    const { container } = render(<DragHandle variant="dots" />);
+    const dotsIcon = container.querySelector('[class*="dotsIcon"]');
+    const linesIcon = container.querySelector('[class*="linesIcon"]');
+    const gripIcon = container.querySelector('[class*="gripIcon"]');
+    expect(dotsIcon).toBeInTheDocument();
+    expect(linesIcon).not.toBeInTheDocument();
+    expect(gripIcon).not.toBeInTheDocument();
   });
 
-  // 12. Icon rendering tests
-  describe('icon rendering', () => {
-    it('only renders dots icon when variant is dots', () => {
-      const { container } = render(<DragHandle variant="dots" />);
-      const dotsIcon = container.querySelector('[class*="dotsIcon"]');
-      const linesIcon = container.querySelector('[class*="linesIcon"]');
-      const gripIcon = container.querySelector('[class*="gripIcon"]');
-      expect(dotsIcon).toBeInTheDocument();
-      expect(linesIcon).not.toBeInTheDocument();
-      expect(gripIcon).not.toBeInTheDocument();
-    });
+  it('only renders lines icon when variant is lines', () => {
+    const { container } = render(<DragHandle variant="lines" />);
+    const dotsIcon = container.querySelector('[class*="dotsIcon"]');
+    const linesIcon = container.querySelector('[class*="linesIcon"]');
+    const gripIcon = container.querySelector('[class*="gripIcon"]');
+    expect(dotsIcon).not.toBeInTheDocument();
+    expect(linesIcon).toBeInTheDocument();
+    expect(gripIcon).not.toBeInTheDocument();
+  });
 
-    it('only renders lines icon when variant is lines', () => {
-      const { container } = render(<DragHandle variant="lines" />);
-      const dotsIcon = container.querySelector('[class*="dotsIcon"]');
-      const linesIcon = container.querySelector('[class*="linesIcon"]');
-      const gripIcon = container.querySelector('[class*="gripIcon"]');
-      expect(dotsIcon).not.toBeInTheDocument();
-      expect(linesIcon).toBeInTheDocument();
-      expect(gripIcon).not.toBeInTheDocument();
-    });
+  it('only renders grip icon when variant is grip', () => {
+    const { container } = render(<DragHandle variant="grip" />);
+    const dotsIcon = container.querySelector('[class*="dotsIcon"]');
+    const linesIcon = container.querySelector('[class*="linesIcon"]');
+    const gripIcon = container.querySelector('[class*="gripIcon"]');
+    expect(dotsIcon).not.toBeInTheDocument();
+    expect(linesIcon).not.toBeInTheDocument();
+    expect(gripIcon).toBeInTheDocument();
+  });
 
-    it('only renders grip icon when variant is grip', () => {
-      const { container } = render(<DragHandle variant="grip" />);
-      const dotsIcon = container.querySelector('[class*="dotsIcon"]');
-      const linesIcon = container.querySelector('[class*="linesIcon"]');
-      const gripIcon = container.querySelector('[class*="gripIcon"]');
-      expect(dotsIcon).not.toBeInTheDocument();
-      expect(linesIcon).not.toBeInTheDocument();
-      expect(gripIcon).toBeInTheDocument();
-    });
+  it('grip svg has correct attributes', () => {
+    const { container } = render(<DragHandle variant="grip" />);
+    const svg = container.querySelector('svg');
+    expect(svg).toHaveAttribute('fill', 'none');
+    expect(svg).toHaveAttribute('stroke', 'currentColor');
+    expect(svg).toHaveAttribute('stroke-width', '2');
+    expect(svg).toHaveAttribute('stroke-linecap', 'round');
+    expect(svg).toHaveAttribute('stroke-linejoin', 'round');
+  });
 
-    it('grip svg has correct attributes', () => {
-      const { container } = render(<DragHandle variant="grip" />);
-      const svg = container.querySelector('svg');
-      expect(svg).toHaveAttribute('fill', 'none');
-      expect(svg).toHaveAttribute('stroke', 'currentColor');
-      expect(svg).toHaveAttribute('stroke-width', '2');
-      expect(svg).toHaveAttribute('stroke-linecap', 'round');
-      expect(svg).toHaveAttribute('stroke-linejoin', 'round');
-    });
+  it('grip svg circles have correct positions', () => {
+    const { container } = render(<DragHandle variant="grip" />);
+    const circles = container.querySelectorAll('circle');
 
-    it('grip svg circles have correct positions', () => {
-      const { container } = render(<DragHandle variant="grip" />);
-      const circles = container.querySelectorAll('circle');
+    // Check first column circles (cx="9")
+    expect(circles[0]).toHaveAttribute('cx', '9');
+    expect(circles[0]).toHaveAttribute('cy', '5');
+    expect(circles[1]).toHaveAttribute('cx', '9');
+    expect(circles[1]).toHaveAttribute('cy', '12');
+    expect(circles[2]).toHaveAttribute('cx', '9');
+    expect(circles[2]).toHaveAttribute('cy', '19');
 
-      // Check first column circles (cx="9")
-      expect(circles[0]).toHaveAttribute('cx', '9');
-      expect(circles[0]).toHaveAttribute('cy', '5');
-      expect(circles[1]).toHaveAttribute('cx', '9');
-      expect(circles[1]).toHaveAttribute('cy', '12');
-      expect(circles[2]).toHaveAttribute('cx', '9');
-      expect(circles[2]).toHaveAttribute('cy', '19');
-
-      // Check second column circles (cx="15")
-      expect(circles[3]).toHaveAttribute('cx', '15');
-      expect(circles[3]).toHaveAttribute('cy', '5');
-      expect(circles[4]).toHaveAttribute('cx', '15');
-      expect(circles[4]).toHaveAttribute('cy', '12');
-      expect(circles[5]).toHaveAttribute('cx', '15');
-      expect(circles[5]).toHaveAttribute('cy', '19');
-    });
+    // Check second column circles (cx="15")
+    expect(circles[3]).toHaveAttribute('cx', '15');
+    expect(circles[3]).toHaveAttribute('cy', '5');
+    expect(circles[4]).toHaveAttribute('cx', '15');
+    expect(circles[4]).toHaveAttribute('cy', '12');
+    expect(circles[5]).toHaveAttribute('cx', '15');
+    expect(circles[5]).toHaveAttribute('cy', '19');
   });
 });

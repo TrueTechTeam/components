@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
 import styles from './ProgressBar.module.scss';
 import type { BaseComponentProps } from '../../../types/component.types';
 
@@ -90,83 +90,79 @@ export interface ProgressBarProps extends Omit<BaseComponentProps, 'children'> {
  * <ProgressBar variant="warning" value={30} size="lg" striped animated />
  * ```
  */
-export const ProgressBar = forwardRef<HTMLDivElement, ProgressBarProps>(
-  (
-    {
-      variant = 'primary',
-      size = 'md',
-      value = 0,
-      max = 100,
-      showValue = false,
-      label,
-      animated = true,
-      striped = false,
-      formatValue,
-      indeterminate = false,
-      bufferValue,
-      className,
-      ...restProps
-    },
-    ref
-  ) => {
-    // Ensure value is between 0 and max
-    const normalizedValue = Math.min(Math.max(value, 0), max);
-    const percentage = max > 0 ? (normalizedValue / max) * 100 : 0;
+export const ProgressBar = ({
+  ref,
+  variant = 'primary',
+  size = 'md',
+  value = 0,
+  max = 100,
+  showValue = false,
+  label,
+  animated = true,
+  striped = false,
+  formatValue,
+  indeterminate = false,
+  bufferValue,
+  className,
+  ...restProps
+}: ProgressBarProps & {
+  ref?: React.Ref<HTMLDivElement>;
+}) => {
+  // Ensure value is between 0 and max
+  const normalizedValue = Math.min(Math.max(value, 0), max);
+  const percentage = max > 0 ? (normalizedValue / max) * 100 : 0;
 
-    // Calculate buffer percentage if provided
-    const bufferPercentage =
-      bufferValue !== undefined ? (Math.min(Math.max(bufferValue, 0), max) / max) * 100 : undefined;
+  // Calculate buffer percentage if provided
+  const bufferPercentage =
+    bufferValue !== undefined ? (Math.min(Math.max(bufferValue, 0), max) / max) * 100 : undefined;
 
-    // Format the display value
-    const displayValue = formatValue
-      ? formatValue(normalizedValue, max)
-      : `${Math.round(percentage)}%`;
+  // Format the display value
+  const displayValue = formatValue
+    ? formatValue(normalizedValue, max)
+    : `${Math.round(percentage)}%`;
 
-    // Merge className with component styles
-    const componentClasses = [styles.progressBar, className].filter(Boolean).join(' ');
+  // Merge className with component styles
+  const componentClasses = [styles.progressBar, className].filter(Boolean).join(' ');
 
-    return (
-      <div
-        ref={ref}
-        className={componentClasses}
-        data-component="progress-bar"
-        data-variant={variant}
-        data-size={size}
-        data-indeterminate={indeterminate || undefined}
-        role="progressbar"
-        aria-valuenow={indeterminate ? undefined : normalizedValue}
-        aria-valuemin={0}
-        aria-valuemax={max}
-        aria-label={label}
-        {...restProps}
-      >
-        {(label || (showValue && !indeterminate)) && (
-          <div className={styles.progressBarHeader}>
-            {label && <span className={styles.progressBarLabel}>{label}</span>}
-            {showValue && !indeterminate && (
-              <span className={styles.progressBarValue}>{displayValue}</span>
-            )}
-          </div>
-        )}
-        <div className={styles.progressBarTrack}>
-          {/* Buffer track (behind main fill) */}
-          {bufferPercentage !== undefined && !indeterminate && (
-            <div className={styles.progressBarBuffer} style={{ width: `${bufferPercentage}%` }} />
+  return (
+    <div
+      ref={ref}
+      className={componentClasses}
+      data-component="progress-bar"
+      data-variant={variant}
+      data-size={size}
+      data-indeterminate={indeterminate || undefined}
+      role="progressbar"
+      aria-valuenow={indeterminate ? undefined : normalizedValue}
+      aria-valuemin={0}
+      aria-valuemax={max}
+      aria-label={label}
+      {...restProps}
+    >
+      {(label || (showValue && !indeterminate)) && (
+        <div className={styles.progressBarHeader}>
+          {label && <span className={styles.progressBarLabel}>{label}</span>}
+          {showValue && !indeterminate && (
+            <span className={styles.progressBarValue}>{displayValue}</span>
           )}
-          {/* Main progress fill */}
-          <div
-            className={styles.progressBarFill}
-            style={indeterminate ? undefined : { width: `${percentage}%` }}
-            data-animated={animated || undefined}
-            data-striped={striped || undefined}
-            data-indeterminate={indeterminate || undefined}
-          />
         </div>
+      )}
+      <div className={styles.progressBarTrack}>
+        {/* Buffer track (behind main fill) */}
+        {bufferPercentage !== undefined && !indeterminate && (
+          <div className={styles.progressBarBuffer} style={{ width: `${bufferPercentage}%` }} />
+        )}
+        {/* Main progress fill */}
+        <div
+          className={styles.progressBarFill}
+          style={indeterminate ? undefined : { width: `${percentage}%` }}
+          data-animated={animated || undefined}
+          data-striped={striped || undefined}
+          data-indeterminate={indeterminate || undefined}
+        />
       </div>
-    );
-  }
-);
-
-ProgressBar.displayName = 'ProgressBar';
+    </div>
+  );
+};
 
 export default ProgressBar;

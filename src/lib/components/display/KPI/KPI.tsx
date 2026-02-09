@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
 import styles from './KPI.module.scss';
 import type { BaseComponentProps } from '../../../types/component.types';
 
@@ -94,66 +94,62 @@ export interface KPIProps extends BaseComponentProps {
  * />
  * ```
  */
-export const KPI = forwardRef<HTMLDivElement, KPIProps>(
-  (
-    {
-      variant = 'primary',
-      size = 'md',
-      title,
-      value,
-      subtitle,
-      description,
-      change,
-      changeType = 'neutral',
-      icon,
-      trend,
-      footer,
-      className,
-      children,
-      ...restProps
-    },
-    ref
-  ) => {
-    // Merge className with component styles
-    const componentClasses = [styles.kpi, className].filter(Boolean).join(' ');
+export const KPI = ({
+  ref,
+  variant = 'primary',
+  size = 'md',
+  title,
+  value,
+  subtitle,
+  description,
+  change,
+  changeType = 'neutral',
+  icon,
+  trend,
+  footer,
+  className,
+  children,
+  ...restProps
+}: KPIProps & {
+  ref?: React.Ref<HTMLDivElement>;
+}) => {
+  // Merge className with component styles
+  const componentClasses = [styles.kpi, className].filter(Boolean).join(' ');
 
-    return (
-      <div
-        ref={ref}
-        className={componentClasses}
-        data-component="kpi"
-        data-variant={variant}
-        data-size={size}
-        {...restProps}
-      >
-        <div className={styles.kpiHeader}>
-          <div className={styles.kpiHeaderContent}>
-            {subtitle && <span className={styles.kpiSubtitle}>{subtitle}</span>}
-            <h3 className={styles.kpiTitle}>{title}</h3>
-          </div>
-          {icon && <div className={styles.kpiIcon}>{icon}</div>}
+  return (
+    <div
+      ref={ref}
+      className={componentClasses}
+      data-component="kpi"
+      data-variant={variant}
+      data-size={size}
+      {...restProps}
+    >
+      <div className={styles.kpiHeader}>
+        <div className={styles.kpiHeaderContent}>
+          {subtitle && <span className={styles.kpiSubtitle}>{subtitle}</span>}
+          <h3 className={styles.kpiTitle}>{title}</h3>
         </div>
-
-        <div className={styles.kpiBody}>
-          <div className={styles.kpiValueWrapper}>
-            <div className={styles.kpiValue}>{value}</div>
-            {change && (
-              <span className={styles.kpiChange} data-change-type={changeType}>
-                {change}
-              </span>
-            )}
-          </div>
-          {description && <p className={styles.kpiDescription}>{description}</p>}
-        </div>
-
-        {trend && <div className={styles.kpiTrend}>{trend}</div>}
-
-        {(footer || children) && <div className={styles.kpiFooter}>{footer || children}</div>}
+        {icon && <div className={styles.kpiIcon}>{icon}</div>}
       </div>
-    );
-  }
-);
 
-KPI.displayName = 'KPI';
+      <div className={styles.kpiBody}>
+        <div className={styles.kpiValueWrapper}>
+          <div className={styles.kpiValue}>{value}</div>
+          {change && (
+            <span className={styles.kpiChange} data-change-type={changeType}>
+              {change}
+            </span>
+          )}
+        </div>
+        {description && <p className={styles.kpiDescription}>{description}</p>}
+      </div>
+
+      {trend && <div className={styles.kpiTrend}>{trend}</div>}
+
+      {(footer || children) && <div className={styles.kpiFooter}>{footer || children}</div>}
+    </div>
+  );
+};
 
 export default KPI;

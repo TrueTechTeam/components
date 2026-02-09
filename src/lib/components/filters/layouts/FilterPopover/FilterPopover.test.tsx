@@ -926,13 +926,6 @@ describe('FilterPopover', () => {
     });
   });
 
-  // 16. Display name test
-  describe('display name', () => {
-    it('has correct display name', () => {
-      expect(FilterPopover.displayName).toBe('FilterPopover');
-    });
-  });
-
   // 17. Combined props tests
   describe('combined props', () => {
     it('renders with all props combined', () => {

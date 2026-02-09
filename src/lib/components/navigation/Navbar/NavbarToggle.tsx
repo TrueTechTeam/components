@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
 import type { BaseComponentProps } from '../../../types';
 import { useNavbarContextStrict } from './NavbarContext';
 import styles from './Navbar.module.scss';
@@ -21,42 +21,45 @@ export interface NavbarToggleProps extends BaseComponentProps {
  * <NavbarToggle icon={<CustomIcon />} />
  * ```
  */
-export const NavbarToggle = forwardRef<HTMLButtonElement, NavbarToggleProps>(
-  (
-    { icon, className, 'data-testid': testId, 'aria-label': ariaLabel, style, ...restProps },
-    ref
-  ) => {
-    const { navbarId, isExpanded, toggle } = useNavbarContextStrict();
+export const NavbarToggle = ({
+  ref,
+  icon,
+  className,
+  'data-testid': testId,
+  'aria-label': ariaLabel,
+  style,
+  ...restProps
+}: NavbarToggleProps & {
+  ref?: React.Ref<HTMLButtonElement>;
+}) => {
+  const { navbarId, isExpanded, toggle } = useNavbarContextStrict();
 
-    const componentClasses = [styles.toggle, className].filter(Boolean).join(' ');
+  const componentClasses = [styles.toggle, className].filter(Boolean).join(' ');
 
-    return (
-      <button
-        ref={ref}
-        type="button"
-        className={componentClasses}
-        onClick={toggle}
-        data-component="navbar-toggle"
-        data-expanded={isExpanded || undefined}
-        data-testid={testId}
-        aria-label={ariaLabel || (isExpanded ? 'Close menu' : 'Open menu')}
-        aria-expanded={isExpanded}
-        aria-controls={`${navbarId}-collapse`}
-        style={style}
-        {...restProps}
-      >
-        {icon || (
-          <span className={styles.hamburger} data-expanded={isExpanded || undefined}>
-            <span className={styles.hamburgerLine} />
-            <span className={styles.hamburgerLine} />
-            <span className={styles.hamburgerLine} />
-          </span>
-        )}
-      </button>
-    );
-  }
-);
-
-NavbarToggle.displayName = 'NavbarToggle';
+  return (
+    <button
+      ref={ref}
+      type="button"
+      className={componentClasses}
+      onClick={toggle}
+      data-component="navbar-toggle"
+      data-expanded={isExpanded || undefined}
+      data-testid={testId}
+      aria-label={ariaLabel || (isExpanded ? 'Close menu' : 'Open menu')}
+      aria-expanded={isExpanded}
+      aria-controls={`${navbarId}-collapse`}
+      style={style}
+      {...restProps}
+    >
+      {icon || (
+        <span className={styles.hamburger} data-expanded={isExpanded || undefined}>
+          <span className={styles.hamburgerLine} />
+          <span className={styles.hamburgerLine} />
+          <span className={styles.hamburgerLine} />
+        </span>
+      )}
+    </button>
+  );
+};
 
 export default NavbarToggle;

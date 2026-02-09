@@ -1,4 +1,4 @@
-import React, { forwardRef, useState, useEffect, useRef, useCallback } from 'react';
+import React, { useState, useEffect, useRef, useCallback } from 'react';
 import styles from './CountUp.module.scss';
 import type { BaseComponentProps, ComponentSize } from '../../../types/component.types';
 
@@ -153,223 +153,219 @@ const easingFunctions: Record<EasingFunction, (t: number) => number> = {
  * />
  * ```
  */
-export const CountUp = forwardRef<HTMLSpanElement, CountUpProps>(
-  (
-    {
-      value,
-      start = 0,
-      duration = 2000,
-      easing = 'easeOutCubic',
-      prefix = '',
-      suffix = '',
-      decimals = 0,
-      separator = ',',
-      decimalSeparator = '.',
-      triggerOnVisible = true,
-      visibilityThreshold = 0.1,
-      onStart,
-      onEnd,
-      formatFn,
-      size = 'md',
-      autoStart = true,
-      delay = 0,
-      className,
-      style,
-      'data-testid': testId,
-      'aria-label': ariaLabel,
-      ...restProps
-    },
-    ref
-  ) => {
-    const [displayValue, setDisplayValue] = useState(start);
-    const [isAnimating, setIsAnimating] = useState(false);
-    const elementRef = useRef<HTMLSpanElement | null>(null);
-    const animationRef = useRef<number | null>(null);
-    const startTimeRef = useRef<number | null>(null);
-    const hasStartedRef = useRef(false);
+export const CountUp = ({
+  ref,
+  value,
+  start = 0,
+  duration = 2000,
+  easing = 'easeOutCubic',
+  prefix = '',
+  suffix = '',
+  decimals = 0,
+  separator = ',',
+  decimalSeparator = '.',
+  triggerOnVisible = true,
+  visibilityThreshold = 0.1,
+  onStart,
+  onEnd,
+  formatFn,
+  size = 'md',
+  autoStart = true,
+  delay = 0,
+  className,
+  style,
+  'data-testid': testId,
+  'aria-label': ariaLabel,
+  ...restProps
+}: CountUpProps & {
+  ref?: React.Ref<HTMLSpanElement>;
+}) => {
+  const [displayValue, setDisplayValue] = useState(start);
+  const [isAnimating, setIsAnimating] = useState(false);
+  const elementRef = useRef<HTMLSpanElement | null>(null);
+  const animationRef = useRef<number | null>(null);
+  const startTimeRef = useRef<number | null>(null);
+  const hasStartedRef = useRef(false);
 
-    // Store current values in refs for animation callback
-    const valuesRef = useRef({ duration, easing, start, value, onEnd, onStart, delay });
-    useEffect(() => {
-      valuesRef.current = { duration, easing, start, value, onEnd, onStart, delay };
-    });
+  // Store current values in refs for animation callback
+  const valuesRef = useRef({ duration, easing, start, value, onEnd, onStart, delay });
+  useEffect(() => {
+    valuesRef.current = { duration, easing, start, value, onEnd, onStart, delay };
+  });
 
-    // Format number with separators
-    const formatNumber = useCallback(
-      (num: number): string => {
-        if (formatFn) {
-          return formatFn(num);
-        }
-
-        const fixed = num.toFixed(decimals);
-        const [intPart, decPart] = fixed.split('.');
-
-        // Add thousands separator
-        const formattedInt = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, separator);
-
-        return decPart ? `${formattedInt}${decimalSeparator}${decPart}` : formattedInt;
-      },
-      [decimals, separator, decimalSeparator, formatFn]
-    );
-
-    // Start animation
-    const startAnimation = useCallback(() => {
-      if (hasStartedRef.current) {
-        return;
+  // Format number with separators
+  const formatNumber = useCallback(
+    (num: number): string => {
+      if (formatFn) {
+        return formatFn(num);
       }
 
-      hasStartedRef.current = true;
-      setIsAnimating(true);
-      startTimeRef.current = null;
+      const fixed = num.toFixed(decimals);
+      const [intPart, decPart] = fixed.split('.');
 
-      const runAnimation = () => {
-        const {
-          duration: dur,
-          easing: ease,
-          start: startVal,
-          value: endVal,
-          onEnd: endCb,
-        } = valuesRef.current;
+      // Add thousands separator
+      const formattedInt = intPart.replace(/\B(?=(\d{3})+(?!\d))/g, separator);
 
-        const animate = (timestamp: number) => {
-          if (startTimeRef.current === null) {
-            startTimeRef.current = timestamp;
-          }
+      return decPart ? `${formattedInt}${decimalSeparator}${decPart}` : formattedInt;
+    },
+    [decimals, separator, decimalSeparator, formatFn]
+  );
 
-          const elapsed = timestamp - startTimeRef.current;
-          const progress = Math.min(elapsed / dur, 1);
+  // Start animation
+  const startAnimation = useCallback(() => {
+    if (hasStartedRef.current) {
+      return;
+    }
 
-          const easingFn = easingFunctions[ease];
-          const easedProgress = easingFn(progress);
+    hasStartedRef.current = true;
+    setIsAnimating(true);
+    startTimeRef.current = null;
 
-          const currentValue = startVal + (endVal - startVal) * easedProgress;
-          setDisplayValue(currentValue);
+    const runAnimation = () => {
+      const {
+        duration: dur,
+        easing: ease,
+        start: startVal,
+        value: endVal,
+        onEnd: endCb,
+      } = valuesRef.current;
 
-          if (progress < 1) {
-            animationRef.current = requestAnimationFrame(animate);
-          } else {
-            setDisplayValue(endVal);
-            setIsAnimating(false);
-            endCb?.();
-          }
-        };
+      const animate = (timestamp: number) => {
+        if (startTimeRef.current === null) {
+          startTimeRef.current = timestamp;
+        }
 
-        animationRef.current = requestAnimationFrame(animate);
+        const elapsed = timestamp - startTimeRef.current;
+        const progress = Math.min(elapsed / dur, 1);
+
+        const easingFn = easingFunctions[ease];
+        const easedProgress = easingFn(progress);
+
+        const currentValue = startVal + (endVal - startVal) * easedProgress;
+        setDisplayValue(currentValue);
+
+        if (progress < 1) {
+          animationRef.current = requestAnimationFrame(animate);
+        } else {
+          setDisplayValue(endVal);
+          setIsAnimating(false);
+          endCb?.();
+        }
       };
 
-      const { delay: delayMs, onStart: startCb } = valuesRef.current;
-      if (delayMs > 0) {
-        setTimeout(() => {
-          startCb?.();
-          runAnimation();
-        }, delayMs);
-      } else {
+      animationRef.current = requestAnimationFrame(animate);
+    };
+
+    const { delay: delayMs, onStart: startCb } = valuesRef.current;
+    if (delayMs > 0) {
+      setTimeout(() => {
         startCb?.();
         runAnimation();
-      }
-    }, []);
+      }, delayMs);
+    } else {
+      startCb?.();
+      runAnimation();
+    }
+  }, []);
 
-    // Intersection Observer for visibility trigger
-    useEffect(() => {
-      if (!triggerOnVisible || hasStartedRef.current) {
-        return;
-      }
+  // Intersection Observer for visibility trigger
+  useEffect(() => {
+    if (!triggerOnVisible || hasStartedRef.current) {
+      return;
+    }
 
-      const element = elementRef.current;
-      if (!element) {
-        return;
-      }
+    const element = elementRef.current;
+    if (!element) {
+      return;
+    }
 
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              startAnimation();
-              observer.disconnect();
-            }
-          });
-        },
-        { threshold: visibilityThreshold }
-      );
-
-      observer.observe(element);
-
-      return () => {
-        observer.disconnect();
-      };
-    }, [triggerOnVisible, visibilityThreshold, startAnimation]);
-
-    // Auto start (when not using visibility trigger)
-    useEffect(() => {
-      if (!triggerOnVisible && autoStart && !hasStartedRef.current) {
-        // Defer to avoid synchronous setState in effect
-        const timeoutId = setTimeout(() => {
-          startAnimation();
-        }, 0);
-        return () => clearTimeout(timeoutId);
-      }
-    }, [triggerOnVisible, autoStart, startAnimation]);
-
-    // Cleanup animation frame on unmount
-    useEffect(() => {
-      return () => {
-        if (animationRef.current) {
-          cancelAnimationFrame(animationRef.current);
-        }
-      };
-    }, []);
-
-    // Update when value changes (re-animate)
-    const prevValueRef = useRef(value);
-    useEffect(() => {
-      if (prevValueRef.current !== value && hasStartedRef.current && !isAnimating) {
-        // Reset and re-animate when value changes
-        // Defer to avoid synchronous setState in effect
-        hasStartedRef.current = false;
-        const timeoutId = setTimeout(() => {
-          setDisplayValue(start);
-        }, 0);
-        prevValueRef.current = value;
-        return () => clearTimeout(timeoutId);
-      }
-      prevValueRef.current = value;
-    }, [value, isAnimating, start]);
-
-    const componentClasses = [styles.countUp, className].filter(Boolean).join(' ');
-
-    // Combine refs
-    const setRefs = useCallback(
-      (node: HTMLSpanElement | null) => {
-        elementRef.current = node;
-        if (typeof ref === 'function') {
-          ref(node);
-        } else if (ref) {
-          ref.current = node;
-        }
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            startAnimation();
+            observer.disconnect();
+          }
+        });
       },
-      [ref]
+      { threshold: visibilityThreshold }
     );
 
-    return (
-      <span
-        ref={setRefs}
-        className={componentClasses}
-        data-component="count-up"
-        data-size={size}
-        data-animating={isAnimating || undefined}
-        data-testid={testId}
-        aria-label={ariaLabel || `${prefix}${formatNumber(value)}${suffix}`}
-        style={style}
-        {...restProps}
-      >
-        {prefix && <span className={styles.prefix}>{prefix}</span>}
-        <span className={styles.value}>{formatNumber(displayValue)}</span>
-        {suffix && <span className={styles.suffix}>{suffix}</span>}
-      </span>
-    );
-  }
-);
+    observer.observe(element);
 
-CountUp.displayName = 'CountUp';
+    return () => {
+      observer.disconnect();
+    };
+  }, [triggerOnVisible, visibilityThreshold, startAnimation]);
+
+  // Auto start (when not using visibility trigger)
+  useEffect(() => {
+    if (!triggerOnVisible && autoStart && !hasStartedRef.current) {
+      // Defer to avoid synchronous setState in effect
+      const timeoutId = setTimeout(() => {
+        startAnimation();
+      }, 0);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [triggerOnVisible, autoStart, startAnimation]);
+
+  // Cleanup animation frame on unmount
+  useEffect(() => {
+    return () => {
+      if (animationRef.current) {
+        cancelAnimationFrame(animationRef.current);
+      }
+    };
+  }, []);
+
+  // Update when value changes (re-animate)
+  const prevValueRef = useRef(value);
+  useEffect(() => {
+    if (prevValueRef.current !== value && hasStartedRef.current && !isAnimating) {
+      // Reset and re-animate when value changes
+      // Defer to avoid synchronous setState in effect
+      hasStartedRef.current = false;
+      const timeoutId = setTimeout(() => {
+        setDisplayValue(start);
+      }, 0);
+      prevValueRef.current = value;
+      return () => clearTimeout(timeoutId);
+    }
+    prevValueRef.current = value;
+  }, [value, isAnimating, start]);
+
+  const componentClasses = [styles.countUp, className].filter(Boolean).join(' ');
+
+  // Combine refs
+  const setRefs = useCallback(
+    (node: HTMLSpanElement | null) => {
+      elementRef.current = node;
+      if (typeof ref === 'function') {
+        ref(node);
+      } else if (ref) {
+        ref.current = node;
+      }
+    },
+    [ref]
+  );
+
+  return (
+    <span
+      ref={setRefs}
+      className={componentClasses}
+      data-component="count-up"
+      data-size={size}
+      data-animating={isAnimating || undefined}
+      data-testid={testId}
+      aria-label={ariaLabel || `${prefix}${formatNumber(value)}${suffix}`}
+      style={style}
+      {...restProps}
+    >
+      {prefix && <span className={styles.prefix}>{prefix}</span>}
+      <span className={styles.value}>{formatNumber(displayValue)}</span>
+      {suffix && <span className={styles.suffix}>{suffix}</span>}
+    </span>
+  );
+};
 
 export default CountUp;

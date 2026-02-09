@@ -886,11 +886,4 @@ describe('KanbanBoard', () => {
       expect(screen.getByText('Card 2')).toBeInTheDocument();
     });
   });
-
-  // 17. Display name
-  describe('display name', () => {
-    it('has correct display name', () => {
-      expect(KanbanBoard.displayName).toBe('KanbanBoard');
-    });
-  });
 });

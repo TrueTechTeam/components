@@ -1,4 +1,4 @@
-import { addons } from '@storybook/manager-api';
+import { addons } from 'storybook/manager-api';
 import { lightTheme, darkTheme } from './theme';
 
 // Detect user's preferred color scheme

@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
 import type { ComponentVariant, BaseComponentProps, ExtendedComponentSize } from '../../../types';
 import { Icon } from '../../display/Icon';
 import type { IconName } from '../../display/Icon/icons';
@@ -55,49 +55,45 @@ export interface IconButtonProps extends BaseComponentProps {
  * - Default ghost variant for minimal UI
  * - Required aria-label for accessibility
  */
-export const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
-  (
-    {
-      icon,
-      variant = 'ghost',
-      size = 'md',
-      disabled = false,
-      type = 'button',
-      onClick,
-      className,
-      'data-testid': testId,
-      'aria-label': ariaLabel,
-      style,
-      ...restProps
-    },
-    ref
-  ) => {
-    const buttonClasses = [styles.iconButton, className].filter(Boolean).join(' ');
+export const IconButton = ({
+  ref,
+  icon,
+  variant = 'ghost',
+  size = 'md',
+  disabled = false,
+  type = 'button',
+  onClick,
+  className,
+  'data-testid': testId,
+  'aria-label': ariaLabel,
+  style,
+  ...restProps
+}: IconButtonProps & {
+  ref?: React.Ref<HTMLButtonElement>;
+}) => {
+  const buttonClasses = [styles.iconButton, className].filter(Boolean).join(' ');
 
-    // Map size to icon pixel value
-    const iconSize = ICON_SIZE_MAP[size];
+  // Map size to icon pixel value
+  const iconSize = ICON_SIZE_MAP[size];
 
-    return (
-      <button
-        ref={ref}
-        type={type}
-        className={buttonClasses}
-        data-variant={variant}
-        data-size={size}
-        disabled={disabled}
-        onClick={onClick}
-        data-component="icon-button"
-        data-testid={testId || 'icon-button'}
-        aria-label={ariaLabel}
-        style={style}
-        {...restProps}
-      >
-        <Icon name={icon} size={iconSize} />
-      </button>
-    );
-  }
-);
-
-IconButton.displayName = 'IconButton';
+  return (
+    <button
+      ref={ref}
+      type={type}
+      className={buttonClasses}
+      data-variant={variant}
+      data-size={size}
+      disabled={disabled}
+      onClick={onClick}
+      data-component="icon-button"
+      data-testid={testId || 'icon-button'}
+      aria-label={ariaLabel}
+      style={style}
+      {...restProps}
+    >
+      <Icon name={icon} size={iconSize} />
+    </button>
+  );
+};
 
 export default IconButton;

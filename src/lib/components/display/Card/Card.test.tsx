@@ -887,11 +887,4 @@ describe('Card', () => {
       expect(handleClick).not.toHaveBeenCalled();
     });
   });
-
-  // 19. Display name
-  describe('display name', () => {
-    it('has correct display name', () => {
-      expect(Card.displayName).toBe('Card');
-    });
-  });
 });

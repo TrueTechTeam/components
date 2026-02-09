@@ -933,11 +933,4 @@ describe('FilterSidebar', () => {
       expect(screen.getByText('Test')).toBeInTheDocument();
     });
   });
-
-  // 16. Display name
-  describe('display name', () => {
-    it('has correct display name', () => {
-      expect(FilterSidebar.displayName).toBe('FilterSidebar');
-    });
-  });
 });

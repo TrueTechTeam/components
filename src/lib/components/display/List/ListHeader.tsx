@@ -164,6 +164,4 @@ export function ListHeader<T extends Record<string, unknown>>({
   );
 }
 
-ListHeader.displayName = 'ListHeader';
-
 export default ListHeader;

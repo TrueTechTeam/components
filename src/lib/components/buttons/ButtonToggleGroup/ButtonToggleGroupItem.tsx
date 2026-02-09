@@ -1,4 +1,4 @@
-import React, { forwardRef, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import type { BaseComponentProps } from '../../../types';
 import { Icon } from '../../display/Icon';
 import type { IconName } from '../../display/Icon/icons';
@@ -42,63 +42,59 @@ export interface ButtonToggleGroupItemProps extends Omit<BaseComponentProps, 'ch
  * </ButtonToggleGroup>
  * ```
  */
-export const ButtonToggleGroupItem = forwardRef<HTMLButtonElement, ButtonToggleGroupItemProps>(
-  (
-    {
-      value,
-      icon,
-      disabled: itemDisabled = false,
-      children,
-      className,
-      'data-testid': testId,
-      style,
-      ...restProps
+export const ButtonToggleGroupItem = ({
+  ref,
+  value,
+  icon,
+  disabled: itemDisabled = false,
+  children,
+  className,
+  'data-testid': testId,
+  style,
+  ...restProps
+}: ButtonToggleGroupItemProps & {
+  ref?: React.Ref<HTMLButtonElement>;
+}) => {
+  const context = useButtonToggleGroup();
+
+  const isSelected = context.value === value;
+  const isDisabled = itemDisabled || context.disabled;
+
+  const handleClick = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      if (isDisabled) {
+        return;
+      }
+      context.onChange?.(value, event);
     },
-    ref
-  ) => {
-    const context = useButtonToggleGroup();
+    [context, value, isDisabled]
+  );
 
-    const isSelected = context.value === value;
-    const isDisabled = itemDisabled || context.disabled;
+  const itemClasses = [styles.item, className].filter(Boolean).join(' ');
 
-    const handleClick = useCallback(
-      (event: React.MouseEvent<HTMLButtonElement>) => {
-        if (isDisabled) {
-          return;
-        }
-        context.onChange?.(value, event);
-      },
-      [context, value, isDisabled]
-    );
+  // Map size to icon pixel value
+  const iconSize = context.size ? ICON_SIZE_MAP[context.size] : ICON_SIZE_MAP.md;
 
-    const itemClasses = [styles.item, className].filter(Boolean).join(' ');
-
-    // Map size to icon pixel value
-    const iconSize = context.size ? ICON_SIZE_MAP[context.size] : ICON_SIZE_MAP.md;
-
-    return (
-      <button
-        ref={ref}
-        type="button"
-        role="radio"
-        className={itemClasses}
-        data-selected={isSelected || undefined}
-        data-component="button-toggle-group-item"
-        data-testid={testId || `button-toggle-group-item-${value}`}
-        disabled={isDisabled}
-        onClick={handleClick}
-        aria-checked={isSelected}
-        aria-label={typeof children === 'string' ? children : undefined}
-        style={style}
-        {...restProps}
-      >
-        {icon && <Icon name={icon} size={iconSize} className={styles.icon} />}
-        {children && <span className={styles.label}>{children}</span>}
-      </button>
-    );
-  }
-);
-
-ButtonToggleGroupItem.displayName = 'ButtonToggleGroupItem';
+  return (
+    <button
+      ref={ref}
+      type="button"
+      role="radio"
+      className={itemClasses}
+      data-selected={isSelected || undefined}
+      data-component="button-toggle-group-item"
+      data-testid={testId || `button-toggle-group-item-${value}`}
+      disabled={isDisabled}
+      onClick={handleClick}
+      aria-checked={isSelected}
+      aria-label={typeof children === 'string' ? children : undefined}
+      style={style}
+      {...restProps}
+    >
+      {icon && <Icon name={icon} size={iconSize} className={styles.icon} />}
+      {children && <span className={styles.label}>{children}</span>}
+    </button>
+  );
+};
 
 export default ButtonToggleGroupItem;

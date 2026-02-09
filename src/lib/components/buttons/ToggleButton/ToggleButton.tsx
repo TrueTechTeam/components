@@ -1,4 +1,4 @@
-import React, { forwardRef, useState, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import type { BaseComponentProps, ExtendedComponentSize } from '../../../types';
 import { Icon } from '../../display/Icon';
 import type { IconName } from '../../display/Icon/icons';
@@ -108,90 +108,86 @@ export interface ToggleButtonProps extends Omit<BaseComponentProps, 'children'> 
  * />
  * ```
  */
-export const ToggleButton = forwardRef<HTMLButtonElement, ToggleButtonProps>(
-  (
-    {
-      active,
-      defaultActive = false,
-      onChange,
-      activeIcon = 'heart-filled',
-      inactiveIcon = 'heart',
-      size = 'md',
-      activeColor = 'var(--theme-error)',
-      inactiveColor = 'var(--theme-text-secondary)',
-      disabled = false,
-      type = 'button',
-      animated = true,
-      className,
-      'data-testid': testId,
-      'aria-label': ariaLabel,
-      style,
-      ...restProps
+export const ToggleButton = ({
+  ref,
+  active,
+  defaultActive = false,
+  onChange,
+  activeIcon = 'heart-filled',
+  inactiveIcon = 'heart',
+  size = 'md',
+  activeColor = 'var(--theme-error)',
+  inactiveColor = 'var(--theme-text-secondary)',
+  disabled = false,
+  type = 'button',
+  animated = true,
+  className,
+  'data-testid': testId,
+  'aria-label': ariaLabel,
+  style,
+  ...restProps
+}: ToggleButtonProps & {
+  ref?: React.Ref<HTMLButtonElement>;
+}) => {
+  // Internal state for uncontrolled component
+  const [internalActive, setInternalActive] = useState(defaultActive);
+
+  // Use controlled value if provided, otherwise use internal state
+  const isActive = active !== undefined ? active : internalActive;
+
+  const handleClick = useCallback(
+    (event: React.MouseEvent<HTMLButtonElement>) => {
+      if (disabled) {
+        return;
+      }
+
+      const newActive = !isActive;
+
+      // Update internal state if uncontrolled
+      if (active === undefined) {
+        setInternalActive(newActive);
+      }
+
+      onChange?.(newActive, event);
     },
-    ref
-  ) => {
-    // Internal state for uncontrolled component
-    const [internalActive, setInternalActive] = useState(defaultActive);
+    [active, isActive, disabled, onChange]
+  );
 
-    // Use controlled value if provided, otherwise use internal state
-    const isActive = active !== undefined ? active : internalActive;
+  const buttonClasses = [styles.toggleButton, className].filter(Boolean).join(' ');
 
-    const handleClick = useCallback(
-      (event: React.MouseEvent<HTMLButtonElement>) => {
-        if (disabled) {
-          return;
-        }
+  // Map size to icon pixel value
+  const iconSize = ICON_SIZE_MAP[size];
 
-        const newActive = !isActive;
+  // Current icon based on state
+  const currentIcon = isActive ? activeIcon : inactiveIcon;
 
-        // Update internal state if uncontrolled
-        if (active === undefined) {
-          setInternalActive(newActive);
-        }
+  // Custom CSS variables for colors
+  const buttonStyle = {
+    '--toggle-button-active-color': activeColor,
+    '--toggle-button-inactive-color': inactiveColor,
+    ...style,
+  } as React.CSSProperties;
 
-        onChange?.(newActive, event);
-      },
-      [active, isActive, disabled, onChange]
-    );
-
-    const buttonClasses = [styles.toggleButton, className].filter(Boolean).join(' ');
-
-    // Map size to icon pixel value
-    const iconSize = ICON_SIZE_MAP[size];
-
-    // Current icon based on state
-    const currentIcon = isActive ? activeIcon : inactiveIcon;
-
-    // Custom CSS variables for colors
-    const buttonStyle = {
-      '--toggle-button-active-color': activeColor,
-      '--toggle-button-inactive-color': inactiveColor,
-      ...style,
-    } as React.CSSProperties;
-
-    return (
-      <button
-        ref={ref}
-        type={type}
-        className={buttonClasses}
-        data-active={isActive || undefined}
-        data-size={size}
-        data-animated={animated || undefined}
-        data-component="toggle-button"
-        data-testid={testId || 'toggle-button'}
-        disabled={disabled}
-        onClick={handleClick}
-        aria-label={ariaLabel}
-        aria-pressed={isActive}
-        style={buttonStyle}
-        {...restProps}
-      >
-        <Icon name={currentIcon} size={iconSize} className={styles.icon} />
-      </button>
-    );
-  }
-);
-
-ToggleButton.displayName = 'ToggleButton';
+  return (
+    <button
+      ref={ref}
+      type={type}
+      className={buttonClasses}
+      data-active={isActive || undefined}
+      data-size={size}
+      data-animated={animated || undefined}
+      data-component="toggle-button"
+      data-testid={testId || 'toggle-button'}
+      disabled={disabled}
+      onClick={handleClick}
+      aria-label={ariaLabel}
+      aria-pressed={isActive}
+      style={buttonStyle}
+      {...restProps}
+    >
+      <Icon name={currentIcon} size={iconSize} className={styles.icon} />
+    </button>
+  );
+};
 
 export default ToggleButton;

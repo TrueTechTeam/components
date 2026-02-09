@@ -1,4 +1,4 @@
-import React, { forwardRef, useMemo, useId, useCallback } from 'react';
+import React, { useMemo, useId, useCallback } from 'react';
 import type { BaseComponentProps, ComponentSize } from '../../../types';
 import {
   StepperContext,
@@ -92,112 +92,108 @@ export interface StepperProps extends BaseComponentProps {
  * </Stepper>
  * ```
  */
-export const Stepper = forwardRef<HTMLDivElement, StepperProps>(
-  (
-    {
-      currentStep,
-      onStepChange,
-      orientation = 'horizontal',
-      variant = 'numbered',
-      size = 'md',
-      allowStepClick = false,
-      onlyPreviousClickable = true,
-      completedSteps = [],
-      children,
-      className,
-      'data-testid': testId,
-      'aria-label': ariaLabel,
-      style,
-      ...restProps
+export const Stepper = ({
+  ref,
+  currentStep,
+  onStepChange,
+  orientation = 'horizontal',
+  variant = 'numbered',
+  size = 'md',
+  allowStepClick = false,
+  onlyPreviousClickable = true,
+  completedSteps = [],
+  children,
+  className,
+  'data-testid': testId,
+  'aria-label': ariaLabel,
+  style,
+  ...restProps
+}: StepperProps & {
+  ref?: React.Ref<HTMLDivElement>;
+}) => {
+  const stepperId = useId();
+
+  // Provide a no-op registerStep for backwards compatibility
+  // Step index is now injected directly via _stepIndex prop
+  const registerStep = useCallback(() => 0, []);
+
+  // Count total steps
+  const totalSteps = React.Children.count(children);
+
+  const handleStepClick = useCallback(
+    (step: number) => {
+      if (!allowStepClick) {
+        return;
+      }
+      if (onlyPreviousClickable && step > currentStep) {
+        return;
+      }
+      onStepChange?.(step);
     },
-    ref
-  ) => {
-    const stepperId = useId();
+    [allowStepClick, onlyPreviousClickable, currentStep, onStepChange]
+  );
 
-    // Provide a no-op registerStep for backwards compatibility
-    // Step index is now injected directly via _stepIndex prop
-    const registerStep = useCallback(() => 0, []);
+  const completedStepsSet = useMemo(() => new Set(completedSteps), [completedSteps]);
 
-    // Count total steps
-    const totalSteps = React.Children.count(children);
+  const contextValue: StepperContextValue = useMemo(
+    () => ({
+      stepperId,
+      currentStep,
+      totalSteps,
+      orientation,
+      variant,
+      size,
+      completedSteps: completedStepsSet,
+      onStepClick: handleStepClick,
+      allowStepClick,
+      onlyPreviousClickable,
+      registerStep,
+    }),
+    [
+      stepperId,
+      currentStep,
+      totalSteps,
+      orientation,
+      variant,
+      size,
+      completedStepsSet,
+      handleStepClick,
+      allowStepClick,
+      onlyPreviousClickable,
+      registerStep,
+    ]
+  );
 
-    const handleStepClick = useCallback(
-      (step: number) => {
-        if (!allowStepClick) {
-          return;
-        }
-        if (onlyPreviousClickable && step > currentStep) {
-          return;
-        }
-        onStepChange?.(step);
-      },
-      [allowStepClick, onlyPreviousClickable, currentStep, onStepChange]
-    );
+  const componentClasses = [styles.stepper, className].filter(Boolean).join(' ');
 
-    const completedStepsSet = useMemo(() => new Set(completedSteps), [completedSteps]);
-
-    const contextValue: StepperContextValue = useMemo(
-      () => ({
-        stepperId,
-        currentStep,
-        totalSteps,
-        orientation,
-        variant,
-        size,
-        completedSteps: completedStepsSet,
-        onStepClick: handleStepClick,
-        allowStepClick,
-        onlyPreviousClickable,
-        registerStep,
-      }),
-      [
-        stepperId,
-        currentStep,
-        totalSteps,
-        orientation,
-        variant,
-        size,
-        completedStepsSet,
-        handleStepClick,
-        allowStepClick,
-        onlyPreviousClickable,
-        registerStep,
-      ]
-    );
-
-    const componentClasses = [styles.stepper, className].filter(Boolean).join(' ');
-
-    return (
-      <div
-        ref={ref}
-        className={componentClasses}
-        data-component="stepper"
-        data-orientation={orientation}
-        data-variant={variant}
-        data-size={size}
-        data-testid={testId}
-        aria-label={ariaLabel || 'Progress steps'}
-        role="group"
-        style={style}
-        {...restProps}
-      >
-        <StepperContext.Provider value={contextValue}>
-          {React.Children.map(children, (child, index) => (
-            <>
-              {React.isValidElement(child)
-                ? React.cloneElement(child as React.ReactElement<{ _stepIndex?: number }>, {
-                    _stepIndex: index,
-                  })
-                : child}
-              {index < totalSteps - 1 && <div className={styles.connector} data-step={index} />}
-            </>
-          ))}
-        </StepperContext.Provider>
-      </div>
-    );
-  }
-);
-
-Stepper.displayName = 'Stepper';
+  return (
+    <div
+      ref={ref}
+      className={componentClasses}
+      data-component="stepper"
+      data-orientation={orientation}
+      data-variant={variant}
+      data-size={size}
+      data-testid={testId}
+      aria-label={ariaLabel || 'Progress steps'}
+      role="group"
+      style={style}
+      {...restProps}
+    >
+      <StepperContext.Provider value={contextValue}>
+        {React.Children.map(children, (child, index) => (
+          <>
+            {React.isValidElement(child)
+              ? React.cloneElement(child as React.ReactElement<{ _stepIndex?: number }>, {
+                  _stepIndex: index,
+                })
+              : child}
+            {index < totalSteps - 1 && <div className={styles.connector} data-step={index} />}
+          </>
+        ))}
+      </StepperContext.Provider>
+    </div>
+  );
+};
 
 export default Stepper;

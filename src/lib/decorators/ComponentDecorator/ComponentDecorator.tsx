@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React, { type JSX } from 'react';
 import type { CSSVariables } from '../../types';
 
 export interface ComponentDecoratorProps {
@@ -66,11 +66,17 @@ export function withComponentDecorator<P extends object>(
   componentName: string,
   defaultClassName?: string
 ) {
-  const DecoratedComponent = forwardRef<
-    HTMLDivElement,
-    P & Omit<ComponentDecoratorProps, 'componentName'>
-  >((props, ref) => {
-    const { className, cssVariables, 'data-testid': testId, children, ...restProps } = props;
+  const DecoratedComponent = ({
+    ref,
+    ...props
+  }: P & Omit<ComponentDecoratorProps, 'componentName'> & { ref?: React.Ref<HTMLDivElement> }) => {
+    const {
+      className,
+      cssVariables,
+      'data-testid': testId,
+      children,
+      ...restProps
+    } = props as unknown as ComponentDecoratorProps;
 
     // Generate CSS variable styles
     const cssVarStyles = cssVariables
@@ -99,7 +105,7 @@ export function withComponentDecorator<P extends object>(
         <Component {...(restProps as P)}>{children}</Component>
       </div>
     );
-  });
+  };
 
   DecoratedComponent.displayName = `WithComponentDecorator(${componentName})`;
 

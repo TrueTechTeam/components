@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
 import styles from './Pill.module.scss';
 import type { BaseComponentProps } from '../../../types/component.types';
 import { Icon } from '../Icon';
@@ -90,92 +90,88 @@ export interface PillProps extends BaseComponentProps {
  * </Pill>
  * ```
  */
-export const Pill = forwardRef<HTMLElement, PillProps>(
-  (
-    {
-      variant = 'filled',
-      color = 'primary',
-      size = 'md',
-      disabled = false,
-      onClick,
-      onRemove,
-      startIcon,
-      endIcon,
-      className,
-      children,
-      ...restProps
-    },
-    ref
-  ) => {
-    // Determine if component should be clickable
-    const isClickable = !!onClick;
+export const Pill = ({
+  ref,
+  variant = 'filled',
+  color = 'primary',
+  size = 'md',
+  disabled = false,
+  onClick,
+  onRemove,
+  startIcon,
+  endIcon,
+  className,
+  children,
+  ...restProps
+}: PillProps & {
+  ref?: React.Ref<HTMLElement>;
+}) => {
+  // Determine if component should be clickable
+  const isClickable = !!onClick;
 
-    // Merge className with component styles
-    const componentClasses = [styles.pill, className].filter(Boolean).join(' ');
+  // Merge className with component styles
+  const componentClasses = [styles.pill, className].filter(Boolean).join(' ');
 
-    // Handle remove button click
-    const handleRemoveClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-      event.stopPropagation(); // Prevent pill onClick from firing
-      onRemove?.(event);
-    };
+  // Handle remove button click
+  const handleRemoveClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation(); // Prevent pill onClick from firing
+    onRemove?.(event);
+  };
 
-    // Common props for both span and button
-    const commonProps = {
-      className: componentClasses,
-      'data-component': 'pill',
-      'data-variant': variant,
-      'data-color': color,
-      'data-size': size,
-      'data-disabled': disabled || undefined,
-      'data-clickable': isClickable || undefined,
-      'data-removable': !!onRemove || undefined,
-      ...restProps,
-    };
+  // Common props for both span and button
+  const commonProps = {
+    className: componentClasses,
+    'data-component': 'pill',
+    'data-variant': variant,
+    'data-color': color,
+    'data-size': size,
+    'data-disabled': disabled || undefined,
+    'data-clickable': isClickable || undefined,
+    'data-removable': !!onRemove || undefined,
+    ...restProps,
+  };
 
-    const content = (
-      <>
-        {startIcon && <span className={styles.pillIcon}>{startIcon}</span>}
-        <span className={styles.pillText}>{children}</span>
-        {endIcon && !onRemove && <span className={styles.pillIcon}>{endIcon}</span>}
-        {onRemove && (
-          <button
-            type="button"
-            className={styles.pillRemove}
-            onClick={handleRemoveClick}
-            disabled={disabled}
-            aria-label="Remove"
-            tabIndex={-1}
-          >
-            <Icon name="close" size="1em" aria-hidden="true" />
-          </button>
-        )}
-      </>
-    );
-
-    // Render as button if clickable
-    if (isClickable) {
-      return (
+  const content = (
+    <>
+      {startIcon && <span className={styles.pillIcon}>{startIcon}</span>}
+      <span className={styles.pillText}>{children}</span>
+      {endIcon && !onRemove && <span className={styles.pillIcon}>{endIcon}</span>}
+      {onRemove && (
         <button
-          ref={ref as React.Ref<HTMLButtonElement>}
           type="button"
-          onClick={onClick}
+          className={styles.pillRemove}
+          onClick={handleRemoveClick}
           disabled={disabled}
-          {...commonProps}
+          aria-label="Remove"
+          tabIndex={-1}
         >
-          {content}
+          <Icon name="close" size="1em" aria-hidden="true" />
         </button>
-      );
-    }
+      )}
+    </>
+  );
 
-    // Render as span by default
+  // Render as button if clickable
+  if (isClickable) {
     return (
-      <span ref={ref as React.Ref<HTMLSpanElement>} {...commonProps}>
+      <button
+        ref={ref as React.Ref<HTMLButtonElement>}
+        type="button"
+        onClick={onClick}
+        disabled={disabled}
+        {...commonProps}
+      >
         {content}
-      </span>
+      </button>
     );
   }
-);
 
-Pill.displayName = 'Pill';
+  // Render as span by default
+  return (
+    <span ref={ref as React.Ref<HTMLSpanElement>} {...commonProps}>
+      {content}
+    </span>
+  );
+};
 
 export default Pill;

@@ -1,4 +1,4 @@
-import React, { forwardRef, useCallback, useMemo, useEffect, useRef } from 'react';
+import React, { useCallback, useMemo, useEffect, useRef } from 'react';
 import { useResizeObserver } from '../../../hooks';
 import type { BaseComponentProps } from '../../../types';
 import styles from './ResponsiveStack.module.scss';
@@ -111,103 +111,102 @@ export interface ResponsiveStackProps extends BaseComponentProps {
  * </ResponsiveStack>
  * ```
  */
-export const ResponsiveStack = forwardRef<HTMLDivElement, ResponsiveStackProps>(
-  (
-    {
-      breakpoint = 768,
-      direction = 'row',
-      collapseDirection = 'column',
-      gap = 16,
-      collapseGap,
-      align = 'stretch',
-      collapseAlign,
-      justify = 'start',
-      collapseJustify,
-      wrap = false,
-      onLayoutChange,
-      children,
-      className,
-      style,
-      'data-testid': testId,
-      'aria-label': ariaLabel,
-      ...restProps
-    },
-    ref
-  ) => {
-    const onLayoutChangeRef = useRef(onLayoutChange);
-    useEffect(() => {
-      onLayoutChangeRef.current = onLayoutChange;
-    }, [onLayoutChange]);
+export const ResponsiveStack = ({
+  ref,
+  breakpoint = 768,
+  direction = 'row',
+  collapseDirection = 'column',
+  gap = 16,
+  collapseGap,
+  align = 'stretch',
+  collapseAlign,
+  justify = 'start',
+  collapseJustify,
+  wrap = false,
+  onLayoutChange,
+  children,
+  className,
+  style,
+  'data-testid': testId,
+  'aria-label': ariaLabel,
+  ...restProps
+}: ResponsiveStackProps & {
+  ref?: React.Ref<HTMLDivElement>;
+}) => {
+  const onLayoutChangeRef = useRef(onLayoutChange);
+  useEffect(() => {
+    onLayoutChangeRef.current = onLayoutChange;
+  }, [onLayoutChange]);
 
-    const { ref: containerRef, width } = useResizeObserver();
+  const { ref: containerRef, width } = useResizeObserver();
 
-    // Combine refs
-    const setRefs = useCallback(
-      (node: HTMLDivElement | null) => {
-        containerRef(node);
-        if (typeof ref === 'function') {
-          ref(node);
-        } else if (ref) {
-          ref.current = node;
-        }
-      },
-      [containerRef, ref]
-    );
-
-    const isCollapsed = width > 0 && width < breakpoint;
-    const currentDirection = isCollapsed ? collapseDirection : direction;
-    const currentGap = isCollapsed ? (collapseGap ?? gap) : gap;
-    const currentAlign = isCollapsed ? (collapseAlign ?? align) : align;
-    const currentJustify = isCollapsed ? (collapseJustify ?? justify) : justify;
-
-    // Track previous collapsed state to trigger callback
-    const prevCollapsedRef = useRef<boolean | null>(null);
-    useEffect(() => {
-      if (width > 0 && prevCollapsedRef.current !== isCollapsed) {
-        prevCollapsedRef.current = isCollapsed;
-        onLayoutChangeRef.current?.(isCollapsed, currentDirection);
+  // Combine refs
+  const setRefs = useCallback(
+    (node: HTMLDivElement | null) => {
+      containerRef(node);
+      if (typeof ref === 'function') {
+        ref(node);
+      } else if (ref) {
+        ref.current = node;
       }
-    }, [isCollapsed, currentDirection, width]);
+    },
+    [containerRef, ref]
+  );
 
-    const componentClasses = [styles.responsiveStack, className].filter(Boolean).join(' ');
+  const isCollapsed = width > 0 && width < breakpoint;
+  const currentDirection = isCollapsed ? collapseDirection : direction;
+  const currentGap = isCollapsed ? (collapseGap ?? gap) : gap;
+  const currentAlign = isCollapsed ? (collapseAlign ?? align) : align;
+  const currentJustify = isCollapsed ? (collapseJustify ?? justify) : justify;
 
-    const cssVariables = useMemo(
-      () =>
-        ({
-          '--stack-direction': currentDirection,
-          '--stack-gap': `${currentGap}px`,
-          '--stack-align':
-            currentAlign === 'start' || currentAlign === 'end'
-              ? `flex-${currentAlign}`
-              : currentAlign,
-          '--stack-justify':
-            currentJustify === 'start' || currentJustify === 'end'
-              ? `flex-${currentJustify}`
-              : currentJustify,
-          '--stack-wrap': wrap ? 'wrap' : 'nowrap',
-          ...style,
-        }) as React.CSSProperties,
-      [currentDirection, currentGap, currentAlign, currentJustify, wrap, style]
-    );
+  // Track previous collapsed state to trigger callback
+  const prevCollapsedRef = useRef<boolean | null>(null);
+  useEffect(() => {
+    if (width > 0 && prevCollapsedRef.current !== isCollapsed) {
+      prevCollapsedRef.current = isCollapsed;
+      onLayoutChangeRef.current?.(isCollapsed, currentDirection);
+    }
+  }, [isCollapsed, currentDirection, width]);
 
-    return (
-      <div
-        ref={setRefs}
-        className={componentClasses}
-        style={cssVariables}
-        data-component="responsive-stack"
-        data-direction={currentDirection}
-        data-collapsed={isCollapsed || undefined}
-        data-testid={testId}
-        aria-label={ariaLabel}
-        {...restProps}
-      >
-        {children}
-      </div>
-    );
-  }
-);
+  const componentClasses = [styles.responsiveStack, className].filter(Boolean).join(' ');
 
-ResponsiveStack.displayName = 'ResponsiveStack';
+  const cssVariables = useMemo(
+    () =>
+      ({
+        '--stack-direction': currentDirection,
+        '--stack-gap': `${currentGap}px`,
+
+        '--stack-align':
+          currentAlign === 'start' || currentAlign === 'end'
+            ? `flex-${currentAlign}`
+            : currentAlign,
+
+        '--stack-justify':
+          currentJustify === 'start' || currentJustify === 'end'
+            ? `flex-${currentJustify}`
+            : currentJustify,
+
+        '--stack-wrap': wrap ? 'wrap' : 'nowrap',
+        ...style,
+      }) as React.CSSProperties,
+    [currentDirection, currentGap, currentAlign, currentJustify, wrap, style]
+  );
+
+  return (
+    <div
+      ref={setRefs}
+      className={componentClasses}
+      style={cssVariables}
+      data-component="responsive-stack"
+      data-direction={currentDirection}
+      data-collapsed={isCollapsed || undefined}
+      data-testid={testId}
+      aria-label={ariaLabel}
+      {...restProps}
+    >
+      {children}
+    </div>
+  );
+};
 
 export default ResponsiveStack;

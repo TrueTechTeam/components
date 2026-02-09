@@ -392,5 +392,3 @@ export function ToastProvider({
     </ToastContext.Provider>
   );
 }
-
-ToastProvider.displayName = 'ToastProvider';

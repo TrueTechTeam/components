@@ -2,7 +2,7 @@
  * KanbanCard component - Individual card within a KanbanColumn
  */
 
-import React, { forwardRef, useCallback, type ReactNode, type DragEvent } from 'react';
+import React, { useCallback, type ReactNode, type DragEvent } from 'react';
 import type { BaseComponentProps } from '../../../types/component.types';
 import { useKanbanBoardContextOptional } from './KanbanBoardContext';
 import { useSortable } from '../hooks';
@@ -91,114 +91,110 @@ export interface KanbanCardProps extends Omit<BaseComponentProps, 'children'> {
  * </KanbanCard>
  * ```
  */
-export const KanbanCard = forwardRef<HTMLDivElement, KanbanCardProps>(
-  (
-    {
-      id,
-      columnId,
-      index,
-      disabled = false,
-      children,
-      className,
-      'data-testid': dataTestId,
-      'aria-label': ariaLabel,
-      style,
-      data = {},
+export const KanbanCard = ({
+  ref,
+  id,
+  columnId,
+  index,
+  disabled = false,
+  children,
+  className,
+  'data-testid': dataTestId,
+  'aria-label': ariaLabel,
+  style,
+  data = {},
+}: KanbanCardProps & {
+  ref?: React.Ref<HTMLDivElement>;
+}) => {
+  const boardContext = useKanbanBoardContextOptional();
+  const isDisabled = disabled || boardContext?.disabled;
+
+  const {
+    isDragging,
+    isOver,
+    setNodeRef,
+    attributes,
+    listeners,
+    style: sortableStyle,
+  } = useSortable({
+    id,
+    index,
+    data: { ...data, type: 'kanban-card', columnId },
+    disabled: isDisabled,
+    groupId: 'kanban-cards', // All cards can move between columns
+  });
+
+  // Create ref callback
+  const handleRef = useCallback(
+    (node: HTMLElement | null) => {
+      setNodeRef(node);
+      if (typeof ref === 'function') {
+        ref(node as HTMLDivElement);
+      } else if (ref) {
+        (ref as React.MutableRefObject<HTMLDivElement | null>).current = node as HTMLDivElement;
+      }
     },
-    ref
-  ) => {
-    const boardContext = useKanbanBoardContextOptional();
-    const isDisabled = disabled || boardContext?.disabled;
+    [ref, setNodeRef]
+  );
 
-    const {
-      isDragging,
-      isOver,
-      setNodeRef,
-      attributes,
-      listeners,
-      style: sortableStyle,
-    } = useSortable({
-      id,
-      index,
-      data: { ...data, type: 'kanban-card', columnId },
-      disabled: isDisabled,
-      groupId: 'kanban-cards', // All cards can move between columns
-    });
+  // Drag handle props
+  const dragHandleProps = boardContext?.useDragHandle
+    ? {
+        draggable: !isDisabled,
+        onDragStart: listeners.onDragStart,
+        onDragEnd: listeners.onDragEnd,
+        onKeyDown: listeners.onKeyDown,
+        role: 'button',
+        tabIndex: isDisabled ? -1 : 0,
+        'aria-grabbed': isDragging,
+      }
+    : undefined;
 
-    // Create ref callback
-    const handleRef = useCallback(
-      (node: HTMLElement | null) => {
-        setNodeRef(node);
-        if (typeof ref === 'function') {
-          ref(node as HTMLDivElement);
-        } else if (ref) {
-          (ref as React.MutableRefObject<HTMLDivElement | null>).current = node as HTMLDivElement;
-        }
-      },
-      [ref, setNodeRef]
-    );
+  // Item listeners
+  const cardListeners = boardContext?.useDragHandle
+    ? {
+        onDragEnter: listeners.onDragEnter,
+        onDragLeave: listeners.onDragLeave,
+        onDragOver: listeners.onDragOver,
+        onDrop: listeners.onDrop,
+      }
+    : listeners;
 
-    // Drag handle props
-    const dragHandleProps = boardContext?.useDragHandle
-      ? {
-          draggable: !isDisabled,
-          onDragStart: listeners.onDragStart,
-          onDragEnd: listeners.onDragEnd,
-          onKeyDown: listeners.onKeyDown,
-          role: 'button',
-          tabIndex: isDisabled ? -1 : 0,
-          'aria-grabbed': isDragging,
-        }
-      : undefined;
+  const cardAttributes = boardContext?.useDragHandle
+    ? { ...attributes, draggable: false }
+    : attributes;
 
-    // Item listeners
-    const cardListeners = boardContext?.useDragHandle
-      ? {
-          onDragEnter: listeners.onDragEnter,
-          onDragLeave: listeners.onDragLeave,
-          onDragOver: listeners.onDragOver,
-          onDrop: listeners.onDrop,
-        }
-      : listeners;
+  // Render props
+  const renderProps: KanbanCardRenderProps = {
+    isDragging,
+    isOver,
+    dragHandleProps,
+    columnId,
+    index,
+  };
 
-    const cardAttributes = boardContext?.useDragHandle
-      ? { ...attributes, draggable: false }
-      : attributes;
+  const content =
+    typeof children === 'function'
+      ? (children as (props: KanbanCardRenderProps) => ReactNode)(renderProps)
+      : children;
 
-    // Render props
-    const renderProps: KanbanCardRenderProps = {
-      isDragging,
-      isOver,
-      dragHandleProps,
-      columnId,
-      index,
-    };
+  const containerClasses = [styles.kanbanCard, className].filter(Boolean).join(' ');
 
-    const content =
-      typeof children === 'function'
-        ? (children as (props: KanbanCardRenderProps) => ReactNode)(renderProps)
-        : children;
-
-    const containerClasses = [styles.kanbanCard, className].filter(Boolean).join(' ');
-
-    return (
-      <div
-        ref={handleRef}
-        className={containerClasses}
-        style={{ ...style, ...sortableStyle }}
-        data-testid={dataTestId}
-        aria-label={ariaLabel}
-        data-card-id={id}
-        data-column-id={columnId}
-        {...cardAttributes}
-        {...cardListeners}
-      >
-        {content}
-      </div>
-    );
-  }
-);
-
-KanbanCard.displayName = 'KanbanCard';
+  return (
+    <div
+      ref={handleRef}
+      className={containerClasses}
+      style={{ ...style, ...sortableStyle }}
+      data-testid={dataTestId}
+      aria-label={ariaLabel}
+      data-card-id={id}
+      data-column-id={columnId}
+      {...cardAttributes}
+      {...cardListeners}
+    >
+      {content}
+    </div>
+  );
+};
 
 export default KanbanCard;

@@ -71,7 +71,7 @@ export interface PopoverProps extends Omit<BaseComponentProps, 'children'> {
   /**
    * Trigger element (render prop or ReactNode)
    */
-  trigger: ReactNode | ((props: { ref: RefObject<HTMLElement> }) => ReactNode);
+  trigger: ReactNode | ((props: { ref: RefObject<HTMLElement | null> }) => ReactNode);
 
   /**
    * Popover content
@@ -175,15 +175,23 @@ export const Popover: React.FC<PopoverProps> = ({
       typeof trigger === 'function' ? (
         trigger({ ref: triggerRef })
       ) : isValidElement(trigger) ? (
-        cloneElement(trigger as ReactElement, {
-          ref: triggerRef,
-          onClick: (event: React.MouseEvent) => {
-            // Call original onClick if it exists
-            const originalOnClick = (trigger as ReactElement).props?.onClick;
-            originalOnClick?.(event);
-            handleTriggerClick(event);
-          },
-        })
+        cloneElement(
+          trigger as ReactElement<{
+            ref?: React.Ref<HTMLElement>;
+            onClick?: (event: React.MouseEvent) => void;
+          }>,
+          {
+            ref: triggerRef,
+            onClick: (event: React.MouseEvent) => {
+              // Call original onClick if it exists
+              const originalOnClick = (
+                trigger as ReactElement<{ onClick?: (event: React.MouseEvent) => void }>
+              ).props?.onClick;
+              originalOnClick?.(event);
+              handleTriggerClick(event);
+            },
+          }
+        )
       ) : (
         <span ref={triggerRef} onClick={handleTriggerClick}>
           {trigger}
@@ -224,5 +232,3 @@ export const Popover: React.FC<PopoverProps> = ({
     </>
   );
 };
-
-Popover.displayName = 'Popover';

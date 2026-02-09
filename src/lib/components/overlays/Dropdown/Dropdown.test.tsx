@@ -64,10 +64,6 @@ describe('Dropdown', () => {
       expect(screen.getByText('Option 2')).toBeInTheDocument();
       expect(screen.getByText('Option 3')).toBeInTheDocument();
     });
-
-    it('should render display name', () => {
-      expect(Dropdown.displayName).toBe('Dropdown');
-    });
   });
 
   describe('interactions', () => {

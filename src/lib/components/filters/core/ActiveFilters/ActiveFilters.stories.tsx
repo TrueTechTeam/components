@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { action } from '@storybook/addon-actions';
+import { action } from 'storybook/actions';
 import { FilterProvider, ActiveFilters, FilterField } from '../../index';
 import { Chip } from '../../../display/Chip';
 import type { FilterDefinition, FilterValue } from '../../types';

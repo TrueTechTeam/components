@@ -89,7 +89,7 @@ export function useInterval(options: UseIntervalOptions): UseIntervalReturn {
   const { callback, delay, immediate = false } = options;
 
   const callbackRef = useRef(callback);
-  const intervalRef = useRef<ReturnType<typeof setInterval>>();
+  const intervalRef = useRef<ReturnType<typeof setInterval> | undefined>(undefined);
   const hasRunImmediate = useRef(false);
 
   // Keep callback ref up to date

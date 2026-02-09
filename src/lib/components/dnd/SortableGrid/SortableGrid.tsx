@@ -167,6 +167,4 @@ export function SortableGrid<T extends SortableGridItemData>({
   );
 }
 
-SortableGrid.displayName = 'SortableGrid';
-
 export default SortableGrid;

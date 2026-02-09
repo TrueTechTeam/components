@@ -804,11 +804,4 @@ describe('RatingFilter', () => {
       expect(mockUseFilter).toHaveBeenCalledWith({ filterId: 'product-rating' });
     });
   });
-
-  // 16. Display name
-  describe('display name', () => {
-    it('has correct display name', () => {
-      expect(RatingFilter.displayName).toBe('RatingFilter');
-    });
-  });
 });

@@ -537,9 +537,5 @@ describe('NumberInput', () => {
     });
   });
 
-  describe('Display Name', () => {
-    it('should have correct displayName', () => {
-      expect(NumberInput.displayName).toBe('NumberInput');
-    });
-  });
+  describe('Display Name', () => {});
 });

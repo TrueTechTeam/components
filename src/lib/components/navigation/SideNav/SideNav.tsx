@@ -1,4 +1,4 @@
-import React, { forwardRef, useState, useCallback, useMemo, useId } from 'react';
+import React, { useState, useCallback, useMemo, useId } from 'react';
 import type { BaseComponentProps } from '../../../types';
 import { SideNavContext, type SideNavContextValue } from './SideNavContext';
 import styles from './SideNav.module.scss';
@@ -100,145 +100,141 @@ export interface SideNavProps extends BaseComponentProps {
  * </SideNav>
  * ```
  */
-export const SideNav = forwardRef<HTMLElement, SideNavProps>(
-  (
-    {
-      position = 'left',
-      collapsed: controlledCollapsed,
-      defaultCollapsed = false,
-      onCollapsedChange,
-      expandedWidth = 240,
-      collapsedWidth = 64,
-      selectedValue: controlledSelectedValue,
-      defaultSelectedValue,
-      onSelect,
-      header,
-      footer,
-      children,
-      className,
-      'data-testid': testId,
-      'aria-label': ariaLabel,
-      style,
-      ...restProps
+export const SideNav = ({
+  ref,
+  position = 'left',
+  collapsed: controlledCollapsed,
+  defaultCollapsed = false,
+  onCollapsedChange,
+  expandedWidth = 240,
+  collapsedWidth = 64,
+  selectedValue: controlledSelectedValue,
+  defaultSelectedValue,
+  onSelect,
+  header,
+  footer,
+  children,
+  className,
+  'data-testid': testId,
+  'aria-label': ariaLabel,
+  style,
+  ...restProps
+}: SideNavProps & {
+  ref?: React.Ref<HTMLElement>;
+}) => {
+  const sideNavId = useId();
+
+  // Collapsed state
+  const isCollapsedControlled = controlledCollapsed !== undefined;
+  const [internalCollapsed] = useState(defaultCollapsed);
+  const collapsed = isCollapsedControlled ? controlledCollapsed : internalCollapsed;
+
+  // Selected state
+  const isSelectedControlled = controlledSelectedValue !== undefined;
+  const [internalSelectedValue, setInternalSelectedValue] = useState<string | null>(
+    defaultSelectedValue ?? null
+  );
+  const selectedValue = isSelectedControlled ? controlledSelectedValue : internalSelectedValue;
+
+  // Expanded groups
+  const [expandedGroups, setExpandedGroups] = useState<Set<string>>(() => new Set());
+
+  const handleSelect = useCallback(
+    (value: string) => {
+      if (!isSelectedControlled) {
+        setInternalSelectedValue(value);
+      }
+      onSelect?.(value);
     },
-    ref
-  ) => {
-    const sideNavId = useId();
+    [isSelectedControlled, onSelect]
+  );
 
-    // Collapsed state
-    const isCollapsedControlled = controlledCollapsed !== undefined;
-    const [internalCollapsed] = useState(defaultCollapsed);
-    const collapsed = isCollapsedControlled ? controlledCollapsed : internalCollapsed;
-
-    // Selected state
-    const isSelectedControlled = controlledSelectedValue !== undefined;
-    const [internalSelectedValue, setInternalSelectedValue] = useState<string | null>(
-      defaultSelectedValue ?? null
-    );
-    const selectedValue = isSelectedControlled ? controlledSelectedValue : internalSelectedValue;
-
-    // Expanded groups
-    const [expandedGroups, setExpandedGroups] = useState<Set<string>>(() => new Set());
-
-    const handleSelect = useCallback(
-      (value: string) => {
-        if (!isSelectedControlled) {
-          setInternalSelectedValue(value);
-        }
-        onSelect?.(value);
-      },
-      [isSelectedControlled, onSelect]
-    );
-
-    const toggleGroup = useCallback((groupId: string) => {
-      setExpandedGroups((prev) => {
-        const next = new Set(prev);
-        if (next.has(groupId)) {
-          next.delete(groupId);
-        } else {
-          next.add(groupId);
-        }
-        return next;
-      });
-    }, []);
-
-    const registerDefaultExpanded = useCallback((groupId: string) => {
-      setExpandedGroups((prev) => {
-        if (prev.has(groupId)) {
-          return prev;
-        }
-        const next = new Set(prev);
+  const toggleGroup = useCallback((groupId: string) => {
+    setExpandedGroups((prev) => {
+      const next = new Set(prev);
+      if (next.has(groupId)) {
+        next.delete(groupId);
+      } else {
         next.add(groupId);
-        return next;
-      });
-    }, []);
+      }
+      return next;
+    });
+  }, []);
 
-    const contextValue: SideNavContextValue = useMemo(
-      () => ({
-        sideNavId,
-        collapsed,
-        selectedValue,
-        onSelect: handleSelect,
-        position,
-        expandedGroups,
-        toggleGroup,
-        registerDefaultExpanded,
-      }),
-      [
-        sideNavId,
-        collapsed,
-        selectedValue,
-        handleSelect,
-        position,
-        expandedGroups,
-        toggleGroup,
-        registerDefaultExpanded,
-      ]
-    );
+  const registerDefaultExpanded = useCallback((groupId: string) => {
+    setExpandedGroups((prev) => {
+      if (prev.has(groupId)) {
+        return prev;
+      }
+      const next = new Set(prev);
+      next.add(groupId);
+      return next;
+    });
+  }, []);
 
-    const currentWidth = collapsed ? collapsedWidth : expandedWidth;
+  const contextValue: SideNavContextValue = useMemo(
+    () => ({
+      sideNavId,
+      collapsed,
+      selectedValue,
+      onSelect: handleSelect,
+      position,
+      expandedGroups,
+      toggleGroup,
+      registerDefaultExpanded,
+    }),
+    [
+      sideNavId,
+      collapsed,
+      selectedValue,
+      handleSelect,
+      position,
+      expandedGroups,
+      toggleGroup,
+      registerDefaultExpanded,
+    ]
+  );
 
-    const cssVariables = {
-      '--sidenav-width': `${currentWidth}px`,
-      '--sidenav-expanded-width': `${expandedWidth}px`,
-      '--sidenav-collapsed-width': `${collapsedWidth}px`,
-      ...style,
-    } as React.CSSProperties;
+  const currentWidth = collapsed ? collapsedWidth : expandedWidth;
 
-    const componentClasses = [styles.sideNav, className].filter(Boolean).join(' ');
+  const cssVariables = {
+    '--sidenav-width': `${currentWidth}px`,
+    '--sidenav-expanded-width': `${expandedWidth}px`,
+    '--sidenav-collapsed-width': `${collapsedWidth}px`,
+    ...style,
+  } as React.CSSProperties;
 
-    return (
-      <nav
-        ref={ref}
-        className={componentClasses}
-        style={cssVariables}
-        data-component="side-nav"
-        data-position={position}
-        data-collapsed={collapsed || undefined}
-        data-testid={testId}
-        aria-label={ariaLabel || 'Side navigation'}
-        {...restProps}
-      >
-        <SideNavContext.Provider value={contextValue}>
-          {header && (
-            <div className={styles.header} data-collapsed={collapsed || undefined}>
-              {header}
-            </div>
-          )}
+  const componentClasses = [styles.sideNav, className].filter(Boolean).join(' ');
 
-          <div className={styles.content}>{children}</div>
+  return (
+    <nav
+      ref={ref}
+      className={componentClasses}
+      style={cssVariables}
+      data-component="side-nav"
+      data-position={position}
+      data-collapsed={collapsed || undefined}
+      data-testid={testId}
+      aria-label={ariaLabel || 'Side navigation'}
+      {...restProps}
+    >
+      <SideNavContext.Provider value={contextValue}>
+        {header && (
+          <div className={styles.header} data-collapsed={collapsed || undefined}>
+            {header}
+          </div>
+        )}
 
-          {footer && (
-            <div className={styles.footer} data-collapsed={collapsed || undefined}>
-              {footer}
-            </div>
-          )}
-        </SideNavContext.Provider>
-      </nav>
-    );
-  }
-);
+        <div className={styles.content}>{children}</div>
 
-SideNav.displayName = 'SideNav';
+        {footer && (
+          <div className={styles.footer} data-collapsed={collapsed || undefined}>
+            {footer}
+          </div>
+        )}
+      </SideNavContext.Provider>
+    </nav>
+  );
+};
 
 export default SideNav;

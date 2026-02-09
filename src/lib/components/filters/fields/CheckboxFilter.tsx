@@ -2,7 +2,7 @@
  * CheckboxFilter - Single checkbox boolean filter
  */
 
-import React, { forwardRef } from 'react';
+import React from 'react';
 import { Checkbox } from '../../inputs/Checkbox';
 import { useFilter } from '../hooks/useFilter';
 import type { BaseComponentProps, ComponentSize } from '../../../types';
@@ -21,42 +21,45 @@ export interface CheckboxFilterProps extends BaseComponentProps {
 /**
  * CheckboxFilter wraps the Checkbox component for boolean filters
  */
-export const CheckboxFilter = forwardRef<HTMLDivElement, CheckboxFilterProps>(
-  (
-    { filterId, label: labelOverride, size = 'md', checkboxProps, className, ...restProps },
-    ref
-  ) => {
-    const { filter, value, setValue, isEnabled, error } = useFilter<boolean>({ filterId });
+export const CheckboxFilter = ({
+  ref,
+  filterId,
+  label: labelOverride,
+  size = 'md',
+  checkboxProps,
+  className,
+  ...restProps
+}: CheckboxFilterProps & {
+  ref?: React.Ref<HTMLDivElement>;
+}) => {
+  const { filter, value, setValue, isEnabled, error } = useFilter<boolean>({ filterId });
 
-    if (!filter) {
-      console.warn(`CheckboxFilter: Filter "${filterId}" not found`);
-      return null;
-    }
-
-    const label = labelOverride ?? filter.label;
-
-    const handleChange = (checked: boolean) => {
-      setValue(checked);
-    };
-
-    return (
-      <div ref={ref} className={className} {...restProps}>
-        <Checkbox
-          checked={value ?? false}
-          onChange={handleChange}
-          label={label}
-          disabled={!isEnabled}
-          error={!!error}
-          errorMessage={error ?? undefined}
-          helperText={filter.helperText}
-          size={size}
-          {...checkboxProps}
-        />
-      </div>
-    );
+  if (!filter) {
+    console.warn(`CheckboxFilter: Filter "${filterId}" not found`);
+    return null;
   }
-);
 
-CheckboxFilter.displayName = 'CheckboxFilter';
+  const label = labelOverride ?? filter.label;
+
+  const handleChange = (checked: boolean) => {
+    setValue(checked);
+  };
+
+  return (
+    <div ref={ref} className={className} {...restProps}>
+      <Checkbox
+        checked={value ?? false}
+        onChange={handleChange}
+        label={label}
+        disabled={!isEnabled}
+        error={!!error}
+        errorMessage={error ?? undefined}
+        helperText={filter.helperText}
+        size={size}
+        {...checkboxProps}
+      />
+    </div>
+  );
+};
 
 export default CheckboxFilter;

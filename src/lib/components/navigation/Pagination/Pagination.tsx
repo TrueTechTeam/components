@@ -1,4 +1,4 @@
-import React, { forwardRef, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import type { BaseComponentProps, ComponentSize } from '../../../types';
 import { Icon } from '../../display/Icon';
 import styles from './Pagination.module.scss';
@@ -175,156 +175,152 @@ function usePaginationRange(
  * />
  * ```
  */
-export const Pagination = forwardRef<HTMLElement, PaginationProps>(
-  (
-    {
-      totalPages,
-      currentPage,
-      onPageChange,
-      siblingCount = 1,
-      boundaryCount = 1,
-      showFirstLast = true,
-      showPrevNext = true,
-      size = 'md',
-      variant = 'default',
-      shape = 'rounded',
-      disabled = false,
-      labels = {},
-      className,
-      'data-testid': testId,
-      'aria-label': ariaLabel,
-      style,
-      ...restProps
-    },
-    ref
-  ) => {
-    const range = usePaginationRange(totalPages, currentPage, siblingCount, boundaryCount);
+export const Pagination = ({
+  ref,
+  totalPages,
+  currentPage,
+  onPageChange,
+  siblingCount = 1,
+  boundaryCount = 1,
+  showFirstLast = true,
+  showPrevNext = true,
+  size = 'md',
+  variant = 'default',
+  shape = 'rounded',
+  disabled = false,
+  labels = {},
+  className,
+  'data-testid': testId,
+  'aria-label': ariaLabel,
+  style,
+  ...restProps
+}: PaginationProps & {
+  ref?: React.Ref<HTMLElement>;
+}) => {
+  const range = usePaginationRange(totalPages, currentPage, siblingCount, boundaryCount);
 
-    const isFirstPage = currentPage === 1;
-    const isLastPage = currentPage === totalPages;
+  const isFirstPage = currentPage === 1;
+  const isLastPage = currentPage === totalPages;
 
-    const handlePageClick = (page: number) => {
-      if (disabled || page < 1 || page > totalPages || page === currentPage) {
-        return;
-      }
-      onPageChange(page);
-    };
-
-    const getPageLabel = (page: number) => {
-      return labels.page ? labels.page(page) : `Page ${page}`;
-    };
-
-    const componentClasses = [styles.pagination, className].filter(Boolean).join(' ');
-
-    if (totalPages <= 0) {
-      return null;
+  const handlePageClick = (page: number) => {
+    if (disabled || page < 1 || page > totalPages || page === currentPage) {
+      return;
     }
+    onPageChange(page);
+  };
 
-    return (
-      <nav
-        ref={ref}
-        className={componentClasses}
-        data-component="pagination"
-        data-size={size}
-        data-variant={variant}
-        data-shape={shape}
-        data-disabled={disabled || undefined}
-        data-testid={testId}
-        aria-label={ariaLabel || 'Pagination'}
-        style={style}
-        {...restProps}
-      >
-        {/* First page button */}
-        {showFirstLast && (
-          <button
-            type="button"
-            className={styles.button}
-            onClick={() => handlePageClick(1)}
-            disabled={disabled || isFirstPage}
-            aria-label={labels.first || 'Go to first page'}
-            data-type="first"
-          >
-            <Icon name="chevrons-left" />
-          </button>
-        )}
+  const getPageLabel = (page: number) => {
+    return labels.page ? labels.page(page) : `Page ${page}`;
+  };
 
-        {/* Previous button */}
-        {showPrevNext && (
-          <button
-            type="button"
-            className={styles.button}
-            onClick={() => handlePageClick(currentPage - 1)}
-            disabled={disabled || isFirstPage}
-            aria-label={labels.prev || 'Go to previous page'}
-            data-type="prev"
-          >
-            <Icon name="chevron-left" />
-          </button>
-        )}
+  const componentClasses = [styles.pagination, className].filter(Boolean).join(' ');
 
-        {/* Page numbers */}
-        <div className={styles.pages}>
-          {range.map((item, index) => {
-            if (item === 'ellipsis') {
-              return (
-                <span key={`ellipsis-${index}`} className={styles.ellipsis}>
-                  <Icon name="more" />
-                </span>
-              );
-            }
-
-            const isActive = item === currentPage;
-
-            return (
-              <button
-                key={item}
-                type="button"
-                className={styles.button}
-                onClick={() => handlePageClick(item)}
-                disabled={disabled}
-                aria-label={getPageLabel(item)}
-                aria-current={isActive ? 'page' : undefined}
-                data-type="page"
-                data-active={isActive || undefined}
-              >
-                {item}
-              </button>
-            );
-          })}
-        </div>
-
-        {/* Next button */}
-        {showPrevNext && (
-          <button
-            type="button"
-            className={styles.button}
-            onClick={() => handlePageClick(currentPage + 1)}
-            disabled={disabled || isLastPage}
-            aria-label={labels.next || 'Go to next page'}
-            data-type="next"
-          >
-            <Icon name="chevron-right" />
-          </button>
-        )}
-
-        {/* Last page button */}
-        {showFirstLast && (
-          <button
-            type="button"
-            className={styles.button}
-            onClick={() => handlePageClick(totalPages)}
-            disabled={disabled || isLastPage}
-            aria-label={labels.last || 'Go to last page'}
-            data-type="last"
-          >
-            <Icon name="chevrons-right" />
-          </button>
-        )}
-      </nav>
-    );
+  if (totalPages <= 0) {
+    return null;
   }
-);
 
-Pagination.displayName = 'Pagination';
+  return (
+    <nav
+      ref={ref}
+      className={componentClasses}
+      data-component="pagination"
+      data-size={size}
+      data-variant={variant}
+      data-shape={shape}
+      data-disabled={disabled || undefined}
+      data-testid={testId}
+      aria-label={ariaLabel || 'Pagination'}
+      style={style}
+      {...restProps}
+    >
+      {/* First page button */}
+      {showFirstLast && (
+        <button
+          type="button"
+          className={styles.button}
+          onClick={() => handlePageClick(1)}
+          disabled={disabled || isFirstPage}
+          aria-label={labels.first || 'Go to first page'}
+          data-type="first"
+        >
+          <Icon name="chevrons-left" />
+        </button>
+      )}
+
+      {/* Previous button */}
+      {showPrevNext && (
+        <button
+          type="button"
+          className={styles.button}
+          onClick={() => handlePageClick(currentPage - 1)}
+          disabled={disabled || isFirstPage}
+          aria-label={labels.prev || 'Go to previous page'}
+          data-type="prev"
+        >
+          <Icon name="chevron-left" />
+        </button>
+      )}
+
+      {/* Page numbers */}
+      <div className={styles.pages}>
+        {range.map((item, index) => {
+          if (item === 'ellipsis') {
+            return (
+              <span key={`ellipsis-${index}`} className={styles.ellipsis}>
+                <Icon name="more" />
+              </span>
+            );
+          }
+
+          const isActive = item === currentPage;
+
+          return (
+            <button
+              key={item}
+              type="button"
+              className={styles.button}
+              onClick={() => handlePageClick(item)}
+              disabled={disabled}
+              aria-label={getPageLabel(item)}
+              aria-current={isActive ? 'page' : undefined}
+              data-type="page"
+              data-active={isActive || undefined}
+            >
+              {item}
+            </button>
+          );
+        })}
+      </div>
+
+      {/* Next button */}
+      {showPrevNext && (
+        <button
+          type="button"
+          className={styles.button}
+          onClick={() => handlePageClick(currentPage + 1)}
+          disabled={disabled || isLastPage}
+          aria-label={labels.next || 'Go to next page'}
+          data-type="next"
+        >
+          <Icon name="chevron-right" />
+        </button>
+      )}
+
+      {/* Last page button */}
+      {showFirstLast && (
+        <button
+          type="button"
+          className={styles.button}
+          onClick={() => handlePageClick(totalPages)}
+          disabled={disabled || isLastPage}
+          aria-label={labels.last || 'Go to last page'}
+          data-type="last"
+        >
+          <Icon name="chevrons-right" />
+        </button>
+      )}
+    </nav>
+  );
+};
 
 export default Pagination;

@@ -1,12 +1,4 @@
-import React, {
-  forwardRef,
-  useState,
-  useCallback,
-  useEffect,
-  useRef,
-  Children,
-  isValidElement,
-} from 'react';
+import React, { useState, useCallback, useEffect, useRef, Children, isValidElement } from 'react';
 import { useResizeObserver } from '../../../hooks';
 import type { BaseComponentProps } from '../../../types';
 import styles from './MasonryLayout.module.scss';
@@ -95,223 +87,219 @@ interface ItemPosition {
  * </MasonryLayout>
  * ```
  */
-export const MasonryLayout = forwardRef<HTMLDivElement, MasonryLayoutProps>(
-  (
-    {
-      columnWidth = 250,
-      gap = 16,
-      maxColumns,
-      minColumns = 1,
-      animationDuration = 250,
-      animationEasing = 'ease-out',
-      onColumnCountChange,
-      children,
-      className,
-      style,
-      'data-testid': testId,
-      'aria-label': ariaLabel,
-      ...restProps
+export const MasonryLayout = ({
+  ref,
+  columnWidth = 250,
+  gap = 16,
+  maxColumns,
+  minColumns = 1,
+  animationDuration = 250,
+  animationEasing = 'ease-out',
+  onColumnCountChange,
+  children,
+  className,
+  style,
+  'data-testid': testId,
+  'aria-label': ariaLabel,
+  ...restProps
+}: MasonryLayoutProps & {
+  ref?: React.Ref<HTMLDivElement>;
+}) => {
+  const [columnCount, setColumnCount] = useState(1);
+  const [positions, setPositions] = useState<Map<number, ItemPosition>>(new Map());
+  const [containerHeight, setContainerHeight] = useState(0);
+  const itemRefs = useRef<Map<number, HTMLDivElement>>(new Map());
+  const onColumnCountChangeRef = useRef(onColumnCountChange);
+
+  useEffect(() => {
+    onColumnCountChangeRef.current = onColumnCountChange;
+  }, [onColumnCountChange]);
+
+  const { ref: containerRef, width: containerWidth } = useResizeObserver();
+
+  // Combine refs
+  const setRefs = useCallback(
+    (node: HTMLDivElement | null) => {
+      containerRef(node);
+      if (typeof ref === 'function') {
+        ref(node);
+      } else if (ref) {
+        ref.current = node;
+      }
     },
-    ref
-  ) => {
-    const [columnCount, setColumnCount] = useState(1);
-    const [positions, setPositions] = useState<Map<number, ItemPosition>>(new Map());
-    const [containerHeight, setContainerHeight] = useState(0);
-    const itemRefs = useRef<Map<number, HTMLDivElement>>(new Map());
-    const onColumnCountChangeRef = useRef(onColumnCountChange);
+    [containerRef, ref]
+  );
 
-    useEffect(() => {
-      onColumnCountChangeRef.current = onColumnCountChange;
-    }, [onColumnCountChange]);
+  // Calculate column count based on container width
+  useEffect(() => {
+    if (containerWidth <= 0) {
+      return;
+    }
 
-    const { ref: containerRef, width: containerWidth } = useResizeObserver();
+    // Calculate how many columns fit
+    // Formula: width >= n * columnWidth + (n-1) * gap
+    let calculatedColumns = Math.floor((containerWidth + gap) / (columnWidth + gap));
 
-    // Combine refs
-    const setRefs = useCallback(
-      (node: HTMLDivElement | null) => {
-        containerRef(node);
-        if (typeof ref === 'function') {
-          ref(node);
-        } else if (ref) {
-          ref.current = node;
-        }
-      },
-      [containerRef, ref]
-    );
+    // Apply constraints
+    calculatedColumns = Math.max(minColumns, calculatedColumns);
+    if (maxColumns !== undefined) {
+      calculatedColumns = Math.min(maxColumns, calculatedColumns);
+    }
+    calculatedColumns = Math.max(1, calculatedColumns);
 
-    // Calculate column count based on container width
-    useEffect(() => {
-      if (containerWidth <= 0) {
-        return;
-      }
+    if (calculatedColumns !== columnCount) {
+      setColumnCount(calculatedColumns);
+      onColumnCountChangeRef.current?.(calculatedColumns);
+    }
+  }, [containerWidth, columnWidth, gap, minColumns, maxColumns, columnCount]);
 
-      // Calculate how many columns fit
-      // Formula: width >= n * columnWidth + (n-1) * gap
-      let calculatedColumns = Math.floor((containerWidth + gap) / (columnWidth + gap));
+  // Calculate item positions
+  useEffect(() => {
+    if (containerWidth <= 0 || columnCount <= 0) {
+      return;
+    }
 
-      // Apply constraints
-      calculatedColumns = Math.max(minColumns, calculatedColumns);
-      if (maxColumns !== undefined) {
-        calculatedColumns = Math.min(maxColumns, calculatedColumns);
-      }
-      calculatedColumns = Math.max(1, calculatedColumns);
+    const childArray = Children.toArray(children);
+    const actualColumnWidth = (containerWidth - (columnCount - 1) * gap) / columnCount;
 
-      if (calculatedColumns !== columnCount) {
-        setColumnCount(calculatedColumns);
-        onColumnCountChangeRef.current?.(calculatedColumns);
-      }
-    }, [containerWidth, columnWidth, gap, minColumns, maxColumns, columnCount]);
+    // Track the bottom of each column
+    const columnHeights = new Array(columnCount).fill(0);
+    const newPositions = new Map<number, ItemPosition>();
 
-    // Calculate item positions
-    useEffect(() => {
-      if (containerWidth <= 0 || columnCount <= 0) {
-        return;
-      }
+    childArray.forEach((_, index) => {
+      // Find the shortest column
+      const shortestColumn = columnHeights.indexOf(Math.min(...columnHeights));
+      const left = shortestColumn * (actualColumnWidth + gap);
+      const top = columnHeights[shortestColumn];
 
-      const childArray = Children.toArray(children);
-      const actualColumnWidth = (containerWidth - (columnCount - 1) * gap) / columnCount;
-
-      // Track the bottom of each column
-      const columnHeights = new Array(columnCount).fill(0);
-      const newPositions = new Map<number, ItemPosition>();
-
-      childArray.forEach((_, index) => {
-        // Find the shortest column
-        const shortestColumn = columnHeights.indexOf(Math.min(...columnHeights));
-        const left = shortestColumn * (actualColumnWidth + gap);
-        const top = columnHeights[shortestColumn];
-
-        newPositions.set(index, {
-          left,
-          top,
-          width: actualColumnWidth,
-        });
-
-        // Get actual item height from ref
-        const itemElement = itemRefs.current.get(index);
-        const itemHeight = itemElement?.offsetHeight ?? 0;
-
-        columnHeights[shortestColumn] = top + itemHeight + gap;
+      newPositions.set(index, {
+        left,
+        top,
+        width: actualColumnWidth,
       });
 
-      setPositions(newPositions);
-      setContainerHeight(Math.max(...columnHeights) - gap);
-    }, [children, containerWidth, columnCount, gap]);
+      // Get actual item height from ref
+      const itemElement = itemRefs.current.get(index);
+      const itemHeight = itemElement?.offsetHeight ?? 0;
 
-    // Re-calculate positions when items resize
-    useEffect(() => {
-      if (typeof window === 'undefined') {
-        return;
-      }
+      columnHeights[shortestColumn] = top + itemHeight + gap;
+    });
 
-      const observers: ResizeObserver[] = [];
+    setPositions(newPositions);
+    setContainerHeight(Math.max(...columnHeights) - gap);
+  }, [children, containerWidth, columnCount, gap]);
 
-      itemRefs.current.forEach((element) => {
-        const observer = new ResizeObserver(() => {
-          // Trigger recalculation
-          const childArray = Children.toArray(children);
-          if (containerWidth <= 0 || columnCount <= 0) {
-            return;
-          }
+  // Re-calculate positions when items resize
+  useEffect(() => {
+    if (typeof window === 'undefined') {
+      return;
+    }
 
-          const actualColumnWidth = (containerWidth - (columnCount - 1) * gap) / columnCount;
-          const columnHeights = new Array(columnCount).fill(0);
-          const newPositions = new Map<number, ItemPosition>();
+    const observers: ResizeObserver[] = [];
 
-          childArray.forEach((_, index) => {
-            const shortestColumn = columnHeights.indexOf(Math.min(...columnHeights));
-            const left = shortestColumn * (actualColumnWidth + gap);
-            const top = columnHeights[shortestColumn];
+    itemRefs.current.forEach((element) => {
+      const observer = new ResizeObserver(() => {
+        // Trigger recalculation
+        const childArray = Children.toArray(children);
+        if (containerWidth <= 0 || columnCount <= 0) {
+          return;
+        }
 
-            newPositions.set(index, {
-              left,
-              top,
-              width: actualColumnWidth,
-            });
+        const actualColumnWidth = (containerWidth - (columnCount - 1) * gap) / columnCount;
+        const columnHeights = new Array(columnCount).fill(0);
+        const newPositions = new Map<number, ItemPosition>();
 
-            const itemElement = itemRefs.current.get(index);
-            const itemHeight = itemElement?.offsetHeight ?? 0;
-            columnHeights[shortestColumn] = top + itemHeight + gap;
+        childArray.forEach((_, index) => {
+          const shortestColumn = columnHeights.indexOf(Math.min(...columnHeights));
+          const left = shortestColumn * (actualColumnWidth + gap);
+          const top = columnHeights[shortestColumn];
+
+          newPositions.set(index, {
+            left,
+            top,
+            width: actualColumnWidth,
           });
 
-          setPositions(newPositions);
-          setContainerHeight(Math.max(...columnHeights) - gap);
+          const itemElement = itemRefs.current.get(index);
+          const itemHeight = itemElement?.offsetHeight ?? 0;
+          columnHeights[shortestColumn] = top + itemHeight + gap;
         });
 
-        observer.observe(element);
-        observers.push(observer);
+        setPositions(newPositions);
+        setContainerHeight(Math.max(...columnHeights) - gap);
       });
 
-      return () => {
-        observers.forEach((observer) => observer.disconnect());
-      };
-    }, [children, containerWidth, columnCount, gap]);
+      observer.observe(element);
+      observers.push(observer);
+    });
 
-    const setItemRef = useCallback((index: number, node: HTMLDivElement | null) => {
-      if (node) {
-        itemRefs.current.set(index, node);
-      } else {
-        itemRefs.current.delete(index);
-      }
-    }, []);
+    return () => {
+      observers.forEach((observer) => observer.disconnect());
+    };
+  }, [children, containerWidth, columnCount, gap]);
 
-    const componentClasses = [styles.masonryLayout, className].filter(Boolean).join(' ');
+  const setItemRef = useCallback((index: number, node: HTMLDivElement | null) => {
+    if (node) {
+      itemRefs.current.set(index, node);
+    } else {
+      itemRefs.current.delete(index);
+    }
+  }, []);
 
-    const cssVariables = {
-      '--masonry-gap': `${gap}px`,
-      '--masonry-animation-duration': `${animationDuration}ms`,
-      '--masonry-animation-easing': animationEasing,
-      ...style,
-    } as React.CSSProperties;
+  const componentClasses = [styles.masonryLayout, className].filter(Boolean).join(' ');
 
-    return (
-      <div
-        ref={setRefs}
-        className={componentClasses}
-        style={{
-          ...cssVariables,
-          height: containerHeight > 0 ? containerHeight : 'auto',
-        }}
-        data-component="masonry-layout"
-        data-columns={columnCount}
-        data-testid={testId}
-        aria-label={ariaLabel}
-        {...restProps}
-      >
-        {Children.map(children, (child, index) => {
-          if (!isValidElement(child)) {
-            return child;
-          }
+  const cssVariables = {
+    '--masonry-gap': `${gap}px`,
+    '--masonry-animation-duration': `${animationDuration}ms`,
+    '--masonry-animation-easing': animationEasing,
+    ...style,
+  } as React.CSSProperties;
 
-          const position = positions.get(index);
-          const itemStyle: React.CSSProperties = position
-            ? {
-                position: 'absolute',
-                left: position.left,
-                top: position.top,
-                width: position.width,
-              }
-            : {
-                position: 'absolute',
-                opacity: 0,
-              };
+  return (
+    <div
+      ref={setRefs}
+      className={componentClasses}
+      style={{
+        ...cssVariables,
+        height: containerHeight > 0 ? containerHeight : 'auto',
+      }}
+      data-component="masonry-layout"
+      data-columns={columnCount}
+      data-testid={testId}
+      aria-label={ariaLabel}
+      {...restProps}
+    >
+      {Children.map(children, (child, index) => {
+        if (!isValidElement(child)) {
+          return child;
+        }
 
-          return (
-            <div
-              ref={(node) => setItemRef(index, node)}
-              className={styles.masonryItem}
-              style={itemStyle}
-              data-index={index}
-            >
-              {child}
-            </div>
-          );
-        })}
-      </div>
-    );
-  }
-);
+        const position = positions.get(index);
+        const itemStyle: React.CSSProperties = position
+          ? {
+              position: 'absolute',
+              left: position.left,
+              top: position.top,
+              width: position.width,
+            }
+          : {
+              position: 'absolute',
+              opacity: 0,
+            };
 
-MasonryLayout.displayName = 'MasonryLayout';
+        return (
+          <div
+            ref={(node) => setItemRef(index, node)}
+            className={styles.masonryItem}
+            style={itemStyle}
+            data-index={index}
+          >
+            {child}
+          </div>
+        );
+      })}
+    </div>
+  );
+};
 
 export default MasonryLayout;

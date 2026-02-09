@@ -977,136 +977,128 @@ describe('FormBuilder', () => {
       expect(refCallback).toHaveBeenCalledWith(expect.any(HTMLFormElement));
     });
   });
+});
 
-  describe('display name', () => {
-    it('has correct display name', () => {
-      expect(FormBuilder.displayName).toBe('FormBuilder');
+describe('edge cases', () => {
+  it('handles empty fields array', () => {
+    const { container } = render(<FormBuilder fields={[]} />);
+    expect(container.querySelector('form')).toBeInTheDocument();
+    expect(screen.getByText('Submit')).toBeInTheDocument();
+  });
+
+  it('handles undefined fields', () => {
+    const { container } = render(<FormBuilder fields={undefined} />);
+    expect(container.querySelector('form')).toBeInTheDocument();
+  });
+
+  it('handles undefined children', () => {
+    const { container } = render(<FormBuilder>{undefined}</FormBuilder>);
+    expect(container.querySelector('form')).toBeInTheDocument();
+  });
+
+  it('handles null children', () => {
+    const { container } = render(<FormBuilder>{null}</FormBuilder>);
+    expect(container.querySelector('form')).toBeInTheDocument();
+  });
+
+  it('handles both fields and children', () => {
+    const fields: FormFieldConfig[] = [{ name: 'config', type: 'input', label: 'Config Field' }];
+
+    render(
+      <FormBuilder fields={fields}>
+        <input name="child" data-testid="child-input" />
+      </FormBuilder>
+    );
+
+    expect(screen.getByText('Config Field')).toBeInTheDocument();
+    expect(screen.getByTestId('child-input')).toBeInTheDocument();
+  });
+
+  it('handles empty defaultValues', () => {
+    const { container } = render(<FormBuilder defaultValues={{}} />);
+    expect(container.querySelector('form')).toBeInTheDocument();
+  });
+
+  it('handles field with no options for radio', () => {
+    const fields: FormFieldConfig[] = [
+      { name: 'choice', type: 'radio', label: 'Choose', props: {} },
+    ];
+
+    render(<FormBuilder fields={fields} />);
+    expect(screen.getByText('Choose')).toBeInTheDocument();
+  });
+
+  it('handles field with no options for select', () => {
+    const fields: FormFieldConfig[] = [{ name: 'choice', type: 'select', label: 'Choose' }];
+
+    render(<FormBuilder fields={fields} />);
+    expect(screen.getByText('Choose')).toBeInTheDocument();
+  });
+
+  it('handles daterange with partial values', () => {
+    const fields: FormFieldConfig[] = [{ name: 'range', type: 'daterange', label: 'Range' }];
+
+    render(<FormBuilder fields={fields} defaultValues={{ range: { startDate: '2024-01-01' } }} />);
+    expect((screen.getByTestId('date-range-start') as HTMLInputElement).value).toBe('2024-01-01');
+  });
+
+  it('handles tag input with empty array', () => {
+    const fields: FormFieldConfig[] = [{ name: 'tags', type: 'tag', label: 'Tags' }];
+
+    render(<FormBuilder fields={fields} />);
+    expect((screen.getByTestId('tag-input') as HTMLInputElement).value).toBe('');
+  });
+});
+
+describe('async submission', () => {
+  it('handles async onSubmit', async () => {
+    const onSubmit = jest.fn().mockResolvedValue(undefined);
+
+    render(<FormBuilder onSubmit={onSubmit} />);
+
+    fireEvent.click(screen.getByText('Submit'));
+
+    await waitFor(() => {
+      expect(onSubmit).toHaveBeenCalled();
     });
   });
 
-  describe('edge cases', () => {
-    it('handles empty fields array', () => {
-      const { container } = render(<FormBuilder fields={[]} />);
-      expect(container.querySelector('form')).toBeInTheDocument();
-      expect(screen.getByText('Submit')).toBeInTheDocument();
-    });
+  it('disables submit button while submitting', async () => {
+    const onSubmit = jest
+      .fn()
+      .mockImplementation(() => new Promise((resolve) => setTimeout(resolve, 100)));
 
-    it('handles undefined fields', () => {
-      const { container } = render(<FormBuilder fields={undefined} />);
-      expect(container.querySelector('form')).toBeInTheDocument();
-    });
+    render(<FormBuilder onSubmit={onSubmit} />);
 
-    it('handles undefined children', () => {
-      const { container } = render(<FormBuilder>{undefined}</FormBuilder>);
-      expect(container.querySelector('form')).toBeInTheDocument();
-    });
+    const submitButton = screen.getByText('Submit');
+    fireEvent.click(submitButton);
 
-    it('handles null children', () => {
-      const { container } = render(<FormBuilder>{null}</FormBuilder>);
-      expect(container.querySelector('form')).toBeInTheDocument();
-    });
-
-    it('handles both fields and children', () => {
-      const fields: FormFieldConfig[] = [{ name: 'config', type: 'input', label: 'Config Field' }];
-
-      render(
-        <FormBuilder fields={fields}>
-          <input name="child" data-testid="child-input" />
-        </FormBuilder>
-      );
-
-      expect(screen.getByText('Config Field')).toBeInTheDocument();
-      expect(screen.getByTestId('child-input')).toBeInTheDocument();
-    });
-
-    it('handles empty defaultValues', () => {
-      const { container } = render(<FormBuilder defaultValues={{}} />);
-      expect(container.querySelector('form')).toBeInTheDocument();
-    });
-
-    it('handles field with no options for radio', () => {
-      const fields: FormFieldConfig[] = [
-        { name: 'choice', type: 'radio', label: 'Choose', props: {} },
-      ];
-
-      render(<FormBuilder fields={fields} />);
-      expect(screen.getByText('Choose')).toBeInTheDocument();
-    });
-
-    it('handles field with no options for select', () => {
-      const fields: FormFieldConfig[] = [{ name: 'choice', type: 'select', label: 'Choose' }];
-
-      render(<FormBuilder fields={fields} />);
-      expect(screen.getByText('Choose')).toBeInTheDocument();
-    });
-
-    it('handles daterange with partial values', () => {
-      const fields: FormFieldConfig[] = [{ name: 'range', type: 'daterange', label: 'Range' }];
-
-      render(
-        <FormBuilder fields={fields} defaultValues={{ range: { startDate: '2024-01-01' } }} />
-      );
-      expect((screen.getByTestId('date-range-start') as HTMLInputElement).value).toBe('2024-01-01');
-    });
-
-    it('handles tag input with empty array', () => {
-      const fields: FormFieldConfig[] = [{ name: 'tags', type: 'tag', label: 'Tags' }];
-
-      render(<FormBuilder fields={fields} />);
-      expect((screen.getByTestId('tag-input') as HTMLInputElement).value).toBe('');
+    // Button should be disabled during submission
+    await waitFor(() => {
+      expect(onSubmit).toHaveBeenCalled();
     });
   });
+});
 
-  describe('async submission', () => {
-    it('handles async onSubmit', async () => {
-      const onSubmit = jest.fn().mockResolvedValue(undefined);
+describe('validateOn prop', () => {
+  it('uses validateOn="blur" by default', () => {
+    const fields: FormFieldConfig[] = [{ name: 'test', type: 'input', label: 'Test' }];
 
-      render(<FormBuilder onSubmit={onSubmit} />);
-
-      fireEvent.click(screen.getByText('Submit'));
-
-      await waitFor(() => {
-        expect(onSubmit).toHaveBeenCalled();
-      });
-    });
-
-    it('disables submit button while submitting', async () => {
-      const onSubmit = jest
-        .fn()
-        .mockImplementation(() => new Promise((resolve) => setTimeout(resolve, 100)));
-
-      render(<FormBuilder onSubmit={onSubmit} />);
-
-      const submitButton = screen.getByText('Submit');
-      fireEvent.click(submitButton);
-
-      // Button should be disabled during submission
-      await waitFor(() => {
-        expect(onSubmit).toHaveBeenCalled();
-      });
-    });
+    const { container } = render(<FormBuilder fields={fields} />);
+    expect(container.querySelector('form')).toBeInTheDocument();
   });
 
-  describe('validateOn prop', () => {
-    it('uses validateOn="blur" by default', () => {
-      const fields: FormFieldConfig[] = [{ name: 'test', type: 'input', label: 'Test' }];
+  it('accepts validateOn="change"', () => {
+    const fields: FormFieldConfig[] = [{ name: 'test', type: 'input', label: 'Test' }];
 
-      const { container } = render(<FormBuilder fields={fields} />);
-      expect(container.querySelector('form')).toBeInTheDocument();
-    });
+    const { container } = render(<FormBuilder fields={fields} validateOn="change" />);
+    expect(container.querySelector('form')).toBeInTheDocument();
+  });
 
-    it('accepts validateOn="change"', () => {
-      const fields: FormFieldConfig[] = [{ name: 'test', type: 'input', label: 'Test' }];
+  it('accepts validateOn="submit"', () => {
+    const fields: FormFieldConfig[] = [{ name: 'test', type: 'input', label: 'Test' }];
 
-      const { container } = render(<FormBuilder fields={fields} validateOn="change" />);
-      expect(container.querySelector('form')).toBeInTheDocument();
-    });
-
-    it('accepts validateOn="submit"', () => {
-      const fields: FormFieldConfig[] = [{ name: 'test', type: 'input', label: 'Test' }];
-
-      const { container } = render(<FormBuilder fields={fields} validateOn="submit" />);
-      expect(container.querySelector('form')).toBeInTheDocument();
-    });
+    const { container } = render(<FormBuilder fields={fields} validateOn="submit" />);
+    expect(container.querySelector('form')).toBeInTheDocument();
   });
 });

@@ -826,121 +826,109 @@ describe('ToggleFilter', () => {
       expect(screen.getByRole('alert')).toHaveTextContent('Required field');
     });
   });
+});
 
-  // 14. Display name
-  describe('display name', () => {
-    it('has correct display name', () => {
-      expect(ToggleFilter.displayName).toBe('ToggleFilter');
-    });
+// 15. Context integration
+describe('context integration', () => {
+  it('retrieves filter from context', () => {
+    const filter = createBooleanFilter('active', 'Active');
+    const getFilter = jest.fn(() => filter);
+    const context = createMockContext([filter], {}, { getFilter });
+
+    renderWithContext(<ToggleFilter filterId="active" />, context);
+
+    expect(getFilter).toHaveBeenCalledWith('active');
   });
 
-  // 15. Context integration
-  describe('context integration', () => {
-    it('retrieves filter from context', () => {
-      const filter = createBooleanFilter('active', 'Active');
-      const getFilter = jest.fn(() => filter);
-      const context = createMockContext([filter], {}, { getFilter });
+  it('checks filter enabled state from context', () => {
+    const filter = createBooleanFilter('active', 'Active');
+    const isFilterEnabled = jest.fn(() => true);
+    const context = createMockContext([filter], {}, { isFilterEnabled });
 
-      renderWithContext(<ToggleFilter filterId="active" />, context);
+    renderWithContext(<ToggleFilter filterId="active" />, context);
 
-      expect(getFilter).toHaveBeenCalledWith('active');
-    });
-
-    it('checks filter enabled state from context', () => {
-      const filter = createBooleanFilter('active', 'Active');
-      const isFilterEnabled = jest.fn(() => true);
-      const context = createMockContext([filter], {}, { isFilterEnabled });
-
-      renderWithContext(<ToggleFilter filterId="active" />, context);
-
-      expect(isFilterEnabled).toHaveBeenCalledWith('active');
-    });
-
-    it('retrieves value from context', () => {
-      const filter = createBooleanFilter('active', 'Active');
-      const context = createMockContext([filter], { active: true });
-
-      renderWithContext(<ToggleFilter filterId="active" />, context);
-
-      const toggle = screen.getByRole('checkbox') as HTMLInputElement;
-      expect(toggle.checked).toBe(true);
-    });
-
-    it('retrieves error from context', () => {
-      const filter = createBooleanFilter('active', 'Active');
-      const context = createMockContext(
-        [filter],
-        {},
-        {
-          errors: { active: 'Error from context' },
-        }
-      );
-
-      renderWithContext(<ToggleFilter filterId="active" />, context);
-
-      expect(screen.getByRole('alert')).toHaveTextContent('Error from context');
-    });
-
-    it('calls setFilterValue from context on change', () => {
-      const filter = createBooleanFilter('active', 'Active');
-      const setFilterValue = jest.fn();
-      const context = createMockContext([filter], {}, { setFilterValue });
-
-      renderWithContext(<ToggleFilter filterId="active" />, context);
-
-      const toggle = screen.getByRole('checkbox');
-      fireEvent.click(toggle);
-
-      expect(setFilterValue).toHaveBeenCalledWith('active', true);
-    });
+    expect(isFilterEnabled).toHaveBeenCalledWith('active');
   });
 
-  // 16. Data attributes
-  describe('data attributes', () => {
-    it('accepts and applies data attributes to wrapper', () => {
-      const filter = createBooleanFilter('active', 'Active');
-      const context = createMockContext([filter]);
+  it('retrieves value from context', () => {
+    const filter = createBooleanFilter('active', 'Active');
+    const context = createMockContext([filter], { active: true });
 
-      renderWithContext(
-        <ToggleFilter filterId="active" data-testid="test-filter" data-custom="value" />,
-        context
-      );
+    renderWithContext(<ToggleFilter filterId="active" />, context);
 
-      const element = screen.getByTestId('test-filter');
-      expect(element).toHaveAttribute('data-custom', 'value');
-    });
+    const toggle = screen.getByRole('checkbox') as HTMLInputElement;
+    expect(toggle.checked).toBe(true);
+  });
 
-    it('forwards title attribute to wrapper', () => {
-      const filter = createBooleanFilter('active', 'Active');
-      const context = createMockContext([filter]);
+  it('retrieves error from context', () => {
+    const filter = createBooleanFilter('active', 'Active');
+    const context = createMockContext(
+      [filter],
+      {},
+      {
+        errors: { active: 'Error from context' },
+      }
+    );
 
-      const { container } = renderWithContext(
-        <ToggleFilter filterId="active" title="Filter title" />,
-        context
-      );
+    renderWithContext(<ToggleFilter filterId="active" />, context);
 
-      const wrapper = container.firstChild as HTMLElement;
-      expect(wrapper).toHaveAttribute('title', 'Filter title');
-    });
+    expect(screen.getByRole('alert')).toHaveTextContent('Error from context');
+  });
 
-    it('handles multiple data attributes', () => {
-      const filter = createBooleanFilter('active', 'Active');
-      const context = createMockContext([filter]);
+  it('calls setFilterValue from context on change', () => {
+    const filter = createBooleanFilter('active', 'Active');
+    const setFilterValue = jest.fn();
+    const context = createMockContext([filter], {}, { setFilterValue });
 
-      const { container } = renderWithContext(
-        <ToggleFilter
-          filterId="active"
-          data-custom="value1"
-          data-another="value2"
-          id="custom-id"
-        />,
-        context
-      );
+    renderWithContext(<ToggleFilter filterId="active" />, context);
 
-      const wrapper = container.firstChild as HTMLElement;
-      expect(wrapper).toHaveAttribute('data-custom', 'value1');
-      expect(wrapper).toHaveAttribute('data-another', 'value2');
-      expect(wrapper).toHaveAttribute('id', 'custom-id');
-    });
+    const toggle = screen.getByRole('checkbox');
+    fireEvent.click(toggle);
+
+    expect(setFilterValue).toHaveBeenCalledWith('active', true);
+  });
+});
+
+// 16. Data attributes
+describe('data attributes', () => {
+  it('accepts and applies data attributes to wrapper', () => {
+    const filter = createBooleanFilter('active', 'Active');
+    const context = createMockContext([filter]);
+
+    renderWithContext(
+      <ToggleFilter filterId="active" data-testid="test-filter" data-custom="value" />,
+      context
+    );
+
+    const element = screen.getByTestId('test-filter');
+    expect(element).toHaveAttribute('data-custom', 'value');
+  });
+
+  it('forwards title attribute to wrapper', () => {
+    const filter = createBooleanFilter('active', 'Active');
+    const context = createMockContext([filter]);
+
+    const { container } = renderWithContext(
+      <ToggleFilter filterId="active" title="Filter title" />,
+      context
+    );
+
+    const wrapper = container.firstChild as HTMLElement;
+    expect(wrapper).toHaveAttribute('title', 'Filter title');
+  });
+
+  it('handles multiple data attributes', () => {
+    const filter = createBooleanFilter('active', 'Active');
+    const context = createMockContext([filter]);
+
+    const { container } = renderWithContext(
+      <ToggleFilter filterId="active" data-custom="value1" data-another="value2" id="custom-id" />,
+      context
+    );
+
+    const wrapper = container.firstChild as HTMLElement;
+    expect(wrapper).toHaveAttribute('data-custom', 'value1');
+    expect(wrapper).toHaveAttribute('data-another', 'value2');
+    expect(wrapper).toHaveAttribute('id', 'custom-id');
   });
 });

@@ -1,9 +1,8 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import type { Preview } from '@storybook/react';
+import { DocsContainer } from '@storybook/addon-docs/blocks';
+import type { Preview } from '@storybook/react-vite';
 import React, { useEffect } from 'react';
-import { DocsContainer } from '@storybook/blocks';
 import { GlobalProvider } from '../src/lib/providers/GlobalProvider';
-import { create } from '@storybook/theming';
+import { create } from 'storybook/theming';
 import '../src/lib/styles/index.scss';
 
 // Docs themes for light/dark modes
@@ -50,7 +49,7 @@ export const darkDocsTheme = create({
 
   // Backgrounds
   appBg: '#222831',
-  appContentBg: '#393e46',
+  appContentBg: '#222831',
   appBorderColor: '#31363f',
   appBorderRadius: 8,
 
@@ -77,9 +76,20 @@ export const darkDocsTheme = create({
   booleanSelectedBg: '#00adb5',
 });
 
+const Container = (props: React.ComponentProps<typeof DocsContainer>) => {
+  const theme =
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    ((props.context as any).store?.userGlobals?.globals?.theme as string) || 'dark';
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+  }, [theme]);
+
+  return <DocsContainer {...props} theme={theme === 'light' ? lightDocsTheme : darkDocsTheme} />;
+};
+
 const preview: Preview = {
   parameters: {
-    actions: { argTypesRegex: '^on[A-Z].*' },
     controls: {
       matchers: {
         color: /(background|color)$/i,
@@ -90,13 +100,7 @@ const preview: Preview = {
       disable: true,
     },
     docs: {
-      container: (props: React.ComponentProps<typeof DocsContainer>) => {
-        const theme =
-          ((props.context as any).store?.userGlobals?.globals?.theme as string) || 'dark';
-        return (
-          <DocsContainer {...props} theme={theme === 'light' ? lightDocsTheme : darkDocsTheme} />
-        );
-      },
+      container: Container,
     },
     layout: 'centered',
   },
@@ -148,7 +152,6 @@ const preview: Preview = {
           { value: 'light', title: 'Light', icon: 'sun' },
           { value: 'dark', title: 'Dark', icon: 'moon' },
         ],
-        showName: true,
         dynamicTitle: true,
       },
     },

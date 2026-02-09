@@ -316,6 +316,4 @@ export const AccordionContainer: React.FC<AccordionContainerProps> = ({
   );
 };
 
-AccordionContainer.displayName = 'AccordionContainer';
-
 export default AccordionContainer;

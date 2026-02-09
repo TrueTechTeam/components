@@ -902,11 +902,4 @@ describe('FilterBar', () => {
       expect(screen.getByText('Clear')).toBeInTheDocument();
     });
   });
-
-  // 10. Display name
-  describe('display name', () => {
-    it('has correct display name', () => {
-      expect(FilterBar.displayName).toBe('FilterBar');
-    });
-  });
 });

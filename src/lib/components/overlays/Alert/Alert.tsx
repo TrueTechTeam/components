@@ -2,7 +2,7 @@
  * Alert component - Dialog variant with preset configurations
  */
 
-import React, { forwardRef, useCallback, type ReactNode } from 'react';
+import React, { useCallback, type ReactNode } from 'react';
 import { Dialog, type DialogProps, type DialogSize } from '../Dialog';
 import { Button } from '../../buttons/Button';
 import { Icon } from '../../display/Icon';
@@ -120,133 +120,129 @@ export interface AlertProps extends Omit<DialogProps, 'actions' | 'renderHeader'
  * />
  * ```
  */
-export const Alert = forwardRef<HTMLDivElement, AlertProps>(
-  (
-    {
-      variant = 'info',
-      icon,
-      hideIcon = false,
-      title,
-      description,
-      children,
-      confirmText,
-      cancelText,
-      onConfirm,
-      onCancel,
-      loading = false,
-      confirmDisabled = false,
-      confirmVariant,
-      extraActions,
-      size = 'sm',
-      showCancel,
-      onClose,
-      className,
-      'data-testid': testId,
-      ...restProps
-    },
-    ref
-  ) => {
-    // Get preset configuration
-    const preset = ALERT_PRESETS[variant];
+export const Alert = ({
+  ref,
+  variant = 'info',
+  icon,
+  hideIcon = false,
+  title,
+  description,
+  children,
+  confirmText,
+  cancelText,
+  onConfirm,
+  onCancel,
+  loading = false,
+  confirmDisabled = false,
+  confirmVariant,
+  extraActions,
+  size = 'sm',
+  showCancel,
+  onClose,
+  className,
+  'data-testid': testId,
+  ...restProps
+}: AlertProps & {
+  ref?: React.Ref<HTMLDivElement>;
+}) => {
+  // Get preset configuration
+  const preset = ALERT_PRESETS[variant];
 
-    // Determine if we should show cancel button
-    const shouldShowCancel = showCancel ?? (variant === 'confirm' || !!cancelText);
+  // Determine if we should show cancel button
+  const shouldShowCancel = showCancel ?? (variant === 'confirm' || !!cancelText);
 
-    // Handle confirm click
-    const handleConfirm = useCallback(async () => {
-      if (onConfirm) {
-        await onConfirm();
-      }
-      onClose?.();
-    }, [onConfirm, onClose]);
+  // Handle confirm click
+  const handleConfirm = useCallback(async () => {
+    if (onConfirm) {
+      await onConfirm();
+    }
+    onClose?.();
+  }, [onConfirm, onClose]);
 
-    // Handle cancel click
-    const handleCancel = useCallback(() => {
-      onCancel?.();
-      onClose?.();
-    }, [onCancel, onClose]);
+  // Handle cancel click
+  const handleCancel = useCallback(() => {
+    onCancel?.();
+    onClose?.();
+  }, [onCancel, onClose]);
 
-    // Render icon
-    const renderIcon = () => {
-      if (hideIcon) {
-        return null;
-      }
+  // Render icon
+  const renderIcon = () => {
+    if (hideIcon) {
+      return null;
+    }
 
-      const iconToRender = icon ?? preset.icon;
+    const iconToRender = icon ?? preset.icon;
 
-      if (typeof iconToRender === 'string') {
-        return (
-          <div className={styles.alertIcon} data-variant={variant}>
-            <Icon name={iconToRender as IconName} size="lg" />
-          </div>
-        );
-      }
-
+    if (typeof iconToRender === 'string') {
       return (
         <div className={styles.alertIcon} data-variant={variant}>
-          {iconToRender}
+          <Icon name={iconToRender as IconName} size="lg" />
         </div>
       );
-    };
-
-    // Render actions
-    const renderActions = () => (
-      <div className={styles.alertActions}>
-        {extraActions}
-        {shouldShowCancel && (
-          <Button variant="ghost" onClick={handleCancel} data-testid="alert-cancel-button">
-            {cancelText ?? preset.cancelText ?? 'Cancel'}
-          </Button>
-        )}
-        <Button
-          variant={confirmVariant ?? preset.confirmVariant}
-          onClick={handleConfirm}
-          loading={loading}
-          disabled={confirmDisabled}
-          data-testid="alert-confirm-button"
-        >
-          {confirmText ?? preset.confirmText}
-        </Button>
-      </div>
-    );
-
-    // Custom header renderer
-    const renderHeader = ({ onClose: closeHandler }: { onClose: () => void }) => (
-      <div className={styles.alertHeader}>
-        {renderIcon()}
-        <div className={styles.alertHeaderContent}>
-          {title && <h2 className={styles.alertTitle}>{title ?? preset.title}</h2>}
-        </div>
-      </div>
-    );
-
-    // Custom footer renderer
-    const renderFooter = () => renderActions();
-
-    const classes = [styles.alert, className].filter(Boolean).join(' ');
+    }
 
     return (
-      <Dialog
-        ref={ref}
-        size={size}
-        title={undefined}
-        onClose={onClose}
-        className={classes}
-        data-testid={testId || 'alert'}
-        data-variant={variant}
-        role="alertdialog"
-        showCloseButton={false}
-        renderHeader={renderHeader}
-        renderFooter={renderFooter}
-        {...restProps}
-      >
-        {description && <div className={styles.alertDescription}>{description}</div>}
-        {children}
-      </Dialog>
+      <div className={styles.alertIcon} data-variant={variant}>
+        {iconToRender}
+      </div>
     );
-  }
-);
+  };
 
-Alert.displayName = 'Alert';
+  // Render actions
+  const renderActions = () => (
+    <div className={styles.alertActions}>
+      {extraActions}
+      {shouldShowCancel && (
+        <Button variant="ghost" onClick={handleCancel} data-testid="alert-cancel-button">
+          {cancelText ?? preset.cancelText ?? 'Cancel'}
+        </Button>
+      )}
+      <Button
+        variant={confirmVariant ?? preset.confirmVariant}
+        onClick={handleConfirm}
+        loading={loading}
+        disabled={confirmDisabled}
+        data-testid="alert-confirm-button"
+      >
+        {confirmText ?? preset.confirmText}
+      </Button>
+    </div>
+  );
+
+  // Custom header renderer
+  const renderHeader = ({ onClose: closeHandler }: { onClose: () => void }) => (
+    <div className={styles.alertHeader}>
+      {renderIcon()}
+      <div className={styles.alertHeaderContent}>
+        {title && <h2 className={styles.alertTitle}>{title ?? preset.title}</h2>}
+      </div>
+    </div>
+  );
+
+  // Custom footer renderer
+  const renderFooter = () => renderActions();
+
+  const classes = [styles.alert, className].filter(Boolean).join(' ');
+
+  return (
+    <Dialog
+      ref={ref}
+      size={size}
+      title={undefined}
+      onClose={onClose}
+      className={classes}
+      data-testid={testId || 'alert'}
+      data-variant={variant}
+      role="alertdialog"
+      showCloseButton={false}
+      renderHeader={renderHeader}
+      renderFooter={renderFooter}
+      {...restProps}
+    >
+      {description && <div className={styles.alertDescription}>{description}</div>}
+      {children}
+    </Dialog>
+  );
+};
 
 export default Alert;

@@ -78,7 +78,7 @@ export function useClipboard(options: UseClipboardOptions = {}): UseClipboardRet
   const [copied, setCopied] = useState(false);
   const [error, setError] = useState<Error | null>(null);
 
-  const timeoutRef = useRef<ReturnType<typeof setTimeout>>();
+  const timeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const onSuccessRef = useRef(onSuccess);
   const onErrorRef = useRef(onError);
 

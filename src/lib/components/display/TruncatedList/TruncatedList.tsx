@@ -1,4 +1,4 @@
-import React, { forwardRef, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import { Tooltip } from '../../overlays/Tooltip';
 import type { PopoverPosition } from '../../../utils/positioning';
 import type { BaseComponentProps } from '../../../types';
@@ -115,28 +115,26 @@ export interface TruncatedListProps<T> extends Omit<BaseComponentProps, 'childre
  * />
  * ```
  */
-function TruncatedListInner<T>(
-  {
-    items,
-    maxVisible = 3,
-    renderItem,
-    renderMore,
-    gap = 8,
-    direction = 'horizontal',
-    showTooltip = true,
-    tooltipContent,
-    tooltipPosition = 'bottom',
-    tooltipMaxWidth = 300,
-    onMoreClick,
-    keyExtractor = (_, index) => index,
-    className,
-    style,
-    'data-testid': testId,
-    'aria-label': ariaLabel,
-    ...restProps
-  }: TruncatedListProps<T>,
-  ref: React.ForwardedRef<HTMLDivElement>
-) {
+function TruncatedListInner<T>({
+  ref,
+  items,
+  maxVisible = 3,
+  renderItem,
+  renderMore,
+  gap = 8,
+  direction = 'horizontal',
+  showTooltip = true,
+  tooltipContent,
+  tooltipPosition = 'bottom',
+  tooltipMaxWidth = 300,
+  onMoreClick,
+  keyExtractor = (_, index) => index,
+  className,
+  style,
+  'data-testid': testId,
+  'aria-label': ariaLabel,
+  ...restProps
+}: TruncatedListProps<T> & { ref?: React.Ref<HTMLDivElement> }) {
   const visibleItems = useMemo(() => items.slice(0, maxVisible), [items, maxVisible]);
   const hiddenItems = useMemo(() => items.slice(maxVisible), [items, maxVisible]);
   const hiddenCount = hiddenItems.length;
@@ -223,11 +221,8 @@ function TruncatedListInner<T>(
   );
 }
 
-// Properly typed forwardRef with generic support
-export const TruncatedList = forwardRef(TruncatedListInner) as <T>(
-  props: TruncatedListProps<T> & { ref?: React.ForwardedRef<HTMLDivElement> }
+export const TruncatedList = TruncatedListInner as <T>(
+  props: TruncatedListProps<T> & { ref?: React.Ref<HTMLDivElement> }
 ) => React.ReactElement;
-
-(TruncatedList as React.FC).displayName = 'TruncatedList';
 
 export default TruncatedList;

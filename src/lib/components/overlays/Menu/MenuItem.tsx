@@ -30,7 +30,7 @@ function extractTextContent(node: ReactNode): string {
   if (Array.isArray(node)) {
     return node.map(extractTextContent).join('');
   }
-  if (isValidElement(node) && node.props.children) {
+  if (isValidElement<{ children?: ReactNode }>(node) && node.props.children) {
     return extractTextContent(node.props.children);
   }
   return '';
@@ -226,5 +226,3 @@ export const MenuItem: React.FC<MenuItemProps> = ({
     </li>
   );
 };
-
-MenuItem.displayName = 'MenuItem';

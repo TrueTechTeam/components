@@ -109,6 +109,4 @@ export function ListGroup({
   );
 }
 
-ListGroup.displayName = 'ListGroup';
-
 export default ListGroup;

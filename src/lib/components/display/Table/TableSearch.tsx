@@ -120,6 +120,4 @@ export function TableSearch({
   );
 }
 
-TableSearch.displayName = 'TableSearch';
-
 export default TableSearch;

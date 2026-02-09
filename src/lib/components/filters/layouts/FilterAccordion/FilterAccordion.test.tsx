@@ -1044,11 +1044,4 @@ describe('FilterAccordion', () => {
       expect(element).toHaveAttribute('id', 'filter-accordion');
     });
   });
-
-  // 14. Display name
-  describe('display name', () => {
-    it('has correct display name', () => {
-      expect(FilterAccordion.displayName).toBe('FilterAccordion');
-    });
-  });
 });

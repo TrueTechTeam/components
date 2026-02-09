@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react';
-import { action } from '@storybook/addon-actions';
-import { useArgs } from '@storybook/preview-api';
+import { action } from 'storybook/actions';
+import { useArgs } from 'storybook/preview-api';
 import { useState } from 'react';
 import { Collapse, type CollapseProps } from './Collapse';
 import { Button } from '../../buttons/Button';

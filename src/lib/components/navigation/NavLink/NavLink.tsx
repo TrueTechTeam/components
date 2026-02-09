@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
 import type { BaseComponentProps, ComponentSize } from '../../../types';
 import { Icon, type IconName } from '../../display/Icon';
 import styles from './NavLink.module.scss';
@@ -84,89 +84,85 @@ export interface NavLinkProps extends BaseComponentProps {
  * <NavLink href="/profile" variant="pill" active>Profile</NavLink>
  * ```
  */
-export const NavLink = forwardRef<HTMLAnchorElement, NavLinkProps>(
-  (
-    {
-      href,
-      active = false,
-      icon,
-      iconPosition = 'start',
-      variant = 'default',
-      size = 'md',
-      disabled = false,
-      onClick,
-      children,
-      className,
-      target,
-      rel,
-      'data-testid': testId,
-      'aria-label': ariaLabel,
-      style,
-      ...restProps
-    },
-    ref
-  ) => {
-    const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
-      if (disabled) {
-        e.preventDefault();
-        return;
-      }
-      onClick?.(e);
-    };
+export const NavLink = ({
+  ref,
+  href,
+  active = false,
+  icon,
+  iconPosition = 'start',
+  variant = 'default',
+  size = 'md',
+  disabled = false,
+  onClick,
+  children,
+  className,
+  target,
+  rel,
+  'data-testid': testId,
+  'aria-label': ariaLabel,
+  style,
+  ...restProps
+}: NavLinkProps & {
+  ref?: React.Ref<HTMLAnchorElement>;
+}) => {
+  const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (disabled) {
+      e.preventDefault();
+      return;
+    }
+    onClick?.(e);
+  };
 
-    const renderIcon = () => {
-      if (!icon) {
-        return null;
-      }
+  const renderIcon = () => {
+    if (!icon) {
+      return null;
+    }
 
-      if (typeof icon === 'string') {
-        return <Icon name={icon as IconName} size={size === 'sm' ? 16 : size === 'lg' ? 24 : 20} />;
-      }
+    if (typeof icon === 'string') {
+      return <Icon name={icon as IconName} size={size === 'sm' ? 16 : size === 'lg' ? 24 : 20} />;
+    }
 
-      return icon;
-    };
+    return icon;
+  };
 
-    const componentClasses = [styles.navLink, className].filter(Boolean).join(' ');
+  const componentClasses = [styles.navLink, className].filter(Boolean).join(' ');
 
-    // Default rel for external links
-    const computedRel = rel || (target === '_blank' ? 'noopener noreferrer' : undefined);
+  // Default rel for external links
+  const computedRel = rel || (target === '_blank' ? 'noopener noreferrer' : undefined);
 
-    return (
-      <a
-        ref={ref}
-        href={disabled ? undefined : href}
-        className={componentClasses}
-        onClick={handleClick}
-        target={target}
-        rel={computedRel}
-        data-component="nav-link"
-        data-variant={variant}
-        data-size={size}
-        data-active={active || undefined}
-        data-disabled={disabled || undefined}
-        data-testid={testId}
-        aria-label={ariaLabel}
-        aria-current={active ? 'page' : undefined}
-        aria-disabled={disabled || undefined}
-        style={style}
-        {...restProps}
-      >
-        {icon && iconPosition === 'start' && (
-          <span className={styles.icon} data-position="start">
-            {renderIcon()}
-          </span>
-        )}
-        <span className={styles.label}>{children}</span>
-        {icon && iconPosition === 'end' && (
-          <span className={styles.icon} data-position="end">
-            {renderIcon()}
-          </span>
-        )}
-      </a>
-    );
-  }
-);
-
-NavLink.displayName = 'NavLink';
+  return (
+    <a
+      ref={ref}
+      href={disabled ? undefined : href}
+      className={componentClasses}
+      onClick={handleClick}
+      target={target}
+      rel={computedRel}
+      data-component="nav-link"
+      data-variant={variant}
+      data-size={size}
+      data-active={active || undefined}
+      data-disabled={disabled || undefined}
+      data-testid={testId}
+      aria-label={ariaLabel}
+      aria-current={active ? 'page' : undefined}
+      aria-disabled={disabled || undefined}
+      style={style}
+      {...restProps}
+    >
+      {icon && iconPosition === 'start' && (
+        <span className={styles.icon} data-position="start">
+          {renderIcon()}
+        </span>
+      )}
+      <span className={styles.label}>{children}</span>
+      {icon && iconPosition === 'end' && (
+        <span className={styles.icon} data-position="end">
+          {renderIcon()}
+        </span>
+      )}
+    </a>
+  );
+};
 
 export default NavLink;

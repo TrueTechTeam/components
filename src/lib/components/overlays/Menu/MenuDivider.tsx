@@ -31,5 +31,3 @@ export const MenuDivider: React.FC<MenuDividerProps> = ({
     />
   );
 };
-
-MenuDivider.displayName = 'MenuDivider';

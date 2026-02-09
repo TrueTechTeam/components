@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { forwardRef, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import type { TableProps, ColumnConfig, TableContextValue } from './types';
 import { TableContext } from './TableContext';
 import { TableHeader } from './TableHeader';
@@ -17,63 +17,61 @@ import { TableSearch } from './TableSearch';
 import { autoGenerateColumns, sortData, calculateColumnWidths } from './utils';
 import styles from './Table.module.scss';
 
-// Generic component with forwardRef
-function TableInner<T extends Record<string, any>>(
-  {
-    data,
-    columns: columnsProp,
-    rowKey = 'id' as keyof T,
-    size = 'md',
-    variant = 'default',
-    // Sorting
-    sort: controlledSort,
-    defaultSort,
-    onSortChange,
-    // Selection
-    selectionMode = 'none',
-    selectedKeys: controlledSelectedKeys,
-    defaultSelectedKeys,
-    onSelectionChange,
-    showSelectionControls = true,
-    onRowClick,
-    // Expand
-    expandedRowRender,
-    expandedKeys: controlledExpandedKeys,
-    defaultExpandedKeys,
-    onExpandChange,
-    // Pagination
-    pagination,
-    // Infinite scroll
-    infiniteScroll,
-    // Search/Filter
-    searchable = false,
-    searchPlaceholder = 'Search...',
-    searchFields,
-    searchFn,
-    searchQuery: controlledSearchQuery,
-    onSearchChange,
-    searchDebounce = 300,
-    // Responsive
-    stickyHeader = false,
-    stickyFirstColumn = false,
-    maxHeight,
-    // Empty & Loading
-    emptyContent = 'No data available',
-    loading = false,
-    loadingContent,
-    skeleton,
-    // Accessibility
-    caption,
-    captionHidden = false,
-    // Base props
-    className,
-    style,
-    'data-testid': testId,
-    'aria-label': ariaLabel,
-    ...restProps
-  }: TableProps<T>,
-  ref: React.ForwardedRef<HTMLDivElement>
-) {
+// Generic component with ref as prop
+function TableInner<T extends Record<string, any>>({
+  ref,
+  data,
+  columns: columnsProp,
+  rowKey = 'id' as keyof T,
+  size = 'md',
+  variant = 'default',
+  // Sorting
+  sort: controlledSort,
+  defaultSort,
+  onSortChange,
+  // Selection
+  selectionMode = 'none',
+  selectedKeys: controlledSelectedKeys,
+  defaultSelectedKeys,
+  onSelectionChange,
+  showSelectionControls = true,
+  onRowClick,
+  // Expand
+  expandedRowRender,
+  expandedKeys: controlledExpandedKeys,
+  defaultExpandedKeys,
+  onExpandChange,
+  // Pagination
+  pagination,
+  // Infinite scroll
+  infiniteScroll,
+  // Search/Filter
+  searchable = false,
+  searchPlaceholder = 'Search...',
+  searchFields,
+  searchFn,
+  searchQuery: controlledSearchQuery,
+  onSearchChange,
+  searchDebounce = 300,
+  // Responsive
+  stickyHeader = false,
+  stickyFirstColumn = false,
+  maxHeight,
+  // Empty & Loading
+  emptyContent = 'No data available',
+  loading = false,
+  loadingContent,
+  skeleton,
+  // Accessibility
+  caption,
+  captionHidden = false,
+  // Base props
+  className,
+  style,
+  'data-testid': testId,
+  'aria-label': ariaLabel,
+  ...restProps
+}: TableProps<T> & { ref?: React.Ref<HTMLDivElement> }) {
   // Generate or use provided columns
   const columns = useMemo<Array<ColumnConfig<T>>>(
     () => columnsProp || autoGenerateColumns(data),
@@ -314,14 +312,8 @@ function TableInner<T extends Record<string, any>>(
   );
 }
 
-// Wrap with forwardRef while preserving generic type
-export const Table = forwardRef(TableInner) as <
-  T extends Record<string, any> = Record<string, unknown>,
->(
-  props: TableProps<T> & { ref?: React.ForwardedRef<HTMLDivElement> }
+export const Table = TableInner as <T extends Record<string, any> = Record<string, unknown>>(
+  props: TableProps<T> & { ref?: React.Ref<HTMLDivElement> }
 ) => React.ReactElement;
-
-// Add displayName
-(Table as React.FC).displayName = 'Table';
 
 export default Table;

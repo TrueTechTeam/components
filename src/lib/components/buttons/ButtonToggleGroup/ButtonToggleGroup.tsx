@@ -1,4 +1,4 @@
-import React, { forwardRef, useState, useCallback, useId } from 'react';
+import React, { useState, useCallback, useId } from 'react';
 import type { BaseComponentProps, ComponentSize, ComponentVariant } from '../../../types';
 import {
   ButtonToggleGroupContext,
@@ -92,82 +92,78 @@ export interface ButtonToggleGroupProps extends Omit<BaseComponentProps, 'onChan
  * </ButtonToggleGroup>
  * ```
  */
-export const ButtonToggleGroup = forwardRef<HTMLDivElement, ButtonToggleGroupProps>(
-  (
-    {
-      value,
-      defaultValue,
-      onChange,
-      variant = 'outline',
-      size = 'md',
-      orientation = 'horizontal',
-      fullWidth = false,
-      disabled = false,
-      'aria-label': ariaLabel,
-      name: providedName,
-      children,
-      className,
-      'data-testid': testId,
-      style,
-      ...restProps
+export const ButtonToggleGroup = ({
+  ref,
+  value,
+  defaultValue,
+  onChange,
+  variant = 'outline',
+  size = 'md',
+  orientation = 'horizontal',
+  fullWidth = false,
+  disabled = false,
+  'aria-label': ariaLabel,
+  name: providedName,
+  children,
+  className,
+  'data-testid': testId,
+  style,
+  ...restProps
+}: ButtonToggleGroupProps & {
+  ref?: React.Ref<HTMLDivElement>;
+}) => {
+  const autoName = useId();
+  const name = providedName || autoName;
+
+  // Internal state for uncontrolled component
+  const [internalValue, setInternalValue] = useState(defaultValue);
+
+  // Use controlled value if provided, otherwise use internal state
+  const selectedValue = value !== undefined ? value : internalValue;
+
+  const handleChange = useCallback(
+    (newValue: string, event: React.MouseEvent<HTMLButtonElement>) => {
+      // Update internal state if uncontrolled
+      if (value === undefined) {
+        setInternalValue(newValue);
+      }
+
+      onChange?.(newValue, event);
     },
-    ref
-  ) => {
-    const autoName = useId();
-    const name = providedName || autoName;
+    [value, onChange]
+  );
 
-    // Internal state for uncontrolled component
-    const [internalValue, setInternalValue] = useState(defaultValue);
+  const contextValue: ButtonToggleGroupContextValue = {
+    name,
+    value: selectedValue,
+    onChange: handleChange,
+    disabled,
+    size,
+    variant,
+  };
 
-    // Use controlled value if provided, otherwise use internal state
-    const selectedValue = value !== undefined ? value : internalValue;
+  const groupClasses = [styles.buttonToggleGroup, className].filter(Boolean).join(' ');
 
-    const handleChange = useCallback(
-      (newValue: string, event: React.MouseEvent<HTMLButtonElement>) => {
-        // Update internal state if uncontrolled
-        if (value === undefined) {
-          setInternalValue(newValue);
-        }
-
-        onChange?.(newValue, event);
-      },
-      [value, onChange]
-    );
-
-    const contextValue: ButtonToggleGroupContextValue = {
-      name,
-      value: selectedValue,
-      onChange: handleChange,
-      disabled,
-      size,
-      variant,
-    };
-
-    const groupClasses = [styles.buttonToggleGroup, className].filter(Boolean).join(' ');
-
-    return (
-      <div
-        ref={ref}
-        role="radiogroup"
-        className={groupClasses}
-        data-orientation={orientation}
-        data-variant={variant}
-        data-size={size}
-        data-full-width={fullWidth || undefined}
-        data-component="button-toggle-group"
-        data-testid={testId || 'button-toggle-group'}
-        aria-label={ariaLabel}
-        style={style}
-        {...restProps}
-      >
-        <ButtonToggleGroupContext.Provider value={contextValue}>
-          {children}
-        </ButtonToggleGroupContext.Provider>
-      </div>
-    );
-  }
-);
-
-ButtonToggleGroup.displayName = 'ButtonToggleGroup';
+  return (
+    <div
+      ref={ref}
+      role="radiogroup"
+      className={groupClasses}
+      data-orientation={orientation}
+      data-variant={variant}
+      data-size={size}
+      data-full-width={fullWidth || undefined}
+      data-component="button-toggle-group"
+      data-testid={testId || 'button-toggle-group'}
+      aria-label={ariaLabel}
+      style={style}
+      {...restProps}
+    >
+      <ButtonToggleGroupContext.Provider value={contextValue}>
+        {children}
+      </ButtonToggleGroupContext.Provider>
+    </div>
+  );
+};
 
 export default ButtonToggleGroup;

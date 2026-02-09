@@ -12,10 +12,10 @@ import { useEffect, type RefObject } from 'react';
  * @param excludeRefs - Additional refs to exclude from outside click detection (e.g., trigger elements)
  */
 export function useClickOutside<T extends HTMLElement>(
-  ref: RefObject<T>,
+  ref: RefObject<T | null>,
   handler: (event: MouseEvent | TouchEvent) => void,
   enabled = true,
-  excludeRefs?: Array<RefObject<HTMLElement>>
+  excludeRefs?: Array<RefObject<HTMLElement | null>>
 ): void {
   useEffect(() => {
     if (!enabled) {

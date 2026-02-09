@@ -1,4 +1,4 @@
-import React, { forwardRef, useCallback } from 'react';
+import React, { useCallback } from 'react';
 import type { BaseComponentProps } from '../../../types';
 import type { IconName } from '../../display/Icon/icons';
 import { Checkbox } from '../Checkbox';
@@ -57,65 +57,61 @@ export interface CheckboxGroupItemProps extends Omit<BaseComponentProps, 'childr
  * </CheckboxGroup>
  * ```
  */
-export const CheckboxGroupItem = forwardRef<HTMLInputElement, CheckboxGroupItemProps>(
-  (
-    {
-      value,
-      label,
-      labelPlacement = 'end',
-      disabled: itemDisabled = false,
-      helperText,
-      checkIcon = 'check',
-      id,
-      className,
-      'data-testid': testId,
-      style,
-      ...restProps
+export const CheckboxGroupItem = ({
+  ref,
+  value,
+  label,
+  labelPlacement = 'end',
+  disabled: itemDisabled = false,
+  helperText,
+  checkIcon = 'check',
+  id,
+  className,
+  'data-testid': testId,
+  style,
+  ...restProps
+}: CheckboxGroupItemProps & {
+  ref?: React.Ref<HTMLInputElement>;
+}) => {
+  const context = useCheckboxGroupStrict();
+
+  const isChecked = context.values.includes(value);
+  const isDisabled = itemDisabled || context.disabled;
+  const isReadOnly = context.readOnly;
+
+  const handleChange = useCallback(
+    (checked: boolean, event: React.ChangeEvent<HTMLInputElement>) => {
+      if (isDisabled || isReadOnly) {
+        return;
+      }
+      context.onChange(value, checked, event);
     },
-    ref
-  ) => {
-    const context = useCheckboxGroupStrict();
+    [context, value, isDisabled, isReadOnly]
+  );
 
-    const isChecked = context.values.includes(value);
-    const isDisabled = itemDisabled || context.disabled;
-    const isReadOnly = context.readOnly;
+  const itemClasses = [styles.item, className].filter(Boolean).join(' ');
 
-    const handleChange = useCallback(
-      (checked: boolean, event: React.ChangeEvent<HTMLInputElement>) => {
-        if (isDisabled || isReadOnly) {
-          return;
-        }
-        context.onChange(value, checked, event);
-      },
-      [context, value, isDisabled, isReadOnly]
-    );
-
-    const itemClasses = [styles.item, className].filter(Boolean).join(' ');
-
-    return (
-      <div className={itemClasses} style={style}>
-        <Checkbox
-          ref={ref}
-          id={id}
-          name={context.name}
-          checked={isChecked}
-          onChange={handleChange}
-          disabled={isDisabled}
-          readOnly={isReadOnly}
-          label={label}
-          labelPlacement={labelPlacement}
-          helperText={helperText}
-          checkIcon={checkIcon}
-          variant={context.variant}
-          size={context.size}
-          data-testid={testId || `checkbox-group-item-${value}`}
-          {...restProps}
-        />
-      </div>
-    );
-  }
-);
-
-CheckboxGroupItem.displayName = 'CheckboxGroupItem';
+  return (
+    <div className={itemClasses} style={style}>
+      <Checkbox
+        ref={ref}
+        id={id}
+        name={context.name}
+        checked={isChecked}
+        onChange={handleChange}
+        disabled={isDisabled}
+        readOnly={isReadOnly}
+        label={label}
+        labelPlacement={labelPlacement}
+        helperText={helperText}
+        checkIcon={checkIcon}
+        variant={context.variant}
+        size={context.size}
+        data-testid={testId || `checkbox-group-item-${value}`}
+        {...restProps}
+      />
+    </div>
+  );
+};
 
 export default CheckboxGroupItem;

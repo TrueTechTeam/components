@@ -1,4 +1,4 @@
-import React, { forwardRef, useMemo } from 'react';
+import React, { useMemo } from 'react';
 import type { BaseComponentProps, ComponentSize } from '../../../types';
 import { Icon, type IconName } from '../../display/Icon';
 import { BreadcrumbItem, type BreadcrumbItemProps } from './BreadcrumbItem';
@@ -109,104 +109,100 @@ export interface BreadcrumbsProps extends BaseComponentProps {
  * />
  * ```
  */
-export const Breadcrumbs = forwardRef<HTMLElement, BreadcrumbsProps>(
-  (
-    {
-      separator = '/',
-      maxItems,
-      itemsBeforeCollapse = 1,
-      itemsAfterCollapse = 2,
-      showHomeIcon = false,
-      size = 'md',
-      items,
-      children,
-      className,
-      'data-testid': testId,
-      'aria-label': ariaLabel,
-      style,
-      ...restProps
-    },
-    ref
-  ) => {
-    // Convert items to rendered elements
-    const renderedItems = useMemo(() => {
-      if (items) {
-        return items.map((item, index) => (
-          <BreadcrumbItem
-            key={index}
-            href={item.href}
-            icon={index === 0 && showHomeIcon ? 'home' : item.icon}
-            current={item.current ?? index === items.length - 1}
-            onClick={item.onClick}
-          >
-            {item.label}
-          </BreadcrumbItem>
-        ));
+export const Breadcrumbs = ({
+  ref,
+  separator = '/',
+  maxItems,
+  itemsBeforeCollapse = 1,
+  itemsAfterCollapse = 2,
+  showHomeIcon = false,
+  size = 'md',
+  items,
+  children,
+  className,
+  'data-testid': testId,
+  'aria-label': ariaLabel,
+  style,
+  ...restProps
+}: BreadcrumbsProps & {
+  ref?: React.Ref<HTMLElement>;
+}) => {
+  // Convert items to rendered elements
+  const renderedItems = useMemo(() => {
+    if (items) {
+      return items.map((item, index) => (
+        <BreadcrumbItem
+          key={index}
+          href={item.href}
+          icon={index === 0 && showHomeIcon ? 'home' : item.icon}
+          current={item.current ?? index === items.length - 1}
+          onClick={item.onClick}
+        >
+          {item.label}
+        </BreadcrumbItem>
+      ));
+    }
+
+    // Process children, injecting home icon if needed
+    return React.Children.map(children, (child, index) => {
+      if (index === 0 && showHomeIcon && React.isValidElement(child)) {
+        return React.cloneElement(child as React.ReactElement<BreadcrumbItemProps>, {
+          icon: (child as React.ReactElement<BreadcrumbItemProps>).props.icon || 'Home',
+        });
       }
+      return child;
+    });
+  }, [items, children, showHomeIcon]);
 
-      // Process children, injecting home icon if needed
-      return React.Children.map(children, (child, index) => {
-        if (index === 0 && showHomeIcon && React.isValidElement(child)) {
-          return React.cloneElement(child as React.ReactElement<BreadcrumbItemProps>, {
-            icon: (child as React.ReactElement<BreadcrumbItemProps>).props.icon || 'Home',
-          });
-        }
-        return child;
-      });
-    }, [items, children, showHomeIcon]);
+  // Handle collapsing
+  const displayedItems = useMemo(() => {
+    if (!renderedItems) {
+      return [];
+    }
 
-    // Handle collapsing
-    const displayedItems = useMemo(() => {
-      if (!renderedItems) {
-        return [];
-      }
+    const itemArray = React.Children.toArray(renderedItems);
 
-      const itemArray = React.Children.toArray(renderedItems);
+    if (!maxItems || itemArray.length <= maxItems) {
+      return itemArray;
+    }
 
-      if (!maxItems || itemArray.length <= maxItems) {
-        return itemArray;
-      }
+    const beforeItems = itemArray.slice(0, itemsBeforeCollapse);
+    const afterItems = itemArray.slice(-itemsAfterCollapse);
 
-      const beforeItems = itemArray.slice(0, itemsBeforeCollapse);
-      const afterItems = itemArray.slice(-itemsAfterCollapse);
+    return [
+      ...beforeItems,
+      <span key="ellipsis" className={styles.ellipsis}>
+        <Icon name="more" size={size === 'sm' ? 14 : size === 'lg' ? 18 : 16} />
+      </span>,
+      ...afterItems,
+    ];
+  }, [renderedItems, maxItems, itemsBeforeCollapse, itemsAfterCollapse, size]);
 
-      return [
-        ...beforeItems,
-        <span key="ellipsis" className={styles.ellipsis}>
-          <Icon name="more" size={size === 'sm' ? 14 : size === 'lg' ? 18 : 16} />
-        </span>,
-        ...afterItems,
-      ];
-    }, [renderedItems, maxItems, itemsBeforeCollapse, itemsAfterCollapse, size]);
+  const componentClasses = [styles.breadcrumbs, className].filter(Boolean).join(' ');
 
-    const componentClasses = [styles.breadcrumbs, className].filter(Boolean).join(' ');
-
-    return (
-      <nav
-        ref={ref}
-        className={componentClasses}
-        data-component="breadcrumbs"
-        data-size={size}
-        data-testid={testId}
-        aria-label={ariaLabel || 'Breadcrumb'}
-        style={style}
-        {...restProps}
-      >
-        <ol className={styles.list}>
-          {displayedItems?.map((item, index) => (
-            <li key={index} className={styles.listItem}>
-              {item}
-              {index < displayedItems.length - 1 && (
-                <BreadcrumbSeparator>{separator}</BreadcrumbSeparator>
-              )}
-            </li>
-          ))}
-        </ol>
-      </nav>
-    );
-  }
-);
-
-Breadcrumbs.displayName = 'Breadcrumbs';
+  return (
+    <nav
+      ref={ref}
+      className={componentClasses}
+      data-component="breadcrumbs"
+      data-size={size}
+      data-testid={testId}
+      aria-label={ariaLabel || 'Breadcrumb'}
+      style={style}
+      {...restProps}
+    >
+      <ol className={styles.list}>
+        {displayedItems?.map((item, index) => (
+          <li key={index} className={styles.listItem}>
+            {item}
+            {index < displayedItems.length - 1 && (
+              <BreadcrumbSeparator>{separator}</BreadcrumbSeparator>
+            )}
+          </li>
+        ))}
+      </ol>
+    </nav>
+  );
+};
 
 export default Breadcrumbs;

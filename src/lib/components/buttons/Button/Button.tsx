@@ -1,4 +1,4 @@
-import React, { forwardRef, useRef, useState, useEffect } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import type { ExtendedComponentSize, ComponentVariant, BaseComponentProps } from '../../../types';
 import { Icon } from '../../display/Icon';
 import type { IconName } from '../../display/Icon/icons';
@@ -106,115 +106,106 @@ const getSpinnerSize = (buttonSize: ExtendedComponentSize): ExtendedComponentSiz
   }
 };
 
-export const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  (
-    {
-      children,
-      variant = 'primary',
-      size = 'md',
-      disabled = false,
-      type = 'button',
-      onClick,
-      fullWidth = false,
-      startIcon,
-      endIcon,
-      loading = false,
-      loadingText,
-      loadingPosition = 'start',
-      className,
-      'data-testid': testId,
-      'aria-label': ariaLabel,
-      style,
-      ...restProps
-    },
-    ref
-  ) => {
-    const internalRef = useRef<HTMLButtonElement>(null);
-    const [minWidth, setMinWidth] = useState<number | undefined>();
+export const Button = ({
+  ref,
+  children,
+  variant = 'primary',
+  size = 'md',
+  disabled = false,
+  type = 'button',
+  onClick,
+  fullWidth = false,
+  startIcon,
+  endIcon,
+  loading = false,
+  loadingText,
+  loadingPosition = 'start',
+  className,
+  'data-testid': testId,
+  'aria-label': ariaLabel,
+  style,
+  ...restProps
+}: ButtonProps & {
+  ref?: React.Ref<HTMLButtonElement>;
+}) => {
+  const internalRef = useRef<HTMLButtonElement>(null);
+  const [minWidth, setMinWidth] = useState<number | undefined>();
 
-    // Capture button width before loading starts to prevent layout shift
-    useEffect(() => {
-      const buttonEl = internalRef.current;
-      if (buttonEl && !loading) {
-        setMinWidth(buttonEl.offsetWidth);
-      }
-    }, [loading, children]);
+  // Capture button width before loading starts to prevent layout shift
+  useEffect(() => {
+    const buttonEl = internalRef.current;
+    if (buttonEl && !loading) {
+      setMinWidth(buttonEl.offsetWidth);
+    }
+  }, [loading, children]);
 
-    // Merge refs
-    const setRefs = (element: HTMLButtonElement | null) => {
-      (internalRef as React.MutableRefObject<HTMLButtonElement | null>).current = element;
-      if (typeof ref === 'function') {
-        ref(element);
-      } else if (ref) {
-        (ref as React.MutableRefObject<HTMLButtonElement | null>).current = element;
-      }
-    };
+  // Merge refs
+  const setRefs = (element: HTMLButtonElement | null) => {
+    (internalRef as React.MutableRefObject<HTMLButtonElement | null>).current = element;
+    if (typeof ref === 'function') {
+      ref(element);
+    } else if (ref) {
+      (ref as React.MutableRefObject<HTMLButtonElement | null>).current = element;
+    }
+  };
 
-    const buttonClasses = [styles.button, className].filter(Boolean).join(' ');
-    const isDisabled = disabled || loading;
+  const buttonClasses = [styles.button, className].filter(Boolean).join(' ');
+  const isDisabled = disabled || loading;
 
-    const spinner = (
-      <Spinner
-        size={getSpinnerSize(size)}
-        variant="currentColor"
-        spinnerStyle="circular"
-        srText=""
-      />
-    );
+  const spinner = (
+    <Spinner size={getSpinnerSize(size)} variant="currentColor" spinnerStyle="circular" srText="" />
+  );
 
-    const renderContent = () => {
-      if (loading) {
-        const text = loadingText !== undefined ? loadingText : children;
+  const renderContent = () => {
+    if (loading) {
+      const text = loadingText !== undefined ? loadingText : children;
 
-        if (loadingPosition === 'center') {
-          return spinner;
-        }
-
-        return (
-          <>
-            {loadingPosition === 'start' && spinner}
-            {text}
-            {loadingPosition === 'end' && spinner}
-          </>
-        );
+      if (loadingPosition === 'center') {
+        return spinner;
       }
 
       return (
         <>
-          {startIcon && renderIcon(startIcon, size)}
-          {children}
-          {endIcon && renderIcon(endIcon, size)}
+          {loadingPosition === 'start' && spinner}
+          {text}
+          {loadingPosition === 'end' && spinner}
         </>
       );
-    };
+    }
 
     return (
-      <button
-        ref={setRefs}
-        type={type}
-        className={buttonClasses}
-        data-variant={variant}
-        data-size={size}
-        data-full-width={fullWidth || undefined}
-        data-loading={loading || undefined}
-        disabled={isDisabled}
-        onClick={onClick}
-        data-component="button"
-        data-testid={testId || 'button'}
-        aria-label={ariaLabel}
-        aria-busy={loading}
-        style={{
-          ...style,
-          ...(minWidth && loading ? { minWidth: `${minWidth}px` } : {}),
-        }}
-        {...restProps}
-      >
-        {renderContent()}
-      </button>
+      <>
+        {startIcon && renderIcon(startIcon, size)}
+        {children}
+        {endIcon && renderIcon(endIcon, size)}
+      </>
     );
-  }
-);
+  };
 
-Button.displayName = 'Button';
+  return (
+    <button
+      ref={setRefs}
+      type={type}
+      className={buttonClasses}
+      data-variant={variant}
+      data-size={size}
+      data-full-width={fullWidth || undefined}
+      data-loading={loading || undefined}
+      disabled={isDisabled}
+      onClick={onClick}
+      data-component="button"
+      data-testid={testId || 'button'}
+      aria-label={ariaLabel}
+      aria-busy={loading}
+      style={{
+        ...style,
+        ...(minWidth && loading ? { minWidth: `${minWidth}px` } : {}),
+      }}
+      {...restProps}
+    >
+      {renderContent()}
+    </button>
+  );
+};
 
 export default Button;

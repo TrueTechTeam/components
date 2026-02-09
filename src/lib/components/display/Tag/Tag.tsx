@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
 import { IconButton } from '../../buttons/IconButton';
 import styles from './Tag.module.scss';
 import type { BaseComponentProps } from '../../../types/component.types';
@@ -66,74 +66,70 @@ export interface TagProps extends BaseComponentProps {
  * </Tag>
  * ```
  */
-export const Tag = forwardRef<HTMLElement, TagProps>(
-  (
-    {
-      variant = 'primary',
-      size = 'md',
-      disabled = false,
-      removable = false,
-      onRemove,
-      onClick,
-      className,
-      children,
-      ...restProps
-    },
-    ref
-  ) => {
-    // Determine if tag should be a button (if onClick is provided)
-    const isButton = !!onClick;
-    const Component = isButton ? 'button' : 'span';
+export const Tag = ({
+  ref,
+  variant = 'primary',
+  size = 'md',
+  disabled = false,
+  removable = false,
+  onRemove,
+  onClick,
+  className,
+  children,
+  ...restProps
+}: TagProps & {
+  ref?: React.Ref<HTMLElement>;
+}) => {
+  // Determine if tag should be a button (if onClick is provided)
+  const isButton = !!onClick;
+  const Component = isButton ? 'button' : 'span';
 
-    // Merge className with component styles
-    const componentClasses = [styles.tag, className].filter(Boolean).join(' ');
+  // Merge className with component styles
+  const componentClasses = [styles.tag, className].filter(Boolean).join(' ');
 
-    // Handle click
-    const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-      if (disabled) {
-        event.preventDefault();
-        return;
-      }
-      onClick?.(event);
-    };
+  // Handle click
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    if (disabled) {
+      event.preventDefault();
+      return;
+    }
+    onClick?.(event);
+  };
 
-    // Handle remove
-    const handleRemove = (event: React.MouseEvent<HTMLButtonElement>) => {
-      event.stopPropagation();
-      if (!disabled) {
-        onRemove?.();
-      }
-    };
+  // Handle remove
+  const handleRemove = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.stopPropagation();
+    if (!disabled) {
+      onRemove?.();
+    }
+  };
 
-    return (
-      <Component
-        ref={ref as React.Ref<HTMLButtonElement & HTMLSpanElement>}
-        className={componentClasses}
-        data-component="tag"
-        data-variant={variant}
-        data-size={size}
-        data-disabled={disabled || undefined}
-        onClick={isButton ? handleClick : undefined}
-        type={isButton ? 'button' : undefined}
-        disabled={isButton && disabled ? true : undefined}
-        {...restProps}
-      >
-        <span className={styles.tagText}>{children}</span>
-        {removable && (
-          <IconButton
-            variant="ghost"
-            size="xs"
-            icon="close"
-            onClick={handleRemove}
-            aria-label={`Remove ${children}`}
-            type="button"
-            disabled={disabled}
-            className={styles.removeButton}
-          />
-        )}
-      </Component>
-    );
-  }
-);
-
-Tag.displayName = 'Tag';
+  return (
+    <Component
+      ref={ref as React.Ref<HTMLButtonElement & HTMLSpanElement>}
+      className={componentClasses}
+      data-component="tag"
+      data-variant={variant}
+      data-size={size}
+      data-disabled={disabled || undefined}
+      onClick={isButton ? handleClick : undefined}
+      type={isButton ? 'button' : undefined}
+      disabled={isButton && disabled ? true : undefined}
+      {...restProps}
+    >
+      <span className={styles.tagText}>{children}</span>
+      {removable && (
+        <IconButton
+          variant="ghost"
+          size="xs"
+          icon="close"
+          onClick={handleRemove}
+          aria-label={`Remove ${children}`}
+          type="button"
+          disabled={disabled}
+          className={styles.removeButton}
+        />
+      )}
+    </Component>
+  );
+};

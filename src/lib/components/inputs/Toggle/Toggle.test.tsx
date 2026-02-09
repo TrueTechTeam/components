@@ -355,134 +355,128 @@ describe('Toggle', () => {
       expect(ref.current?.type).toBe('checkbox');
     });
   });
+});
 
-  describe('Display Name', () => {
-    it('should have correct display name', () => {
-      expect(Toggle.displayName).toBe('Toggle');
-    });
+describe('Data Attributes', () => {
+  it('should apply data-checked attribute when checked', () => {
+    const { container } = render(<Toggle label="Test" checked onChange={() => {}} />);
+    const toggle = container.querySelector('[data-checked="true"]');
+    expect(toggle).toBeInTheDocument();
   });
 
-  describe('Data Attributes', () => {
-    it('should apply data-checked attribute when checked', () => {
-      const { container } = render(<Toggle label="Test" checked onChange={() => {}} />);
-      const toggle = container.querySelector('[data-checked="true"]');
-      expect(toggle).toBeInTheDocument();
-    });
-
-    it('should apply data-disabled attribute when disabled', () => {
-      const { container } = render(<Toggle label="Test" disabled />);
-      const toggle = container.querySelector('[data-disabled="true"]');
-      expect(toggle).toBeInTheDocument();
-    });
-
-    it('should apply data-readonly attribute when readOnly', () => {
-      const { container } = render(<Toggle label="Test" readOnly />);
-      const toggle = container.querySelector('[data-readonly="true"]');
-      expect(toggle).toBeInTheDocument();
-    });
-
-    it('should apply data-required attribute when required', () => {
-      const { container } = render(<Toggle label="Test" required />);
-      const labelText = container.querySelector('[data-required="true"]');
-      expect(labelText).toBeInTheDocument();
-    });
+  it('should apply data-disabled attribute when disabled', () => {
+    const { container } = render(<Toggle label="Test" disabled />);
+    const toggle = container.querySelector('[data-disabled="true"]');
+    expect(toggle).toBeInTheDocument();
   });
 
-  describe('Edge Cases', () => {
-    it('should handle unchecked to checked toggle', () => {
-      const handleChange = jest.fn();
-      render(<Toggle label="Test" checked={false} onChange={handleChange} />);
-
-      const toggle = screen.getByRole('checkbox');
-      fireEvent.click(toggle);
-
-      expect(handleChange).toHaveBeenCalledWith(true, expect.any(Object));
-    });
-
-    it('should handle checked to unchecked toggle', () => {
-      const handleChange = jest.fn();
-      render(<Toggle label="Test" checked onChange={handleChange} />);
-
-      const toggle = screen.getByRole('checkbox');
-      fireEvent.click(toggle);
-
-      expect(handleChange).toHaveBeenCalledWith(false, expect.any(Object));
-    });
-
-    it('should not render helper text or error message when neither provided', () => {
-      render(<Toggle label="Test" />);
-      const helperText = screen.queryByRole('alert');
-      expect(helperText).not.toBeInTheDocument();
-    });
-
-    it('should handle multiple rapid clicks', () => {
-      const handleChange = jest.fn();
-      render(<Toggle label="Test" defaultChecked={false} onChange={handleChange} />);
-
-      const toggle = screen.getByRole('checkbox');
-      fireEvent.click(toggle);
-      fireEvent.click(toggle);
-      fireEvent.click(toggle);
-
-      expect(handleChange).toHaveBeenCalledTimes(3);
-    });
-
-    it('should work with both loading and disabled', () => {
-      const handleChange = jest.fn();
-      render(<Toggle label="Test" loading disabled onChange={handleChange} />);
-
-      const toggle = screen.getByRole('checkbox');
-      fireEvent.click(toggle);
-
-      expect(handleChange).not.toHaveBeenCalled();
-      expect(toggle).toBeDisabled();
-    });
-
-    it('should accept additional HTML attributes', () => {
-      render(<Toggle label="Test" title="Toggle title" tabIndex={0} />);
-      const toggle = screen.getByRole('checkbox');
-      expect(toggle).toHaveAttribute('title', 'Toggle title');
-      expect(toggle).toHaveAttribute('tabIndex', '0');
-    });
+  it('should apply data-readonly attribute when readOnly', () => {
+    const { container } = render(<Toggle label="Test" readOnly />);
+    const toggle = container.querySelector('[data-readonly="true"]');
+    expect(toggle).toBeInTheDocument();
   });
 
-  describe('Callback with Event Object', () => {
-    it('should pass event object to onChange callback', () => {
-      const handleChange = jest.fn();
-      render(<Toggle label="Test" checked={false} onChange={handleChange} />);
+  it('should apply data-required attribute when required', () => {
+    const { container } = render(<Toggle label="Test" required />);
+    const labelText = container.querySelector('[data-required="true"]');
+    expect(labelText).toBeInTheDocument();
+  });
+});
 
-      const toggle = screen.getByRole('checkbox');
-      fireEvent.click(toggle);
+describe('Edge Cases', () => {
+  it('should handle unchecked to checked toggle', () => {
+    const handleChange = jest.fn();
+    render(<Toggle label="Test" checked={false} onChange={handleChange} />);
 
-      expect(handleChange).toHaveBeenCalledWith(
-        true,
-        expect.objectContaining({
-          target: expect.any(Object),
-          type: 'change',
-        })
-      );
-    });
+    const toggle = screen.getByRole('checkbox');
+    fireEvent.click(toggle);
+
+    expect(handleChange).toHaveBeenCalledWith(true, expect.any(Object));
   });
 
-  describe('Container Structure', () => {
-    it('should render correct container structure with label', () => {
-      const { container } = render(<Toggle label="Test" />);
-      const mainContainer = container.querySelector('[data-label-placement]');
-      expect(mainContainer).toBeInTheDocument();
-    });
+  it('should handle checked to unchecked toggle', () => {
+    const handleChange = jest.fn();
+    render(<Toggle label="Test" checked onChange={handleChange} />);
 
-    it('should render correct container structure without label', () => {
-      render(<Toggle aria-label="Test" data-testid="test-toggle" />);
-      const container = screen.getByTestId('test-toggle-container');
-      expect(container).toBeInTheDocument();
-    });
+    const toggle = screen.getByRole('checkbox');
+    fireEvent.click(toggle);
+
+    expect(handleChange).toHaveBeenCalledWith(false, expect.any(Object));
   });
 
-  describe('Type Attribute', () => {
-    it('should have type="checkbox"', () => {
-      render(<Toggle label="Test" />);
-      const toggle = screen.getByRole('checkbox');
-      expect(toggle).toHaveAttribute('type', 'checkbox');
-    });
+  it('should not render helper text or error message when neither provided', () => {
+    render(<Toggle label="Test" />);
+    const helperText = screen.queryByRole('alert');
+    expect(helperText).not.toBeInTheDocument();
+  });
+
+  it('should handle multiple rapid clicks', () => {
+    const handleChange = jest.fn();
+    render(<Toggle label="Test" defaultChecked={false} onChange={handleChange} />);
+
+    const toggle = screen.getByRole('checkbox');
+    fireEvent.click(toggle);
+    fireEvent.click(toggle);
+    fireEvent.click(toggle);
+
+    expect(handleChange).toHaveBeenCalledTimes(3);
+  });
+
+  it('should work with both loading and disabled', () => {
+    const handleChange = jest.fn();
+    render(<Toggle label="Test" loading disabled onChange={handleChange} />);
+
+    const toggle = screen.getByRole('checkbox');
+    fireEvent.click(toggle);
+
+    expect(handleChange).not.toHaveBeenCalled();
+    expect(toggle).toBeDisabled();
+  });
+
+  it('should accept additional HTML attributes', () => {
+    render(<Toggle label="Test" title="Toggle title" tabIndex={0} />);
+    const toggle = screen.getByRole('checkbox');
+    expect(toggle).toHaveAttribute('title', 'Toggle title');
+    expect(toggle).toHaveAttribute('tabIndex', '0');
+  });
+});
+
+describe('Callback with Event Object', () => {
+  it('should pass event object to onChange callback', () => {
+    const handleChange = jest.fn();
+    render(<Toggle label="Test" checked={false} onChange={handleChange} />);
+
+    const toggle = screen.getByRole('checkbox');
+    fireEvent.click(toggle);
+
+    expect(handleChange).toHaveBeenCalledWith(
+      true,
+      expect.objectContaining({
+        target: expect.any(Object),
+        type: 'change',
+      })
+    );
+  });
+});
+
+describe('Container Structure', () => {
+  it('should render correct container structure with label', () => {
+    const { container } = render(<Toggle label="Test" />);
+    const mainContainer = container.querySelector('[data-label-placement]');
+    expect(mainContainer).toBeInTheDocument();
+  });
+
+  it('should render correct container structure without label', () => {
+    render(<Toggle aria-label="Test" data-testid="test-toggle" />);
+    const container = screen.getByTestId('test-toggle-container');
+    expect(container).toBeInTheDocument();
+  });
+});
+
+describe('Type Attribute', () => {
+  it('should have type="checkbox"', () => {
+    render(<Toggle label="Test" />);
+    const toggle = screen.getByRole('checkbox');
+    expect(toggle).toHaveAttribute('type', 'checkbox');
   });
 });

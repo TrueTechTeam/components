@@ -611,85 +611,78 @@ describe('OverflowText', () => {
       }).not.toThrow();
     });
   });
+});
 
-  // 17. Display name
-  describe('display name', () => {
-    it('has correct display name', () => {
-      expect(OverflowText.displayName).toBe('OverflowText');
+// 18. Tooltip interaction tests
+describe('tooltip interactions', () => {
+  it('hides tooltip on mouse leave', async () => {
+    const user = userEvent.setup();
+    const text = 'Test text';
+
+    render(<OverflowText tooltipDelay={0}>{text}</OverflowText>);
+
+    const textElement = screen.getByText(text);
+
+    await user.hover(textElement);
+    await waitFor(() => {
+      const tooltips = screen.getAllByText(text);
+      expect(tooltips.length).toBeGreaterThan(1);
     });
+
+    await user.unhover(textElement);
+
+    // After unhover, tooltip should eventually disappear
+    await waitFor(
+      () => {
+        const tooltips = screen.queryAllByText(text);
+        expect(tooltips.length).toBeLessThanOrEqual(1);
+      },
+      { timeout: 500 }
+    );
   });
 
-  // 18. Tooltip interaction tests
-  describe('tooltip interactions', () => {
-    it('hides tooltip on mouse leave', async () => {
-      const user = userEvent.setup();
-      const text = 'Test text';
+  it('shows tooltip with custom content on hover', async () => {
+    const user = userEvent.setup();
+    const displayText = 'Short';
+    const tooltipText = 'Full description';
 
-      render(<OverflowText tooltipDelay={0}>{text}</OverflowText>);
+    render(
+      <OverflowText tooltipContent={tooltipText} tooltipDelay={0}>
+        {displayText}
+      </OverflowText>
+    );
 
-      const textElement = screen.getByText(text);
+    await user.hover(screen.getByText(displayText));
 
-      await user.hover(textElement);
-      await waitFor(() => {
-        const tooltips = screen.getAllByText(text);
-        expect(tooltips.length).toBeGreaterThan(1);
-      });
-
-      await user.unhover(textElement);
-
-      // After unhover, tooltip should eventually disappear
-      await waitFor(
-        () => {
-          const tooltips = screen.queryAllByText(text);
-          expect(tooltips.length).toBeLessThanOrEqual(1);
-        },
-        { timeout: 500 }
-      );
-    });
-
-    it('shows tooltip with custom content on hover', async () => {
-      const user = userEvent.setup();
-      const displayText = 'Short';
-      const tooltipText = 'Full description';
-
-      render(
-        <OverflowText tooltipContent={tooltipText} tooltipDelay={0}>
-          {displayText}
-        </OverflowText>
-      );
-
-      await user.hover(screen.getByText(displayText));
-
-      await waitFor(() => {
-        expect(screen.getByText(tooltipText)).toBeInTheDocument();
-      });
+    await waitFor(() => {
+      expect(screen.getByText(tooltipText)).toBeInTheDocument();
     });
   });
+});
 
-  // 19. CSS variables tests
-  describe('CSS variables', () => {
-    it('sets correct CSS variables', () => {
-      render(
-        <OverflowText lines={5} tooltipMaxWidth={600}>
-          Test
-        </OverflowText>
-      );
-      const element = screen.getByText('Test') as HTMLElement;
-      expect(element.style.getPropertyValue('--overflow-text-lines')).toBe('5');
-      expect(element.style.getPropertyValue('--overflow-text-tooltip-max-width')).toBe('600px');
-    });
+// 19. CSS variables tests
+describe('CSS variables', () => {
+  it('sets correct CSS variables', () => {
+    render(
+      <OverflowText lines={5} tooltipMaxWidth={600}>
+        Test
+      </OverflowText>
+    );
+    const element = screen.getByText('Test') as HTMLElement;
+    expect(element.style.getPropertyValue('--overflow-text-lines')).toBe('5');
+    expect(element.style.getPropertyValue('--overflow-text-tooltip-max-width')).toBe('600px');
+  });
 
-    it('merges CSS variables with custom styles', () => {
-      render(
-        <OverflowText lines={2} tooltipMaxWidth={400} style={{ fontSize: '16px', color: 'red' }}>
-          Test
-        </OverflowText>
-      );
-      const element = screen.getByText('Test') as HTMLElement;
-      expect(element.style.getPropertyValue('--overflow-text-lines')).toBe('2');
-      expect(element.style.getPropertyValue('--overflow-text-tooltip-max-width')).toBe('400px');
-      expect(element.style.fontSize).toBe('16px');
-      expect(element.style.color).toBe('red');
-    });
+  it('merges CSS variables with custom styles', () => {
+    render(
+      <OverflowText lines={2} tooltipMaxWidth={400} style={{ fontSize: '16px', color: 'red' }}>
+        Test
+      </OverflowText>
+    );
+    const element = screen.getByText('Test') as HTMLElement;
+    expect(element.style.getPropertyValue('--overflow-text-lines')).toBe('2');
+    expect(element.style.getPropertyValue('--overflow-text-tooltip-max-width')).toBe('400px');
+    expect(element.style.fontSize).toBe('16px');
+    expect(element.style.color).toBe('red');
   });
 });

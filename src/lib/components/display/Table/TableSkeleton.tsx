@@ -55,5 +55,3 @@ export function TableSkeleton({
     </div>
   );
 }
-
-TableSkeleton.displayName = 'TableSkeleton';

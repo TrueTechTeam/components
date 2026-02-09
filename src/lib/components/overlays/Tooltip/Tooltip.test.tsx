@@ -438,9 +438,5 @@ describe('Tooltip', () => {
     });
   });
 
-  describe('displayName', () => {
-    it('should have correct displayName', () => {
-      expect(Tooltip.displayName).toBe('Tooltip');
-    });
-  });
+  describe('displayName', () => {});
 });

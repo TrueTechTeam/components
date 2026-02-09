@@ -162,5 +162,3 @@ export const Tooltip: React.FC<TooltipProps> = ({
     </Popover>
   );
 };
-
-Tooltip.displayName = 'Tooltip';

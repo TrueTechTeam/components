@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
 import styles from './Badge.module.scss';
 import type { BaseComponentProps } from '../../../types/component.types';
 
@@ -49,30 +49,33 @@ export interface BadgeProps extends BaseComponentProps {
  * </Badge>
  * ```
  */
-export const Badge = forwardRef<HTMLSpanElement, BadgeProps>(
-  (
-    { variant = 'primary', size = 'md', disabled = false, className, children, ...restProps },
-    ref
-  ) => {
-    // Merge className with component styles
-    const componentClasses = [styles.badge, className].filter(Boolean).join(' ');
+export const Badge = ({
+  ref,
+  variant = 'primary',
+  size = 'md',
+  disabled = false,
+  className,
+  children,
+  ...restProps
+}: BadgeProps & {
+  ref?: React.Ref<HTMLSpanElement>;
+}) => {
+  // Merge className with component styles
+  const componentClasses = [styles.badge, className].filter(Boolean).join(' ');
 
-    return (
-      <span
-        ref={ref}
-        className={componentClasses}
-        data-component="badge"
-        data-variant={variant}
-        data-size={size}
-        data-disabled={disabled || undefined}
-        {...restProps}
-      >
-        {children}
-      </span>
-    );
-  }
-);
-
-Badge.displayName = 'Badge';
+  return (
+    <span
+      ref={ref}
+      className={componentClasses}
+      data-component="badge"
+      data-variant={variant}
+      data-size={size}
+      data-disabled={disabled || undefined}
+      {...restProps}
+    >
+      {children}
+    </span>
+  );
+};
 
 export default Badge;

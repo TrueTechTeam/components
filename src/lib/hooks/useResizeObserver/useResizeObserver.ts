@@ -85,7 +85,7 @@ export function useResizeObserver(options: UseResizeObserverOptions = {}): UseRe
   const [element, setElement] = useState<HTMLElement | null>(null);
 
   const observerRef = useRef<ResizeObserver | null>(null);
-  const debounceTimeoutRef = useRef<ReturnType<typeof setTimeout>>();
+  const debounceTimeoutRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined);
   const onResizeRef = useRef(onResize);
 
   // Keep onResize ref up to date

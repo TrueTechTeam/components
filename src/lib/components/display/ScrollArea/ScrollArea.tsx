@@ -1,4 +1,4 @@
-import React, { forwardRef, useCallback, useRef, useState, useImperativeHandle } from 'react';
+import React, { useCallback, useRef, useState, useImperativeHandle } from 'react';
 import type { BaseComponentProps } from '../../../types';
 import styles from './ScrollArea.module.scss';
 
@@ -125,135 +125,131 @@ export interface ScrollAreaProps extends BaseComponentProps {
  * </ScrollArea>
  * ```
  */
-export const ScrollArea = forwardRef<ScrollAreaRef, ScrollAreaProps>(
-  (
-    {
-      direction = 'vertical',
-      maxHeight,
-      maxWidth,
-      showShadows = false,
+export const ScrollArea = ({
+  ref,
+  direction = 'vertical',
+  maxHeight,
+  maxWidth,
+  showShadows = false,
+  onScroll,
+  onScrollToTop,
+  onScrollToBottom,
+  onScrollToLeft,
+  onScrollToRight,
+  scrollEndThreshold = 10,
+  children,
+  className,
+  'data-testid': testId,
+  style,
+  ...restProps
+}: ScrollAreaProps & {
+  ref?: React.Ref<ScrollAreaRef>;
+}) => {
+  const viewportRef = useRef<HTMLDivElement>(null);
+  const [atTop, setAtTop] = useState(true);
+  const [atBottom, setAtBottom] = useState(false);
+  const [atLeft, setAtLeft] = useState(true);
+  const [atRight, setAtRight] = useState(false);
+
+  // Imperative handle for programmatic scrolling
+  useImperativeHandle(ref, () => ({
+    scrollTo: (options) => viewportRef.current?.scrollTo(options),
+    scrollToTop: (behavior = 'smooth') => viewportRef.current?.scrollTo({ top: 0, behavior }),
+    scrollToBottom: (behavior = 'smooth') => {
+      const el = viewportRef.current;
+      if (el) {
+        el.scrollTo({ top: el.scrollHeight, behavior });
+      }
+    },
+    scrollToLeft: (behavior = 'smooth') => viewportRef.current?.scrollTo({ left: 0, behavior }),
+    scrollToRight: (behavior = 'smooth') => {
+      const el = viewportRef.current;
+      if (el) {
+        el.scrollTo({ left: el.scrollWidth, behavior });
+      }
+    },
+    getScrollPosition: () => ({
+      scrollTop: viewportRef.current?.scrollTop ?? 0,
+      scrollLeft: viewportRef.current?.scrollLeft ?? 0,
+    }),
+    getElement: () => viewportRef.current,
+  }));
+
+  const handleScroll = useCallback(
+    (event: React.UIEvent<HTMLDivElement>) => {
+      const { scrollTop, scrollLeft, scrollHeight, scrollWidth, clientHeight, clientWidth } =
+        event.currentTarget;
+
+      // Check vertical scroll positions
+      const newAtTop = scrollTop <= scrollEndThreshold;
+      const newAtBottom = scrollTop + clientHeight >= scrollHeight - scrollEndThreshold;
+
+      // Check horizontal scroll positions
+      const newAtLeft = scrollLeft <= scrollEndThreshold;
+      const newAtRight = scrollLeft + clientWidth >= scrollWidth - scrollEndThreshold;
+
+      // Trigger callbacks on position changes
+      if (newAtTop && !atTop) {
+        onScrollToTop?.();
+      }
+      if (newAtBottom && !atBottom) {
+        onScrollToBottom?.();
+      }
+      if (newAtLeft && !atLeft) {
+        onScrollToLeft?.();
+      }
+      if (newAtRight && !atRight) {
+        onScrollToRight?.();
+      }
+
+      setAtTop(newAtTop);
+      setAtBottom(newAtBottom);
+      setAtLeft(newAtLeft);
+      setAtRight(newAtRight);
+
+      onScroll?.(event);
+    },
+    [
+      atTop,
+      atBottom,
+      atLeft,
+      atRight,
+      scrollEndThreshold,
       onScroll,
       onScrollToTop,
       onScrollToBottom,
       onScrollToLeft,
       onScrollToRight,
-      scrollEndThreshold = 10,
-      children,
-      className,
-      'data-testid': testId,
-      style,
-      ...restProps
-    },
-    ref
-  ) => {
-    const viewportRef = useRef<HTMLDivElement>(null);
-    const [atTop, setAtTop] = useState(true);
-    const [atBottom, setAtBottom] = useState(false);
-    const [atLeft, setAtLeft] = useState(true);
-    const [atRight, setAtRight] = useState(false);
+    ]
+  );
 
-    // Imperative handle for programmatic scrolling
-    useImperativeHandle(ref, () => ({
-      scrollTo: (options) => viewportRef.current?.scrollTo(options),
-      scrollToTop: (behavior = 'smooth') => viewportRef.current?.scrollTo({ top: 0, behavior }),
-      scrollToBottom: (behavior = 'smooth') => {
-        const el = viewportRef.current;
-        if (el) {
-          el.scrollTo({ top: el.scrollHeight, behavior });
-        }
-      },
-      scrollToLeft: (behavior = 'smooth') => viewportRef.current?.scrollTo({ left: 0, behavior }),
-      scrollToRight: (behavior = 'smooth') => {
-        const el = viewportRef.current;
-        if (el) {
-          el.scrollTo({ left: el.scrollWidth, behavior });
-        }
-      },
-      getScrollPosition: () => ({
-        scrollTop: viewportRef.current?.scrollTop ?? 0,
-        scrollLeft: viewportRef.current?.scrollLeft ?? 0,
-      }),
-      getElement: () => viewportRef.current,
-    }));
+  const containerClasses = [styles.scrollArea, className].filter(Boolean).join(' ');
 
-    const handleScroll = useCallback(
-      (event: React.UIEvent<HTMLDivElement>) => {
-        const { scrollTop, scrollLeft, scrollHeight, scrollWidth, clientHeight, clientWidth } =
-          event.currentTarget;
+  const containerStyle = {
+    '--scroll-area-max-height': typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight,
+    '--scroll-area-max-width': typeof maxWidth === 'number' ? `${maxWidth}px` : maxWidth,
+    ...style,
+  } as React.CSSProperties;
 
-        // Check vertical scroll positions
-        const newAtTop = scrollTop <= scrollEndThreshold;
-        const newAtBottom = scrollTop + clientHeight >= scrollHeight - scrollEndThreshold;
-
-        // Check horizontal scroll positions
-        const newAtLeft = scrollLeft <= scrollEndThreshold;
-        const newAtRight = scrollLeft + clientWidth >= scrollWidth - scrollEndThreshold;
-
-        // Trigger callbacks on position changes
-        if (newAtTop && !atTop) {
-          onScrollToTop?.();
-        }
-        if (newAtBottom && !atBottom) {
-          onScrollToBottom?.();
-        }
-        if (newAtLeft && !atLeft) {
-          onScrollToLeft?.();
-        }
-        if (newAtRight && !atRight) {
-          onScrollToRight?.();
-        }
-
-        setAtTop(newAtTop);
-        setAtBottom(newAtBottom);
-        setAtLeft(newAtLeft);
-        setAtRight(newAtRight);
-
-        onScroll?.(event);
-      },
-      [
-        atTop,
-        atBottom,
-        atLeft,
-        atRight,
-        scrollEndThreshold,
-        onScroll,
-        onScrollToTop,
-        onScrollToBottom,
-        onScrollToLeft,
-        onScrollToRight,
-      ]
-    );
-
-    const containerClasses = [styles.scrollArea, className].filter(Boolean).join(' ');
-
-    const containerStyle = {
-      '--scroll-area-max-height': typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight,
-      '--scroll-area-max-width': typeof maxWidth === 'number' ? `${maxWidth}px` : maxWidth,
-      ...style,
-    } as React.CSSProperties;
-
-    return (
-      <div
-        className={containerClasses}
-        data-direction={direction}
-        data-shadow={showShadows || undefined}
-        data-at-top={atTop || undefined}
-        data-at-bottom={atBottom || undefined}
-        data-at-left={atLeft || undefined}
-        data-at-right={atRight || undefined}
-        data-component="scroll-area"
-        data-testid={testId || 'scroll-area'}
-        style={containerStyle}
-        {...restProps}
-      >
-        <div ref={viewportRef} className={styles.viewport} onScroll={handleScroll} tabIndex={0}>
-          {children}
-        </div>
+  return (
+    <div
+      className={containerClasses}
+      data-direction={direction}
+      data-shadow={showShadows || undefined}
+      data-at-top={atTop || undefined}
+      data-at-bottom={atBottom || undefined}
+      data-at-left={atLeft || undefined}
+      data-at-right={atRight || undefined}
+      data-component="scroll-area"
+      data-testid={testId || 'scroll-area'}
+      style={containerStyle}
+      {...restProps}
+    >
+      <div ref={viewportRef} className={styles.viewport} onScroll={handleScroll} tabIndex={0}>
+        {children}
       </div>
-    );
-  }
-);
-
-ScrollArea.displayName = 'ScrollArea';
+    </div>
+  );
+};
 
 export default ScrollArea;

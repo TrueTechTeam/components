@@ -925,10 +925,4 @@ describe('TextFilter', () => {
       expect(input).toHaveValue(longText);
     });
   });
-
-  describe('display name', () => {
-    it('has correct display name', () => {
-      expect(TextFilter.displayName).toBe('TextFilter');
-    });
-  });
 });

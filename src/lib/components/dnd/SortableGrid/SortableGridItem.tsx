@@ -2,7 +2,7 @@
  * SortableGridItem component - Individual item within a SortableGrid
  */
 
-import React, { forwardRef, useCallback, type ReactNode } from 'react';
+import React, { useCallback, type ReactNode } from 'react';
 import type { BaseComponentProps } from '../../../types/component.types';
 import { useSortable } from '../hooks';
 import styles from './SortableGrid.module.scss';
@@ -58,80 +58,76 @@ export interface SortableGridItemProps extends Omit<BaseComponentProps, 'childre
 /**
  * SortableGridItem component for use within SortableGrid
  */
-export const SortableGridItem = forwardRef<HTMLDivElement, SortableGridItemProps>(
-  (
-    {
-      id,
-      index,
-      disabled = false,
-      children,
-      className,
-      'data-testid': dataTestId,
-      'aria-label': ariaLabel,
-      style,
-      data = {},
+export const SortableGridItem = ({
+  ref,
+  id,
+  index,
+  disabled = false,
+  children,
+  className,
+  'data-testid': dataTestId,
+  'aria-label': ariaLabel,
+  style,
+  data = {},
+}: SortableGridItemProps & {
+  ref?: React.Ref<HTMLDivElement>;
+}) => {
+  const {
+    isDragging,
+    isOver,
+    setNodeRef,
+    attributes,
+    listeners,
+    style: sortableStyle,
+  } = useSortable({
+    id,
+    index,
+    data: { ...data, type: 'grid-item' },
+    disabled,
+    groupId: 'sortable-grid',
+  });
+
+  // Create ref callback
+  const handleRef = useCallback(
+    (node: HTMLElement | null) => {
+      setNodeRef(node);
+      if (typeof ref === 'function') {
+        ref(node as HTMLDivElement);
+      } else if (ref) {
+        (ref as React.MutableRefObject<HTMLDivElement | null>).current = node as HTMLDivElement;
+      }
     },
-    ref
-  ) => {
-    const {
-      isDragging,
-      isOver,
-      setNodeRef,
-      attributes,
-      listeners,
-      style: sortableStyle,
-    } = useSortable({
-      id,
-      index,
-      data: { ...data, type: 'grid-item' },
-      disabled,
-      groupId: 'sortable-grid',
-    });
+    [ref, setNodeRef]
+  );
 
-    // Create ref callback
-    const handleRef = useCallback(
-      (node: HTMLElement | null) => {
-        setNodeRef(node);
-        if (typeof ref === 'function') {
-          ref(node as HTMLDivElement);
-        } else if (ref) {
-          (ref as React.MutableRefObject<HTMLDivElement | null>).current = node as HTMLDivElement;
-        }
-      },
-      [ref, setNodeRef]
-    );
+  // Render props
+  const renderProps: SortableGridItemRenderProps = {
+    isDragging,
+    isOver,
+    index,
+  };
 
-    // Render props
-    const renderProps: SortableGridItemRenderProps = {
-      isDragging,
-      isOver,
-      index,
-    };
+  const content =
+    typeof children === 'function'
+      ? (children as (props: SortableGridItemRenderProps) => ReactNode)(renderProps)
+      : children;
 
-    const content =
-      typeof children === 'function'
-        ? (children as (props: SortableGridItemRenderProps) => ReactNode)(renderProps)
-        : children;
+  const containerClasses = [styles.sortableGridItem, className].filter(Boolean).join(' ');
 
-    const containerClasses = [styles.sortableGridItem, className].filter(Boolean).join(' ');
-
-    return (
-      <div
-        ref={handleRef}
-        className={containerClasses}
-        style={{ ...style, ...sortableStyle }}
-        data-testid={dataTestId}
-        {...attributes}
-        {...listeners}
-        aria-label={ariaLabel}
-        role="gridcell"
-      >
-        {content}
-      </div>
-    );
-  }
-);
-
-SortableGridItem.displayName = 'SortableGridItem';
+  return (
+    <div
+      ref={handleRef}
+      className={containerClasses}
+      style={{ ...style, ...sortableStyle }}
+      data-testid={dataTestId}
+      {...attributes}
+      {...listeners}
+      aria-label={ariaLabel}
+      role="gridcell"
+    >
+      {content}
+    </div>
+  );
+};
 
 export default SortableGridItem;

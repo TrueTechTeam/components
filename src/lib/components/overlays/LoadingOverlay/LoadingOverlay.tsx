@@ -1,4 +1,4 @@
-import React, { forwardRef, type ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 import type { BaseComponentProps, ExtendedComponentSize } from '../../../types/component.types';
 import {
   Spinner,
@@ -119,105 +119,101 @@ export interface LoadingOverlayProps extends BaseComponentProps {
  * </LoadingOverlay>
  * ```
  */
-export const LoadingOverlay = forwardRef<HTMLDivElement, LoadingOverlayProps>(
-  (
-    {
-      children,
-      visible = true,
-      mode = 'container',
-      spinnerStyle = 'circular',
-      spinnerSize = 'lg',
-      spinnerVariant = 'primary',
-      spinnerSpeed = 'normal',
-      message,
-      blur = false,
-      backdropOpacity = 0.7,
-      zIndex,
-      transitionDuration = 200,
-      customSpinner,
-      borderRadius,
-      className,
-      'data-testid': testId,
-      style,
-      ...restProps
-    },
-    ref
-  ) => {
-    const borderRadiusValue = typeof borderRadius === 'number' ? `${borderRadius}px` : borderRadius;
-    const componentClasses = [styles.loadingOverlay, className].filter(Boolean).join(' ');
+export const LoadingOverlay = ({
+  ref,
+  children,
+  visible = true,
+  mode = 'container',
+  spinnerStyle = 'circular',
+  spinnerSize = 'lg',
+  spinnerVariant = 'primary',
+  spinnerSpeed = 'normal',
+  message,
+  blur = false,
+  backdropOpacity = 0.7,
+  zIndex,
+  transitionDuration = 200,
+  customSpinner,
+  borderRadius,
+  className,
+  'data-testid': testId,
+  style,
+  ...restProps
+}: LoadingOverlayProps & {
+  ref?: React.Ref<HTMLDivElement>;
+}) => {
+  const borderRadiusValue = typeof borderRadius === 'number' ? `${borderRadius}px` : borderRadius;
+  const componentClasses = [styles.loadingOverlay, className].filter(Boolean).join(' ');
 
-    const spinnerElement = customSpinner || (
-      <Spinner
-        spinnerStyle={spinnerStyle}
-        size={spinnerSize}
-        variant={spinnerVariant}
-        speed={spinnerSpeed}
-      />
-    );
+  const spinnerElement = customSpinner || (
+    <Spinner
+      spinnerStyle={spinnerStyle}
+      size={spinnerSize}
+      variant={spinnerVariant}
+      speed={spinnerSpeed}
+    />
+  );
 
-    const overlayContent = (
-      <div
-        className={styles.loadingOverlayBackdrop}
-        data-visible={visible}
-        data-blur={blur || undefined}
-        style={
-          {
-            '--backdrop-opacity': backdropOpacity,
-            '--transition-duration': `${transitionDuration}ms`,
-            ...(zIndex !== undefined && { zIndex }),
-            ...(borderRadiusValue && { borderRadius: borderRadiusValue }),
-          } as React.CSSProperties
-        }
-      >
-        <div className={styles.loadingOverlayContent}>
-          {spinnerElement}
-          {message && <div className={styles.loadingOverlayMessage}>{message}</div>}
-        </div>
-      </div>
-    );
-
-    // Fullscreen mode - render in portal
-    if (mode === 'fullscreen') {
-      if (!visible) {
-        return null;
+  const overlayContent = (
+    <div
+      className={styles.loadingOverlayBackdrop}
+      data-visible={visible}
+      data-blur={blur || undefined}
+      style={
+        {
+          '--backdrop-opacity': backdropOpacity,
+          '--transition-duration': `${transitionDuration}ms`,
+          ...(zIndex !== undefined && { zIndex }),
+          ...(borderRadiusValue && { borderRadius: borderRadiusValue }),
+        } as React.CSSProperties
       }
+    >
+      <div className={styles.loadingOverlayContent}>
+        {spinnerElement}
+        {message && <div className={styles.loadingOverlayMessage}>{message}</div>}
+      </div>
+    </div>
+  );
 
-      return (
-        <Portal zIndex={zIndex}>
-          <div
-            ref={ref}
-            className={componentClasses}
-            data-component="loading-overlay"
-            data-mode={mode}
-            data-testid={testId || 'loading-overlay'}
-            style={style}
-            {...restProps}
-          >
-            {overlayContent}
-          </div>
-        </Portal>
-      );
+  // Fullscreen mode - render in portal
+  if (mode === 'fullscreen') {
+    if (!visible) {
+      return null;
     }
 
-    // Container mode - wrap children
     return (
-      <div
-        ref={ref}
-        className={componentClasses}
-        data-component="loading-overlay"
-        data-mode={mode}
-        data-testid={testId || 'loading-overlay'}
-        style={style}
-        aria-busy={visible}
-        {...restProps}
-      >
-        {children}
-        {overlayContent}
-      </div>
+      <Portal zIndex={zIndex}>
+        <div
+          ref={ref}
+          className={componentClasses}
+          data-component="loading-overlay"
+          data-mode={mode}
+          data-testid={testId || 'loading-overlay'}
+          style={style}
+          {...restProps}
+        >
+          {overlayContent}
+        </div>
+      </Portal>
     );
   }
-);
 
-LoadingOverlay.displayName = 'LoadingOverlay';
+  // Container mode - wrap children
+  return (
+    <div
+      ref={ref}
+      className={componentClasses}
+      data-component="loading-overlay"
+      data-mode={mode}
+      data-testid={testId || 'loading-overlay'}
+      style={style}
+      aria-busy={visible}
+      {...restProps}
+    >
+      {children}
+      {overlayContent}
+    </div>
+  );
+};
 
 export default LoadingOverlay;
