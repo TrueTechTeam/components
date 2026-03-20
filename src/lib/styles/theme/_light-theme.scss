@@ -41,17 +41,17 @@
   --theme-tertiary-700: #4338ca;
 
   // Semantic colors
-  --theme-success: var(--color-green-700);
+  --theme-success: #15803d;
   --theme-warning: var(--color-amber-700);
   --theme-error: var(--color-red-700);
-  --theme-info: #00adb5;
-  --theme-info-500: #00adb5;
+  --theme-info: #0e7490;
+  --theme-info-500: #0e7490;
 
   // Success variant tokens
-  --theme-success-hover: var(--color-green-800);
-  --theme-success-active: var(--color-green-900);
+  --theme-success-hover: #166534;
+  --theme-success-active: #14532d;
   --theme-success-disabled: var(--color-green-200);
-  --theme-success-500: #047857;
+  --theme-success-500: #15803d;
 
   // Warning variant tokens
   --theme-warning-hover: var(--color-amber-800);

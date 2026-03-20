@@ -41,6 +41,14 @@
   align-items: center;
   gap: inherit;
   flex-wrap: inherit;
+
+  .filterBar[data-fill-width] & {
+    flex: 1;
+
+    > * {
+      flex: 1;
+    }
+  }
 }
 
 .moreFiltersBadge {

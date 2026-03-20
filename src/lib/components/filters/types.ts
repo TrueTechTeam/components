@@ -1027,6 +1027,12 @@ export interface FilterBarProps extends FilterLayoutProps {
    * @default 'md'
    */
   gap?: 'sm' | 'md' | 'lg';
+
+  /**
+   * Make filters stretch to fill the container with equal widths
+   * @default false
+   */
+  fillWidth?: boolean;
 }
 
 /**

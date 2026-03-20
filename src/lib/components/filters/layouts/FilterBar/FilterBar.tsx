@@ -33,6 +33,7 @@ export const FilterBar = ({
   moreFiltersLabel = 'More Filters',
   wrap = true,
   gap = 'md',
+  fillWidth = false,
   showActiveFilters = true,
   activeFiltersPosition = 'inline',
   showApplyButton = false,
@@ -83,6 +84,7 @@ export const FilterBar = ({
       className={componentClasses}
       data-wrap={wrap || undefined}
       data-gap={gap}
+      data-fill-width={fillWidth || undefined}
       {...restProps}
     >
       {/* Active filters at top */}

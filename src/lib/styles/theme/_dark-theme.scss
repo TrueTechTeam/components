@@ -40,17 +40,17 @@
   --theme-tertiary-700: #a5b4fc;
 
   // Semantic colors
-  --theme-success: var(--color-green-700);
+  --theme-success: #15803d;
   --theme-warning: var(--color-amber-700);
   --theme-error: var(--color-red-700);
-  --theme-info: #00adb5;
-  --theme-info-500: #00adb5;
+  --theme-info: #0e7490;
+  --theme-info-500: #0e7490;
 
   // Success variant tokens
-  --theme-success-hover: var(--color-green-600);
-  --theme-success-active: var(--color-green-800);
+  --theme-success-hover: #16a34a;
+  --theme-success-active: #166534;
   --theme-success-disabled: var(--color-green-900);
-  --theme-success-500: #059669;
+  --theme-success-500: #16a34a;
 
   // Warning variant tokens
   --theme-warning-hover: var(--color-amber-600);

@@ -246,24 +246,21 @@ function useOptionsManager({ filters, values: _values }: OptionsManagerProps) {
   const optionsStateRef = useRef<Map<string, FilterOptionsState>>(new Map());
   const [, forceUpdate] = useState({});
 
-  // Create options hooks for each filter that needs them
-  const optionsMap = useMemo(() => {
-    const map = new Map<string, FilterOptionsState>();
-
+  // Invalidate cached options when filter definitions change (e.g., dynamic options)
+  useEffect(() => {
+    let hasChanges = false;
     for (const filter of filters) {
       if (filter.options) {
-        // Static options
-        map.set(filter.id, {
-          options: filter.options,
-          loading: false,
-          error: null,
-          hasMore: false,
-          loadMore: () => {},
-        });
+        const cached = optionsStateRef.current.get(filter.id);
+        if (cached && cached.options !== filter.options) {
+          optionsStateRef.current.delete(filter.id);
+          hasChanges = true;
+        }
       }
     }
-
-    return map;
+    if (hasChanges) {
+      forceUpdate({});
+    }
   }, [filters]);
 
   // For filters with loaders, we need to track them separately
@@ -317,7 +314,7 @@ function useOptionsManager({ filters, values: _values }: OptionsManagerProps) {
     forceUpdate({});
   }, []);
 
-  return { getFilterOptions, reloadFilterOptions, optionsMap };
+  return { getFilterOptions, reloadFilterOptions };
 }
 
 // =============================================================================

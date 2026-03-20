@@ -89,6 +89,21 @@ export interface ThemeColorTokens {
   interactiveFocus: string;
   interactiveActive: string;
   interactiveDisabled: string;
+
+  // Inputs
+  inputBg: string;
+  inputBgDisabled: string;
+  inputBorder: string;
+  inputBorderHover: string;
+  inputBorderFocus: string;
+  inputText: string;
+  inputPlaceholder: string;
+
+  // Controls
+  controlBg: string;
+  controlBgChecked: string;
+  controlBorder: string;
+  controlBorderHover: string;
 }
 
 /**
