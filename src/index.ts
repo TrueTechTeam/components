@@ -1,3 +1,5 @@
+'use client';
+
 // Styles
 import './lib/styles/index.scss';
 
