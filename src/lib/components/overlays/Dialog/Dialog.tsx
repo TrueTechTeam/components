@@ -364,6 +364,7 @@ export const Dialog = ({
 
   // Animation state
   const [animationState, setAnimationState] = useState<AnimationState>('exited');
+  const animationStateRef = useRef<AnimationState>('exited');
 
   // Refs
   const dialogRef = useRef<HTMLDivElement>(null);
@@ -451,6 +452,9 @@ export const Dialog = ({
     }
   }, [isOpen]);
 
+  // Keep ref in sync for use inside effects without adding to deps
+  animationStateRef.current = animationState;
+
   // Animation handling
   useEffect(() => {
     if (isOpen) {
@@ -460,7 +464,7 @@ export const Dialog = ({
         onOpenComplete?.();
       }, animationDuration);
       return () => clearTimeout(timer);
-    } else if (animationState !== 'exited') {
+    } else if (animationStateRef.current !== 'exited') {
       setAnimationState('exiting');
       const timer = setTimeout(() => {
         setAnimationState('exited');
@@ -468,7 +472,7 @@ export const Dialog = ({
       }, animationDuration);
       return () => clearTimeout(timer);
     }
-  }, [isOpen, animationDuration, onOpenComplete, onCloseComplete, animationState]);
+  }, [isOpen, animationDuration, onOpenComplete, onCloseComplete]);
 
   // Don't render if fully closed
   if (animationState === 'exited' && !isOpen) {

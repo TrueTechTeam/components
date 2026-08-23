@@ -1,0 +1,146 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with the ui-components library.
+
+## Commands
+
+```bash
+npx nx build ui-components                    # Build library
+npx nx build ui-components --configuration=production
+npx nx test ui-components                     # Run tests
+npx nx test ui-components --watch             # Watch mode
+npx nx lint ui-components                     # Lint
+npx nx lint ui-components --fix               # Lint with auto-fix
+npx nx storybook ui-components                # Start Storybook (localhost:6006)
+npx nx build-storybook ui-components          # Build static Storybook
+npx nx typecheck ui-components                # Type check
+```
+
+## Directory Structure
+
+```
+src/lib/
+├── components/          # UI components organized by category
+│   ├── buttons/         # Button, IconButton, ToggleButton, ButtonToggleGroup
+│   ├── display/         # Icon, Avatar, Badge, Chip, Pill, Tag, Table, List, KPI, Stat, etc.
+│   ├── inputs/          # Input, Select, Checkbox, Radio, Toggle, DatePicker, etc.
+│   ├── overlays/        # Portal, Popover, Tooltip, Dropdown, Menu
+│   ├── navigation/      # Tabs, Stepper, Breadcrumbs, Navbar, SideNav, Pagination
+│   ├── layout/          # Panes, ResponsiveStack, AdaptiveGrid, MasonryLayout
+│   ├── forms/           # FormBuilder
+│   ├── filters/         # FilterProvider, FilterBar, TextFilter, SelectFilter, etc.
+│   └── dnd/             # SortableList, SortableGrid, KanbanBoard, ResizablePanels
+├── styles/              # SCSS themes and utilities
+│   ├── theme/           # _variables.scss, _colors.scss
+│   ├── global/          # Global styles
+│   └── mixins/          # SCSS mixins
+├── hooks/               # React hooks (useDialog, useAlert, useToast, etc.)
+├── contexts/            # ThemeProvider, PageMessagesProvider
+├── providers/           # GlobalProvider
+├── utils/               # Theme utils, color utils, date utils, validation
+├── types/               # TypeScript type definitions
+└── assets/              # Icons and static assets
+```
+
+## Component Development Guidelines
+
+### File Structure for New Components
+
+Each component should have its own directory:
+```
+ComponentName/
+├── ComponentName.tsx           # Main component
+├── ComponentName.module.scss   # Styles (SCSS Module)
+├── ComponentName.spec.tsx      # Tests
+├── ComponentName.stories.tsx   # Storybook stories
+└── index.ts                    # Re-export
+```
+
+### Styling Pattern
+
+Use SCSS Modules with CSS custom properties:
+```tsx
+// ComponentName.module.scss
+.container {
+  padding: var(--spacing-md);
+  border-radius: var(--radius-md);
+  background: var(--theme-surface);
+  color: var(--theme-on-surface);
+}
+
+// ComponentName.tsx
+import styles from './ComponentName.module.scss';
+<div className={styles.container}>...</div>
+```
+
+### Export Pattern
+
+1. Export from the component's `index.ts`
+2. Add to the category's `index.ts` (e.g., `components/buttons/index.ts`)
+3. Category is already re-exported from `components/index.ts`
+4. Components are exported via `src/index.ts`
+
+### Props Pattern
+
+Extend base props and use consistent naming:
+```tsx
+import type { BaseComponentProps, ComponentSize } from '../../types';
+
+interface ButtonProps extends BaseComponentProps {
+  variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
+  size?: ComponentSize;  // 'sm' | 'md' | 'lg'
+  disabled?: boolean;
+  loading?: boolean;
+  startIcon?: React.ReactNode;
+  endIcon?: React.ReactNode;
+}
+```
+
+### Storybook Stories
+
+Use CSF3 format with autodocs:
+```tsx
+import type { Meta, StoryObj } from '@storybook/react';
+import { Button } from './Button';
+
+const meta: Meta<typeof Button> = {
+  title: 'Components/Buttons/Button',
+  component: Button,
+  tags: ['autodocs'],
+  argTypes: {
+    variant: { control: 'select', options: ['primary', 'secondary', 'outline', 'ghost'] },
+  },
+};
+export default meta;
+
+type Story = StoryObj<typeof Button>;
+
+export const Primary: Story = {
+  args: { variant: 'primary', children: 'Button' },
+};
+```
+
+## CSS Custom Properties
+
+Available in `styles/theme/_variables.scss`:
+
+- **Spacing**: `--spacing-xs` (4px) to `--spacing-xxl` (48px)
+- **Radius**: `--radius-none`, `--radius-sm`, `--radius-md`, `--radius-lg`, `--radius-xl`, `--radius-full`
+- **Typography**: `--font-size-xs` to `--font-size-4xl`, `--font-weight-light` to `--font-weight-bold`
+- **Transitions**: `--transition-fast`, `--transition-normal`, `--transition-slow`
+- **Z-index**: `--z-dropdown`, `--z-sticky`, `--z-modal`, `--z-popover`, `--z-tooltip`
+
+## Testing
+
+- Use React Testing Library
+- Test user interactions, not implementation details
+- Test accessibility with `@testing-library/jest-dom`
+
+## Publishing
+
+The library is published to npm as `@true-tech-team/ui-components`. Release is managed via Nx:
+```bash
+npx nx release                 # Full release flow
+npx nx release version         # Version bump only
+npx nx release publish         # Publish to npm
+```
