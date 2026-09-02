@@ -180,7 +180,7 @@ export const CheckboxGroup = ({
   const selectedValues = value !== undefined ? value : internalValues;
 
   const handleChange = useCallback(
-    (itemValue: string, checked: boolean, event: React.ChangeEvent<HTMLInputElement>) => {
+    (itemValue: string, checked: boolean, _event: React.ChangeEvent<HTMLInputElement>) => {
       let newValues: string[];
 
       if (checked) {

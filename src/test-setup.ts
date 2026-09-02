@@ -16,11 +16,13 @@ Object.defineProperty(window, 'matchMedia', {
 });
 
 // Provide a minimal ResizeObserver implementation for tests
+/* eslint-disable @typescript-eslint/no-empty-function */
 class MockResizeObserver {
   observe() {}
   unobserve() {}
   disconnect() {}
 }
+/* eslint-enable @typescript-eslint/no-empty-function */
 
 // @ts-ignore - assign to global for test env
 global.ResizeObserver = global.ResizeObserver || MockResizeObserver;
@@ -42,6 +44,7 @@ if (!HTMLCanvasElement.prototype.getContext) {
 Element.prototype.scrollIntoView = jest.fn();
 
 // Provide a minimal IntersectionObserver implementation for tests
+/* eslint-disable @typescript-eslint/no-empty-function */
 class MockIntersectionObserver {
   observe() {}
   unobserve() {}
@@ -50,6 +53,9 @@ class MockIntersectionObserver {
     return [];
   }
 }
+/* eslint-enable @typescript-eslint/no-empty-function */
 
 // @ts-ignore - assign to global for test env
-global.IntersectionObserver = global.IntersectionObserver || (MockIntersectionObserver as any);
+global.IntersectionObserver =
+  global.IntersectionObserver ||
+  (MockIntersectionObserver as unknown as typeof IntersectionObserver);

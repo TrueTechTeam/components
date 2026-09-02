@@ -32,7 +32,7 @@ export const DateFilter = ({
   label: labelOverride,
   placeholder: placeholderOverride,
   showLabel = true,
-  size = 'md',
+  size: _size = 'md',
   datePickerProps,
   className,
   ...restProps

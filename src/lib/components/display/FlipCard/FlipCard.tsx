@@ -231,7 +231,7 @@ export const FlipCard = ({
 
   // Click handler
   const handleClick = useCallback(
-    (event: MouseEvent<HTMLDivElement>) => {
+    (_event: MouseEvent<HTMLDivElement>) => {
       if (flipTrigger === 'click') {
         handleFlip();
       }

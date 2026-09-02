@@ -1,0 +1,22 @@
+{
+  "plugins": ["./.stylelint/css-variables-plugin.js"],
+  "extends": ["stylelint-config-standard-scss"],
+  "rules": {
+    "true-tech/css-variables-in-theme": true,
+    "selector-class-pattern": null,
+    "custom-property-pattern": null,
+    "scss/at-import-partial-extension": null,
+    "scss/dollar-variable-pattern": null
+  },
+  "ignoreFiles": [
+    "**/*.js",
+    "**/*.jsx",
+    "**/*.ts",
+    "**/*.tsx",
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/build/**",
+    "**/.storybook/**",
+    ".stylelint/test-*.scss"
+  ]
+}

@@ -32,7 +32,7 @@ export const TextFilter = ({
   label: labelOverride,
   placeholder: placeholderOverride,
   showLabel = true,
-  size = 'md',
+  size: _size = 'md',
   inputProps,
   className,
   ...restProps

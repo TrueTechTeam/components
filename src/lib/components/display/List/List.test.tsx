@@ -340,7 +340,7 @@ describe('List', () => {
     });
 
     it('handles expand trigger as icon', () => {
-      const renderExpandedContent = (item: TestItem) => <div>Expanded</div>;
+      const renderExpandedContent = (_item: TestItem) => <div>Expanded</div>;
 
       render(
         <List
@@ -355,7 +355,7 @@ describe('List', () => {
     });
 
     it('handles expand trigger as click', () => {
-      const renderExpandedContent = (item: TestItem) => <div>Expanded</div>;
+      const renderExpandedContent = (_item: TestItem) => <div>Expanded</div>;
 
       render(
         <List

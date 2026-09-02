@@ -1,14 +1,17 @@
-export default {
+import type { Config } from 'jest';
+
+const config: Config = {
   displayName: 'ui-components',
-  preset: '../../jest.preset.js',
   testEnvironment: 'jsdom',
   testPathIgnorePatterns: ['/node_modules/', '/.claude/', '\\.template\\.'],
   transform: {
-    '^(?!.*\\.(js|jsx|ts|tsx|css|json)$)': '@nx/react/plugins/jest',
-    '^.+\\.[tj]sx?$': ['babel-jest', { presets: ['@nx/react/babel'] }],
+    '^.+\\.[tj]sx?$': [
+      'ts-jest',
+      { tsconfig: '<rootDir>/tsconfig.spec.json', isolatedModules: true },
+    ],
   },
   moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx'],
-  coverageDirectory: '../../coverage/libs/ui-components',
+  coverageDirectory: 'coverage',
   setupFilesAfterEnv: ['<rootDir>/src/test-setup.ts'],
   moduleNameMapper: {
     '\\.(css|scss)$': 'identity-obj-proxy',
@@ -29,3 +32,5 @@ export default {
     },
   },
 };
+
+export default config;

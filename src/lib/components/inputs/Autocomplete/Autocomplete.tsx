@@ -144,8 +144,8 @@ const defaultFilterFunction = (option: AutocompleteOption, inputValue: string): 
  * Filterable input with dropdown menu
  */
 export const Autocomplete: React.FC<AutocompleteProps> = ({
-  variant = 'primary',
-  size = 'md',
+  variant: _variant = 'primary',
+  size: _size = 'md',
   label,
   placeholder,
   options: providedOptions,

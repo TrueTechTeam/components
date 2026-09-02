@@ -1,15 +1,8 @@
-# Netlify configuration for Storybook (separate deployment)
-# Note: Don't set base directory - we need npm install to run at repo root for Nx
+# Netlify configuration for Storybook
 
 [build]
-  # Build command runs from repo root
-  command = "npx nx build-storybook ui-components"
-
-  # Storybook output directory (relative to repo root)
-  publish = "dist/storybook/ui-components"
-
-  # Skip build if no relevant files changed
-  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- libs/ui-components/src/ libs/ui-components/.storybook/ package.json package-lock.json tsconfig.base.json libs/ui-components/netlify.toml"
+  command = "npm run storybook:build"
+  publish = "dist/storybook"
 
 [build.environment]
   NODE_VERSION = "22"

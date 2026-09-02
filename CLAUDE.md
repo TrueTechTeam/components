@@ -5,15 +5,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with th
 ## Commands
 
 ```bash
-npx nx build ui-components                    # Build library
-npx nx build ui-components --configuration=production
-npx nx test ui-components                     # Run tests
-npx nx test ui-components --watch             # Watch mode
-npx nx lint ui-components                     # Lint
-npx nx lint ui-components --fix               # Lint with auto-fix
-npx nx storybook ui-components                # Start Storybook (localhost:6006)
-npx nx build-storybook ui-components          # Build static Storybook
-npx nx typecheck ui-components                # Type check
+npm run build                    # Build library
+npm run build:production         # Production build
+npm test                         # Run tests
+npm run test:watch               # Watch mode
+npm run lint                     # Lint
+npm run lint:fix                 # Lint with auto-fix
+npm run storybook                # Start Storybook (localhost:6006)
+npm run storybook:build          # Build static Storybook
+npm run typecheck                # Type check
 ```
 
 ## Directory Structure
@@ -47,6 +47,7 @@ src/lib/
 ### File Structure for New Components
 
 Each component should have its own directory:
+
 ```
 ComponentName/
 ├── ComponentName.tsx           # Main component
@@ -59,6 +60,7 @@ ComponentName/
 ### Styling Pattern
 
 Use SCSS Modules with CSS custom properties:
+
 ```tsx
 // ComponentName.module.scss
 .container {
@@ -83,12 +85,13 @@ import styles from './ComponentName.module.scss';
 ### Props Pattern
 
 Extend base props and use consistent naming:
+
 ```tsx
 import type { BaseComponentProps, ComponentSize } from '../../types';
 
 interface ButtonProps extends BaseComponentProps {
   variant?: 'primary' | 'secondary' | 'outline' | 'ghost';
-  size?: ComponentSize;  // 'sm' | 'md' | 'lg'
+  size?: ComponentSize; // 'sm' | 'md' | 'lg'
   disabled?: boolean;
   loading?: boolean;
   startIcon?: React.ReactNode;
@@ -99,6 +102,7 @@ interface ButtonProps extends BaseComponentProps {
 ### Storybook Stories
 
 Use CSF3 format with autodocs:
+
 ```tsx
 import type { Meta, StoryObj } from '@storybook/react';
 import { Button } from './Button';
@@ -138,9 +142,22 @@ Available in `styles/theme/_variables.scss`:
 
 ## Publishing
 
-The library is published to npm as `@true-tech-team/ui-components`. Release is managed via Nx:
+The npm package name is `@true-tech-team/react-components` (the published name — a historical
+mismatch with the `ui-components` name used in imports and this repo's name). Consumers install
+it under the `ui-components` name via an npm alias:
+
+```json
+"dependencies": {
+  "@true-tech-team/ui-components": "npm:@true-tech-team/react-components@^1.0.1"
+}
+```
+
+so `import { Button } from '@true-tech-team/ui-components'` keeps working without changes.
+
+Releases run automatically on push to `master` via `.github/workflows/publish.yml`
+(semantic-release: versions from Conventional Commits, publishes to npm using OIDC trusted
+publishing — no `NPM_TOKEN` secret). To release manually:
+
 ```bash
-npx nx release                 # Full release flow
-npx nx release version         # Version bump only
-npx nx release publish         # Publish to npm
+npx semantic-release --no-ci
 ```

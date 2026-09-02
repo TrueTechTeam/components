@@ -32,7 +32,7 @@ export const SelectFilter = ({
   label: labelOverride,
   placeholder: placeholderOverride,
   showLabel = true,
-  size = 'md',
+  size: _size = 'md',
   selectProps,
   className,
   ...restProps

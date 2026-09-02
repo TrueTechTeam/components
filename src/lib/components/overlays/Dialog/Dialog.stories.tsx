@@ -244,7 +244,7 @@ const CustomLayoutExample = () => {
         isOpen={isOpen}
         onClose={() => setIsOpen(false)}
         showCloseButton={false}
-        renderHeader={({ onClose }) => (
+        renderHeader={({ onClose: _onClose }) => (
           <div
             style={{
               padding: '24px',

@@ -29,7 +29,7 @@ export const DateRangeFilter = ({
   filterId,
   label: labelOverride,
   showLabel = true,
-  size = 'md',
+  size: _size = 'md',
   dateRangePickerProps,
   className,
   ...restProps

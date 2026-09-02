@@ -96,7 +96,7 @@ type Story = StoryObj<typeof Panes>;
 
 const PaneContent = ({
   title,
-  variant = 'primary',
+  variant: _variant = 'primary',
   children,
 }: {
   title: string;

@@ -210,7 +210,7 @@ export const Alert = ({
   );
 
   // Custom header renderer
-  const renderHeader = ({ onClose: closeHandler }: { onClose: () => void }) => (
+  const renderHeader = ({ onClose: _closeHandler }: { onClose: () => void }) => (
     <div className={styles.alertHeader}>
       {renderIcon()}
       <div className={styles.alertHeaderContent}>

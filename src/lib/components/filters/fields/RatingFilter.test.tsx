@@ -13,7 +13,7 @@ jest.mock('../hooks/useFilter', () => ({
 
 // Mock the Rating component
 jest.mock('../../inputs/Rating', () => ({
-  Rating: jest.fn(({ value, onChange, max = 5, disabled, icon, emptyIcon, size, ...props }) => (
+  Rating: jest.fn(({ value, onChange, max = 5, disabled, icon, emptyIcon, size, ..._props }) => (
     <div data-testid="rating-component" data-size={size}>
       {[...Array(max)].map((_, i) => (
         <button
