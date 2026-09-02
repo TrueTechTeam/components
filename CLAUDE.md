@@ -154,6 +154,17 @@ it under the `ui-components` name via an npm alias:
 
 so `import { Button } from '@true-tech-team/ui-components'` keeps working without changes.
 
+**Consumers must explicitly import the compiled stylesheet once**, near the app root:
+
+```ts
+import '@true-tech-team/ui-components/index.css';
+```
+
+This didn't used to be necessary inside the monorepo, where apps resolved this package straight
+from `src/index.ts` and rode along on its internal `import './lib/styles/index.scss'` side effect.
+A real npm install doesn't carry that side effect — Vite's library build extracts styles into a
+separate `dist/index.css`, so it needs a real import.
+
 Releases run automatically on push to `master` via `.github/workflows/publish.yml`
 (semantic-release: versions from Conventional Commits, publishes to npm using OIDC trusted
 publishing — no `NPM_TOKEN` secret). To release manually:
