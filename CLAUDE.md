@@ -165,6 +165,14 @@ from `src/index.ts` and rode along on its internal `import './lib/styles/index.s
 A real npm install doesn't carry that side effect — Vite's library build extracts styles into a
 separate `dist/index.css`, so it needs a real import.
 
+**Every component here is client-only** (`src/index.ts` starts with `'use client';`), but Vite's
+library build strips that directive from the compiled output. `vite.config.ts` restores it via
+`rollupOptions.output.banner`. Without it, Next.js App Router consumers fail at build time with
+`TypeError: (0, e.createContext) is not a function` — the RSC pipeline treats the module as a
+Server Component and calling client-only React APIs (`createContext`, hooks) blows up. If you ever
+split this library into server-safe and client-only entry points, only the client entry needs the
+banner.
+
 Releases run automatically on push to `master` via `.github/workflows/publish.yml`
 (semantic-release: versions from Conventional Commits, publishes to npm using OIDC trusted
 publishing — no `NPM_TOKEN` secret). To release manually:

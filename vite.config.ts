@@ -43,6 +43,13 @@ export default defineConfig(async () => {
       rollupOptions: {
         // External packages that should not be bundled into your library.
         external: ['react', 'react-dom', 'react/jsx-runtime'],
+        output: {
+          // Vite/Rollup strips directive prologues (like the 'use client' at the
+          // top of src/index.ts) from library builds, which breaks consumers on
+          // React Server Components frameworks (Next.js App Router) - every
+          // component here is client-only, so restore it unconditionally.
+          banner: "'use client';",
+        },
       },
     },
   };
