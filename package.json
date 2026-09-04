@@ -100,7 +100,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/TrueTechTeam/ui-components.git"
+    "url": "https://github.com/TrueTechTeam/components.git"
   },
   "keywords": [
     "react",
