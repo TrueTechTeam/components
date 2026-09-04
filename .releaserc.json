@@ -17,12 +17,6 @@
       }
     ],
     [
-      "@semantic-release/exec",
-      {
-        "publishCmd": "echo \"ACTIONS_ID_TOKEN_REQUEST_TOKEN present: $([ -n \\\"$ACTIONS_ID_TOKEN_REQUEST_TOKEN\\\" ] && echo yes || echo no)\"; echo \"ACTIONS_ID_TOKEN_REQUEST_URL present: $([ -n \\\"$ACTIONS_ID_TOKEN_REQUEST_URL\\\" ] && echo yes || echo no)\"; cd dist && npm publish --ignore-scripts --access public"
-      }
-    ],
-    [
       "@semantic-release/git",
       {
         "assets": ["package.json", "CHANGELOG.md"],

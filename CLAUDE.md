@@ -218,22 +218,28 @@ Two independent things happen on every push to `master`:
 
 **1. npm package** (`.github/workflows/publish.yml`, via [semantic-release](https://semantic-release.gitbook.io/)):
 
-- Dry-runs versioning first; if there are no releasable commits (no `feat`/`fix`/`BREAKING CHANGE`
-  since the last release), the rest of the job is skipped.
 - `@semantic-release/commit-analyzer` + `release-notes-generator` determine the next version and
-  changelog from commit messages; `@semantic-release/changelog` writes `CHANGELOG.md`.
+  changelog from commit messages (skips the rest if nothing releasable happened);
+  `@semantic-release/changelog` writes `CHANGELOG.md`.
 - `@semantic-release/npm` (`npmPublish: false`) writes that version into `dist/package.json` —
-  it does **not** handle authentication or publishing itself.
-- `@semantic-release/exec` runs the actual `npm publish` from `dist/`, relying on npm's OIDC
-  trusted publishing (the workflow has `permissions: id-token: write`, no `NPM_TOKEN` secret).
-  This split exists because `@semantic-release/npm`'s own publish step insists on a working
-  `npm whoami` first, which OIDC-only auth doesn't support (there's no persistent token to check) —
-  a plain `npm publish` invocation performs the OIDC exchange itself and works fine.
+  it does **not** publish itself.
 - `@semantic-release/git` commits the version bump + changelog back to `master` and tags it.
 - `@semantic-release/github` creates a GitHub Release.
+- A separate, plain workflow step (`Publish to npm if a new version was released`, _not_ a
+  semantic-release plugin) then compares `dist/package.json`'s version against what's live on
+  the registry and runs `npm publish` directly if they differ. This has to be a plain step, not
+  wrapped through `@semantic-release/exec` or `@semantic-release/npm`'s own publish: both were
+  tried and reliably broke npm's OIDC trusted-publishing exchange (the token retrieval calls
+  never fired), even though a plain `npm publish` in the same job, same environment, succeeds -
+  never re-introduce a JS-mediated publish step here without re-verifying OIDC still works.
 
-To release manually (e.g. to debug the pipeline), run `npx semantic-release --no-ci` with a valid
-`GITHUB_TOKEN` in the environment.
+The workflow also strips `.npmrc`'s `_authToken` line (see the step comment) and disables npm's
+dependency cache — both are required for OIDC trusted publishing to activate at all, not just
+nice-to-haves; removing either brings back `ENEEDAUTH`/`E404` failures.
+
+To release manually (e.g. to debug the pipeline), use the "Publish on push" workflow's manual
+`workflow_dispatch` trigger from the Actions tab rather than running semantic-release locally —
+OIDC trusted publishing only works from within an actual GitHub Actions run.
 
 **2. Storybook** deploys to Netlify via Netlify's own git integration (not GitHub Actions) — it
 watches `master` directly per `netlify.toml` (`npm run storybook:build`, publishes

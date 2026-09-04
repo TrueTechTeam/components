@@ -26,8 +26,8 @@ jobs:
         with:
           node-version: '22'
           registry-url: 'https://registry.npmjs.org'
-          # npm's own trusted-publishing docs explicitly recommend disabling package
-          # manager caching in release/publish workflows.
+          # npm's own trusted-publishing docs recommend disabling package manager
+          # caching in release/publish workflows.
 
       - name: Upgrade npm for OIDC support
         run: |
@@ -62,12 +62,25 @@ jobs:
           cp package.json dist/package.json
           cp README.md dist/README.md
 
-      - name: Debug raw publish dry-run (bypassing semantic-release entirely)
-        run: |
-          cd dist
-          npm publish --ignore-scripts --dry-run --access public --loglevel verbose 2>&1 | tail -100
-
-      - name: Release
+      # Versions, updates CHANGELOG.md, commits/tags, and creates a GitHub release -
+      # but does NOT publish to npm (@semantic-release/npm has npmPublish: false).
+      # @semantic-release/exec's publishCmd was tried for the actual npm publish and
+      # reliably broke npm's OIDC exchange (confirmed: a plain `npm publish` step
+      # succeeds at the exact same OIDC handshake that fails when spawned through
+      # semantic-release's exec plugin) - so publishing runs as its own plain step
+      # below instead, using the real un-wrapped job environment.
+      - name: Release (version, changelog, git tag, GitHub release)
         run: npx semantic-release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish to npm if a new version was released
+        run: |
+          NEW_VERSION=$(node -p "require('./dist/package.json').version")
+          PUBLISHED_VERSION=$(npm view "$(node -p "require('./dist/package.json').name")" version 2>/dev/null || echo "none")
+          if [ "$NEW_VERSION" = "$PUBLISHED_VERSION" ]; then
+            echo "Version $NEW_VERSION is already published; nothing to do."
+          else
+            echo "Publishing $NEW_VERSION (registry currently has $PUBLISHED_VERSION)"
+            cd dist && npm publish --ignore-scripts --access public
+          fi
