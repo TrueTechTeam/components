@@ -19,7 +19,7 @@
     [
       "@semantic-release/exec",
       {
-        "publishCmd": "cd dist && npm publish --ignore-scripts --access public"
+        "publishCmd": "echo \"ACTIONS_ID_TOKEN_REQUEST_TOKEN present: $([ -n \\\"$ACTIONS_ID_TOKEN_REQUEST_TOKEN\\\" ] && echo yes || echo no)\"; echo \"ACTIONS_ID_TOKEN_REQUEST_URL present: $([ -n \\\"$ACTIONS_ID_TOKEN_REQUEST_URL\\\" ] && echo yes || echo no)\"; cd dist && npm publish --ignore-scripts --access public"
       }
     ],
     [
