@@ -9,10 +9,6 @@ on:
 permissions:
   id-token: write
   contents: write
-  # Needed because the release commit/tag can land on the same push as an edit
-  # to this very workflow file - without it, GITHUB_TOKEN can push the branch
-  # but gets "refusing to allow a GitHub App to ... update workflow" on the tag.
-  workflows: write
 
 jobs:
   build-and-publish:
