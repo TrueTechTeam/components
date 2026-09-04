@@ -173,10 +173,68 @@ Server Component and calling client-only React APIs (`createContext`, hooks) blo
 split this library into server-safe and client-only entry points, only the client entry needs the
 banner.
 
-Releases run automatically on push to `master` via `.github/workflows/publish.yml`
-(semantic-release: versions from Conventional Commits, publishes to npm using OIDC trusted
-publishing — no `NPM_TOKEN` secret). To release manually:
+Releases run automatically on push to `master` via `.github/workflows/publish.yml`. See
+**Deployment & Releases** below for the full mechanics.
+
+## Before Committing
+
+Run these and make sure they all pass — the same checks CI runs on every PR:
 
 ```bash
-npx semantic-release --no-ci
+npm run lint          # eslint . --max-warnings=0
+npm run typecheck     # tsc --noEmit -p tsconfig.lib.json
+npm test              # jest
+npm run build         # vite build
 ```
+
+`npx lint-staged` also runs automatically on `git commit` via Husky (Prettier + ESLint on staged
+files) — don't bypass it with `--no-verify`.
+
+## Commit Messages
+
+[Conventional Commits](https://www.conventionalcommits.org/), enforced by commitlint
+(`commitlint.config.js` → `@commitlint/config-conventional`) on every PR via
+`.github/workflows/pr.yml`. Format: `type(scope): subject`.
+
+```
+feat(button): add loading state
+fix(dialog): correct focus trap on close
+chore(deps): bump vite to 7.3.6
+```
+
+Commit messages matter here beyond style — semantic-release parses them to decide the next
+version number and to write the changelog (`feat` → minor, `fix` → patch, `BREAKING CHANGE:` in
+the body or `!` after the type → major). A vague message produces a vague changelog entry.
+
+## Pull Requests
+
+Target `master`. `.github/workflows/pr.yml` runs commitlint on the PR title/commits plus lint,
+typecheck, test, and build — all must pass before merging. There's no separate deploy step tied
+to PRs; nothing publishes until the PR is merged and lands on `master`.
+
+## Deployment & Releases
+
+Two independent things happen on every push to `master`:
+
+**1. npm package** (`.github/workflows/publish.yml`, via [semantic-release](https://semantic-release.gitbook.io/)):
+
+- Dry-runs versioning first; if there are no releasable commits (no `feat`/`fix`/`BREAKING CHANGE`
+  since the last release), the rest of the job is skipped.
+- `@semantic-release/commit-analyzer` + `release-notes-generator` determine the next version and
+  changelog from commit messages; `@semantic-release/changelog` writes `CHANGELOG.md`.
+- `@semantic-release/npm` (`npmPublish: false`) writes that version into `dist/package.json` —
+  it does **not** handle authentication or publishing itself.
+- `@semantic-release/exec` runs the actual `npm publish` from `dist/`, relying on npm's OIDC
+  trusted publishing (the workflow has `permissions: id-token: write`, no `NPM_TOKEN` secret).
+  This split exists because `@semantic-release/npm`'s own publish step insists on a working
+  `npm whoami` first, which OIDC-only auth doesn't support (there's no persistent token to check) —
+  a plain `npm publish` invocation performs the OIDC exchange itself and works fine.
+- `@semantic-release/git` commits the version bump + changelog back to `master` and tags it.
+- `@semantic-release/github` creates a GitHub Release.
+
+To release manually (e.g. to debug the pipeline), run `npx semantic-release --no-ci` with a valid
+`GITHUB_TOKEN` in the environment.
+
+**2. Storybook** deploys to Netlify via Netlify's own git integration (not GitHub Actions) — it
+watches `master` directly per `netlify.toml` (`npm run storybook:build`, publishes
+`dist/storybook`). No repo-side action needed; it just happens on push.

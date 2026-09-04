@@ -12,8 +12,14 @@
     [
       "@semantic-release/npm",
       {
-        "npmPublish": true,
+        "npmPublish": false,
         "pkgRoot": "dist"
+      }
+    ],
+    [
+      "@semantic-release/exec",
+      {
+        "publishCmd": "cd dist && npm publish --registry https://registry.npmjs.org --access public"
       }
     ],
     [
