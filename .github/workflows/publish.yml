@@ -53,6 +53,14 @@ jobs:
           cp package.json dist/package.json
           cp README.md dist/README.md
 
+      - name: Debug npm auth
+        run: |
+          echo "npm whoami result:"
+          npm whoami --registry https://registry.npmjs.org || echo "(no identity - OIDC/anonymous)"
+          echo "npmrc auth-related lines (values redacted):"
+          sed -E 's/(_authToken|_password)=.*/\1=<redacted-if-present>/' "$NPM_CONFIG_USERCONFIG" || true
+          echo "NODE_AUTH_TOKEN is set: $([ -n "$NODE_AUTH_TOKEN" ] && echo yes || echo no)"
+
       - name: Release
         run: npx semantic-release
         env:
