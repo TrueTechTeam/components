@@ -19,7 +19,7 @@
     [
       "@semantic-release/exec",
       {
-        "publishCmd": "cd dist && npm publish --ignore-scripts --registry https://registry.npmjs.org --access public"
+        "publishCmd": "npm config delete //registry.npmjs.org/:_authToken 2>/dev/null; cd dist && npm publish --ignore-scripts --registry https://registry.npmjs.org --access public"
       }
     ],
     [
