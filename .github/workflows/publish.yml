@@ -62,6 +62,11 @@ jobs:
           cp package.json dist/package.json
           cp README.md dist/README.md
 
+      - name: Debug raw publish dry-run (bypassing semantic-release entirely)
+        run: |
+          cd dist
+          npm publish --ignore-scripts --dry-run --access public --loglevel verbose 2>&1 | tail -100
+
       - name: Release
         run: npx semantic-release
         env:
