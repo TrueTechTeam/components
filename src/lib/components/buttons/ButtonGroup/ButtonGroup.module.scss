@@ -1,0 +1,87 @@
+.buttonGroup {
+  --button-group-radius: var(--radius-md);
+
+  // Fallback so this file declares --button-color locally (Button/IconButton always override
+  // it per variant on the button element itself, so this default is rarely, if ever, seen).
+  --button-color: var(--theme-text-primary);
+
+  // Resolved lazily per descendant, so the divider follows whichever variant that button ends
+  // up with even when overridden away from the group's shared variant.
+  --button-group-divider-color: var(--button-color);
+
+  display: inline-flex;
+  border-radius: var(--button-group-radius);
+  overflow: hidden;
+
+  // Flatten the touching corners between buttons; outer corners are restored below so
+  // bordered variants (e.g. outline) get a real curved corner instead of a hard clip from
+  // overflow: hidden.
+  > button {
+    --button-radius: 0;
+
+    position: relative;
+  }
+
+  // Keep the focus ring visible above neighboring buttons
+  > button:focus-visible {
+    z-index: 1;
+  }
+
+  &[data-full-width='true'] {
+    display: flex;
+    width: 100%;
+
+    > button {
+      flex: 1;
+    }
+  }
+
+  &[data-orientation='vertical'] {
+    flex-direction: column;
+
+    > button:first-child {
+      --button-radius: var(--button-group-radius) var(--button-group-radius) 0 0;
+    }
+
+    > button:last-child {
+      --button-radius: 0 0 var(--button-group-radius) var(--button-group-radius);
+    }
+
+    // Divider between adjacent buttons
+    > button + button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 1px;
+      background: var(--button-group-divider-color);
+    }
+  }
+
+  &[data-orientation='horizontal'] {
+    > button:first-child {
+      --button-radius: var(--button-group-radius) 0 0 var(--button-group-radius);
+    }
+
+    > button:last-child {
+      --button-radius: 0 var(--button-group-radius) var(--button-group-radius) 0;
+    }
+
+    // Divider between adjacent buttons
+    > button + button::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 1px;
+      height: 100%;
+      background: var(--button-group-divider-color);
+    }
+  }
+
+  // A single button is both first and last - round every corner
+  > button:first-child:last-child {
+    --button-radius: var(--button-group-radius);
+  }
+}
