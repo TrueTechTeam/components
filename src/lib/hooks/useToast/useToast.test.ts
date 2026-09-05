@@ -58,4 +58,13 @@ describe('useToast', () => {
     result.current.dismiss('toast-id');
     expect(mockContext.removeToast).toHaveBeenCalledWith('toast-id');
   });
+
+  it('returns a referentially stable object across re-renders when nothing changes', () => {
+    const { result, rerender } = renderHook(() => useToast());
+    const firstResult = result.current;
+
+    rerender();
+
+    expect(result.current).toBe(firstResult);
+  });
 });

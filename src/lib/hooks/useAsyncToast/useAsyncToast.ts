@@ -2,7 +2,7 @@
  * Hook for API endpoint toasts with loading -> success/error flow
  */
 
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useToast, type UseToastReturn } from '../useToast';
 import type { ToastData } from '../../components/overlays/Toast';
 
@@ -178,9 +178,12 @@ export function useAsyncToast(): UseAsyncToastReturn {
     [execute]
   );
 
-  return {
-    wrap,
-    execute,
-    toast: toastMethods,
-  };
+  return useMemo(
+    () => ({
+      wrap,
+      execute,
+      toast: toastMethods,
+    }),
+    [wrap, execute, toastMethods]
+  );
 }

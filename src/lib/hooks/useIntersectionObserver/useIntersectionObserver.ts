@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 
 /**
  * Options for intersection observer hook
@@ -190,12 +190,15 @@ export function useIntersectionObserver(
     };
   }, [element, root, rootMargin, threshold, triggerOnce, disabled]);
 
-  return {
-    ref,
-    isIntersecting,
-    entry,
-    element,
-  };
+  return useMemo(
+    () => ({
+      ref,
+      isIntersecting,
+      entry,
+      element,
+    }),
+    [ref, isIntersecting, entry, element]
+  );
 }
 
 export default useIntersectionObserver;

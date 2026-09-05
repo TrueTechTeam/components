@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback, useMemo } from 'react';
 
 /**
  * Options for interval hook
@@ -146,7 +146,7 @@ export function useInterval(options: UseIntervalOptions): UseIntervalReturn {
     }
   }, [delay]);
 
-  return { reset, clear };
+  return useMemo(() => ({ reset, clear }), [reset, clear]);
 }
 
 export default useInterval;

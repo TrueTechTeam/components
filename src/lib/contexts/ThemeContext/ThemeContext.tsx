@@ -1,4 +1,12 @@
-import React, { createContext, useContext, useState, useEffect, type ReactNode } from 'react';
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useMemo,
+  type ReactNode,
+} from 'react';
 import type { ThemeMode, ThemeConfig, ThemeOverride } from '../../types';
 
 interface ThemeContextValue {
@@ -41,17 +49,20 @@ export function ThemeProvider({
     root.setAttribute('data-theme', mode);
   }, [mode]);
 
-  const toggleMode = () => {
+  const toggleMode = useCallback(() => {
     setMode((prev) => (prev === 'light' ? 'dark' : 'light'));
-  };
+  }, []);
 
-  const value: ThemeContextValue = {
-    mode,
-    setMode,
-    toggleMode,
-    themeOverride,
-    setThemeOverride,
-  };
+  const value = useMemo<ThemeContextValue>(
+    () => ({
+      mode,
+      setMode,
+      toggleMode,
+      themeOverride,
+      setThemeOverride,
+    }),
+    [mode, setMode, toggleMode, themeOverride, setThemeOverride]
+  );
 
   return <ThemeContext.Provider value={value}>{children}</ThemeContext.Provider>;
 }

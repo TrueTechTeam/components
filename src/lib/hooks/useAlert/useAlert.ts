@@ -2,7 +2,7 @@
  * Hook for programmatic alert management
  */
 
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import { useAlertContextStrict, type AlertProps } from '../../components/overlays/Alert';
 
 /**
@@ -157,13 +157,16 @@ export function useAlert(options: UseAlertOptions = {}): UseAlertReturn {
     [context, defaultProps]
   );
 
-  return {
-    alert,
-    confirm,
-    error,
-    success,
-    warning,
-    info,
-    dismiss: context.dismiss,
-  };
+  return useMemo(
+    () => ({
+      alert,
+      confirm,
+      error,
+      success,
+      warning,
+      info,
+      dismiss: context.dismiss,
+    }),
+    [alert, confirm, error, success, warning, info, context.dismiss]
+  );
 }

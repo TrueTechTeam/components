@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback, useMemo } from 'react';
 
 /**
  * Options for timeout hook
@@ -112,7 +112,7 @@ export function useTimeout(options: UseTimeoutOptions): UseTimeoutReturn {
     return clear;
   }, [delay, clear]);
 
-  return { reset, clear };
+  return useMemo(() => ({ reset, clear }), [reset, clear]);
 }
 
 export default useTimeout;

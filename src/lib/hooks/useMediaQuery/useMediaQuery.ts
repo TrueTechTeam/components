@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 
 /**
  * Options for media query hook
@@ -108,7 +108,7 @@ export function useMediaQuery(
     return () => mediaQueryList.removeListener(handleChange);
   }, [query]);
 
-  return { matches };
+  return useMemo(() => ({ matches }), [matches]);
 }
 
 export default useMediaQuery;

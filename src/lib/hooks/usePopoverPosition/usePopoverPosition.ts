@@ -2,7 +2,7 @@
  * Hook for calculating and managing popover position
  */
 
-import { useRef, useState, useEffect, type CSSProperties, type RefObject } from 'react';
+import { useRef, useState, useEffect, useMemo, type CSSProperties, type RefObject } from 'react';
 import {
   calculatePopoverPosition,
   getElementBounds,
@@ -155,23 +155,29 @@ export function usePopoverPosition(options: UsePopoverPositionOptions): UsePopov
     };
   }, [isOpen, position, offset, allowFlip, widthConfig]);
 
-  const style: CSSProperties = {
-    position: 'fixed',
-    top: `${positionState.top}px`,
-    left: `${positionState.left}px`,
-    visibility: positionState.isPositioned ? 'visible' : 'hidden',
-    ...(positionState.widthValue !== undefined && {
-      width:
-        typeof positionState.widthValue === 'number'
-          ? `${positionState.widthValue}px`
-          : positionState.widthValue,
+  const style = useMemo<CSSProperties>(
+    () => ({
+      position: 'fixed',
+      top: `${positionState.top}px`,
+      left: `${positionState.left}px`,
+      visibility: positionState.isPositioned ? 'visible' : 'hidden',
+      ...(positionState.widthValue !== undefined && {
+        width:
+          typeof positionState.widthValue === 'number'
+            ? `${positionState.widthValue}px`
+            : positionState.widthValue,
+      }),
     }),
-  };
+    [positionState.top, positionState.left, positionState.isPositioned, positionState.widthValue]
+  );
 
-  return {
-    popoverRef,
-    triggerRef,
-    style,
-    actualPosition: positionState.actualPosition,
-  };
+  return useMemo(
+    () => ({
+      popoverRef,
+      triggerRef,
+      style,
+      actualPosition: positionState.actualPosition,
+    }),
+    [popoverRef, triggerRef, style, positionState.actualPosition]
+  );
 }

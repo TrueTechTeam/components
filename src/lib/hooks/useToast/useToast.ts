@@ -2,7 +2,7 @@
  * Hook for programmatic toast management
  */
 
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import {
   useToastContextStrict,
   type ToastContextValue,
@@ -161,16 +161,30 @@ export function useToast(options: UseToastOptions = {}): UseToastReturn {
     [context, defaultProps]
   );
 
-  return {
-    toast,
-    success,
-    error,
-    warning,
-    info,
-    loading,
-    update: context.updateToast,
-    dismiss: context.removeToast,
-    dismissAll: context.removeAllToasts,
-    promise: context.promise,
-  };
+  return useMemo(
+    () => ({
+      toast,
+      success,
+      error,
+      warning,
+      info,
+      loading,
+      update: context.updateToast,
+      dismiss: context.removeToast,
+      dismissAll: context.removeAllToasts,
+      promise: context.promise,
+    }),
+    [
+      toast,
+      success,
+      error,
+      warning,
+      info,
+      loading,
+      context.updateToast,
+      context.removeToast,
+      context.removeAllToasts,
+      context.promise,
+    ]
+  );
 }

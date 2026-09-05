@@ -2,6 +2,9 @@
 export { Button } from './buttons/Button';
 export type { ButtonProps } from './buttons/Button';
 
+export { IconButton } from './buttons/IconButton';
+export type { IconButtonProps } from './buttons/IconButton';
+
 export { ToggleButton } from './buttons/ToggleButton';
 export type { ToggleButtonProps } from './buttons/ToggleButton';
 

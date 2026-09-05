@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 
 /**
  * Options for the resize observer hook
@@ -155,12 +155,15 @@ export function useResizeObserver(options: UseResizeObserverOptions = {}): UseRe
     };
   }, [element, box, debounce, disabled]);
 
-  return {
-    ref,
-    width: size.width,
-    height: size.height,
-    element,
-  };
+  return useMemo(
+    () => ({
+      ref,
+      width: size.width,
+      height: size.height,
+      element,
+    }),
+    [ref, size.width, size.height, element]
+  );
 }
 
 export default useResizeObserver;

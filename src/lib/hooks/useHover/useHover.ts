@@ -2,7 +2,7 @@
  * Hook for detecting hover state with configurable delays
  */
 
-import { useState, useCallback, useRef } from 'react';
+import { useState, useCallback, useRef, useMemo } from 'react';
 
 /**
  * Options for hover detection
@@ -121,15 +121,21 @@ export function useHover(options: UseHoverOptions = {}): UseHoverReturn {
     }
   }, [disabled, delayLeave, onHoverEnd, clearTimeouts]);
 
-  const hoverProps: HoverProps = {
-    onMouseEnter: handleEnter,
-    onMouseLeave: handleLeave,
-    onFocus: handleEnter,
-    onBlur: handleLeave,
-  };
+  const hoverProps = useMemo<HoverProps>(
+    () => ({
+      onMouseEnter: handleEnter,
+      onMouseLeave: handleLeave,
+      onFocus: handleEnter,
+      onBlur: handleLeave,
+    }),
+    [handleEnter, handleLeave]
+  );
 
-  return {
-    isHovered,
-    hoverProps,
-  };
+  return useMemo(
+    () => ({
+      isHovered,
+      hoverProps,
+    }),
+    [isHovered, hoverProps]
+  );
 }

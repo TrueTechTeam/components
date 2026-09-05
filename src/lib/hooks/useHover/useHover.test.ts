@@ -397,24 +397,20 @@ describe('useHover', () => {
     expect(result.current.isHovered).toBe(true);
   });
 
-  it('provides new hoverProps object on each render with consistent handlers', () => {
+  it('returns a referentially stable hoverProps object and return value across re-renders', () => {
     const { result, rerender } = renderHook(() => useHover());
 
+    const firstResult = result.current;
     const firstPropsRef = result.current.hoverProps;
     const firstOnMouseEnter = result.current.hoverProps.onMouseEnter;
     const firstOnMouseLeave = result.current.hoverProps.onMouseLeave;
 
     rerender();
 
-    const secondPropsRef = result.current.hoverProps;
-    const secondOnMouseEnter = result.current.hoverProps.onMouseEnter;
-    const secondOnMouseLeave = result.current.hoverProps.onMouseLeave;
-
-    // Props object is new
-    expect(firstPropsRef).not.toBe(secondPropsRef);
-
-    // But handlers are stable due to useCallback
-    expect(firstOnMouseEnter).toBe(secondOnMouseEnter);
-    expect(firstOnMouseLeave).toBe(secondOnMouseLeave);
+    // Whole return value and hoverProps are memoized, so nothing changed
+    expect(result.current).toBe(firstResult);
+    expect(result.current.hoverProps).toBe(firstPropsRef);
+    expect(result.current.hoverProps.onMouseEnter).toBe(firstOnMouseEnter);
+    expect(result.current.hoverProps.onMouseLeave).toBe(firstOnMouseLeave);
   });
 });

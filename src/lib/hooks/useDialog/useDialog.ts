@@ -2,7 +2,7 @@
  * Hook for programmatic dialog management
  */
 
-import { useCallback } from 'react';
+import { useCallback, useMemo } from 'react';
 import {
   useDialogContextStrict,
   type DialogContextValue,
@@ -86,13 +86,24 @@ export function useDialog(options: UseDialogOptions = {}): UseDialogReturn {
     [context, defaultProps]
   );
 
-  return {
-    open,
-    update: context.updateDialog,
-    closeDialog: context.closeDialog,
-    closeTopDialog: context.closeTopDialog,
-    closeAllDialogs: context.closeAllDialogs,
-    isDialogOpen: context.isDialogOpen,
-    dialogCount: context.dialogCount,
-  };
+  return useMemo(
+    () => ({
+      open,
+      update: context.updateDialog,
+      closeDialog: context.closeDialog,
+      closeTopDialog: context.closeTopDialog,
+      closeAllDialogs: context.closeAllDialogs,
+      isDialogOpen: context.isDialogOpen,
+      dialogCount: context.dialogCount,
+    }),
+    [
+      open,
+      context.updateDialog,
+      context.closeDialog,
+      context.closeTopDialog,
+      context.closeAllDialogs,
+      context.isDialogOpen,
+      context.dialogCount,
+    ]
+  );
 }

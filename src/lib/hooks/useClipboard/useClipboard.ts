@@ -1,4 +1,4 @@
-import { useState, useCallback, useRef, useEffect } from 'react';
+import { useState, useCallback, useRef, useEffect, useMemo } from 'react';
 
 /**
  * Options for clipboard hook
@@ -149,12 +149,15 @@ export function useClipboard(options: UseClipboardOptions = {}): UseClipboardRet
     setError(null);
   }, []);
 
-  return {
-    copy,
-    copied,
-    error,
-    reset,
-  };
+  return useMemo(
+    () => ({
+      copy,
+      copied,
+      error,
+      reset,
+    }),
+    [copy, copied, error, reset]
+  );
 }
 
 export default useClipboard;
