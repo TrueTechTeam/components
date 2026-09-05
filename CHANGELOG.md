@@ -1,3 +1,9 @@
+## [1.2.1](https://github.com/TrueTechTeam/components/compare/v1.2.0...v1.2.1) (2026-09-05)
+
+### Bug Fixes
+
+- **buttons:** remove divider between ButtonGroup buttons ([246491b](https://github.com/TrueTechTeam/components/commit/246491bc7a4015c7dcd3bb31b5bff730d95c2819))
+
 # [1.2.0](https://github.com/TrueTechTeam/components/compare/v1.1.1...v1.2.0) (2026-09-05)
 
 ### Bug Fixes
