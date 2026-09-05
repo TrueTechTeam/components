@@ -1,3 +1,25 @@
+# [1.1.0](https://github.com/TrueTechTeam/components/compare/v1.0.1...v1.1.0) (2026-09-05)
+
+### Bug Fixes
+
+- correct repository.url to point at the actual repo name ([8e5192a](https://github.com/TrueTechTeam/components/commit/8e5192a1adc0fd39b660da89ccc097243ae92d07))
+- disable npm dependency caching in the publish workflow ([74d4bd8](https://github.com/TrueTechTeam/components/commit/74d4bd8690c0215eb50e8be2e7d49612476269fa))
+- expose compiled CSS via a subpath export ([1f53f01](https://github.com/TrueTechTeam/components/commit/1f53f01119c94e66fb0ddacc7cd434c49f9e9b09))
+- grant workflows:write so GITHUB_TOKEN can push release tags ([7f6a0c7](https://github.com/TrueTechTeam/components/commit/7f6a0c764aa7d975a1a5459dc3241b4b50f32078))
+- preserve 'use client' directive in the built bundle ([f9e4a86](https://github.com/TrueTechTeam/components/commit/f9e4a8616c12e019bc04dc286cc9ec12c0272b9f))
+- publish via a plain workflow step, not @semantic-release/exec ([1820ad7](https://github.com/TrueTechTeam/components/commit/1820ad769fe0ebe5c0cfec978b6fadb452b3c0f1))
+- publish via a raw npm publish command instead of @semantic-release/npm ([9448d9a](https://github.com/TrueTechTeam/components/commit/9448d9afeaff78bbcd4b07951f1d025fc047d64b))
+- skip lifecycle scripts on the actual npm publish ([7572fab](https://github.com/TrueTechTeam/components/commit/7572fab8852c038aed31dba6a5dd0ab5a8ea1507))
+- strip empty \_authToken line so npm actually attempts OIDC ([70a3996](https://github.com/TrueTechTeam/components/commit/70a3996487a94852bf498616abaee2dcf1a94cf5))
+
+### Features
+
+- **landing-app:** migrate auth from NextAuth to Supabase ([#6](https://github.com/TrueTechTeam/components/issues/6)) ([08bc271](https://github.com/TrueTechTeam/components/commit/08bc2719fd43da4312e6aba473aa91aa416b7ebe))
+
+### Reverts
+
+- workflows permission key doesn't exist for GITHUB_TOKEN ([be7d2e7](https://github.com/TrueTechTeam/components/commit/be7d2e734d3008480b0c733a72e934c50c47167b))
+
 # Changelog
 
 All notable changes to this project will be documented in this file.
