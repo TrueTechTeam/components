@@ -141,7 +141,7 @@ const VARIANT_ICONS: Record<ToastVariant, IconName> = {
  * Toast component
  * Single toast notification with auto-dismiss and actions
  */
-export const Toast: React.FC<ToastProps> = ({
+export const Toast = ({
   id,
   variant = 'info',
   title,
@@ -161,7 +161,15 @@ export const Toast: React.FC<ToastProps> = ({
   className,
   'data-testid': testId,
   style,
+  // Internal-only fields from ToastInstance (ToastContext) - not valid DOM attributes
+  createdAt: _createdAt,
+  pausedAt: _pausedAt,
+  remainingDuration: _remainingDuration,
   ...restProps
+}: ToastProps & {
+  createdAt?: number;
+  pausedAt?: number;
+  remainingDuration?: number;
 }) => {
   const [isPaused, setIsPaused] = useState(false);
   const [progress, setProgress] = useState(100);
