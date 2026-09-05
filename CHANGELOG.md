@@ -1,3 +1,9 @@
+## [1.1.1](https://github.com/TrueTechTeam/components/compare/v1.1.0...v1.1.1) (2026-09-05)
+
+### Bug Fixes
+
+- stabilize memoized hook return values and export IconButton ([a6e03ce](https://github.com/TrueTechTeam/components/commit/a6e03ce1012b23b3d50b5f4a2d0e947ff31c30f7))
+
 # [1.1.0](https://github.com/TrueTechTeam/components/compare/v1.0.1...v1.1.0) (2026-09-05)
 
 ### Bug Fixes
