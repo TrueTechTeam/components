@@ -1,3 +1,14 @@
+# [1.2.0](https://github.com/TrueTechTeam/components/compare/v1.1.1...v1.2.0) (2026-09-05)
+
+### Bug Fixes
+
+- **slider:** replace deprecated appearance: slider-vertical ([9ebb33b](https://github.com/TrueTechTeam/components/commit/9ebb33b84ab9793e15ab63f78d858dad95bf0902))
+- **toast:** strip internal instance fields before spreading onto DOM ([515a2ba](https://github.com/TrueTechTeam/components/commit/515a2ba5aec38adcb9ca53b7008e2289cf30723c))
+
+### Features
+
+- **buttons:** add ButtonGroup component ([51134a4](https://github.com/TrueTechTeam/components/commit/51134a428fa401ddd4229e49a0afbfd3f7bbf420))
+
 ## [1.1.1](https://github.com/TrueTechTeam/components/compare/v1.1.0...v1.1.1) (2026-09-05)
 
 ### Bug Fixes
