@@ -21,8 +21,7 @@ paired with an icon button (e.g. "Send" + a dropdown chevron).
 
 Every button in the group shares the same \`variant\` (so the same text/icon and background
 color) by default. Give an individual child its own \`variant\` prop to opt it out and give it a
-different look - the rest of the group is unaffected. Buttons are separated by a divider colored
-to match each button's own text color.
+different look - the rest of the group is unaffected.
 
 ## CSS Variables
 
@@ -39,11 +38,6 @@ to match each button's own text color.
       <td><code>--button-group-radius</code></td>
       <td><a href="?path=/story/theme-css-variables--borders"><code>var(--radius-md)</code></a></td>
       <td>Shared outer border radius</td>
-    </tr>
-    <tr>
-      <td><code>--button-group-divider-color</code></td>
-      <td><code>var(--button-color)</code></td>
-      <td>Divider line color between adjacent buttons (defaults to each button's own text color)</td>
     </tr>
   </tbody>
 </table>

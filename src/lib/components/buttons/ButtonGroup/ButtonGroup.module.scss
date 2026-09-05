@@ -1,14 +1,6 @@
 .buttonGroup {
   --button-group-radius: var(--radius-md);
 
-  // Fallback so this file declares --button-color locally (Button/IconButton always override
-  // it per variant on the button element itself, so this default is rarely, if ever, seen).
-  --button-color: var(--theme-text-primary);
-
-  // Resolved lazily per descendant, so the divider follows whichever variant that button ends
-  // up with even when overridden away from the group's shared variant.
-  --button-group-divider-color: var(--button-color);
-
   display: inline-flex;
   border-radius: var(--button-group-radius);
   overflow: hidden;
@@ -46,17 +38,6 @@
     > button:last-child {
       --button-radius: 0 0 var(--button-group-radius) var(--button-group-radius);
     }
-
-    // Divider between adjacent buttons
-    > button + button::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 1px;
-      background: var(--button-group-divider-color);
-    }
   }
 
   &[data-orientation='horizontal'] {
@@ -66,17 +47,6 @@
 
     > button:last-child {
       --button-radius: 0 var(--button-group-radius) var(--button-group-radius) 0;
-    }
-
-    // Divider between adjacent buttons
-    > button + button::before {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 1px;
-      height: 100%;
-      background: var(--button-group-divider-color);
     }
   }
 

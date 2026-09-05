@@ -38,8 +38,8 @@ export interface ButtonGroupProps extends BaseComponentProps {
  * icon button.
  *
  * Buttons share the group's `variant` (same text/icon and background color) by
- * default, and are separated by a divider colored to match that text color.
- * Pass `variant` directly on a child to opt it out and give it a different look.
+ * default. Pass `variant` directly on a child to opt it out and give it a
+ * different look.
  *
  * @example
  * ```tsx
