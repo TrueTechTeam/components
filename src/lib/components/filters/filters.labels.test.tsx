@@ -10,8 +10,9 @@ import {
   FilterModal,
   FilterPopover,
   FilterSidebar,
+  FilterContext,
 } from './index';
-import type { FilterDefinition, FilterValue } from './types';
+import type { FilterContextValue, FilterDefinition, FilterValue } from './types';
 
 const options = [
   { value: 'a', label: 'Alpha' },
@@ -193,5 +194,54 @@ describe('filter labels', () => {
   it('FilterAccordion translates the General section', () => {
     renderWith({ 'filterAccordion.general': 'Général' }, <FilterAccordion />);
     expect(screen.getByText('Général')).toBeInTheDocument();
+  });
+
+  describe('ListSelectFilter loading state', () => {
+    const loadingFilter: FilterDefinition = { id: 'l', type: 'list-select', label: 'L' };
+    const ctxValue = {
+      values: {},
+      getFilter: () => loadingFilter,
+      getFilterMeta: () => undefined,
+      isFilterActive: () => false,
+      isFilterVisible: () => true,
+      isFilterEnabled: () => true,
+      loadingFilters: new Set<string>(),
+      touched: new Set<string>(),
+      errors: {},
+      getFilterOptions: () => ({
+        options: [],
+        loading: true,
+        error: null,
+        hasMore: false,
+        loadMore: () => {},
+      }),
+      setFilterValue: () => {},
+      clearFilter: () => {},
+      touchFilter: () => {},
+      setFilterError: () => {},
+    } as unknown as FilterContextValue;
+
+    const renderLoading = (labels?: Record<string, string>) =>
+      render(
+        <LabelsProvider labels={labels}>
+          <FilterContext.Provider value={ctxValue}>
+            <FilterField filterId="l" />
+          </FilterContext.Provider>
+        </LabelsProvider>
+      );
+
+    it('translates the loading text', () => {
+      renderLoading({ 'listSelectFilter.loading': 'Chargement…' });
+      expect(screen.getByText('Chargement…')).toBeInTheDocument();
+    });
+
+    it('shows English Loading... by default', () => {
+      render(
+        <FilterContext.Provider value={ctxValue}>
+          <FilterField filterId="l" />
+        </FilterContext.Provider>
+      );
+      expect(screen.getByText('Loading...')).toBeInTheDocument();
+    });
   });
 });
