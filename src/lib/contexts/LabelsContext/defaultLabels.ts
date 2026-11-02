@@ -182,6 +182,10 @@ export const DEFAULT_LABELS = {
   'dateRangePicker.last30Days': 'Last 30 Days',
   'dateRangePicker.thisMonth': 'This Month',
   'dateRangePicker.lastMonth': 'Last Month',
+  'listSelectFilter.loading': 'Loading...',
+  'listSelectFilter.noOptions': 'No options found',
+  'kanbanColumn.empty': 'Drop items here',
+  'filterAccordion.general': 'General',
 } as const satisfies Record<string, string>;
 
 export type LabelKey = keyof typeof DEFAULT_LABELS;

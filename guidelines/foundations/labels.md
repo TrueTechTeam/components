@@ -209,3 +209,7 @@ Build translation files from the exported `DEFAULT_LABELS` (prefix each key with
 | `dateRangePicker.last30Days`            | Last 30 Days                                                    |
 | `dateRangePicker.thisMonth`             | This Month                                                      |
 | `dateRangePicker.lastMonth`             | Last Month                                                      |
+| `listSelectFilter.loading`              | Loading...                                                      |
+| `listSelectFilter.noOptions`            | No options found                                                |
+| `kanbanColumn.empty`                    | Drop items here                                                 |
+| `filterAccordion.general`               | General                                                         |

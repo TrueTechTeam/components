@@ -176,7 +176,7 @@ export const FilterAccordion = ({
         {groupedFilters.ungrouped.length > 0 && (
           <Accordion
             id="ungrouped"
-            header="General"
+            header={t('filterAccordion.general')}
             isOpen={expandedIds.has('ungrouped')}
             onOpenChange={() => handleToggle('ungrouped')}
           >

@@ -55,4 +55,12 @@ describe('dnd labels', () => {
     expect(screen.getByLabelText('Liste')).toBeInTheDocument();
     expect(screen.getByLabelText('Grille')).toBeInTheDocument();
   });
+
+  it('KanbanBoard translates the empty column text', () => {
+    withLabels(
+      { 'kanbanColumn.empty': 'Déposez ici' },
+      <KanbanBoard columns={[{ id: 'c', title: 'C', items: [] }]} renderCard={() => null} />
+    );
+    expect(screen.getByText('Déposez ici')).toBeInTheDocument();
+  });
 });
