@@ -29,6 +29,7 @@ $spacing-xxl: $spacing-unit * 12; // 48px
 
   // Typography
   --font-family-primary: system-ui, -apple-system, blinkmacsystemfont, 'Segoe UI', sans-serif;
+  --font-family-secondary: var(--font-family-primary);
   --font-family-mono: ui-monospace, sfmono-regular, menlo, consolas, 'Liberation Mono', monospace;
   --font-size-xs: 0.75rem; // 12px
   --font-size-sm: 0.875rem; // 14px

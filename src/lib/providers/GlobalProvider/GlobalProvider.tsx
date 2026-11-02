@@ -1,4 +1,4 @@
-import React, { useEffect, type ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 import { ThemeProvider } from '../../contexts/ThemeContext';
 import {
   PageMessagesProvider,
@@ -94,23 +94,8 @@ export function GlobalProvider({
   alertConfig,
   toastConfig,
 }: GlobalProviderProps) {
-  // Apply theme overrides if provided
-  useEffect(() => {
-    if (themeConfig?.theme && injectGlobalStyles) {
-      const { colors } = themeConfig.theme;
-      if (colors) {
-        Object.entries(colors).forEach(([key, value]) => {
-          if (value) {
-            const cssVarName = `--theme-${key.replace(/([A-Z])/g, '-$1').toLowerCase()}`;
-            document.documentElement.style.setProperty(cssVarName, value);
-          }
-        });
-      }
-    }
-  }, [themeConfig, injectGlobalStyles]);
-
   return (
-    <ThemeProvider themeConfig={themeConfig}>
+    <ThemeProvider themeConfig={themeConfig} applyOverrides={injectGlobalStyles}>
       <PageMessagesProvider {...pageMessagesConfig}>
         <DialogProvider {...dialogConfig}>
           <AlertProvider {...alertConfig}>

@@ -79,6 +79,8 @@ export type {
   ThemeShadows,
   Theme,
   ThemeOverride,
+  ThemeColorOverrides,
+  ThemeShadeKey,
   ThemeConfig,
   ThemeMode,
   // Component types
@@ -105,6 +107,7 @@ export {
   gridSpacing,
   isDarkMode,
   getThemeMode,
+  themeOverrideToCssVars,
 } from './lib/utils';
 
 // Validation Utils
