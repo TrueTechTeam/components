@@ -7,3 +7,4 @@
 export * from './AppProvider';
 export * from './router';
 export * from './params';
+export * from './page';
