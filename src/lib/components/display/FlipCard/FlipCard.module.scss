@@ -11,7 +11,7 @@
   --flipcard-bg-front: var(--theme-surface-primary);
   --flipcard-bg-back: var(--theme-surface-secondary);
   --flipcard-border-color: var(--theme-border-primary);
-  --flipcard-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  --flipcard-shadow: var(--theme-shadow-md);
 
   perspective: var(--flipcard-perspective);
   width: var(--flipcard-width);
@@ -25,6 +25,7 @@
 
     &:focus-visible {
       @include focus-ring;
+
       border-radius: var(--flipcard-border-radius);
     }
   }
@@ -75,7 +76,6 @@
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
-  -webkit-backface-visibility: hidden;
   border-radius: var(--flipcard-border-radius);
   overflow: hidden;
   box-shadow: var(--flipcard-shadow);

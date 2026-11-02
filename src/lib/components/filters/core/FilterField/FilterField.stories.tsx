@@ -28,7 +28,7 @@ from the FilterProvider context.
 <tbody>
 <tr>
 <td><code>--filter-field-animation</code></td>
-<td><code>filterFieldFadeIn 0.2s ease-out</code></td>
+<td><code>filter-field-fade-in 0.2s ease-out</code></td>
 <td>Animation for visibility changes</td>
 </tr>
 </tbody>

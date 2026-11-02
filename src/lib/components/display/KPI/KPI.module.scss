@@ -2,13 +2,17 @@
 @use '../../../styles/mixins/spacing' as *;
 
 .kpi {
+  &:focus-visible {
+    @include focus-ring;
+  }
+
   // CSS variables with defaults
   --kpi-bg: var(--theme-background-primary);
   --kpi-border: 1px solid var(--theme-border-primary);
   --kpi-padding: var(--spacing-lg);
   --kpi-border-radius: var(--radius-lg);
   --kpi-gap: var(--spacing-md);
-  --kpi-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --kpi-shadow: var(--theme-shadow-sm);
 
   display: flex;
   flex-direction: column;
@@ -18,10 +22,10 @@
   border: var(--kpi-border);
   border-radius: var(--kpi-border-radius);
   box-shadow: var(--kpi-shadow);
-  transition: box-shadow 0.2s ease;
+  transition: box-shadow var(--duration-fast) var(--ease-standard);
 
   &:hover {
-    --kpi-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    --kpi-shadow: var(--theme-shadow-md);
   }
 
   // Size styles
@@ -106,22 +110,22 @@
 
   .kpi[data-variant='success'] & {
     background: var(--theme-success-disabled);
-    color: var(--theme-text-on-primary);
+    color: var(--theme-success-text);
   }
 
   .kpi[data-variant='warning'] & {
     background: var(--theme-warning-disabled);
-    color: var(--theme-text-contrast);
+    color: var(--theme-warning-text);
   }
 
   .kpi[data-variant='danger'] & {
     background: var(--theme-error-disabled);
-    color: var(--theme-text-on-primary);
+    color: var(--theme-error-text);
   }
 
   .kpi[data-variant='info'] & {
     background: var(--theme-info-disabled);
-    color: var(--theme-text-on-primary);
+    color: var(--theme-info-text);
   }
 
   .kpi[data-size='sm'] & {

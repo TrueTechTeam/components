@@ -12,10 +12,12 @@
     stroke-dasharray: 1, 150;
     stroke-dashoffset: 0;
   }
+
   50% {
     stroke-dasharray: 90, 150;
     stroke-dashoffset: -35;
   }
+
   100% {
     stroke-dasharray: 90, 150;
     stroke-dashoffset: -124;
@@ -29,6 +31,7 @@
     transform: scale(0);
     opacity: 0.5;
   }
+
   40% {
     transform: scale(1);
     opacity: 1;
@@ -41,6 +44,7 @@
   100% {
     transform: scaleY(0.4);
   }
+
   20% {
     transform: scaleY(1);
   }
@@ -51,10 +55,12 @@
     transform: scale(0.8);
     opacity: 1;
   }
+
   50% {
     transform: scale(1);
     opacity: 0.5;
   }
+
   100% {
     transform: scale(0.8);
     opacity: 1;
@@ -129,7 +135,7 @@
   }
 
   &[data-variant='warning'] {
-    --spinner-color: var(--theme-warning);
+    --spinner-color: var(--theme-warning-500);
   }
 
   &[data-variant='danger'] {
@@ -145,7 +151,7 @@
   }
 
   &[data-variant='currentColor'] {
-    --spinner-color: currentColor;
+    --spinner-color: currentcolor;
   }
 
   // Reduced motion support
@@ -272,7 +278,7 @@
   padding: 0;
   margin: -1px;
   overflow: hidden;
-  clip: rect(0, 0, 0, 0);
+  clip-path: inset(50%);
   white-space: nowrap;
   border: 0;
 }

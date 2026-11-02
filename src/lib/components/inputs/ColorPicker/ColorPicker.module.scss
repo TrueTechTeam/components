@@ -10,7 +10,7 @@
 
 .label {
   font-size: var(--font-size-base);
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   color: var(--theme-text-primary);
 }
 
@@ -22,6 +22,10 @@
 }
 
 .swatchButton {
+  &:focus-visible {
+    @include focus-ring;
+  }
+
   @include button-reset;
 
   width: 32px !important;
@@ -32,7 +36,10 @@
   border: 2px solid var(--theme-control-border);
   border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition-property:
+    color, background-color, border-color, outline-color, box-shadow, opacity, transform;
+  transition-duration: var(--duration-fast);
+  transition-timing-function: var(--ease-standard);
   overflow: hidden;
   position: relative;
 
@@ -165,6 +172,10 @@
 }
 
 .presetColor {
+  &:focus-visible {
+    @include focus-ring;
+  }
+
   @include button-reset;
 
   width: 32px;
@@ -172,7 +183,10 @@
   border: 2px solid var(--theme-neutral-300);
   border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition-property:
+    color, background-color, border-color, outline-color, box-shadow, opacity, transform;
+  transition-duration: var(--duration-fast);
+  transition-timing-function: var(--ease-standard);
 
   &:disabled {
     opacity: 0.5;
@@ -186,7 +200,7 @@
 }
 
 .required {
-  color: var(--theme-error);
+  color: var(--theme-error-text);
 
   .label[data-required='true'] & {
     margin-left: 2px;
@@ -198,6 +212,6 @@
   color: var(--theme-text-secondary);
 
   &[data-error='true'] {
-    color: var(--theme-error);
+    color: var(--theme-error-text);
   }
 }

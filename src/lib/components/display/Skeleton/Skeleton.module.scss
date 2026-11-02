@@ -5,9 +5,11 @@
   0% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.4;
   }
+
   100% {
     opacity: 1;
   }
@@ -17,9 +19,11 @@
   0% {
     transform: translateX(-100%);
   }
+
   50% {
     transform: translateX(100%);
   }
+
   100% {
     transform: translateX(100%);
   }
@@ -43,11 +47,8 @@
     &::after {
       content: '';
       position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      inset: 0;
+      background: linear-gradient(90deg, transparent, rgb(255 255 255 / 40%), transparent);
       animation: skeleton-wave 2s linear infinite;
     }
   }
@@ -55,6 +56,7 @@
   // Variant: text
   &[data-variant='text'] {
     --skeleton-radius: var(--radius-sm);
+
     transform: scale(1, 0.6);
     transform-origin: 0 60%;
   }
@@ -80,4 +82,12 @@
   flex-direction: column;
   gap: var(--spacing-sm);
   width: 100%;
+}
+
+// Reduced motion (MOTION-3): drop decorative animation; the state is still conveyed statically
+@media (prefers-reduced-motion: reduce) {
+  .skeleton,
+  .skeleton::after {
+    animation: none;
+  }
 }

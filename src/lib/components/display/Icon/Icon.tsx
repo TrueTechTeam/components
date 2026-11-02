@@ -87,14 +87,20 @@ export function Icon({
     ...style,
   } as React.CSSProperties;
 
+  // Icons are decorative unless given an accessible name: an unlabeled icon next to text would
+  // otherwise be announced by its registry name ("chevron-down", "error").
+  const accessibleName = ariaLabel || title;
+  const a11yProps = accessibleName
+    ? { role: 'img', 'aria-label': accessibleName }
+    : { 'aria-hidden': true as const };
+
   return (
     <span
       className={`${styles.icon} ${className || ''}`}
       style={iconStyle}
       data-testid={testId || `icon-${name}`}
-      role="img"
-      aria-label={ariaLabel || title || name}
       title={title}
+      {...a11yProps}
     >
       <IconComponent />
     </span>

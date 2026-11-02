@@ -103,6 +103,25 @@ const preview: Preview = {
       container: Container,
     },
     layout: 'centered',
+    options: {
+      storySort: {
+        order: [
+          'Buttons',
+          'Display',
+          'Inputs',
+          'Overlays',
+          'Navigation',
+          'Layout',
+          'Forms',
+          'Filters',
+          'DnD',
+          'Patterns',
+          'Hooks',
+          'Providers',
+          'Theme',
+        ],
+      },
+    },
   },
   decorators: [
     (Story) => (

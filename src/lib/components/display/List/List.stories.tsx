@@ -52,7 +52,7 @@ Versatile list component supporting selection, grouping, search, bulk actions, e
 </tr>
 <tr>
 <td><code>--list-item-selected-bg</code></td>
-<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-primary-subtle)</code></a>, rgba(37, 99, 235, 0.08)</td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-primary-50)</code></a>, rgba(37, 99, 235, 0.08)</td>
 <td>Background color of selected items</td>
 </tr>
 <tr>

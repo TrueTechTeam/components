@@ -12,6 +12,8 @@ export interface ToggleFilterProps extends BaseComponentProps {
   filterId: string;
   /** Override label */
   label?: string;
+  /** Show label */
+  showLabel?: boolean;
   /** Size variant */
   size?: ComponentSize;
   /** Additional props for Toggle component */
@@ -25,6 +27,7 @@ export const ToggleFilter = ({
   ref,
   filterId,
   label: labelOverride,
+  showLabel = true,
   size = 'md',
   toggleProps,
   className,
@@ -50,7 +53,7 @@ export const ToggleFilter = ({
       <Toggle
         checked={value ?? false}
         onChange={handleChange}
-        label={label}
+        label={showLabel ? label : undefined}
         disabled={!isEnabled}
         error={!!error}
         errorMessage={error ?? undefined}

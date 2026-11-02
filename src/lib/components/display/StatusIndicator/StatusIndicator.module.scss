@@ -7,7 +7,14 @@
   --indicator-dot-color: var(--theme-neutral-500);
   --indicator-gap: var(--spacing-xs);
   --indicator-font-size: var(--font-size-sm);
-  --indicator-transition: all 0.2s ease;
+  --indicator-transition:
+    color var(--duration-fast) var(--ease-standard),
+    background-color var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard),
+    outline-color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard),
+    opacity var(--duration-fast) var(--ease-standard),
+    transform var(--duration-fast) var(--ease-standard);
 
   // Base styles
   display: inline-flex;
@@ -103,7 +110,17 @@
   100% {
     opacity: 1;
   }
+
   50% {
     opacity: 0.5;
+  }
+}
+
+// Reduced motion (MOTION-3): drop decorative animation; the state is still conveyed statically
+@media (prefers-reduced-motion: reduce) {
+  .statusIndicator,
+  .statusIndicator *,
+  .statusIndicator::after {
+    animation: none;
   }
 }

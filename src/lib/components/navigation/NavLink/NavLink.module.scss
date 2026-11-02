@@ -79,6 +79,7 @@
   // Variant: underline
   &[data-variant='underline'] {
     --nav-link-radius: 0;
+
     padding-bottom: calc(var(--nav-link-padding-y) + var(--nav-link-underline-height));
 
     &::after {
@@ -105,7 +106,7 @@
   &[data-variant='pill'] {
     --nav-link-radius: var(--radius-full);
     --nav-link-bg-hover: var(--theme-background-tertiary);
-    --nav-link-bg-active: var(--theme-primary-100, rgba(0, 173, 181, 0.1));
+    --nav-link-bg-active: var(--theme-primary-100);
   }
 
   // Variant: ghost

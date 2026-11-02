@@ -4,10 +4,10 @@
 
 .numberRangeFilter {
   --number-range-gap: var(--spacing-sm, 8px);
-  --number-range-label-color: var(--theme-text-primary, #1a1a1a);
-  --number-range-helper-color: var(--theme-text-tertiary, #666666);
-  --number-range-error-color: var(--theme-error, #dc2626);
-  --number-range-separator-color: var(--theme-text-secondary, #4a5058);
+  --number-range-label-color: var(--theme-text-primary);
+  --number-range-helper-color: var(--theme-text-tertiary);
+  --number-range-error-color: var(--theme-error);
+  --number-range-separator-color: var(--theme-text-secondary);
 
   display: flex;
   flex-direction: column;

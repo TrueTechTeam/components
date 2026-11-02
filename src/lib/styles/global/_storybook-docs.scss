@@ -267,7 +267,7 @@
 }
 
 // Control action buttons (reset, etc)
-.docblock-argstable button:not([class*='Bool']):not([role='switch']) {
+.docblock-argstable button:not([class*='Bool'], [role='switch']) {
   background: var(--theme-primary);
   border: 1px solid var(--theme-border-primary);
   border-radius: var(--radius-md);
@@ -445,7 +445,7 @@ hr {
   border: 1px solid var(--theme-border-primary);
   color: var(--theme-text-primary);
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-lg);
+  box-shadow: var(--theme-shadow-lg);
 }
 
 // =============================================================================

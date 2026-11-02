@@ -2,6 +2,11 @@
 @use '../../../styles/mixins/spacing' as *;
 
 .menuItem {
+  // Inset so the ring isn't clipped by the menu's scroll container
+  &:focus-visible {
+    @include focus-ring($offset: -2px);
+  }
+
   --menu-item-padding-x: var(--spacing-md);
   --menu-item-padding-y: var(--spacing-sm);
   --menu-item-bg-hover: var(--theme-interactive-hover);

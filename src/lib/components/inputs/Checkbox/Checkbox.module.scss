@@ -32,8 +32,15 @@
   --checkbox-bg-checked: var(--theme-primary);
   --checkbox-border-checked: var(--theme-primary);
   --checkbox-icon-color: var(--theme-text-on-primary);
-  --checkbox-focus-ring: var(--theme-interactive-focus);
-  --checkbox-transition: all 0.15s ease-in-out;
+  --checkbox-focus-ring: var(--focus-ring-color);
+  --checkbox-transition:
+    color var(--duration-fast) var(--ease-standard),
+    background-color var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard),
+    outline-color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard),
+    opacity var(--duration-fast) var(--ease-standard),
+    transform var(--duration-fast) var(--ease-standard);
 
   position: relative;
   display: inline-block;
@@ -175,7 +182,7 @@
 }
 
 .required {
-  color: var(--theme-error);
+  color: var(--theme-error-text);
 
   .labelText[data-required='true'] & {
     margin-left: 2px;
@@ -187,6 +194,6 @@
   color: var(--theme-text-tertiary);
 
   &[data-error='true'] {
-    color: var(--theme-error);
+    color: var(--theme-error-text);
   }
 }

@@ -25,7 +25,10 @@
   background-color: var(--toggle-button-bg);
   color: var(--toggle-button-inactive-color);
   cursor: pointer;
-  transition: all var(--transition-normal);
+  transition-property:
+    color, background-color, border-color, outline-color, box-shadow, opacity, transform;
+  transition-duration: var(--duration-fast);
+  transition-timing-function: var(--ease-standard);
   user-select: none;
 
   &:focus-visible {
@@ -115,5 +118,13 @@
 
   100% {
     transform: scale(1);
+  }
+}
+
+// Reduced motion (MOTION-3): drop decorative animation; the state is still conveyed statically
+@media (prefers-reduced-motion: reduce) {
+  .toggleButton,
+  .toggleButton * {
+    animation: none;
   }
 }

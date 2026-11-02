@@ -15,7 +15,7 @@
 
 .label {
   font-size: var(--font-size-base);
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   color: var(--theme-text-primary);
 
   .container.horizontal & {
@@ -37,49 +37,51 @@
   align-items: center;
   gap: var(--spacing-xs);
   padding: var(--spacing-xs);
-  min-height: 42px;
-  border: 1px solid var(--theme-border-primary);
+  min-height: var(--control-height-md);
+  border: 1px solid var(--theme-input-border);
   border-radius: var(--radius-md);
-  background: var(--theme-background-primary);
+  background: var(--theme-input-bg);
   cursor: text;
-  transition: all 0.15s ease;
+
+  @include transition(border-color, background-color, outline-color);
+
+  &:hover:not([data-disabled='true']) {
+    border-color: var(--theme-input-border-hover);
+  }
 
   &:focus-within {
-    border-color: var(--theme-primary-500);
-    box-shadow: 0 0 0 3px var(--theme-primary-200);
+    @include field-focus;
+  }
+
+  &[data-variant='secondary']:focus-within {
+    @include field-focus(var(--theme-secondary-500));
+  }
+
+  &[data-variant='tertiary']:focus-within {
+    @include field-focus(var(--theme-tertiary-500));
   }
 
   &[data-error='true'] {
-    border-color: var(--theme-error);
+    border-color: var(--theme-error-text);
 
     &:focus-within {
-      box-shadow: 0 0 0 3px var(--theme-error-hover);
+      @include field-focus(var(--theme-error-text));
     }
   }
 
   &[data-disabled='true'] {
-    background: var(--theme-neutral-100);
+    background: var(--theme-input-bg-disabled);
     cursor: not-allowed;
   }
 
   &[data-size='sm'] {
-    min-height: 34px;
-    padding: 4px;
+    min-height: var(--control-height-sm);
+    padding: var(--spacing-xs);
   }
 
   &[data-size='lg'] {
-    min-height: 50px;
+    min-height: var(--control-height-lg);
     padding: var(--spacing-sm);
-  }
-
-  &[data-variant='secondary']:focus-within {
-    border-color: var(--theme-secondary-500);
-    box-shadow: 0 0 0 3px var(--theme-secondary-200);
-  }
-
-  &[data-variant='tertiary']:focus-within {
-    border-color: var(--theme-tertiary-500);
-    box-shadow: 0 0 0 3px var(--theme-tertiary-200);
   }
 }
 
@@ -187,7 +189,7 @@
   color: var(--theme-text-secondary);
 
   &[data-error='true'] {
-    color: var(--theme-error);
+    color: var(--theme-error-text);
   }
 }
 
@@ -197,7 +199,7 @@
 }
 
 .required {
-  color: var(--theme-error);
+  color: var(--theme-error-text);
 
   .label[data-required='true'] & {
     margin-left: 2px;

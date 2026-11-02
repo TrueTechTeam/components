@@ -12,7 +12,7 @@
 
 .label {
   font-size: var(--font-size-base);
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   color: var(--theme-text-primary);
 }
 
@@ -20,7 +20,7 @@
   background: var(--theme-surface-elevated);
   border: 1px solid var(--theme-input-border);
   border-radius: var(--radius-md);
-  box-shadow: 0 4px 12px rgb(0 0 0 / 15%);
+  box-shadow: var(--theme-shadow-lg);
   display: flex;
   gap: var(--spacing-md);
 
@@ -43,6 +43,10 @@
 }
 
 .presetButton {
+  &:focus-visible {
+    @include focus-ring;
+  }
+
   @include button-reset;
 
   padding: var(--spacing-sm);
@@ -51,7 +55,10 @@
   color: var(--theme-text-primary);
   cursor: pointer;
   border-radius: var(--radius-sm);
-  transition: all 0.15s ease;
+  transition-property:
+    color, background-color, border-color, outline-color, box-shadow, opacity, transform;
+  transition-duration: var(--duration-fast);
+  transition-timing-function: var(--ease-standard);
 
   &:hover {
     background: var(--theme-neutral-100);
@@ -91,6 +98,10 @@
 }
 
 .navButton {
+  &:focus-visible {
+    @include focus-ring;
+  }
+
   @include button-reset;
 
   display: flex;
@@ -98,11 +109,14 @@
   justify-content: center;
   width: 32px;
   height: 32px;
-  font-size: 24px;
+  font-size: var(--font-size-2xl);
   line-height: 1;
   color: var(--theme-text-secondary);
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition-property:
+    color, background-color, border-color, outline-color, box-shadow, opacity, transform;
+  transition-duration: var(--duration-fast);
+  transition-timing-function: var(--ease-standard);
   border-radius: var(--radius-sm);
 
   &:hover {
@@ -140,6 +154,10 @@
 }
 
 .dayCell {
+  &:focus-visible {
+    @include focus-ring;
+  }
+
   @include button-reset;
 
   display: flex;
@@ -150,7 +168,10 @@
   font-size: var(--font-size-sm);
   color: var(--theme-text-primary);
   cursor: pointer;
-  transition: all 0.15s ease;
+  transition-property:
+    color, background-color, border-color, outline-color, box-shadow, opacity, transform;
+  transition-duration: var(--duration-fast);
+  transition-timing-function: var(--ease-standard);
   border-radius: var(--radius-sm);
   position: relative;
 
@@ -214,7 +235,7 @@
 }
 
 .required {
-  color: var(--theme-error);
+  color: var(--theme-error-text);
 
   .label[data-required='true'] & {
     margin-left: 2px;
@@ -226,6 +247,6 @@
   color: var(--theme-text-secondary);
 
   &[data-error='true'] {
-    color: var(--theme-error);
+    color: var(--theme-error-text);
   }
 }

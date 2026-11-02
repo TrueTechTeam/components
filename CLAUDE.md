@@ -42,6 +42,22 @@ src/lib/
 └── assets/              # Icons and static assets
 ```
 
+## Design Guidelines (read before any UI or style change)
+
+`guidelines/` holds the library's research-backed design rules. They are written for coding agents
+and shipped in the npm package (copied into `dist/` by the `copyGuidelines` plugin in
+`vite.config.ts`).
+
+- Start at `guidelines/decision-tree.md`. Apply rules by ID (`COLOR-1`, `CHOOSE-INPUT-4`, …) and
+  cite them in commits and PRs.
+- Creating or modifying a component: every MUST in
+  `guidelines/contributing/component-checklist.md` has to pass.
+- Known gaps between the current components and the guidelines are tracked in
+  `docs/design-audit.md`. Tick items off as they land.
+- When you add a component or change its purpose, update `guidelines/components/catalog.md` and
+  `guidelines/components/choosing.md` in the same PR. Consumers' agents rely on them.
+- When you add or rename a token, update `guidelines/foundations/tokens.md`.
+
 ## Component Development Guidelines
 
 ### File Structure for New Components
@@ -131,7 +147,11 @@ Available in `styles/theme/_variables.scss`:
 - **Spacing**: `--spacing-xs` (4px) to `--spacing-xxl` (48px)
 - **Radius**: `--radius-none`, `--radius-sm`, `--radius-md`, `--radius-lg`, `--radius-xl`, `--radius-full`
 - **Typography**: `--font-size-xs` to `--font-size-4xl`, `--font-weight-light` to `--font-weight-bold`
-- **Transitions**: `--transition-fast`, `--transition-normal`, `--transition-slow`
+- **Transitions**: `--transition-fast`, `--transition-normal`, `--transition-slow` (legacy). Prefer
+  `--duration-{instant,fast,normal,slow}` with `--ease-{standard,enter,exit}`
+- **Focus**: `--focus-ring-width`, `--focus-ring-offset`, `--focus-ring-color` (use `@include focus-ring`)
+- **Sizing**: `--target-size-min` (24px), `--target-size-touch` (44px),
+  `--content-width-{prose,form,page}`
 - **Z-index**: `--z-dropdown`, `--z-sticky`, `--z-modal`, `--z-popover`, `--z-tooltip`
 
 ## Testing

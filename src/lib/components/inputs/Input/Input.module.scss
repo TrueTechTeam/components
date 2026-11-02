@@ -43,12 +43,12 @@
 
 .inputWrapper {
   // CSS Variables for theming - can be overridden by parent className
-  --input-bg: var(--theme-background-primary);
-  --input-border-color: var(--theme-border-primary);
-  --input-border-color-hover: var(--theme-primary);
-  --input-border-color-focus: var(--theme-primary);
-  --input-text-color: var(--theme-text-primary);
-  --input-placeholder-color: var(--theme-text-tertiary);
+  --input-bg: var(--theme-input-bg);
+  --input-border-color: var(--theme-input-border);
+  --input-border-color-hover: var(--theme-input-border-hover);
+  --input-border-color-focus: var(--focus-ring-color);
+  --input-text-color: var(--theme-input-text);
+  --input-placeholder-color: var(--theme-input-placeholder);
   --input-border-width: 1px;
   --input-border-radius: var(--radius-md);
   --input-padding-x: calc(var(--spacing-unit) * 3);
@@ -59,32 +59,6 @@
   flex-direction: column;
   gap: spacing(1);
   width: 100%;
-
-  &[data-state='focused'] {
-    border-color: var(--input-border-color-focus);
-
-    @include focus-ring(var(--input-border-color-focus), 0);
-  }
-
-  &[data-state='error'] {
-    --input-border-color: var(--theme-error);
-    --input-border-color-hover: var(--theme-error);
-    --input-border-color-focus: var(--theme-error);
-  }
-
-  &[data-state='disabled'] {
-    --input-bg: var(--theme-interactive-disabled);
-    --input-text-color: var(--theme-text-disabled);
-
-    cursor: not-allowed;
-    opacity: 0.6;
-  }
-
-  &[data-state='readonly'] {
-    --input-bg: var(--theme-background-secondary);
-
-    cursor: default;
-  }
 
   // Size variants
   &[data-size='sm'] {
@@ -158,7 +132,7 @@
   font-weight: var(--font-weight-semibold);
 
   .inputLabel[data-required='true'] & {
-    color: var(--theme-error);
+    color: var(--theme-error-text);
     margin-left: spacing(0.5);
   }
 }
@@ -172,11 +146,37 @@
   background-color: var(--input-bg);
   border: var(--input-border-width) solid var(--input-border-color);
   border-radius: var(--input-border-radius);
+  min-height: var(--control-height-md);
 
-  @include transition(border-color, background-color, box-shadow);
+  @include transition(border-color, background-color, outline-color);
 
-  &:hover:not([data-state='disabled']) {
+  &:hover:not([data-state='disabled'], [data-state='readonly']) {
     border-color: var(--input-border-color-hover);
+  }
+
+  // State attributes are rendered on this element (see Input.tsx)
+  &[data-state='error'] {
+    --input-border-color: var(--theme-error-text);
+    --input-border-color-hover: var(--theme-error-text);
+    --input-border-color-focus: var(--theme-error-text);
+  }
+
+  &:focus-within {
+    @include field-focus(var(--input-border-color-focus));
+  }
+
+  &[data-state='disabled'] {
+    --input-bg: var(--theme-input-bg-disabled);
+    --input-text-color: var(--theme-text-disabled);
+
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
+
+  &[data-state='readonly'] {
+    --input-bg: var(--theme-background-secondary);
+
+    cursor: default;
   }
 }
 
@@ -243,7 +243,7 @@
 .errorMessage {
   flex: 1;
   font-size: var(--font-size-xs);
-  color: var(--theme-error);
+  color: var(--theme-error-text);
   line-height: var(--line-height-tight);
   display: flex;
   align-items: flex-start;
@@ -265,12 +265,12 @@
   line-height: var(--line-height-tight);
 
   &.atWarning {
-    color: var(--theme-warning);
+    color: var(--theme-warning-text);
     font-weight: var(--font-weight-medium);
   }
 
   &.atLimit {
-    color: var(--theme-error);
+    color: var(--theme-error-text);
     font-weight: var(--font-weight-semibold);
   }
 

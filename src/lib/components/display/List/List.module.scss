@@ -1,16 +1,19 @@
 @use '../../../styles/mixins/component' as *;
 
+// Set inline by List.tsx:
+// @runtime-vars --list-max-height --list-columns
+
 .listContainer {
   // CSS Variables for theming
-  --list-border-color: var(--theme-border-primary, #e0e0e0);
-  --list-bg: var(--theme-surface-primary, #ffffff);
-  --list-item-bg: var(--theme-surface-primary, #ffffff);
-  --list-item-hover-bg: var(--theme-interactive-hover, rgba(0, 0, 0, 0.04));
-  --list-item-selected-bg: var(--theme-primary-subtle, rgba(37, 99, 235, 0.08));
-  --list-item-focus-ring: var(--theme-primary, #3b82f6);
-  --list-text-color: var(--theme-text-primary, #1a1a1a);
-  --list-text-secondary: var(--theme-text-secondary, #666666);
-  --list-group-header-bg: var(--theme-surface-secondary, #f5f5f5);
+  --list-border-color: var(--theme-border-primary);
+  --list-bg: var(--theme-surface-primary);
+  --list-item-bg: var(--theme-surface-primary);
+  --list-item-hover-bg: var(--theme-interactive-hover);
+  --list-item-selected-bg: color-mix(in srgb, var(--theme-primary) 10%, transparent);
+  --list-item-focus-ring: var(--theme-primary);
+  --list-text-color: var(--theme-text-primary);
+  --list-text-secondary: var(--theme-text-secondary);
+  --list-group-header-bg: var(--theme-surface-secondary);
 
   width: 100%;
   display: flex;
@@ -186,10 +189,10 @@
       color: var(--list-text-secondary);
     }
 
-    &:focus {
-      outline: none;
+    &:focus-visible {
+      outline: var(--focus-ring-width) solid var(--list-item-focus-ring);
+      outline-offset: 0;
       border-color: var(--list-item-focus-ring);
-      box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
     }
   }
 }
@@ -395,7 +398,7 @@
   width: var(--list-avatar-size, 32px);
   height: var(--list-avatar-size, 32px);
   border-radius: 50%;
-  background: var(--theme-surface-secondary, #f0f0f0);
+  background: var(--theme-surface-secondary);
   overflow: hidden;
 
   img {
@@ -445,7 +448,7 @@
 .expandedContent {
   padding: var(--spacing-sm, 8px) var(--list-item-padding-x, 16px);
   padding-left: calc(var(--list-item-padding-x, 16px) + 32px + var(--spacing-sm, 8px));
-  background: var(--theme-surface-secondary, #f9f9f9);
+  background: var(--theme-surface-secondary);
   border-bottom: 1px solid var(--list-border-color);
   font-size: var(--list-font-size, 0.875rem);
 }
@@ -472,12 +475,8 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: var(--theme-surface-overlay, rgba(255, 255, 255, 0.7));
+  background: color-mix(in srgb, var(--theme-surface-primary) 70%, transparent);
   z-index: 5;
-
-  @media (prefers-color-scheme: dark) {
-    background: var(--theme-surface-overlay, rgba(0, 0, 0, 0.5));
-  }
 }
 
 // Infinite scroll sentinel
@@ -532,12 +531,12 @@
   width: 16px;
   height: 16px;
   border-radius: 50%;
-  border: 2px solid var(--theme-border-primary, #d0d0d0);
+  border: 2px solid var(--theme-border-primary);
   position: relative;
   transition: border-color 0.15s ease;
 
   &[data-selected='true'] {
-    border-color: var(--theme-primary, #3b82f6);
+    border-color: var(--theme-primary);
 
     &::after {
       content: '';
@@ -548,7 +547,7 @@
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: var(--theme-primary, #3b82f6);
+      background: var(--theme-primary);
     }
   }
 }
@@ -565,7 +564,7 @@
 }
 
 // Responsive adjustments
-@media (max-width: 768px) {
+@media (width <= 768px) {
   .list {
     &[data-size='lg'] {
       --list-item-padding-x: var(--spacing-md, 16px);

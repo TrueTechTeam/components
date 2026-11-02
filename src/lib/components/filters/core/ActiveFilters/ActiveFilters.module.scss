@@ -4,7 +4,7 @@
 
 .activeFilters {
   --active-filters-gap: var(--spacing-sm, 8px);
-  --active-filters-show-more-color: var(--theme-primary, #2563eb);
+  --active-filters-show-more-color: var(--theme-primary);
 
   display: flex;
   align-items: center;
@@ -33,11 +33,11 @@
   transition: background-color 0.15s ease;
 
   &:hover {
-    background: var(--theme-interactive-hover, rgba(0, 0, 0, 0.04));
+    background: var(--theme-interactive-hover);
   }
 
   &:focus-visible {
-    outline: 2px solid var(--theme-primary, #2563eb);
+    outline: 2px solid var(--theme-primary);
     outline-offset: 2px;
   }
 }

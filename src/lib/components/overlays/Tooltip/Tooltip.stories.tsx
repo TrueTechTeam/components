@@ -63,7 +63,7 @@ Tooltip displays helpful text when hovering or focusing an element. Automaticall
 </tr>
 <tr>
 <td><code>--popover-border</code></td>
-<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-neutral-700)</code></a></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-border-primary)</code></a></td>
 <td>Tooltip border color</td>
 </tr>
 <tr>

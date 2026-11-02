@@ -9,7 +9,7 @@
 
 .label {
   font-size: var(--font-size-base);
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   color: var(--theme-text-primary);
 }
 
@@ -39,6 +39,10 @@
 }
 
 .item {
+  &:has(:focus-visible) {
+    @include focus-ring;
+  }
+
   @include button-reset;
 
   display: flex;
@@ -58,7 +62,12 @@
 
 .iconWrapper {
   font-size: var(--rating-size);
-  color: var(--theme-neutral-300);
+
+  // Not --theme-neutral-300: that's a border/divider token, and it's miscalibrated for
+  // icon contrast in dark theme (#31363f, nearly as dark as the background it sits on).
+  // --theme-text-tertiary is built to stay legible-but-muted against the surface in both
+  // themes.
+  color: var(--theme-text-tertiary);
   transition: color 0.15s ease;
 
   .item[data-filled='true'] & {
@@ -72,7 +81,7 @@
 }
 
 .required {
-  color: var(--theme-error);
+  color: var(--theme-error-text);
 
   .label[data-required='true'] & {
     margin-left: 2px;

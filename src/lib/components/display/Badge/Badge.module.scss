@@ -15,7 +15,6 @@
   align-items: center;
   justify-content: center;
   gap: var(--spacing-xs);
-
   background: var(--badge-bg);
   color: var(--badge-color);
   padding: var(--badge-padding);
@@ -34,27 +33,27 @@
 
   &[data-variant='secondary'] {
     --badge-bg: var(--theme-secondary-100);
-    --badge-color: var(--theme-secondary-700);
+    --badge-color: var(--theme-text-secondary);
   }
 
   &[data-variant='success'] {
     --badge-bg: var(--theme-success);
-    --badge-color: var(--theme-text-on-primary);
+    --badge-color: var(--theme-text-on-success);
   }
 
   &[data-variant='warning'] {
     --badge-bg: var(--theme-warning);
-    --badge-color: var(--theme-text-contrast);
+    --badge-color: var(--theme-text-on-warning);
   }
 
   &[data-variant='danger'] {
     --badge-bg: var(--theme-error);
-    --badge-color: var(--theme-text-on-primary);
+    --badge-color: var(--theme-text-on-error);
   }
 
   &[data-variant='info'] {
     --badge-bg: var(--theme-info);
-    --badge-color: var(--theme-text-on-primary);
+    --badge-color: var(--theme-text-on-info);
   }
 
   &[data-variant='neutral'] {

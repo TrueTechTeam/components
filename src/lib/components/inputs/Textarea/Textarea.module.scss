@@ -10,12 +10,12 @@
 
 .label {
   font-size: var(--font-size-base);
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   color: var(--theme-text-primary);
 }
 
 .required {
-  color: var(--theme-error);
+  color: var(--theme-error-text);
 
   .label[data-required='true'] & {
     margin-left: 2px;
@@ -29,16 +29,22 @@
 
 .textarea {
   // CSS Custom Properties
-  --textarea-bg: var(--theme-background-primary);
-  --textarea-border: var(--theme-neutral-400);
-  --textarea-text: var(--theme-text-primary);
-  --textarea-placeholder: var(--theme-text-tertiary);
-  --textarea-focus-border: var(--theme-primary-500);
-  --textarea-focus-ring: var(--theme-primary-200);
+  --textarea-bg: var(--theme-input-bg);
+  --textarea-border: var(--theme-input-border);
+  --textarea-text: var(--theme-input-text);
+  --textarea-placeholder: var(--theme-input-placeholder);
+  --textarea-focus-border: var(--focus-ring-color);
   --textarea-padding: var(--spacing-sm);
   --textarea-font-size: var(--font-size-base);
   --textarea-line-height: 1.5;
-  --textarea-transition: all 0.15s ease-in-out;
+  --textarea-transition:
+    color var(--duration-fast) var(--ease-standard),
+    background-color var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard),
+    outline-color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard),
+    opacity var(--duration-fast) var(--ease-standard),
+    transform var(--duration-fast) var(--ease-standard);
 
   width: 100%;
   font-family: inherit;
@@ -75,27 +81,22 @@
   // Variants
   &[data-variant='primary'] {
     --textarea-focus-border: var(--theme-primary-500);
-    --textarea-focus-ring: var(--theme-primary-200);
   }
 
   &[data-variant='secondary'] {
     --textarea-focus-border: var(--theme-secondary-500);
-    --textarea-focus-ring: var(--theme-secondary-200);
   }
 
   &[data-variant='success'] {
     --textarea-focus-border: var(--theme-success-500);
-    --textarea-focus-ring: var(--theme-success-hover);
   }
 
   &[data-variant='warning'] {
     --textarea-focus-border: var(--theme-warning-500);
-    --textarea-focus-ring: var(--theme-warning-hover);
   }
 
   &[data-variant='danger'] {
     --textarea-focus-border: var(--theme-error);
-    --textarea-focus-ring: var(--theme-error-hover);
   }
 
   // Resize control
@@ -115,23 +116,20 @@
     resize: vertical;
   }
 
-  // Focus state
-  &:focus {
-    border-color: var(--textarea-focus-border);
-    box-shadow: 0 0 0 3px var(--textarea-focus-ring);
-  }
-
   // Error state
   &[data-error='true'] {
-    --textarea-border: var(--theme-error);
-    --textarea-focus-border: var(--theme-error);
-    --textarea-focus-ring: var(--theme-error-hover);
+    --textarea-border: var(--theme-error-text);
+    --textarea-focus-border: var(--theme-error-text);
+  }
+
+  // Focus state
+  &:focus {
+    @include field-focus(var(--textarea-focus-border));
   }
 
   // Disabled state
   &:disabled {
-    background-color: var(--theme-neutral-100);
-    border-color: var(--theme-neutral-300);
+    background-color: var(--theme-input-bg-disabled);
     color: var(--theme-text-disabled);
     cursor: not-allowed;
     opacity: 0.6;
@@ -144,8 +142,8 @@
   }
 
   // Hover state
-  &:not(:disabled, :read-only):hover {
-    border-color: var(--textarea-focus-border);
+  &:not(:disabled, :read-only, :focus):hover {
+    border-color: var(--theme-input-border-hover);
   }
 }
 
@@ -161,12 +159,12 @@
   pointer-events: none;
 
   &[data-warning='true'] {
-    color: var(--theme-warning-600);
+    color: var(--theme-warning-text);
     font-weight: 500;
   }
 
   &[data-error='true'] {
-    color: var(--theme-error);
+    color: var(--theme-error-text);
     font-weight: 500;
   }
 }
@@ -176,6 +174,6 @@
   color: var(--theme-text-secondary);
 
   &[data-error='true'] {
-    color: var(--theme-error);
+    color: var(--theme-error-text);
   }
 }

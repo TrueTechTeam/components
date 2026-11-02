@@ -5,12 +5,12 @@ describe('Icon', () => {
   describe('rendering', () => {
     it('should render an icon', () => {
       render(<Icon name="check" />);
-      expect(screen.getByRole('img')).toBeInTheDocument();
+      expect(screen.getByTestId('icon-check')).toBeInTheDocument();
     });
 
     it('should render with custom className', () => {
       render(<Icon name="check" className="custom-icon" />);
-      const icon = screen.getByRole('img');
+      const icon = screen.getByTestId('icon-check');
       expect(icon).toHaveClass('custom-icon');
     });
 
@@ -47,19 +47,19 @@ describe('Icon', () => {
   describe('size', () => {
     it('should render with default size', () => {
       render(<Icon name="check" />);
-      const icon = screen.getByRole('img');
+      const icon = screen.getByTestId('icon-check');
       expect(icon).toHaveStyle({ '--icon-size': '24px' });
     });
 
     it('should render with custom numeric size', () => {
       render(<Icon name="check" size={32} />);
-      const icon = screen.getByRole('img');
+      const icon = screen.getByTestId('icon-check');
       expect(icon).toHaveStyle({ '--icon-size': '32px' });
     });
 
     it('should render with custom string size', () => {
       render(<Icon name="check" size="2rem" />);
-      const icon = screen.getByRole('img');
+      const icon = screen.getByTestId('icon-check');
       expect(icon).toHaveStyle({ '--icon-size': '2rem' });
     });
   });
@@ -67,27 +67,27 @@ describe('Icon', () => {
   describe('color', () => {
     it('should render with default color', () => {
       render(<Icon name="check" />);
-      const icon = screen.getByRole('img');
+      const icon = screen.getByTestId('icon-check');
       expect(icon).toHaveStyle({ '--icon-color': 'currentColor' });
     });
 
     it('should render with custom color', () => {
       render(<Icon name="check" color="#ff0000" />);
-      const icon = screen.getByRole('img');
+      const icon = screen.getByTestId('icon-check');
       expect(icon).toHaveStyle({ '--icon-color': '#ff0000' });
     });
 
     it('should render with CSS variable color', () => {
       render(<Icon name="check" color="var(--theme-primary)" />);
-      const icon = screen.getByRole('img');
+      const icon = screen.getByTestId('icon-check');
       expect(icon).toHaveStyle({ '--icon-color': 'var(--theme-primary)' });
     });
   });
 
   describe('accessibility', () => {
-    it('should have role="img"', () => {
-      render(<Icon name="check" />);
-      expect(screen.getByRole('img')).toBeInTheDocument();
+    it('should have role="img" when labeled', () => {
+      render(<Icon name="check" aria-label="Done" />);
+      expect(screen.getByRole('img', { name: 'Done' })).toBeInTheDocument();
     });
 
     it('should have aria-label from prop', () => {
@@ -100,9 +100,12 @@ describe('Icon', () => {
       expect(screen.getByLabelText('Check mark')).toBeInTheDocument();
     });
 
-    it('should use icon name as default aria-label', () => {
+    it('should be decorative (aria-hidden, no role) without a label', () => {
       render(<Icon name="check" />);
-      expect(screen.getByLabelText('check')).toBeInTheDocument();
+      const icon = screen.getByTestId('icon-check');
+      expect(icon).toHaveAttribute('aria-hidden', 'true');
+      expect(icon).not.toHaveAttribute('role');
+      expect(icon).not.toHaveAttribute('aria-label');
     });
   });
 

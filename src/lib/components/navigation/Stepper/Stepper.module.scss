@@ -21,6 +21,7 @@
   --stepper-transition: var(--transition-normal);
   --stepper-gap: var(--spacing-md);
   --stepper-font-size: var(--font-size-sm);
+
   // Reserve space for absolutely positioned labels (title + description + gap)
   --stepper-label-height: calc(var(--stepper-font-size) * 2.5 + var(--spacing-sm));
 
@@ -30,6 +31,7 @@
   &[data-orientation='horizontal'] {
     flex-direction: row;
     align-items: flex-start;
+
     // Reserve space for absolutely positioned labels
     padding-bottom: var(--stepper-label-height);
 
@@ -37,6 +39,7 @@
       display: flex;
       flex-direction: column;
       align-items: center;
+
       // Fixed width for indicator only - label is positioned absolutely
       width: var(--stepper-indicator-size);
       flex-shrink: 0;
@@ -129,7 +132,7 @@
     cursor: pointer;
 
     &:hover .indicator {
-      box-shadow: 0 0 0 4px var(--theme-primary-100, rgba(0, 173, 181, 0.1));
+      box-shadow: 0 0 0 4px var(--theme-primary-100);
     }
 
     &:focus-visible .indicator {
@@ -180,7 +183,7 @@
   width: 8px;
   height: 8px;
   border-radius: var(--radius-full);
-  background-color: currentColor;
+  background-color: currentcolor;
 }
 
 .number {
@@ -205,7 +208,7 @@
   }
 
   [data-error='true'] & {
-    color: var(--theme-error);
+    color: var(--theme-error-text);
   }
 }
 
@@ -223,7 +226,7 @@
 
 .errorMessage {
   font-size: calc(var(--stepper-font-size) * 0.85);
-  color: var(--theme-error);
+  color: var(--theme-error-text);
 }
 
 .connector {

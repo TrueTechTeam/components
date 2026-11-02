@@ -29,7 +29,7 @@
   }
 
   &[data-variant='warning'] {
-    --circle-fill-color: var(--theme-warning);
+    --circle-fill-color: var(--theme-warning-500);
   }
 
   &[data-variant='danger'] {

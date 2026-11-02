@@ -29,7 +29,7 @@ $spacing-xxl: $spacing-unit * 12; // 48px
 
   // Typography
   --font-family-primary: system-ui, -apple-system, blinkmacsystemfont, 'Segoe UI', sans-serif;
-  --font-family-mono: 'Courier New', monospace;
+  --font-family-mono: ui-monospace, sfmono-regular, menlo, consolas, 'Liberation Mono', monospace;
   --font-size-xs: 0.75rem; // 12px
   --font-size-sm: 0.875rem; // 14px
   --font-size-base: 1rem; // 16px
@@ -51,6 +51,37 @@ $spacing-xxl: $spacing-unit * 12; // 48px
   --transition-fast: 150ms ease-in-out;
   --transition-normal: 250ms ease-in-out;
   --transition-slow: 350ms ease-in-out;
+
+  // Motion - durations and easing as separate tokens (see guidelines/foundations/motion.md).
+  // Easing curves follow Material 3's standard set.
+  --duration-instant: 100ms; // hover/press color changes
+  --duration-fast: 150ms; // small state changes: toggles, checkboxes, tooltips
+  --duration-normal: 250ms; // medium surfaces: dropdowns, popovers, accordions
+  --duration-slow: 350ms; // large surfaces: dialogs, drawers, page-level panels
+  --ease-standard: cubic-bezier(0.2, 0, 0, 1); // on-screen movement and state changes
+  --ease-enter: cubic-bezier(0, 0, 0, 1); // elements entering (decelerate)
+  --ease-exit: cubic-bezier(0.3, 0, 1, 1); // elements leaving (accelerate)
+
+  // Focus ring (WCAG 2.4.7 / 2.4.13 - 2px solid, >= 3:1 against adjacent colors)
+  --focus-ring-width: 2px;
+  --focus-ring-offset: 2px;
+  --focus-ring-color: var(--theme-border-focus);
+
+  // Interaction target sizes (WCAG 2.5.8 minimum; 44px touch per Apple HIG / WCAG 2.5.5)
+  --target-size-min: 24px;
+  --target-size-touch: 44px;
+
+  // Control heights - Button, Input, Select, and other inline controls share these per size
+  --control-height-xs: 24px;
+  --control-height-sm: 32px;
+  --control-height-md: 40px;
+  --control-height-lg: 48px;
+  --control-height-xl: 56px;
+
+  // Readable content widths (50-75 characters per line for body text)
+  --content-width-prose: 70ch;
+  --content-width-form: 40rem; // 640px - single-column forms
+  --content-width-page: 80rem; // 1280px - max page content width
 
   // Z-index scale
   --z-dropdown: 1000;

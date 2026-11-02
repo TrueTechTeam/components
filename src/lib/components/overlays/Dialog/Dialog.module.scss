@@ -1,10 +1,13 @@
 @use '../../../styles/mixins/component' as *;
 @use '../../../styles/mixins/spacing' as *;
 
+// Set inline by Dialog.tsx:
+// @runtime-vars --dialog-backdrop-opacity --dialog-max-height --dialog-width
+
 // Dialog Backdrop
 .dialogBackdrop {
   // CSS Variables
-  --dialog-backdrop-bg: rgba(0, 0, 0, var(--dialog-backdrop-opacity, 0.5));
+  --dialog-backdrop-bg: rgb(0 0 0 / var(--dialog-backdrop-opacity, 0.5));
   --dialog-backdrop-blur: 4px;
   --dialog-animation-duration: 200ms;
   --dialog-animation-easing: cubic-bezier(0.16, 1, 0.3, 1);
@@ -124,7 +127,7 @@
   }
 
   // Mobile responsive
-  @media (max-width: 640px) {
+  @media (width <= 640px) {
     width: calc(100vw - var(--spacing-md) * 2) !important;
     max-width: calc(100vw - var(--spacing-md) * 2);
     margin: var(--spacing-md);
@@ -211,7 +214,7 @@
   }
 
   // Mobile responsive
-  @media (max-width: 480px) {
+  @media (width <= 480px) {
     flex-direction: column;
 
     > * {

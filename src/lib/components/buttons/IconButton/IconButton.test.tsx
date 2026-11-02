@@ -115,7 +115,7 @@ describe('IconButton', () => {
             data-testid={`button-${size}`}
           />
         );
-        const icon = container.querySelector('[role="img"]');
+        const icon = container.querySelector('[data-testid^="icon-"]');
         expect(icon).toHaveStyle({ '--icon-size': `${expectedSize}px` });
       });
     });

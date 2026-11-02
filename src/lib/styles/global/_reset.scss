@@ -49,3 +49,14 @@ h5,
 h6 {
   overflow-wrap: break-word;
 }
+
+// Reduced motion (WCAG 2.3.3 / guidelines MOTION-3): collapse transitions everywhere. Keyframe
+// animations are handled per component so functional ones (spinners) keep working.
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

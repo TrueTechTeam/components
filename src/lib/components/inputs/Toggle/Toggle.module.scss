@@ -50,8 +50,16 @@
   --toggle-bg-checked: var(--theme-control-bg-checked);
   --toggle-thumb-bg: var(--theme-white);
   --toggle-border: var(--theme-control-border-hover);
-  --toggle-focus-ring: var(--theme-interactive-focus);
-  --toggle-transition: all 0.2s ease-in-out;
+  --toggle-focus-ring: var(--focus-ring-color);
+  --toggle-transition:
+    color var(--duration-fast) var(--ease-standard),
+    background-color var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard),
+    outline-color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard),
+    opacity var(--duration-fast) var(--ease-standard),
+    transform var(--duration-fast) var(--ease-standard),
+    left var(--duration-fast) var(--ease-standard);
 
   position: relative;
   display: inline-block;
@@ -78,8 +86,11 @@
   }
 
   // Variants - Checked state
+  // Thumb must reach 3:1 against the checked track (WCAG 1.4.11). Surface-primary is white on the
+  // darker light-theme fills and dark on the brighter dark-theme fills.
   &[data-variant='primary'][data-checked='true'] {
     --toggle-bg-checked: var(--theme-primary-500);
+    --toggle-thumb-bg: var(--theme-surface-primary);
   }
 
   &[data-variant='secondary'][data-checked='true'] {
@@ -92,6 +103,7 @@
 
   &[data-variant='warning'][data-checked='true'] {
     --toggle-bg-checked: var(--theme-warning-500);
+    --toggle-thumb-bg: var(--theme-surface-primary);
   }
 
   &[data-variant='danger'][data-checked='true'] {
@@ -177,7 +189,7 @@
   height: var(--toggle-thumb-size);
   background-color: var(--toggle-thumb-bg);
   border-radius: 50%;
-  box-shadow: 0 2px 4px rgb(0 0 0 / 20%);
+  box-shadow: var(--theme-shadow-md);
   transition: var(--toggle-transition);
   display: flex;
   align-items: center;
@@ -190,7 +202,7 @@
 }
 
 .required {
-  color: var(--theme-error);
+  color: var(--theme-error-text);
 
   .labelText[data-required='true'] & {
     margin-left: 2px;
@@ -202,6 +214,6 @@
   color: var(--theme-text-secondary);
 
   &[data-error='true'] {
-    color: var(--theme-error);
+    color: var(--theme-error-text);
   }
 }

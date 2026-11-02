@@ -45,8 +45,15 @@
   --radio-bg: var(--theme-control-bg);
   --radio-border: var(--theme-control-border);
   --radio-dot-color: var(--theme-primary);
-  --radio-focus-ring: var(--theme-interactive-focus);
-  --radio-transition: all 0.15s ease-in-out;
+  --radio-focus-ring: var(--focus-ring-color);
+  --radio-transition:
+    color var(--duration-fast) var(--ease-standard),
+    background-color var(--duration-fast) var(--ease-standard),
+    border-color var(--duration-fast) var(--ease-standard),
+    outline-color var(--duration-fast) var(--ease-standard),
+    box-shadow var(--duration-fast) var(--ease-standard),
+    opacity var(--duration-fast) var(--ease-standard),
+    transform var(--duration-fast) var(--ease-standard);
 
   position: relative;
   display: inline-block;

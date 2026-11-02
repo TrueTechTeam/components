@@ -8,7 +8,6 @@
   display: grid;
   grid-template-rows: 0fr;
   overflow: hidden;
-
   transition: grid-template-rows var(--collapse-duration) var(--collapse-easing);
 
   &[data-open='true'] {

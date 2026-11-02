@@ -445,7 +445,7 @@ const CustomContentExample = () => {
           style={{
             marginTop: '16px',
             padding: '16px',
-            background: 'var(--theme-surface)',
+            background: 'var(--theme-surface-primary)',
             borderRadius: '8px',
           }}
         >

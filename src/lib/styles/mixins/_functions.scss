@@ -7,5 +7,6 @@
 /// @return {String} - A color-mix() expression
 @function alpha($css-var, $alpha) {
   $percentage: $alpha * 100%;
+
   @return color-mix(in srgb, var(#{$css-var}) #{$percentage}, transparent);
 }

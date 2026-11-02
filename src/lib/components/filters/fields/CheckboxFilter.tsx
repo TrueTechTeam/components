@@ -12,6 +12,8 @@ export interface CheckboxFilterProps extends BaseComponentProps {
   filterId: string;
   /** Override label */
   label?: string;
+  /** Show label */
+  showLabel?: boolean;
   /** Size variant */
   size?: ComponentSize;
   /** Additional props for Checkbox component */
@@ -25,6 +27,7 @@ export const CheckboxFilter = ({
   ref,
   filterId,
   label: labelOverride,
+  showLabel = true,
   size = 'md',
   checkboxProps,
   className,
@@ -50,7 +53,7 @@ export const CheckboxFilter = ({
       <Checkbox
         checked={value ?? false}
         onChange={handleChange}
-        label={label}
+        label={showLabel ? label : undefined}
         disabled={!isEnabled}
         error={!!error}
         errorMessage={error ?? undefined}
