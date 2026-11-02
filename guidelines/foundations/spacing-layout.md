@@ -72,14 +72,16 @@ Pick one density per screen region and apply it consistently. Compact density MU
 
 ## LAYOUT-2 - Responsive breakpoints
 
-Design mobile-first and add layout at wider widths. The library's existing breakpoints:
+Design mobile-first and add layout at wider widths. Use the named breakpoints in SCSS
+(`@include bp(laptop)` / `bp-down(laptop)` from `styles/mixins/breakpoints`) and in React
+(`useBreakpoint()`, `useBreakpointValue()`):
 
 | Name    | Min width | Typical change                                           |
 | ------- | --------- | -------------------------------------------------------- |
-| mobile  | 0         | Single column. Bottom navigation. Full-width buttons OK. |
-| tablet  | 481px     | Two-column grids                                         |
-| desktop | 769px     | Side navigation visible. Multi-column layouts            |
-| wide    | 1280px    | Content stops growing (`--content-width-page`)           |
+| phone   | 0         | Single column. Bottom navigation. Full-width buttons OK. |
+| tablet  | 600px     | Two-column grids                                         |
+| laptop  | 1024px    | Side navigation visible. Multi-column layouts            |
+| desktop | 1440px    | Content stops growing (`--content-width-page`)           |
 
 - MUST work at **320px** wide without horizontal scrolling, and at 200% and 400% zoom (WCAG
   1.4.10 Reflow). Tables are exempt and may scroll horizontally inside their container.

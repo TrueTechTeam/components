@@ -1,0 +1,23 @@
+// Named breakpoints. Keep in sync with DEFAULT_BREAKPOINTS in contexts/BreakpointsContext.
+@use 'sass:map';
+
+$breakpoints: (
+  phone: 0,
+  tablet: 600px,
+  laptop: 1024px,
+  desktop: 1440px,
+);
+
+/// Styles at or above the named breakpoint (mobile-first).
+@mixin bp($name) {
+  @media (width >= #{map.get($breakpoints, $name)}) {
+    @content;
+  }
+}
+
+/// Styles strictly below the named breakpoint.
+@mixin bp-down($name) {
+  @media (width < #{map.get($breakpoints, $name)}) {
+    @content;
+  }
+}

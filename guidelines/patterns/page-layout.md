@@ -46,7 +46,7 @@ Mobile: SideNav → hidden behind NavbarToggle; 3–5 key destinations → Botto
 
 ## PAGE-4 - Responsive behavior
 
-- Navigation collapses at < 769px (SideNav → overlay or BottomNavigation).
+- Navigation collapses below `laptop` (1024px) (SideNav → overlay or BottomNavigation).
 - Multi-column content collapses to one column. Order the source so the most important content
   comes first on mobile.
 - Page actions: on mobile, keep the primary action visible (sticky footer or header) and move
