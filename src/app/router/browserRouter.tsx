@@ -20,9 +20,15 @@ const guards = new Map<NavigationGuardApi, number>();
 let lastUrl = '';
 
 const readUrl = () => window.location.pathname + window.location.search + window.location.hash;
+const stripHash = (url: string) => url.split('#')[0];
 const emit = () => listeners.forEach((l) => l());
 
 function onPopState() {
+  // Hash-only history moves (in-page anchors) are not navigations: no guard prompt.
+  if (stripHash(readUrl()) === stripHash(lastUrl)) {
+    lastUrl = readUrl();
+    return;
+  }
   for (const guard of guards.keys()) {
     if (guard.isBlocked()) {
       if (!guard.confirmNavigation()) {
@@ -79,24 +85,42 @@ function isModifiedClick(e: MouseEvent<HTMLAnchorElement>) {
   return e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey;
 }
 
-/** `<a href>` that handles plain left-clicks in-app; modified clicks and `target` keep browser behavior. */
+function isSameOrigin(href: string) {
+  try {
+    return new URL(href, window.location.href).origin === window.location.origin;
+  } catch {
+    return false;
+  }
+}
+
+/**
+ * `<a href>` that handles plain left-clicks on same-origin links in-app. Modified clicks, other
+ * origins and schemes (`mailto:`, `tel:`), `download` and a non-`_self` `target` keep browser behavior.
+ */
 function BrowserLink({
   href,
   children,
   onClick,
   target,
+  download,
   ...rest
 }: RouterLinkProps & AnchorHTMLAttributes<HTMLAnchorElement>) {
   const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
     onClick?.(e);
-    if (e.defaultPrevented || isModifiedClick(e) || (target && target !== '_self')) {
+    if (
+      e.defaultPrevented ||
+      isModifiedClick(e) ||
+      (target && target !== '_self') ||
+      (download !== undefined && download !== false) ||
+      !isSameOrigin(href)
+    ) {
       return;
     }
     e.preventDefault();
     navigate(href);
   };
   return (
-    <a href={href} target={target} onClick={handleClick} {...rest}>
+    <a href={href} target={target} download={download} onClick={handleClick} {...rest}>
       {children}
     </a>
   );
