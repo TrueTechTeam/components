@@ -808,6 +808,25 @@ function App() {
 }
 ```
 
+### Generate a theme with the Theme Builder
+
+Open **Theme Builder** (the first item in Storybook), pick a mood and colors or edit tokens
+directly, check the contrast report, and download `theme.json`. Then pass it to the provider:
+
+```tsx
+import { GlobalProvider } from '@true-tech-team/ui-components';
+import '@true-tech-team/ui-components/index.css';
+import theme from './theme.json';
+
+<GlobalProvider themeConfig={theme}>
+  <YourApp />
+</GlobalProvider>;
+```
+
+`themeConfig.theme` accepts `colors`, per-mode `modes.light|dark.colors`, `spacing`,
+`typography`, `borderRadius` and `shadows`. See `guidelines/foundations/tokens.md` for the
+variable mapping.
+
 ### Toggle Theme
 
 ```tsx

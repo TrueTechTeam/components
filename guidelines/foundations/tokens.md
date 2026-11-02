@@ -91,10 +91,32 @@ it sparingly, since it bypasses the named scale.
 
 ### Typography
 
-`--font-family-primary`, `--font-family-mono`; `--font-size-xs` (12) · `sm` (14) · `base` (16) ·
+`--font-family-primary`, `--font-family-secondary` (defaults to primary; use for headings or
+accents), `--font-family-mono`; `--font-size-xs` (12) · `sm` (14) · `base` (16) ·
 `lg` (18) · `xl` (20) · `2xl` (24) · `3xl` (30) · `4xl` (36); `--font-weight-light` (300) ·
 `normal` (400) · `medium` (500) · `semibold` (600) · `bold` (700); `--line-height-tight` (1.25) ·
 `normal` (1.5) · `relaxed` (1.75).
+
+### Theming through `ThemeConfig.theme`
+
+`<GlobalProvider themeConfig={{ mode, theme }}>` applies a `ThemeOverride` as CSS variables
+(`themeOverrideToCssVars` in `src/lib/utils/themeVars.ts`). Supported groups:
+
+| `theme` key               | CSS variable                                                                       |
+| ------------------------- | ---------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| `colors` (both modes)     | `--theme-<kebab-key>`, e.g. `surfaceElevated` -> `--theme-surface-elevated`        |
+| `modes.light              | dark.colors`                                                                       | same names, only in that mode; wins over shared `colors` |
+| `colors.primary50`..`900` | `--theme-primary-50`..`--theme-primary-900` (same for `secondary`)                 |
+| `spacing`                 | `--spacing-<key>` (`xs`..`xxl`); `spacing.unit` (number) -> `--spacing-unit` in px |
+| `typography.fontFamily`   | `--font-family-<key>` (`primary`, `secondary`, `mono`)                             |
+| `typography.fontSize`     | `--font-size-<key>`                                                                |
+| `typography.fontWeight`   | `--font-weight-<key>`                                                              |
+| `typography.lineHeight`   | `--line-height-<key>`                                                              |
+| `borderRadius`            | `--radius-<key>`                                                                   |
+| `shadows`                 | `--theme-shadow-<key>`                                                             |
+
+Empty or undefined values are skipped. Don't hand-write this object: generate it in Storybook's
+**Theme Builder** (first item in the sidebar), which checks contrast and exports `theme.json`.
 
 ### Motion
 

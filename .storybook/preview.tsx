@@ -116,6 +116,7 @@ const preview: Preview = {
     options: {
       storySort: {
         order: [
+          'Theme Builder',
           'Buttons',
           'Display',
           'Inputs',
