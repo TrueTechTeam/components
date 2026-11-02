@@ -43,6 +43,8 @@ export interface PageMessageContentProps {
   config: PageMessageStateConfig | LoadingStateConfig;
   /** Size variant */
   size: ExtendedComponentSize;
+  /** Heading level of the title @default 2 */
+  headingLevel?: 2 | 3 | 4 | 5 | 6;
   /** Error message (extracted from error prop) */
   errorMessage?: string;
   /** Global actions from context */
@@ -56,9 +58,11 @@ export function PageMessageContent({
   state,
   config,
   size,
+  headingLevel = 2,
   errorMessage,
   actions,
 }: PageMessageContentProps) {
+  const Heading = `h${headingLevel}` as const;
   const t = useLabels();
   // If custom render function is provided, use it
   if (config.render) {
@@ -210,9 +214,13 @@ export function PageMessageContent({
       {renderVisual()}
 
       {showText && config.title && (
-        <h2 className={styles.pageMessagesTitle} data-size={size} data-testid="page-messages-title">
+        <Heading
+          className={styles.pageMessagesTitle}
+          data-size={size}
+          data-testid="page-messages-title"
+        >
           {config.title}
-        </h2>
+        </Heading>
       )}
 
       {showText && description && (

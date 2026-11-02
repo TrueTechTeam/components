@@ -47,6 +47,8 @@ export function Section({
   );
 
   const Heading = `h${headingLevel}` as const;
+  // State messages nest under the section title (GEN-3).
+  const messageLevel = title ? (Math.min(headingLevel + 1, 6) as 3 | 4 | 5) : headingLevel;
   return (
     <section id={id} className={styles.section} aria-labelledby={title ? headingId : undefined}>
       {title && (
@@ -56,7 +58,10 @@ export function Section({
       )}
       <ErrorBoundary
         onError={onError}
-        fallback={(error, reset) => <PageMessages error={error} onRetry={reset} size="sm" />}
+        // Generic text only (R9): the raw error goes to logger.error, never to the screen.
+        fallback={(_error, reset) => (
+          <PageMessages error onRetry={reset} size="sm" headingLevel={messageLevel} />
+        )}
       >
         <PageState
           queries={queries}
@@ -65,6 +70,7 @@ export function Section({
           empty={empty}
           permission={permission}
           size="sm"
+          headingLevel={messageLevel}
           defaultSkeleton={<Skeleton variant="text" lines={3} />}
         >
           {children}

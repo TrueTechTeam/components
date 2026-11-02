@@ -37,6 +37,7 @@ Build translation files from the exported `DEFAULT_LABELS` (prefix each key with
 | `common.loading`                        | Loading…                                                        |
 | `unsavedChanges.confirm`                | You have unsaved changes. Leave anyway?                         |
 | `page.refreshing`                       | Refreshing…                                                     |
+| `page.refetchError`                     | Couldn't refresh. Showing the last loaded data.                 |
 | `accordionContainer.expandAll`          | Expand All                                                      |
 | `accordionContainer.collapseAll`        | Collapse All                                                    |
 | `alert.ok`                              | OK                                                              |

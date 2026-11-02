@@ -151,6 +151,11 @@ When no state is active, children render directly without wrapper.
       options: ['xs', 'sm', 'md', 'lg', 'xl'],
       description: 'Size variant for icons and text',
     },
+    headingLevel: {
+      control: 'select',
+      options: [2, 3, 4, 5, 6],
+      description: 'Heading level of the title, to fit the document outline (default 2)',
+    },
     fullScreen: {
       control: 'boolean',
       description: 'Display in fullscreen mode',

@@ -8,6 +8,7 @@ export const DEFAULT_LABELS = {
   'common.loading': 'Loading…',
   'unsavedChanges.confirm': 'You have unsaved changes. Leave anyway?',
   'page.refreshing': 'Refreshing…',
+  'page.refetchError': "Couldn't refresh. Showing the last loaded data.",
   'accordionContainer.expandAll': 'Expand All',
   'accordionContainer.collapseAll': 'Collapse All',
   'alert.ok': 'OK',

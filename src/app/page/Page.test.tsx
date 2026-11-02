@@ -129,6 +129,44 @@ describe('Page', () => {
     expect(screen.queryByText('Something went wrong')).not.toBeInTheDocument();
   });
 
+  it('keeps loaded content with an inline alert when a background refetch fails', () => {
+    const stale = query({ isError: true, error: new Error('Server down'), data: [1] });
+    const ok = success([2]);
+    render(
+      wrap(
+        <Page title="Orders" queries={[stale, ok]}>
+          <p>Order list</p>
+        </Page>
+      )
+    );
+    expect(screen.getByText('Order list')).toBeInTheDocument();
+    expect(screen.getByRole('alert')).toHaveTextContent(
+      "Couldn't refresh. Showing the last loaded data."
+    );
+    expect(screen.queryByText('Something went wrong')).not.toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: 'Retry' }));
+    expect(stale.refetch).toHaveBeenCalledTimes(1);
+    expect(ok.refetch).not.toHaveBeenCalled();
+  });
+
+  it('shows the full error when any errored query has no data, retrying every errored query', () => {
+    const stale = query({ isError: true, error: new Error('Stale'), data: [1] });
+    const failed = query({ isError: true, error: new Error('No data') });
+    render(
+      wrap(
+        <Page title="Orders" queries={[stale, failed]}>
+          <p>Order list</p>
+        </Page>
+      )
+    );
+    expect(screen.queryByText('Order list')).not.toBeInTheDocument();
+    expect(screen.queryByRole('alert')).not.toBeInTheDocument();
+    expect(screen.getByText('No data')).toBeInTheDocument();
+    fireEvent.click(screen.getByRole('button', { name: /try again/i }));
+    expect(stale.refetch).toHaveBeenCalledTimes(1);
+    expect(failed.refetch).toHaveBeenCalledTimes(1);
+  });
+
   it('shows empty state when isEmpty returns true', () => {
     const isEmpty = jest.fn((data: unknown[]) => (data[0] as unknown[]).length === 0);
     render(
@@ -398,7 +436,13 @@ describe('Page', () => {
         { logger }
       )
     );
-    expect(screen.getByText('Render failed')).toBeInTheDocument();
+    // Generic text only: the thrown message is logged, never shown (R9).
+    expect(screen.getByText('Something went wrong')).toBeInTheDocument();
+    expect(screen.getByText('An unexpected error occurred. Please try again.')).toBeInTheDocument();
+    expect(screen.queryByText(/Render failed/)).not.toBeInTheDocument();
+    expect(jest.mocked(logger.error).mock.calls[0]).toContainEqual(
+      expect.objectContaining({ message: 'Render failed' })
+    );
     expect(logger.error).toHaveBeenCalledTimes(1);
     shouldThrow = false;
     fireEvent.click(screen.getByRole('button', { name: /try again/i }));
