@@ -1,10 +1,14 @@
-import React, { useMemo, useState, type ReactNode } from 'react';
+import React, { useMemo, useRef, useState, type ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { LabelsProvider, type TranslateFn } from '../../lib/contexts/LabelsContext';
 import { BreakpointsProvider, type Breakpoints } from '../../lib/contexts/BreakpointsContext';
 import { useNavigationGuard } from '../../lib/contexts/NavigationGuardContext';
 import { useBrowserRouter } from '../router/browserRouter';
-import { RouterContext, type RouterContextValue } from '../router/RouterContext';
+import {
+  RouterContext,
+  type PendingSearch,
+  type RouterContextValue,
+} from '../router/RouterContext';
 import type { RouterAdapter } from '../router/types';
 import {
   AppContext,
@@ -71,6 +75,7 @@ export function AppProvider({
   const useRouter = router ?? useBrowserRouter;
   const routerAdapter = useRouter();
   const guard = useNavigationGuard();
+  const pendingSearch = useRef<PendingSearch | null>(null);
   // Created once and kept, so dropping the `queryClient` prop later never loses the cache.
   const [defaultClient] = useState(createDefaultQueryClient);
   const [logBuffer] = useState(() => createLogBuffer());
@@ -78,7 +83,7 @@ export function AppProvider({
   const resolvedLogger = logger ?? (debug ? consoleLogger : noopLogger);
 
   const routerValue = useMemo<RouterContextValue>(
-    () => ({ adapter: routerAdapter, guard }),
+    () => ({ adapter: routerAdapter, guard, pendingSearch }),
     [routerAdapter, guard]
   );
 

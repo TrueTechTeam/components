@@ -35,6 +35,12 @@ export interface NextRouterDeps {
  *
  * Next.js cannot block navigation, so `supportsBlocking` is false: guards apply to `AppLink`,
  * `useAppNavigate` and page unload, not to Back/Forward. Search-param updates keep the scroll position.
+ *
+ * The adapter does not call Next's `useSearchParams` at the root, so `AppProvider` needs no
+ * `<Suspense>`. Its `searchParams` is a non-reactive snapshot of `window.location.search` (empty on
+ * the server); `usePageParams` and `usePreference` read the reactive `adapter.useSearchParams`
+ * instead, so — per Next's rules for `useSearchParams` — components using them need a
+ * `<Suspense>` boundary above them in statically rendered routes.
  */
 export function createNextRouter(deps: NextRouterDeps): () => RouterAdapter {
   const { useRouter, usePathname, useSearchParams, Link } = deps;
@@ -43,10 +49,15 @@ export function createNextRouter(deps: NextRouterDeps): () => RouterAdapter {
     return <Link {...props} />;
   }
 
+  /** Reactive search params; only components that read URL params call it. */
+  function useNextSearchParams(): URLSearchParams {
+    const search = useSearchParams()?.toString() ?? '';
+    return useMemo(() => new URLSearchParams(search), [search]);
+  }
+
   return function useNextRouter(): RouterAdapter {
     const router = useRouter();
     const pathname = usePathname() ?? '/';
-    const search = useSearchParams()?.toString() ?? '';
 
     return useMemo(() => {
       const go = (href: string, replace: boolean | undefined, opts?: { scroll?: boolean }) => {
@@ -57,17 +68,22 @@ export function createNextRouter(deps: NextRouterDeps): () => RouterAdapter {
           method.call(router, href);
         }
       };
+      const hasWindow = typeof window !== 'undefined';
       return {
         Link: NextLink,
         navigate: (href, opts) => go(href, opts?.replace),
         pathname,
-        searchParams: new URLSearchParams(search),
+        // Snapshot only: reading Next's useSearchParams here, at the app root, would need a
+        // Suspense boundary around the whole app. Params hooks use `useSearchParams` below.
+        searchParams: new URLSearchParams(hasWindow ? window.location.search : ''),
+        useSearchParams: useNextSearchParams,
         setSearchParams: (next, opts) => {
           const qs = next.toString();
-          go(`${pathname}${qs ? `?${qs}` : ''}`, opts?.replace, { scroll: false });
+          const hash = hasWindow ? window.location.hash : '';
+          go(`${pathname}${qs ? `?${qs}` : ''}${hash}`, opts?.replace, { scroll: false });
         },
         supportsBlocking: false,
       };
-    }, [router, pathname, search]);
+    }, [router, pathname]);
   };
 }

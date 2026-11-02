@@ -23,7 +23,17 @@ export interface RouterAdapter {
   /** Navigates without consulting navigation guards; use `useAppNavigate` for guarded navigation. */
   navigate(href: string, opts?: { replace?: boolean }): void;
   pathname: string;
+  /**
+   * Current search params. Adapters that provide `useSearchParams` may make this a non-reactive
+   * snapshot; read params through `useSearchParams` when it is defined.
+   */
   searchParams: URLSearchParams;
+  /**
+   * Optional hook returning the reactive search params, for routers that must not read them at the
+   * app root (Next.js: `useSearchParams` needs a Suspense boundary). The returned object keeps its
+   * identity while the search string is unchanged. Must be the same function for the adapter's lifetime.
+   */
+  useSearchParams?: () => URLSearchParams;
   setSearchParams(next: URLSearchParams, opts?: { replace?: boolean }): void;
   /** True when the adapter itself blocks navigation (e.g. Back/Forward) while a guard is blocking. */
   supportsBlocking: boolean;
