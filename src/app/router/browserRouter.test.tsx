@@ -85,6 +85,71 @@ describe('useBrowserRouter', () => {
     }
   );
 
+  it.each(['https://example.com/elsewhere', 'mailto:help@example.com', 'tel:+15551234'])(
+    'Link does not intercept %s',
+    (href) => {
+      const push = jest.spyOn(window.history, 'pushState');
+      function Nav() {
+        const { Link } = useBrowserRouter();
+        return <Link href={href}>Out</Link>;
+      }
+      render(<Nav />);
+      const notPrevented = fireEvent.click(screen.getByRole('link', { name: 'Out' }));
+      expect(notPrevented).toBe(true);
+      expect(push).not.toHaveBeenCalled();
+      push.mockRestore();
+    }
+  );
+
+  it.each([{ download: true }, { download: 'report.csv' }, { target: '_blank' }])(
+    'Link does not intercept same-origin links with %p',
+    (extra) => {
+      function Nav() {
+        const { Link } = useBrowserRouter();
+        return (
+          <Link href="/files/report.csv" {...extra}>
+            File
+          </Link>
+        );
+      }
+      render(<Nav />);
+      const notPrevented = fireEvent.click(screen.getByRole('link', { name: 'File' }));
+      expect(notPrevented).toBe(true);
+      expect(window.location.pathname).toBe('/start');
+    }
+  );
+
+  it('ignores hash-only popstate even while blocked', () => {
+    const confirm = jest.spyOn(window, 'confirm').mockReturnValue(false);
+    function BlockingGuard() {
+      const guard = useNavigationGuard();
+      useEffect(() => guard.register({ isBlocking: () => true, message: 'Discard?' }), [guard]);
+      return null;
+    }
+    const wrapper = ({ children }: { children: ReactNode }) => (
+      <NavigationGuardProvider>
+        <BlockingGuard />
+        {children}
+      </NavigationGuardProvider>
+    );
+    const { result } = renderHook(() => useBrowserRouter(), { wrapper });
+    act(() => result.current.navigate('/doc#intro'));
+    act(() => {
+      window.history.replaceState(null, '', '/doc#usage');
+      window.dispatchEvent(new PopStateEvent('popstate'));
+    });
+    expect(confirm).not.toHaveBeenCalled();
+    expect(window.location.hash).toBe('#usage');
+    // A later real navigation away is still guarded against the hash-updated URL.
+    act(() => {
+      window.history.replaceState(null, '', '/elsewhere');
+      window.dispatchEvent(new PopStateEvent('popstate'));
+    });
+    expect(confirm).toHaveBeenCalledTimes(1);
+    expect(window.location.pathname + window.location.hash).toBe('/doc#usage');
+    confirm.mockRestore();
+  });
+
   it('restores the previous URL when popstate happens while blocked and the user cancels', () => {
     const confirm = jest.spyOn(window, 'confirm').mockReturnValue(false);
     function BlockingGuard() {

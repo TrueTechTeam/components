@@ -25,7 +25,11 @@ export function useAppConfig(): AppConfigValue {
   return useAppContextFor('useAppConfig');
 }
 
-/** A logger whose calls are recorded in the log buffer (with `scope`) and then forwarded. */
+/**
+ * A logger whose calls are recorded in the log buffer (with `scope`) and then forwarded to the
+ * `AppProvider` logger. With a `scope`, forwarded calls get `'[scope]'` prepended as the first
+ * argument (e.g. `error('[orders]', 'boom')`); buffer entries keep the original args.
+ */
 export function useLogger(scope?: string): Logger {
   const { logger, logBuffer } = useAppContextFor('useLogger');
   return useMemo(() => createScopedLogger(logger, logBuffer, scope), [logger, logBuffer, scope]);

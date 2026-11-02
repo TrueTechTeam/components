@@ -40,13 +40,26 @@ export interface LogBuffer {
 export function createLogBuffer(size = LOG_BUFFER_SIZE): LogBuffer {
   let entries: LogEntry[] = [];
   const listeners = new Set<() => void>();
+  let notifyQueued = false;
+  // Entries are appended immediately, but subscribers are told in a coalesced microtask so that
+  // logging during render never updates another component (`useLogBuffer`) mid-render.
+  const notify = () => {
+    if (notifyQueued) {
+      return;
+    }
+    notifyQueued = true;
+    queueMicrotask(() => {
+      notifyQueued = false;
+      listeners.forEach((l) => l());
+    });
+  };
   return {
     push(entry) {
       entries =
         entries.length >= size
           ? [...entries.slice(entries.length - size + 1), entry]
           : [...entries, entry];
-      listeners.forEach((l) => l());
+      notify();
     },
     getSnapshot: () => entries,
     subscribe(listener) {

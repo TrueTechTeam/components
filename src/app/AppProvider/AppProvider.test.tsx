@@ -100,12 +100,12 @@ describe('AppProvider', () => {
     expect(screen.getByText('Old fallback')).toBeInTheDocument();
   });
 
-  it('useLogger forwards to the custom logger and records the call with its scope', () => {
+  it('useLogger forwards to the custom logger and records the call with its scope', async () => {
     const logger: Logger = { debug: jest.fn(), info: jest.fn(), warn: jest.fn(), error: jest.fn() };
     const { result } = renderHook(() => ({ log: useLogger('orders'), buffer: useLogBuffer() }), {
       wrapper: makeWrapper({ logger }),
     });
-    act(() => {
+    await act(async () => {
       result.current.log.error('boom', 42);
     });
     expect(logger.error).toHaveBeenCalledWith('[orders]', 'boom', 42);
@@ -114,11 +114,11 @@ describe('AppProvider', () => {
     expect(typeof last.time).toBe('number');
   });
 
-  it('keeps only the latest 200 log entries', () => {
+  it('keeps only the latest 200 log entries', async () => {
     const { result } = renderHook(() => ({ log: useLogger(), buffer: useLogBuffer() }), {
       wrapper: makeWrapper(),
     });
-    act(() => {
+    await act(async () => {
       for (let i = 0; i < 205; i++) {
         result.current.log.info(i);
       }
@@ -127,6 +127,67 @@ describe('AppProvider', () => {
     expect(result.current.buffer[0].args).toEqual([5]);
     expect(result.current.buffer[199].args).toEqual([204]);
     expect(result.current.buffer[0].scope).toBeUndefined();
+  });
+
+  it('logging during render with a mounted useLogBuffer consumer does not warn', async () => {
+    const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined);
+    function Logs() {
+      return <span data-testid="count">{useLogBuffer().length}</span>;
+    }
+    function RenderLogger({ n }: { n: number }) {
+      useLogger('render').info('rendering', n);
+      return null;
+    }
+    const ui = (n: number) => (
+      <AppProvider logger={silentLogger}>
+        <Logs />
+        <RenderLogger n={n} />
+      </AppProvider>
+    );
+    const { rerender } = render(ui(1));
+    await act(async () => {
+      await Promise.resolve();
+    });
+    // Logs is subscribed now; logging during this render must not update it synchronously.
+    rerender(ui(2));
+    await act(async () => {
+      await Promise.resolve();
+    });
+    expect(Number(screen.getByTestId('count').textContent)).toBeGreaterThan(0);
+    expect(errorSpy).not.toHaveBeenCalled();
+    errorSpy.mockRestore();
+  });
+
+  it('renders on the server with the router at / and no search params', () => {
+    // react-dom/server's browser build (picked under jsdom) needs MessageChannel and TextEncoder,
+    // which jsdom lacks. Polyfill them for this test only.
+    const g = globalThis as { MessageChannel?: unknown; TextEncoder?: unknown };
+    const added: Array<'MessageChannel' | 'TextEncoder'> = [];
+    if (!g.MessageChannel) {
+      g.MessageChannel = class {
+        port1: { onmessage: null | (() => void) } = { onmessage: null };
+        port2 = { postMessage: () => setTimeout(() => this.port1.onmessage?.()) };
+      };
+      added.push('MessageChannel');
+    }
+    if (!g.TextEncoder) {
+      g.TextEncoder = (require('util') as typeof import('util')).TextEncoder;
+      added.push('TextEncoder');
+    }
+    const { renderToString } = require('react-dom/server') as typeof import('react-dom/server');
+    function Location() {
+      const { router } = useAppConfig();
+      return <span>{`${router.pathname}|${[...router.searchParams.keys()].length}`}</span>;
+    }
+    window.history.replaceState(null, '', '/client?x=1');
+    const html = renderToString(
+      <AppProvider logger={silentLogger}>
+        <Location />
+      </AppProvider>
+    );
+    expect(html).toContain('<span>/|0</span>');
+    window.history.replaceState(null, '', '/');
+    added.forEach((name) => delete g[name]);
   });
 
   it('routes translate into core labels', () => {

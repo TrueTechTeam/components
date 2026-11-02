@@ -5,6 +5,9 @@ export interface RouterLinkProps {
   href: string;
   children: ReactNode;
   className?: string;
+  target?: string;
+  rel?: string;
+  download?: boolean | string;
   onClick?: MouseEventHandler<HTMLAnchorElement>;
   'aria-current'?: AriaAttributes['aria-current'];
 }
