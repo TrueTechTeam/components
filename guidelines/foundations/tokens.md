@@ -103,9 +103,10 @@ accents), `--font-family-mono`; `--font-size-xs` (12) · `sm` (14) · `base` (16
 (`themeOverrideToCssVars` in `src/lib/utils/themeVars.ts`). Supported groups:
 
 | `theme` key               | CSS variable                                                                       |
-| ------------------------- | ---------------------------------------------------------------------------------- | -------------------------------------------------------- |
+| ------------------------- | ---------------------------------------------------------------------------------- |
 | `colors` (both modes)     | `--theme-<kebab-key>`, e.g. `surfaceElevated` -> `--theme-surface-elevated`        |
-| `modes.light              | dark.colors`                                                                       | same names, only in that mode; wins over shared `colors` |
+| `modes.light.colors`      | same names, only in light mode; wins over shared `colors`                          |
+| `modes.dark.colors`       | same names, only in dark mode; wins over shared `colors`                           |
 | `colors.primary50`..`900` | `--theme-primary-50`..`--theme-primary-900` (same for `secondary`)                 |
 | `spacing`                 | `--spacing-<key>` (`xs`..`xxl`); `spacing.unit` (number) -> `--spacing-unit` in px |
 | `typography.fontFamily`   | `--font-family-<key>` (`primary`, `secondary`, `mono`)                             |
