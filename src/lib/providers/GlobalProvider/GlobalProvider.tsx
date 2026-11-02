@@ -7,6 +7,7 @@ import {
 import { DialogProvider, type DialogProviderProps } from '../../components/overlays/Dialog';
 import { AlertProvider, type AlertProviderProps } from '../../components/overlays/Alert';
 import { ToastProvider, type ToastProviderProps } from '../../components/overlays/Toast';
+import { LabelsProvider, type LabelsProviderProps } from '../../contexts/LabelsContext';
 import type { ThemeConfig } from '../../types';
 import '../../styles/index.scss';
 
@@ -25,6 +26,16 @@ export interface GlobalProviderProps {
    * Whether to inject global styles (default: true)
    */
   injectGlobalStyles?: boolean;
+
+  /**
+   * Overrides for the library's built-in text (flat `component.key` to string)
+   */
+  labels?: LabelsProviderProps['labels'];
+
+  /**
+   * App translate function, called with `ui.<key>` for built-in text
+   */
+  translate?: LabelsProviderProps['translate'];
 
   /**
    * PageMessages default configuration
@@ -93,16 +104,20 @@ export function GlobalProvider({
   dialogConfig,
   alertConfig,
   toastConfig,
+  labels,
+  translate,
 }: GlobalProviderProps) {
   return (
     <ThemeProvider themeConfig={themeConfig} applyOverrides={injectGlobalStyles}>
-      <PageMessagesProvider {...pageMessagesConfig}>
-        <DialogProvider {...dialogConfig}>
-          <AlertProvider {...alertConfig}>
-            <ToastProvider {...toastConfig}>{children}</ToastProvider>
-          </AlertProvider>
-        </DialogProvider>
-      </PageMessagesProvider>
+      <LabelsProvider labels={labels} translate={translate}>
+        <PageMessagesProvider {...pageMessagesConfig}>
+          <DialogProvider {...dialogConfig}>
+            <AlertProvider {...alertConfig}>
+              <ToastProvider {...toastConfig}>{children}</ToastProvider>
+            </AlertProvider>
+          </DialogProvider>
+        </PageMessagesProvider>
+      </LabelsProvider>
     </ThemeProvider>
   );
 }

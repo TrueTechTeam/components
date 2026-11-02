@@ -22,6 +22,7 @@
 - [Elevation & shape](guidelines/foundations/elevation-shape.md): surfaces, shadows, radius, z-index
 - [Motion](guidelines/foundations/motion.md): durations, easing, reduced motion
 - [Accessibility](guidelines/foundations/accessibility.md): WCAG 2.2 AA requirements
+- [Labels](guidelines/foundations/labels.md): translatable built-in text, `ui.` prefix, key table
 
 ## Patterns
 

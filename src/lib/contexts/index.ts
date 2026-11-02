@@ -8,3 +8,6 @@ export type {
   PageMessagesDefaults,
   PageMessagesGlobalActions,
 } from './PageMessagesContext';
+
+export { LabelsProvider, useLabels, interpolate, DEFAULT_LABELS } from './LabelsContext';
+export type { LabelsProviderProps, LabelVars, TranslateFn, LabelKey } from './LabelsContext';

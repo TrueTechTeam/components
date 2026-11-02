@@ -53,6 +53,7 @@ review comments, commit messages and PR descriptions.
 | [foundations/elevation-shape.md](foundations/elevation-shape.md)           | Borders, radius, shadows, z-index, surface layering                            |
 | [foundations/motion.md](foundations/motion.md)                             | Durations, easing, reduced motion, what to animate                             |
 | [foundations/accessibility.md](foundations/accessibility.md)               | Contrast, target size, focus, keyboard, ARIA, screen readers                   |
+| [foundations/labels.md](foundations/labels.md)                             | Translatable built-in text: resolution order, `ui.` prefix, keys               |
 | [patterns/forms.md](patterns/forms.md)                                     | Form layout, labels, validation, errors, buttons                               |
 | [patterns/data-display.md](patterns/data-display.md)                       | Tables vs lists vs cards, filtering, pagination, KPIs, alignment               |
 | [patterns/feedback-states.md](patterns/feedback-states.md)                 | Loading, empty, error and success states; notifications; confirmations         |
