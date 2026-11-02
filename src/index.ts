@@ -124,8 +124,14 @@ export {
   isValidHex,
   getBrightness,
   isLightColor,
+  hexToOklch,
+  oklchToHex,
+  parseColorToOklch,
+  rotateHue,
+  getRelativeLuminance,
+  getContrastRatio,
 } from './lib/utils/colorUtils';
-export type { RGB, HSL, RGBA, HSLA } from './lib/utils/colorUtils';
+export type { RGB, HSL, RGBA, HSLA, OKLCH } from './lib/utils/colorUtils';
 
 // Date Utils
 export {

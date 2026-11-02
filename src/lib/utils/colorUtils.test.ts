@@ -12,6 +12,11 @@ import {
   clamp,
   getBrightness,
   isLightColor,
+  hexToOklch,
+  oklchToHex,
+  parseColorToOklch,
+  rotateHue,
+  getContrastRatio,
   type RGB,
   type HSL,
 } from './colorUtils';
@@ -443,5 +448,37 @@ describe('round-trip conversions', () => {
     expect(hsl).not.toBeNull();
     const converted = hslToHex(hsl!);
     expect(converted).toBe(original);
+  });
+});
+
+describe('oklch', () => {
+  it('round-trips hex through OKLCH within 1 unit per channel', () => {
+    for (const hex of ['#2563eb', '#00777e', '#f59e0b', '#000000', '#ffffff', '#888888']) {
+      expect(oklchToHex(hexToOklch(hex)!)).toBe(hex);
+    }
+  });
+  it('reports hue 0 and chroma ~0 for greys (no NaN)', () => {
+    const g = hexToOklch('#888888')!;
+    expect(Number.isNaN(g.h)).toBe(false);
+    expect(g.c).toBeLessThan(0.001);
+  });
+  it('gamut-maps out-of-range colours instead of returning invalid hex', () => {
+    expect(oklchToHex({ l: 0.7, c: 0.4, h: 145 })).toMatch(/^#[0-9a-f]{6}$/);
+  });
+  it('parses oklch() strings and rejects junk', () => {
+    expect(parseColorToOklch('oklch(0.62 0.19 260)')).toEqual({ l: 0.62, c: 0.19, h: 260 });
+    expect(parseColorToOklch('oklch(62% 0.19 260)')!.l).toBeCloseTo(0.62);
+    for (const bad of ['blue', '#12', '', 'oklch(nonsense)']) {
+      expect(parseColorToOklch(bad)).toBeNull();
+    }
+  });
+  it('rotates hue with wrap-around', () => {
+    expect(rotateHue(350, 30)).toBe(20);
+    expect(rotateHue(10, -30)).toBe(340);
+  });
+  it('computes WCAG contrast ratios', () => {
+    expect(getContrastRatio('#000000', '#ffffff')).toBeCloseTo(21, 0);
+    expect(getContrastRatio('#ffffff', '#ffffff')).toBeCloseTo(1, 5);
+    expect(getContrastRatio('#767676', '#ffffff')).toBeGreaterThanOrEqual(4.5);
   });
 });
