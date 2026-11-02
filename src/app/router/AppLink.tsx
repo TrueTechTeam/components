@@ -5,7 +5,7 @@ import React, {
   type ReactNode,
 } from 'react';
 import { isInAppLinkClick } from './linkClick';
-import { useAppNavigationGuard, useRouterAdapter } from './RouterContext';
+import { useRouterContext } from './RouterContext';
 import type { RouterLinkProps } from './types';
 
 export interface AppLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
@@ -23,10 +23,10 @@ export interface AppLinkProps extends AnchorHTMLAttributes<HTMLAnchorElement> {
  */
 export function AppLink({ href, children, replace, onClick, ...rest }: AppLinkProps) {
   // Adapters forward the remaining anchor attributes to the `<a>` they render.
-  const Link = useRouterAdapter().Link as ComponentType<
+  const { adapter, guard } = useRouterContext('AppLink');
+  const Link = adapter.Link as ComponentType<
     RouterLinkProps & AnchorHTMLAttributes<HTMLAnchorElement>
   >;
-  const guard = useAppNavigationGuard();
 
   const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
     onClick?.(e);

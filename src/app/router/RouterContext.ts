@@ -1,6 +1,13 @@
-import { createContext, useContext } from 'react';
+import { createContext, useContext, type MutableRefObject } from 'react';
 import type { NavigationGuardApi } from '../../lib/contexts/NavigationGuardContext';
 import type { RouterAdapter } from './types';
+
+/** Search params written but not yet committed by the router, shared by every params hook. */
+export interface PendingSearch {
+  /** The committed search string the write was based on. */
+  from: string;
+  params: URLSearchParams;
+}
 
 export interface RouterContextValue {
   adapter: RouterAdapter;
@@ -9,6 +16,8 @@ export interface RouterContextValue {
    * including those in scoped registries (e.g. inside a Dialog), so leaving the page checks all.
    */
   guard: NavigationGuardApi;
+  /** Lets several param updates in one handler compose, across hook instances. */
+  pendingSearch: MutableRefObject<PendingSearch | null>;
 }
 
 /**
@@ -18,7 +27,8 @@ export interface RouterContextValue {
 export const RouterContext = createContext<RouterContextValue | null>(null);
 RouterContext.displayName = 'RouterContext';
 
-function useRouterContext(hookName: string): RouterContextValue {
+/** The router context; throws `'<hookName> must be used within AppProvider'` outside it. Internal. */
+export function useRouterContext(hookName: string): RouterContextValue {
   const value = useContext(RouterContext);
   if (!value) {
     throw new Error(`${hookName} must be used within AppProvider`);
@@ -29,9 +39,4 @@ function useRouterContext(hookName: string): RouterContextValue {
 /** The router adapter `AppProvider` was given (History API by default). */
 export function useRouterAdapter(): RouterAdapter {
   return useRouterContext('useRouterAdapter').adapter;
-}
-
-/** The app-level navigation guard registry (internal: used by `AppLink` and `useAppNavigate`). */
-export function useAppNavigationGuard(): NavigationGuardApi {
-  return useRouterContext('useRouterAdapter').guard;
 }

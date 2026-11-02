@@ -1,6 +1,5 @@
-import { useCallback, useEffect, useMemo, useRef } from 'react';
-import { useRouterAdapter } from '../router/RouterContext';
-import type { RouterAdapter } from '../router/types';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useRouterContext, type RouterContextValue } from '../router/RouterContext';
 import type { ParamCodec } from './codecs';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any -- codecs of any value type
@@ -11,12 +10,19 @@ export type SetParams<S extends ParamSchema> = (
   opts?: { replace?: boolean }
 ) => void;
 
-/** `usePageParams` against an explicit adapter (null only when `schema` is empty). Internal. */
-export function useParamsFromAdapter<S extends ParamSchema>(
-  adapter: RouterAdapter | null,
+const useNoSearchParams = (): URLSearchParams | null => null;
+
+/** `usePageParams` against an explicit router context (null only when `schema` is empty). Internal. */
+export function useParamsFromRouter<S extends ParamSchema>(
+  router: RouterContextValue | null,
   schema: S
 ): [ParamValues<S>, SetParams<S>] {
-  const searchParams = adapter?.searchParams;
+  const adapter = router?.adapter ?? null;
+  // Picked once so the hook order never changes (an adapter keeps its `useSearchParams`).
+  const [useAdapterSearchParams] = useState(() => adapter?.useSearchParams ?? useNoSearchParams);
+  const searchParams = useAdapterSearchParams() ?? adapter?.searchParams;
+  const committed = searchParams?.toString() ?? '';
+
   const keys = Object.keys(schema);
   // The first value of a repeated key wins; codecs turn malformed values into their default.
   const raws = keys.map((key) => searchParams?.get(key) ?? null);
@@ -31,20 +37,32 @@ export function useParamsFromAdapter<S extends ParamSchema>(
   );
 
   const schemaRef = useRef(schema);
-  const adapterRef = useRef(adapter);
-  /** Params as last written, so several updates before the next render compose. */
-  const latestRef = useRef(searchParams);
+  const routerRef = useRef(router);
+  const committedRef = useRef(committed);
   useEffect(() => {
     schemaRef.current = schema;
-    adapterRef.current = adapter;
+    routerRef.current = router;
   });
   useEffect(() => {
-    latestRef.current = searchParams;
-  }, [searchParams]);
+    committedRef.current = committed;
+    // The router committed a different URL (our write landed, or the user navigated): any pending
+    // write is now reflected in, or superseded by, the committed params.
+    const pending = routerRef.current?.pendingSearch;
+    if (pending?.current && pending.current.from !== committed) {
+      pending.current = null;
+    }
+  }, [committed]);
 
   const setParams = useCallback<SetParams<S>>((patch, opts) => {
+    const ctx = routerRef.current;
+    if (!ctx) {
+      return;
+    }
     const current = schemaRef.current;
-    const before = new URLSearchParams(latestRef.current);
+    const from = committedRef.current;
+    const pending = ctx.pendingSearch.current;
+    // Writes made before the router re-renders (from any params hook) build on each other.
+    const before = pending && pending.from === from ? pending.params : new URLSearchParams(from);
     const next = new URLSearchParams(before);
     for (const key of Object.keys(patch)) {
       const codec = current[key];
@@ -62,8 +80,8 @@ export function useParamsFromAdapter<S extends ParamSchema>(
     if (next.toString() === before.toString()) {
       return;
     }
-    latestRef.current = next;
-    adapterRef.current?.setSearchParams(next, { replace: opts?.replace ?? true });
+    ctx.pendingSearch.current = { from, params: next };
+    ctx.adapter.setSearchParams(next, { replace: opts?.replace ?? true });
   }, []);
 
   return [values, setParams];
@@ -86,5 +104,5 @@ export function useParamsFromAdapter<S extends ParamSchema>(
  * ```
  */
 export function usePageParams<S extends ParamSchema>(schema: S): [ParamValues<S>, SetParams<S>] {
-  return useParamsFromAdapter(useRouterAdapter(), schema);
+  return useParamsFromRouter(useRouterContext('usePageParams'), schema);
 }

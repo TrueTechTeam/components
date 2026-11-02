@@ -73,6 +73,12 @@ describe('usePageParams', () => {
     }
   );
 
+  it('a repeated key uses its first value when valid', () => {
+    const { wrapper } = createMemoryRouter('/orders?page=3&page=2');
+    const { result } = renderHook(() => usePageParams(schema), { wrapper });
+    expect(result.current[0].page).toBe(3);
+  });
+
   it('setting a value equal to default removes it; other params kept', () => {
     const router = createMemoryRouter('/orders?page=2&x=1');
     const { result } = renderHook(() => usePageParams(schema), { wrapper: router.wrapper });
@@ -112,6 +118,38 @@ describe('usePageParams', () => {
     expect(router.url()).toBe('/orders?page=2&q=shoes');
   });
 
+  it('composes updates from different hook instances in one handler', () => {
+    window.history.replaceState(null, '', '/orders?page=3');
+    const { result } = renderHook(
+      () => ({ p: usePageParams({ page: param.number(1) }), size: usePreference('size', 25) }),
+      { wrapper: ({ children }) => <AppProvider logger={silentLogger}>{children}</AppProvider> }
+    );
+    act(() => {
+      result.current.size[1](50);
+      result.current.p[1]({ page: 1 });
+    });
+    expect(window.location.search).toBe('?size=50');
+    expect(result.current.p[0].page).toBe(1);
+    expect(result.current.size[0]).toBe(50);
+
+    // After the URL commits, later writes start from it (no stale pending state).
+    act(() => result.current.p[1]({ page: 2 }));
+    expect(window.location.search).toBe('?size=50&page=2');
+    window.history.replaceState(null, '', '/');
+  });
+
+  it('a pending write does not leak into writes after an outside navigation', () => {
+    const router = createMemoryRouter('/orders');
+    const { result } = renderHook(
+      () => ({ a: usePageParams(schema), b: usePageParams({ q: param.string() }) }),
+      { wrapper: router.wrapper }
+    );
+    act(() => result.current.a[1]({ page: 2 }));
+    act(() => router.navigate('/orders?status=closed'));
+    act(() => result.current.b[1]({ q: 'x' }));
+    expect(router.url()).toBe('/orders?status=closed&q=x');
+  });
+
   it('keeps values and setter referentially stable while its params are unchanged', () => {
     const router = createMemoryRouter('/orders?page=2');
     const { result } = renderHook(() => usePageParams(schema), { wrapper: router.wrapper });
@@ -127,7 +165,7 @@ describe('usePageParams', () => {
   it('throws outside AppProvider', () => {
     const spy = jest.spyOn(console, 'error').mockImplementation(() => undefined);
     expect(() => renderHook(() => usePageParams(schema))).toThrow(
-      'useRouterAdapter must be used within AppProvider'
+      'usePageParams must be used within AppProvider'
     );
     spy.mockRestore();
   });
@@ -197,6 +235,23 @@ describe('usePreference', () => {
     expect(window.localStorage.getItem('pref:app:view')).toBe(JSON.stringify('list'));
     expect(window.localStorage.getItem('pref:orders:view')).toBe(JSON.stringify('cards'));
     expect(router.url()).toBe('/orders');
+  });
+
+  it('url storage falls back to the default when a JSON value has the wrong type', () => {
+    const router = createMemoryRouter(
+      `/orders?range=${encodeURIComponent('"oops"')}&cols=${encodeURIComponent('{"a":1}')}`
+    );
+    const { result } = renderHook(
+      () => ({
+        range: usePreference('range', { from: 1 }),
+        cols: usePreference<number[]>('cols', [1, 2]),
+      }),
+      { wrapper: router.wrapper }
+    );
+    expect(result.current.range[0]).toEqual({ from: 1 });
+    expect(result.current.cols[0]).toEqual([1, 2]);
+    act(() => result.current.range[1]({ from: 5 }));
+    expect(result.current.range[0]).toEqual({ from: 5 });
   });
 
   it('local storage reads a stored value and works without AppProvider', () => {

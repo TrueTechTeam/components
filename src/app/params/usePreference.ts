@@ -3,7 +3,7 @@ import { useLocalStorage } from '../../lib/hooks/useLocalStorage';
 import { RouterContext } from '../router/RouterContext';
 import { param, type ParamCodec } from './codecs';
 import { PageIdContext } from './PageIdContext';
-import { useParamsFromAdapter, type ParamSchema } from './usePageParams';
+import { useParamsFromRouter, type ParamSchema } from './usePageParams';
 
 export interface UsePreferenceOptions<T> {
   /** `'url'` (default): a search param, shareable. `'local'`: this browser only. Keep it constant. */
@@ -20,7 +20,12 @@ function jsonCodec<T>(def: T): ParamCodec<T> {
         return def;
       }
       try {
-        return JSON.parse(raw) as T;
+        const value: unknown = JSON.parse(raw);
+        const sameType =
+          typeof value === typeof def &&
+          Array.isArray(value) === Array.isArray(def) &&
+          (value === null) === (def === null);
+        return sameType ? (value as T) : def;
       } catch {
         return def;
       }
@@ -65,7 +70,8 @@ export function usePreference<T>(
   // Both stores are always read so the hook order never depends on `storage`.
   const [localValue, setLocalValue] = useLocalStorage<T>(`pref:${pageId ?? 'app'}:${key}`, def);
   const schema = storage === 'url' ? { [key]: codec ?? inferCodec(def) } : noParams;
-  const [values, setValues] = useParamsFromAdapter(router?.adapter ?? null, schema);
+  // In local mode no router is passed, so URL params are never read (no Suspense needed in Next).
+  const [values, setValues] = useParamsFromRouter(storage === 'url' ? router : null, schema);
   const setUrlValue = useCallback((v: T) => setValues({ [key]: v }), [setValues, key]);
 
   if (storage === 'local') {

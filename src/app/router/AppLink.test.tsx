@@ -178,7 +178,10 @@ describe('useAppNavigate', () => {
   it('throws outside AppProvider', () => {
     const spy = jest.spyOn(console, 'error').mockImplementation(() => undefined);
     expect(() => renderHook(() => useAppNavigate())).toThrow(
-      'useRouterAdapter must be used within AppProvider'
+      'useAppNavigate must be used within AppProvider'
+    );
+    expect(() => render(<AppLink href="/x">X</AppLink>)).toThrow(
+      'AppLink must be used within AppProvider'
     );
     spy.mockRestore();
   });
