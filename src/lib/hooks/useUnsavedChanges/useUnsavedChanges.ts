@@ -26,16 +26,17 @@ export function useUnsavedChanges(
   const stateRef = useRef({ active, message });
   stateRef.current = { active, message };
 
-  useEffect(
-    () =>
-      registry.register({
-        isBlocking: () => stateRef.current.active,
-        get message() {
-          return stateRef.current.message;
-        },
-      }),
-    [registry]
-  );
+  useEffect(() => {
+    if (!enabled) {
+      return;
+    }
+    return registry.register({
+      isBlocking: () => stateRef.current.active,
+      get message() {
+        return stateRef.current.message;
+      },
+    });
+  }, [registry, enabled]);
 
   useEffect(() => {
     if (!active) {

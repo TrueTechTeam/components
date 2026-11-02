@@ -66,10 +66,10 @@ Storybook docs.
 
 ## Forms
 
-| Component                         | Use when                                                                                                                                                         |
-| --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `FormBuilder`                     | Config-driven forms with consistent layout and validation (`layout`: vertical / horizontal / grid). Hooks: `useFormState`, `useFormValidation`, `useFormContext` |
-| `validators`, `combineValidators` | Reusable validation rules for Input/FormBuilder                                                                                                                  |
+| Component                         | Use when                                                                                                                                                                                                                   |
+| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `FormBuilder`                     | Config-driven forms with consistent layout and validation (`layout`: vertical / horizontal / grid; `guardUnsaved` warns before leaving with unsaved changes). Hooks: `useFormState`, `useFormValidation`, `useFormContext` |
+| `validators`, `combineValidators` | Reusable validation rules for Input/FormBuilder                                                                                                                                                                            |
 
 ## Overlays & feedback
 
@@ -172,4 +172,7 @@ Storybook docs.
 `useDialog`, `useAlert`, `useToast`, `useAsyncToast`, `usePageMessages` (feedback) ·
 `useUrlState` (shareable view state) · `useLocalStorage` (persist preferences) · `useMediaQuery`
 (responsive logic; prefer CSS when possible) · `useResizeObserver`, `useIntersectionObserver` ·
-`useClipboard` (copy, with a confirmation toast) · `useTimeout`, `useInterval`, `usePrevious`.
+`useClipboard` (copy, with a confirmation toast) · `useTimeout`, `useInterval`, `usePrevious` ·
+`useUnsavedChanges` (warn on page unload, guarded navigation and Dialog close while a form is
+dirty; `useNavigationGuard` / `NavigationGuardProvider` expose the registry that router adapters
+call before navigating).

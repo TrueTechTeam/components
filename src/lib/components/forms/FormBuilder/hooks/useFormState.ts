@@ -178,8 +178,6 @@ export const useFormState = (options: UseFormStateOptions = {}): FormContext => 
 
     try {
       await onSubmit?.(values);
-      // Successful submit: the submitted values become the new baseline
-      initialValuesRef.current = values;
     } catch (error) {
       console.error('Form submission error:', error);
     } finally {
