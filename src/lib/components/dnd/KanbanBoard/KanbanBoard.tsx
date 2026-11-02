@@ -13,6 +13,7 @@ import { KanbanColumn } from './KanbanColumn';
 import { KanbanCard, type KanbanCardRenderProps } from './KanbanCard';
 import type { BaseComponentProps, ComponentSize } from '../../../types/component.types';
 import styles from './KanbanBoard.module.scss';
+import { useLabels } from '../../../contexts/LabelsContext';
 
 /**
  * Card data type
@@ -158,6 +159,7 @@ function KanbanBoardInner<T extends KanbanCardData>({
   'aria-label': ariaLabel,
   style,
 }: KanbanBoardProps<T>) {
+  const t = useLabels();
   const { active, overId } = useDndContext();
 
   // Get active card ID
@@ -259,7 +261,7 @@ function KanbanBoardInner<T extends KanbanCardData>({
         data-overflow={overflowBehavior}
         data-disabled={disabled || undefined}
         role="region"
-        aria-label={ariaLabel || 'Kanban board'}
+        aria-label={ariaLabel || t('kanbanBoard.label')}
       >
         {columns.map((column, columnIndex) => (
           <KanbanColumn

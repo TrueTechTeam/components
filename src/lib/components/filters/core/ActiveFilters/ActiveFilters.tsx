@@ -8,6 +8,7 @@ import { Button } from '../../../buttons/Button';
 import { useFilterContextStrict } from '../../FilterContext';
 import type { ActiveFiltersProps, FilterDefinition, FilterValue } from '../../types';
 import styles from './ActiveFilters.module.scss';
+import { useLabels } from '../../../../contexts/LabelsContext';
 
 /**
  * ActiveFilters displays the currently applied filters as removable chips.
@@ -25,7 +26,7 @@ export const ActiveFilters = ({
   ref,
   maxVisible,
   showClearAll = true,
-  clearAllLabel = 'Clear all',
+  clearAllLabel: clearAllLabelProp,
   emptyContent,
   chipVariant = 'secondary',
   chipSize = 'sm',
@@ -35,6 +36,9 @@ export const ActiveFilters = ({
 }: ActiveFiltersProps & {
   ref?: React.Ref<HTMLDivElement>;
 }) => {
+  const t = useLabels();
+  const clearAllLabel =
+    clearAllLabelProp === undefined ? t('activeFilters.clearAll') : clearAllLabelProp;
   const ctx = useFilterContextStrict();
   const [showAll, setShowAll] = useState(false);
 
@@ -110,7 +114,7 @@ export const ActiveFilters = ({
               variant={chipVariant}
               size={chipSize}
               onRemove={() => handleRemoveFilter(filter.id)}
-              removeButtonAriaLabel={`Remove ${label} filter`}
+              removeButtonAriaLabel={t('activeFilters.removeFilter', { label })}
             >
               {chipContent}
             </Chip>
@@ -119,13 +123,13 @@ export const ActiveFilters = ({
 
         {hasHiddenFilters && (
           <button type="button" className={styles.showMoreButton} onClick={() => setShowAll(true)}>
-            +{hiddenCount} more
+            {t('truncatedList.more', { count: hiddenCount })}
           </button>
         )}
 
         {showAll && maxVisible && activeFilters.length > maxVisible && (
           <button type="button" className={styles.showLessButton} onClick={() => setShowAll(false)}>
-            Show less
+            {t('activeFilters.showLess')}
           </button>
         )}
       </div>

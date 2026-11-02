@@ -4,6 +4,7 @@
 
 import { useState, useCallback, useEffect, useRef } from 'react';
 import type { FilterOption, FilterOptionsLoader, FilterValue } from '../types';
+import { useLabels } from '../../../contexts/LabelsContext';
 
 export interface UseFilterOptionsOptions<T = string> {
   /** Static options (takes precedence if provided) */
@@ -115,6 +116,7 @@ export function useFilterOptions<T = string>(
     filterId = 'default',
   } = options;
 
+  const t = useLabels();
   const [internalSearchQuery, setInternalSearchQuery] = useState('');
   const searchQuery = externalSearchQuery || internalSearchQuery;
 
@@ -204,13 +206,13 @@ export function useFilterOptions<T = string>(
         }
       } catch (err) {
         if ((err as Error).name !== 'AbortError') {
-          setError((err as Error).message || 'Failed to load options');
+          setError((err as Error).message || t('filters.loadFailed'));
         }
       } finally {
         setLoading(false);
       }
     },
-    [loader, filterId, debouncedSearchQuery, dependencyValues, page, asyncOptions]
+    [loader, filterId, debouncedSearchQuery, dependencyValues, page, asyncOptions, t]
   );
 
   // Load on mount or when dependencies change

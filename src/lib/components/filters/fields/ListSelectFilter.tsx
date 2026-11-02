@@ -9,6 +9,7 @@ import { useFilter } from '../hooks/useFilter';
 import type { BaseComponentProps, ComponentSize } from '../../../types';
 import type { ListSelectFilterConfig } from '../types';
 import styles from './ListSelectFilter.module.scss';
+import { useLabels } from '../../../contexts/LabelsContext';
 
 export interface ListSelectFilterProps extends BaseComponentProps {
   /** Filter ID from FilterDefinition */
@@ -38,6 +39,7 @@ export const ListSelectFilter = ({
 }: ListSelectFilterProps & {
   ref?: React.Ref<HTMLDivElement>;
 }) => {
+  const t = useLabels();
   const { filter, value, setValue, isEnabled, options, error } = useFilter<string | string[]>({
     filterId,
   });
@@ -100,7 +102,7 @@ export const ListSelectFilter = ({
             type="search"
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
-            placeholder={config?.searchPlaceholder ?? 'Search...'}
+            placeholder={config?.searchPlaceholder ?? t('filters.searchPlaceholder')}
             disabled={!isEnabled}
             showClearButton
             onClear={() => setSearchQuery('')}
@@ -169,7 +171,7 @@ export const ListSelectFilter = ({
             onClick={options.loadMore}
             disabled={options.loading}
           >
-            Load more...
+            {t('filters.loadMore')}
           </button>
         )}
       </div>

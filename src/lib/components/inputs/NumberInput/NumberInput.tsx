@@ -2,6 +2,7 @@ import React, { useState, useId, useCallback, useMemo } from 'react';
 import { IconButton } from '../../buttons/IconButton';
 import { Input } from '../Input';
 import styles from './NumberInput.module.scss';
+import { useLabels } from '../../../contexts/LabelsContext';
 
 export interface NumberInputProps
   extends Omit<
@@ -51,6 +52,7 @@ export const NumberInput = ({
 }: NumberInputProps & {
   ref?: React.Ref<HTMLInputElement>;
 }) => {
+  const t = useLabels();
   const autoId = useId();
   const id = providedId || autoId;
   const [internalValue, setInternalValue] = useState(defaultValue);
@@ -120,7 +122,7 @@ export const NumberInput = ({
       icon="minus"
       onClick={decrement}
       disabled={disabled || readOnly || (min !== undefined && value <= min)}
-      aria-label="Decrease value"
+      aria-label={t('numberInput.decrease')}
       type="button"
       className={styles.iconButton}
     />
@@ -132,7 +134,7 @@ export const NumberInput = ({
       icon="plus"
       onClick={increment}
       disabled={disabled || readOnly || (max !== undefined && value >= max)}
-      aria-label="Increase value"
+      aria-label={t('numberInput.increase')}
       type="button"
       className={styles.iconButton}
     />

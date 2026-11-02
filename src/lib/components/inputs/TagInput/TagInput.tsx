@@ -3,6 +3,7 @@ import { IconButton } from '../../buttons/IconButton';
 import { Menu, MenuList, MenuItem } from '../../overlays/Menu';
 import styles from './TagInput.module.scss';
 import type { InputBaseProps } from '../../../types/component.types';
+import { useLabels } from '../../../contexts/LabelsContext';
 
 export interface TagInputProps
   extends Omit<InputBaseProps, 'value' | 'onChange' | 'type' | 'defaultValue' | 'onBlur'> {
@@ -144,7 +145,7 @@ export const TagInput = ({
   validateTag,
   suggestions = [],
   showSuggestions = true,
-  placeholder = 'Add a tag...',
+  placeholder: placeholderProp,
   renderTag,
   clearOnBlur = false,
   addOnBlur = false,
@@ -156,6 +157,8 @@ export const TagInput = ({
 }: TagInputProps & {
   ref?: React.Ref<HTMLInputElement>;
 }) => {
+  const t = useLabels();
+  const placeholder = placeholderProp === undefined ? t('tagInput.placeholder') : placeholderProp;
   // State
   const [internalTags, setInternalTags] = useState<string[]>(defaultValue);
   const [inputValue, setInputValue] = useState('');
@@ -375,7 +378,7 @@ export const TagInput = ({
                       e.stopPropagation();
                       removeTag(index);
                     }}
-                    aria-label={`Remove ${tag}`}
+                    aria-label={t('tag.remove', { name: tag })}
                     type="button"
                   />
                 )}
@@ -406,7 +409,7 @@ export const TagInput = ({
               onBlur={handleBlur}
               disabled={disabled}
               placeholder={tags.length === 0 ? placeholder : ''}
-              aria-label={ariaLabel || label || 'Tag input'}
+              aria-label={ariaLabel || label || t('tagInput.label')}
               aria-invalid={error}
             />
           )}

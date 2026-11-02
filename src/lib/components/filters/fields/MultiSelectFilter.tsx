@@ -14,6 +14,7 @@ import { useFilter } from '../hooks/useFilter';
 import type { BaseComponentProps, ComponentSize } from '../../../types';
 import type { MultiSelectFilterConfig } from '../types';
 import styles from './MultiSelectFilter.module.scss';
+import { useLabels } from '../../../contexts/LabelsContext';
 
 export interface MultiSelectFilterProps extends BaseComponentProps {
   /** Filter ID from FilterDefinition */
@@ -46,6 +47,7 @@ export const MultiSelectFilter = ({
 }: MultiSelectFilterProps & {
   ref?: React.Ref<HTMLDivElement>;
 }) => {
+  const t = useLabels();
   const { filter, value, setValue, isEnabled, options, error } = useFilter<string[]>({
     filterId,
   });
@@ -80,7 +82,8 @@ export const MultiSelectFilter = ({
 
   const config = filter.config as MultiSelectFilterConfig | undefined;
   const label = labelOverride ?? filter.label;
-  const placeholder = placeholderOverride ?? filter.placeholder ?? `Select ${label}`;
+  const placeholder =
+    placeholderOverride ?? filter.placeholder ?? t('filters.selectPlaceholder', { label });
   const displayMode = config?.displayMode ?? 'checkbox-group';
   const orientation = config?.orientation ?? 'vertical';
 
@@ -99,7 +102,7 @@ export const MultiSelectFilter = ({
       const selectedOpt = options.options.find((o) => String(o.value) === value?.[0]);
       displayText = selectedOpt ? String(selectedOpt.label) : (value?.[0] ?? '');
     } else if (selectedCount > 1) {
-      displayText = `${selectedCount} selected`;
+      displayText = t('filters.selectedCount', { count: selectedCount });
     }
 
     // Filter options by search
@@ -175,7 +178,7 @@ export const MultiSelectFilter = ({
                 <Input
                   ref={searchInputRef}
                   type="search"
-                  placeholder="Search..."
+                  placeholder={t('filters.searchPlaceholder')}
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   startIcon="search"
@@ -190,7 +193,7 @@ export const MultiSelectFilter = ({
                 <Checkbox
                   checked={allSelected}
                   onChange={() => (allSelected ? handleClearAll() : handleSelectAll())}
-                  label={config.selectAllLabel ?? 'Select all'}
+                  label={config.selectAllLabel ?? t('filters.selectAll')}
                   disabled={!isEnabled}
                   size={size}
                 />
@@ -200,7 +203,7 @@ export const MultiSelectFilter = ({
             <MenuList>
               {filteredOptions.length === 0 ? (
                 <div className={styles.dropdownNoResults}>
-                  {searchQuery ? 'No results found' : 'No options available'}
+                  {searchQuery ? t('select.noResults') : t('select.noOptions')}
                 </div>
               ) : (
                 filteredOptions.map((option) => {
@@ -250,7 +253,7 @@ export const MultiSelectFilter = ({
             <Checkbox
               checked={allSelected}
               onChange={() => (allSelected ? handleClearAll() : handleSelectAll())}
-              label={config.selectAllLabel ?? 'Select all'}
+              label={config.selectAllLabel ?? t('filters.selectAll')}
               disabled={!isEnabled}
               size={size}
             />
@@ -293,7 +296,7 @@ export const MultiSelectFilter = ({
           <Checkbox
             checked={allSelected}
             onChange={() => (allSelected ? handleClearAll() : handleSelectAll())}
-            label={config.selectAllLabel ?? 'Select all'}
+            label={config.selectAllLabel ?? t('filters.selectAll')}
             disabled={!isEnabled}
             size={size}
           />

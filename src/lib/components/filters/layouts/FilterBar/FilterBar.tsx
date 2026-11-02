@@ -11,6 +11,7 @@ import { ActiveFilters } from '../../core/ActiveFilters';
 import { FilterField } from '../../core/FilterField';
 import type { FilterBarProps } from '../../types';
 import styles from './FilterBar.module.scss';
+import { useLabels } from '../../../../contexts/LabelsContext';
 
 /**
  * FilterBar provides a horizontal layout for inline filters.
@@ -30,24 +31,33 @@ export const FilterBar = ({
   ref,
   visibleFilters,
   showMoreFilters = true,
-  moreFiltersLabel = 'More Filters',
+  moreFiltersLabel: moreFiltersLabelProp,
   wrap = true,
   gap = 'md',
   fillWidth = false,
   showActiveFilters = true,
   activeFiltersPosition = 'inline',
   showApplyButton = false,
-  applyButtonLabel = 'Apply',
+  applyButtonLabel: applyButtonLabelProp,
   showClearButton = true,
-  clearButtonLabel = 'Clear',
+  clearButtonLabel: clearButtonLabelProp,
   showResetButton = false,
-  resetButtonLabel = 'Reset',
+  resetButtonLabel: resetButtonLabelProp,
   children,
   className,
   ...restProps
 }: FilterBarProps & {
   ref?: React.Ref<HTMLDivElement>;
 }) => {
+  const t = useLabels();
+  const moreFiltersLabel =
+    moreFiltersLabelProp === undefined ? t('filterBar.moreFilters') : moreFiltersLabelProp;
+  const applyButtonLabel =
+    applyButtonLabelProp === undefined ? t('filters.apply') : applyButtonLabelProp;
+  const clearButtonLabel =
+    clearButtonLabelProp === undefined ? t('filters.clear') : clearButtonLabelProp;
+  const resetButtonLabel =
+    resetButtonLabelProp === undefined ? t('filters.reset') : resetButtonLabelProp;
   const ctx = useFilterContext();
   const [moreFiltersOpen, setMoreFiltersOpen] = useState(false);
 

@@ -6,6 +6,7 @@ import React, { useCallback, useRef, useEffect, useState } from 'react';
 import type { BaseComponentProps } from '../../../types/component.types';
 import { useResizablePanelsContext } from './ResizablePanelsContext';
 import styles from './ResizablePanels.module.scss';
+import { useLabels } from '../../../contexts/LabelsContext';
 
 export interface ResizeHandleProps extends Omit<BaseComponentProps, 'children'> {
   /**
@@ -44,6 +45,7 @@ export const ResizeHandle = ({
 }: ResizeHandleProps & {
   ref?: React.Ref<HTMLDivElement>;
 }) => {
+  const t = useLabels();
   const context = useResizablePanelsContext();
   const [handleIndex, setHandleIndex] = useState<number>(-1);
   const handleIndexRef = useRef<number>(-1);
@@ -207,7 +209,7 @@ export const ResizeHandle = ({
       data-show-on-hover={showOnHover || undefined}
       role="slider"
       aria-orientation={context.direction === 'horizontal' ? 'vertical' : 'horizontal'}
-      aria-label={ariaLabel || 'Resize handle'}
+      aria-label={ariaLabel || t('resizablePanels.handle')}
       aria-valuenow={context.sizes[handleIndex] ?? 50}
       aria-valuemin={0}
       aria-valuemax={100}

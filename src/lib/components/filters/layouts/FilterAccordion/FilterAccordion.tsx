@@ -11,6 +11,7 @@ import { FilterField } from '../../core/FilterField';
 import { ActiveFilters } from '../../core/ActiveFilters';
 import type { FilterAccordionProps } from '../../types';
 import styles from './FilterAccordion.module.scss';
+import { useLabels } from '../../../../contexts/LabelsContext';
 
 /**
  * FilterAccordion automatically groups filters by their group property
@@ -33,17 +34,24 @@ export const FilterAccordion = ({
   showActiveFilters = false,
   activeFiltersPosition = 'top',
   showApplyButton = false,
-  applyButtonLabel = 'Apply',
+  applyButtonLabel: applyButtonLabelProp,
   showClearButton = true,
-  clearButtonLabel = 'Clear',
+  clearButtonLabel: clearButtonLabelProp,
   showResetButton = false,
-  resetButtonLabel = 'Reset',
+  resetButtonLabel: resetButtonLabelProp,
   children,
   className,
   ...restProps
 }: FilterAccordionProps & {
   ref?: React.Ref<HTMLDivElement>;
 }) => {
+  const t = useLabels();
+  const applyButtonLabel =
+    applyButtonLabelProp === undefined ? t('filters.apply') : applyButtonLabelProp;
+  const clearButtonLabel =
+    clearButtonLabelProp === undefined ? t('filters.clear') : clearButtonLabelProp;
+  const resetButtonLabel =
+    resetButtonLabelProp === undefined ? t('filters.reset') : resetButtonLabelProp;
   const ctx = useFilterContext();
 
   // Get expanded state
