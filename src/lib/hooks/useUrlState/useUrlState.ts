@@ -150,6 +150,9 @@ function inferSerializer<T>(defaultValue: T): UrlStateSerializer<T> {
 /**
  * Hook that synchronizes React state with URL search parameters
  *
+ * @deprecated In `/app` applications use `usePageParams` (typed codecs, router-aware) from
+ * `@true-tech-team/ui-components/app` instead.
+ *
  * @example
  * ```tsx
  * // Basic string parameter

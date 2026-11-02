@@ -19,6 +19,7 @@ import {
   type AppProviderProps,
   type Logger,
 } from './index';
+import { useRouterAdapter } from '../router';
 
 const silentLogger: Logger = {
   debug: jest.fn(),
@@ -176,7 +177,7 @@ describe('AppProvider', () => {
     }
     const { renderToString } = require('react-dom/server') as typeof import('react-dom/server');
     function Location() {
-      const { router } = useAppConfig();
+      const router = useRouterAdapter();
       return <span>{`${router.pathname}|${[...router.searchParams.keys()].length}`}</span>;
     }
     window.history.replaceState(null, '', '/client?x=1');
@@ -232,12 +233,15 @@ describe('AppProvider', () => {
   });
 
   it('passes breakpoints through and exposes titleTemplate and the router', () => {
-    const { result } = renderHook(() => ({ config: useAppConfig(), bp: useBreakpoints() }), {
-      wrapper: makeWrapper({ breakpoints: { tablet: 700 }, titleTemplate: (t) => `${t} | Acme` }),
-    });
+    const { result } = renderHook(
+      () => ({ config: useAppConfig(), bp: useBreakpoints(), router: useRouterAdapter() }),
+      {
+        wrapper: makeWrapper({ breakpoints: { tablet: 700 }, titleTemplate: (t) => `${t} | Acme` }),
+      }
+    );
     expect(result.current.bp.tablet).toBe(700);
     expect(result.current.config.titleTemplate('Orders')).toBe('Orders | Acme');
-    expect(result.current.config.router.pathname).toBe(window.location.pathname);
+    expect(result.current.router.pathname).toBe(window.location.pathname);
   });
 
   it('uses the router hook passed in', () => {
@@ -249,10 +253,49 @@ describe('AppProvider', () => {
       setSearchParams: jest.fn(),
       supportsBlocking: false,
     });
-    const { result } = renderHook(() => useAppConfig(), {
+    const { result } = renderHook(() => useRouterAdapter(), {
       wrapper: makeWrapper({ router: fakeRouter }),
     });
-    expect(result.current.router.pathname).toBe('/fake');
+    expect(result.current.pathname).toBe('/fake');
+  });
+
+  it('does not re-render app config consumers when the URL changes', () => {
+    window.history.replaceState(null, '', '/start');
+    let flagRenders = 0;
+    function FlagConsumer() {
+      flagRenders++;
+      useFlag('beta');
+      useAuth();
+      useLogger();
+      useTrack();
+      useAppTranslation();
+      return null;
+    }
+    let navigate: (href: string) => void = () => undefined;
+    function Location() {
+      const router = useRouterAdapter();
+      navigate = router.navigate;
+      return <span data-testid="path">{router.pathname}</span>;
+    }
+    render(
+      <AppProvider logger={silentLogger}>
+        <FlagConsumer />
+        <Location />
+      </AppProvider>
+    );
+    const before = flagRenders;
+    act(() => navigate('/elsewhere?x=1'));
+    expect(screen.getByTestId('path')).toHaveTextContent('/elsewhere');
+    expect(flagRenders).toBe(before);
+    window.history.replaceState(null, '', '/');
+  });
+
+  it('useRouterAdapter throws outside AppProvider', () => {
+    const spy = jest.spyOn(console, 'error').mockImplementation(() => undefined);
+    expect(() => renderHook(() => useRouterAdapter())).toThrow(
+      'useRouterAdapter must be used within AppProvider'
+    );
+    spy.mockRestore();
   });
 
   it('throws a named error when a hook is used outside AppProvider', () => {

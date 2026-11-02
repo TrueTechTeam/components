@@ -2,7 +2,9 @@ import React, { useMemo, useState, type ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { LabelsProvider, type TranslateFn } from '../../lib/contexts/LabelsContext';
 import { BreakpointsProvider, type Breakpoints } from '../../lib/contexts/BreakpointsContext';
+import { useNavigationGuard } from '../../lib/contexts/NavigationGuardContext';
 import { useBrowserRouter } from '../router/browserRouter';
+import { RouterContext, type RouterContextValue } from '../router/RouterContext';
 import type { RouterAdapter } from '../router/types';
 import {
   AppContext,
@@ -68,15 +70,21 @@ export function AppProvider({
 }: AppProviderProps) {
   const useRouter = router ?? useBrowserRouter;
   const routerAdapter = useRouter();
+  const guard = useNavigationGuard();
   // Created once and kept, so dropping the `queryClient` prop later never loses the cache.
   const [defaultClient] = useState(createDefaultQueryClient);
   const [logBuffer] = useState(() => createLogBuffer());
   const client = queryClient ?? defaultClient;
   const resolvedLogger = logger ?? (debug ? consoleLogger : noopLogger);
 
+  const routerValue = useMemo<RouterContextValue>(
+    () => ({ adapter: routerAdapter, guard }),
+    [routerAdapter, guard]
+  );
+
+  // The router lives in its own context so these consumers don't re-render on navigation.
   const value = useMemo<AppConfigValue>(
     () => ({
-      router: routerAdapter,
       logger: resolvedLogger,
       logBuffer,
       analytics,
@@ -86,24 +94,16 @@ export function AppProvider({
       titleTemplate,
       debug,
     }),
-    [
-      routerAdapter,
-      resolvedLogger,
-      logBuffer,
-      analytics,
-      auth,
-      flags,
-      translate,
-      titleTemplate,
-      debug,
-    ]
+    [resolvedLogger, logBuffer, analytics, auth, flags, translate, titleTemplate, debug]
   );
 
   return (
     <QueryClientProvider client={client}>
       <LabelsProvider translate={translate} locale={locale}>
         <BreakpointsProvider breakpoints={breakpoints}>
-          <AppContext.Provider value={value}>{children}</AppContext.Provider>
+          <AppContext.Provider value={value}>
+            <RouterContext.Provider value={routerValue}>{children}</RouterContext.Provider>
+          </AppContext.Provider>
         </BreakpointsProvider>
       </LabelsProvider>
     </QueryClientProvider>

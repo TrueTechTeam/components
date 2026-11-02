@@ -1,14 +1,14 @@
 /** @jest-environment node */
 import React from 'react';
 import { renderToString } from 'react-dom/server';
-import { AppProvider, useAppConfig, type RouterAdapter } from './index';
+import { AppProvider, useRouterAdapter, type RouterAdapter } from './index';
 
 describe('/app without a DOM (server rendering)', () => {
   it('renders AppProvider and navigate is a no-op', () => {
     expect(typeof window).toBe('undefined');
     let router: RouterAdapter | undefined;
     function Probe() {
-      router = useAppConfig().router;
+      router = useRouterAdapter();
       return <span>{router.pathname}</span>;
     }
     let html = '';

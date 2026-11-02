@@ -6,3 +6,4 @@
 
 export * from './AppProvider';
 export * from './router';
+export * from './params';
