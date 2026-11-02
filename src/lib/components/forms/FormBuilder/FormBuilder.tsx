@@ -29,6 +29,7 @@ import { FilePicker } from '../../inputs/FilePicker';
 import { ColorPicker } from '../../inputs/ColorPicker';
 import { DatePicker } from '../../inputs/DatePicker';
 import { DateRangePicker } from '../../inputs/DateRangePicker';
+import { useLabels } from '../../../contexts/LabelsContext';
 
 /**
  * Form context
@@ -319,10 +320,10 @@ export const FormBuilder = ({
   onValidate,
   validateOn = 'blur',
   showSubmitButton = true,
-  submitButtonText = 'Submit',
+  submitButtonText: submitButtonTextProp,
   submitButtonVariant,
   showResetButton = false,
-  resetButtonText = 'Reset',
+  resetButtonText: resetButtonTextProp,
   layout = 'vertical',
   columns = 2,
   gap,
@@ -335,6 +336,11 @@ export const FormBuilder = ({
 }: FormBuilderProps & {
   ref?: React.Ref<HTMLFormElement>;
 }) => {
+  const t = useLabels();
+  const submitButtonText =
+    submitButtonTextProp === undefined ? t('formBuilder.submit') : submitButtonTextProp;
+  const resetButtonText =
+    resetButtonTextProp === undefined ? t('formBuilder.reset') : resetButtonTextProp;
   // Initialize form state
   const formOptions: UseFormStateOptions = {
     initialValues: defaultValues,

@@ -1,6 +1,6 @@
 import React, { type ReactNode } from 'react';
 import { renderHook } from '@testing-library/react';
-import { LabelsProvider, useLabels, interpolate } from './LabelsContext';
+import { LabelsProvider, useLabels, useLocale, interpolate } from './LabelsContext';
 import { DEFAULT_LABELS } from './defaultLabels';
 import { GlobalProvider } from '../../providers/GlobalProvider';
 
@@ -90,5 +90,34 @@ describe('LabelsContext', () => {
       expect(interpolate('{a} and {b}', { a: 1 })).toBe('1 and {b}');
       expect(interpolate('plain')).toBe('plain');
     });
+  });
+});
+
+describe('useLocale', () => {
+  it('falls back to the browser locale without a provider', () => {
+    const { result } = renderHook(() => useLocale());
+    expect(result.current).toBe(navigator.language || 'en-US');
+  });
+
+  it('uses the nearest provider locale and inherits from outer providers', () => {
+    const wrapper = ({ children }: { children: ReactNode }) => (
+      <LabelsProvider locale="fr-FR">
+        <LabelsProvider labels={{ 'x.y': 'z' }}>{children}</LabelsProvider>
+      </LabelsProvider>
+    );
+    expect(renderHook(() => useLocale(), { wrapper }).result.current).toBe('fr-FR');
+    const inner = ({ children }: { children: ReactNode }) => (
+      <LabelsProvider locale="fr-FR">
+        <LabelsProvider locale="de-DE">{children}</LabelsProvider>
+      </LabelsProvider>
+    );
+    expect(renderHook(() => useLocale(), { wrapper: inner }).result.current).toBe('de-DE');
+  });
+
+  it('GlobalProvider passes locale through', () => {
+    const wrapper = ({ children }: { children: ReactNode }) => (
+      <GlobalProvider locale="es-ES">{children}</GlobalProvider>
+    );
+    expect(renderHook(() => useLocale(), { wrapper }).result.current).toBe('es-ES');
   });
 });

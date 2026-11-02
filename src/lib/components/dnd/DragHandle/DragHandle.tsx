@@ -5,6 +5,7 @@
 import React, { type CSSProperties } from 'react';
 import type { BaseComponentProps, ExtendedComponentSize } from '../../../types/component.types';
 import styles from './DragHandle.module.scss';
+import { useLabels } from '../../../contexts/LabelsContext';
 
 export interface DragHandleProps
   extends Omit<BaseComponentProps, 'children'>,
@@ -55,7 +56,7 @@ export const DragHandle = ({
   size = 'md',
   variant = 'dots',
   disabled = false,
-  label = 'Drag handle',
+  label: labelProp,
   className,
   'data-testid': dataTestId,
   'aria-label': ariaLabel,
@@ -64,6 +65,8 @@ export const DragHandle = ({
 }: DragHandleProps & {
   ref?: React.Ref<HTMLDivElement>;
 }) => {
+  const t = useLabels();
+  const label = labelProp === undefined ? t('dragHandle.label') : labelProp;
   const containerClasses = [styles.dragHandle, className].filter(Boolean).join(' ');
 
   return (

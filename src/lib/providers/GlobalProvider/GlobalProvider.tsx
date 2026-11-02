@@ -38,6 +38,11 @@ export interface GlobalProviderProps {
   translate?: LabelsProviderProps['translate'];
 
   /**
+   * BCP 47 locale (e.g. `fr-FR`) for month and weekday names in date pickers
+   */
+  locale?: LabelsProviderProps['locale'];
+
+  /**
    * PageMessages default configuration
    */
   pageMessagesConfig?: Omit<PageMessagesProviderProps, 'children'>;
@@ -106,10 +111,11 @@ export function GlobalProvider({
   toastConfig,
   labels,
   translate,
+  locale,
 }: GlobalProviderProps) {
   return (
     <ThemeProvider themeConfig={themeConfig} applyOverrides={injectGlobalStyles}>
-      <LabelsProvider labels={labels} translate={translate}>
+      <LabelsProvider labels={labels} translate={translate} locale={locale}>
         <PageMessagesProvider {...pageMessagesConfig}>
           <DialogProvider {...dialogConfig}>
             <AlertProvider {...alertConfig}>

@@ -9,6 +9,7 @@ import { useDebounce } from '../../../hooks';
 import type { IconName } from '../../display/Icon/icons';
 import type { ComponentVariant, ComponentSize, BaseComponentProps } from '../../../types';
 import styles from './Autocomplete.module.scss';
+import { useLabels } from '../../../contexts/LabelsContext';
 
 /**
  * Autocomplete option
@@ -158,7 +159,7 @@ export const Autocomplete: React.FC<AutocompleteProps> = ({
   onLoadOptions,
   debounceDelay = 300,
   loading: controlledLoading,
-  noOptionsMessage = 'No options',
+  noOptionsMessage: noOptionsMessageProp,
   highlightMatch = true,
   startIcon,
   disabled,
@@ -168,6 +169,9 @@ export const Autocomplete: React.FC<AutocompleteProps> = ({
   'data-testid': testId,
   ...restProps
 }) => {
+  const t = useLabels();
+  const noOptionsMessage =
+    noOptionsMessageProp === undefined ? t('autocomplete.noOptions') : noOptionsMessageProp;
   const [inputValue, setInputValue] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const [asyncOptions, setAsyncOptions] = useState<AutocompleteOption[]>([]);
@@ -286,7 +290,7 @@ export const Autocomplete: React.FC<AutocompleteProps> = ({
         <MenuList>
           {loading && (
             <div className={styles.autocompleteLoading} data-testid="autocomplete-loading">
-              Loading...
+              {t('autocomplete.loading')}
             </div>
           )}
           {!loading && filteredOptions.length === 0 && (

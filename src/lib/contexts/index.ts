@@ -9,5 +9,5 @@ export type {
   PageMessagesGlobalActions,
 } from './PageMessagesContext';
 
-export { LabelsProvider, useLabels, interpolate, DEFAULT_LABELS } from './LabelsContext';
+export { LabelsProvider, useLabels, useLocale, interpolate, DEFAULT_LABELS } from './LabelsContext';
 export type { LabelsProviderProps, LabelVars, TranslateFn, LabelKey } from './LabelsContext';

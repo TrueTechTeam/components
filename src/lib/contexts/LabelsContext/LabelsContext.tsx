@@ -1,7 +1,9 @@
 import React, { createContext, useContext, useMemo, type ReactNode } from 'react';
 import { DEFAULT_LABELS } from './defaultLabels';
+import { resolveLocale } from '../../utils/format';
 
 export type LabelVars = Record<string, string | number>;
+export type LabelTranslator = (key: string, vars?: LabelVars) => string;
 export type TranslateFn = (key: string, vars?: LabelVars) => string | undefined | null;
 
 export interface LabelsProviderProps {
@@ -9,12 +11,15 @@ export interface LabelsProviderProps {
   labels?: Partial<Record<string, string>>;
   /** App translate function. Called with `ui.<key>`; return nothing to fall back. */
   translate?: TranslateFn;
+  /** BCP 47 locale (e.g. `fr-FR`) used for month and weekday names. Inherited from outer providers. */
+  locale?: string;
   children: ReactNode;
 }
 
 interface LabelsContextValue {
   labels: Partial<Record<string, string>>;
   translate?: TranslateFn;
+  locale?: string;
 }
 
 const LabelsContext = createContext<LabelsContextValue>({ labels: {} });
@@ -29,14 +34,15 @@ export function interpolate(template: string, vars?: LabelVars): string {
   );
 }
 
-export function LabelsProvider({ labels, translate, children }: LabelsProviderProps) {
+export function LabelsProvider({ labels, translate, locale, children }: LabelsProviderProps) {
   const parent = useContext(LabelsContext);
   const value = useMemo<LabelsContextValue>(
     () => ({
       labels: { ...parent.labels, ...labels },
       translate: translate ?? parent.translate,
+      locale: locale ?? parent.locale,
     }),
-    [parent, labels, translate]
+    [parent, labels, translate, locale]
   );
   return <LabelsContext.Provider value={value}>{children}</LabelsContext.Provider>;
 }
@@ -62,3 +68,13 @@ export function useLabels(): (key: string, vars?: LabelVars) => string {
     [labels, translate]
   );
 }
+
+/** The nearest provider's locale, else the browser locale, else `en-US`. */
+export function useLocale(): string {
+  const { locale } = useContext(LabelsContext);
+  return resolveLocale(locale);
+}
+
+/** English-only translator for helpers that run outside React (no provider available). */
+export const translateDefault: LabelTranslator = (key, vars) =>
+  interpolate((DEFAULT_LABELS as Record<string, string>)[key] ?? key, vars);

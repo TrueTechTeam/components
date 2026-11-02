@@ -3,6 +3,7 @@ import type { ComponentSize } from '../../../types';
 import { Icon } from '../../display/Icon';
 import type { IconName } from '../../display/Icon/icons';
 import styles from './Rating.module.scss';
+import { useLabels } from '../../../contexts/LabelsContext';
 
 export interface RatingProps
   extends Omit<React.HTMLAttributes<HTMLDivElement>, 'onChange' | 'onBlur'> {
@@ -47,6 +48,7 @@ export const Rating = ({
 }: RatingProps & {
   ref?: React.Ref<HTMLDivElement>;
 }) => {
+  const t = useLabels();
   const autoId = useId();
   const id = providedId || autoId;
   const [internalValue, setInternalValue] = useState(defaultValue);
@@ -96,7 +98,7 @@ export const Rating = ({
         onMouseEnter={() => !disabled && !readOnly && setHoverValue(itemValue)}
         onMouseLeave={() => setHoverValue(null)}
         disabled={disabled}
-        aria-label={`${itemValue} ${max === 1 ? 'star' : 'stars'}`}
+        aria-label={t(max === 1 ? 'rating.star' : 'rating.stars', { n: itemValue })}
       >
         <span className={styles.iconWrapper}>
           {isFilled || isHalfFilled ? renderIcon(icon) : renderIcon(emptyIcon)}

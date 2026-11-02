@@ -7,6 +7,7 @@ import { Input } from '../../inputs/Input';
 import { useFilter } from '../hooks/useFilter';
 import type { BaseComponentProps, ComponentSize } from '../../../types';
 import type { TextFilterConfig } from '../types';
+import { useLabels } from '../../../contexts/LabelsContext';
 
 export interface TextFilterProps extends BaseComponentProps {
   /** Filter ID from FilterDefinition */
@@ -39,6 +40,7 @@ export const TextFilter = ({
 }: TextFilterProps & {
   ref?: React.Ref<HTMLDivElement>;
 }) => {
+  const t = useLabels();
   const { filter, value, setValue, isEnabled, error } = useFilter<string>({ filterId });
 
   const config = filter?.config as TextFilterConfig | undefined;
@@ -73,7 +75,8 @@ export const TextFilter = ({
   }
 
   const label = labelOverride ?? filter.label;
-  const placeholder = placeholderOverride ?? filter.placeholder ?? `Enter ${label}`;
+  const placeholder =
+    placeholderOverride ?? filter.placeholder ?? t('filters.enterPlaceholder', { label });
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     const newValue = event.target.value;

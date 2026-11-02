@@ -19,7 +19,7 @@ export type {
   PageMessagesGlobalActions,
 } from './lib/contexts';
 
-export { LabelsProvider, useLabels, interpolate, DEFAULT_LABELS } from './lib/contexts';
+export { LabelsProvider, useLabels, useLocale, interpolate, DEFAULT_LABELS } from './lib/contexts';
 export type { LabelsProviderProps, LabelVars, TranslateFn, LabelKey } from './lib/contexts';
 
 // Hooks

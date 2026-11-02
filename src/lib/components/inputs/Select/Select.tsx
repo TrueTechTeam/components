@@ -8,6 +8,7 @@ import { MenuItem } from '../../overlays/Menu/MenuItem';
 import { MenuGroup } from '../../overlays/Menu/MenuGroup';
 import type { IconName } from '../../display/Icon/icons';
 import styles from './Select.module.scss';
+import { useLabels } from '../../../contexts/LabelsContext';
 
 export interface SelectOption {
   /**
@@ -188,13 +189,13 @@ export const Select = ({
   showClearButton = false,
   startIcon,
   endIcon,
-  placeholder = 'Select an option',
+  placeholder: placeholderProp,
   disabled = false,
   readOnly = false,
   required = false,
   id: providedId,
   searchable = false,
-  searchPlaceholder = 'Search...',
+  searchPlaceholder: searchPlaceholderProp,
   scrollToSelected = true,
   enableTypeAhead = false,
   typeAheadDelay = 500,
@@ -204,6 +205,10 @@ export const Select = ({
 }: SelectProps & {
   ref?: React.Ref<HTMLDivElement>;
 }) => {
+  const t = useLabels();
+  const placeholder = placeholderProp === undefined ? t('select.placeholder') : placeholderProp;
+  const searchPlaceholder =
+    searchPlaceholderProp === undefined ? t('select.searchPlaceholder') : searchPlaceholderProp;
   const autoId = useId();
   const id = providedId || autoId;
 
@@ -366,7 +371,7 @@ export const Select = ({
                   size="sm"
                   icon="close"
                   onClick={handleClear}
-                  aria-label="Clear selection"
+                  aria-label={t('select.clear')}
                   type="button"
                   className={styles.clearButton}
                 />
@@ -411,7 +416,7 @@ export const Select = ({
           <MenuList>
             {filteredOptions.length === 0 ? (
               <div className={styles.noResults}>
-                {searchQuery ? 'No results found' : 'No options available'}
+                {searchQuery ? t('select.noResults') : t('select.noOptions')}
               </div>
             ) : hasGroups ? (
               Object.entries(groupedOptions).map(([groupName, groupOptions]) => {
