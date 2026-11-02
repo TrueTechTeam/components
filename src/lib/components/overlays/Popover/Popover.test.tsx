@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Popover } from './Popover';
 
@@ -155,6 +156,41 @@ describe('Popover', () => {
       fireEvent.mouseDown(document.body);
 
       expect(onOpenChange).not.toHaveBeenCalled();
+    });
+
+    it('should not close when clicking inside a popover nested inside it (e.g. a Select opened from within)', () => {
+      const outerOnOpenChange = jest.fn();
+
+      // A Popover's content renders through a portal, so a popover nested inside another
+      // (e.g. Menu's own Popover, used by Select's dropdown, opened from inside this one)
+      // is a DOM sibling in the portal root, not a descendant - the outer popover has to
+      // special-case this or it treats a click inside the inner one as an outside click.
+      function NestedPopovers() {
+        const [innerOpen, setInnerOpen] = useState(true);
+        return (
+          <Popover
+            trigger={<button>Outer trigger</button>}
+            isOpen
+            onOpenChange={outerOnOpenChange}
+            closeOnClickOutside
+          >
+            <Popover
+              trigger={<button>Inner trigger</button>}
+              isOpen={innerOpen}
+              onOpenChange={setInnerOpen}
+              closeOnClickOutside
+            >
+              <button>Inner option</button>
+            </Popover>
+          </Popover>
+        );
+      }
+
+      render(<NestedPopovers />);
+
+      fireEvent.mouseDown(screen.getByText('Inner option'));
+
+      expect(outerOnOpenChange).not.toHaveBeenCalled();
     });
 
     it('should close on Escape key when closeOnEscape is true', () => {

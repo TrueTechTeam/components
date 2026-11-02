@@ -1,6 +1,9 @@
 @use '../../../styles/mixins/component' as *;
 @use '../../../styles/mixins/spacing' as *;
 
+// Set inline by SideNavItem.tsx:
+// @runtime-vars --sidenav-item-level
+
 .sideNav {
   // CSS Variables
   --sidenav-width: 240px;
@@ -9,7 +12,7 @@
   --sidenav-bg: var(--theme-background-secondary);
   --sidenav-border-color: var(--theme-border-primary);
   --sidenav-item-hover-bg: var(--theme-background-tertiary);
-  --sidenav-item-active-bg: var(--theme-primary-100, rgba(0, 173, 181, 0.1));
+  --sidenav-item-active-bg: var(--theme-primary-100);
   --sidenav-item-active-color: var(--theme-primary);
   --sidenav-text-color: var(--theme-text-primary);
   --sidenav-text-secondary: var(--theme-text-secondary);
@@ -58,8 +61,7 @@
 
 .content {
   flex: 1;
-  overflow-y: auto;
-  overflow-x: hidden;
+  overflow: hidden auto;
   padding: var(--spacing-sm);
   display: flex;
   flex-direction: column;

@@ -56,6 +56,45 @@ function MyComponent() {
 }
 ```
 
+## Design guidelines & AI coding agents
+
+The package ships research-backed design guidelines (WCAG 2.2 AA, NN/g, Baymard, Material 3,
+Carbon) written as decision trees that coding agents can follow. They cover which component to
+use, color, spacing, typography, layout, motion, accessibility, forms, data views, and
+loading/empty/error states.
+
+```
+node_modules/@true-tech-team/ui-components/
+├── llms.txt                     # index for LLM tools
+└── guidelines/
+    ├── README.md                # how to apply the rules
+    ├── decision-tree.md         # start here
+    ├── SKILL.md                 # Claude Code skill wrapper
+    ├── components/              # choosing.md, catalog.md
+    ├── foundations/             # tokens, color, typography, spacing-layout, elevation-shape, motion, accessibility
+    └── patterns/                # forms, data-display, feedback-states, page-layout
+```
+
+**Point your agent at them.** Add this to your project's `AGENTS.md` or `CLAUDE.md`:
+
+```md
+## UI components
+
+This app uses `@true-tech-team/ui-components`. Before writing or changing UI, read
+`node_modules/@true-tech-team/ui-components/guidelines/decision-tree.md` and follow the linked
+rules (cite rule IDs like `CHOOSE-INPUT-4` in summaries). Use library components before custom
+markup, and CSS tokens (`var(--spacing-md)`, `var(--theme-text-primary)`) instead of raw values.
+```
+
+**Or install it as a Claude Code skill** so it loads automatically for UI work:
+
+```bash
+mkdir -p .claude/skills
+cp -r node_modules/@true-tech-team/ui-components/guidelines .claude/skills/ui-components-design
+```
+
+Re-copy after upgrading the package to pick up guideline changes.
+
 ## Components
 
 ### Buttons

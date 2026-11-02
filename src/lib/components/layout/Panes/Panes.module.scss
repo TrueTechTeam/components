@@ -27,9 +27,7 @@
   height: 100%;
   min-width: var(--pane-min-width);
   max-width: var(--pane-max-width);
-  flex-basis: var(--pane-preferred-width);
-  flex-grow: var(--pane-grow);
-  flex-shrink: var(--pane-shrink);
+  flex: var(--pane-grow) var(--pane-shrink) var(--pane-preferred-width);
   min-height: 0; // Allow vertical shrinking
   overflow: hidden;
   will-change: opacity, transform, width, min-width, flex-basis;
@@ -51,6 +49,7 @@
   // Entering state - slides in from the appropriate side
   &[data-entering='true'] {
     opacity: 0;
+
     // Default: slide from right
     transform: translateX(100%);
 
@@ -66,6 +65,7 @@
     min-width: 0;
     width: 0;
     flex-basis: 0;
+
     // Default: slide to right
     transform: translateX(100%);
 

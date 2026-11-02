@@ -53,7 +53,7 @@
     --pagination-button-hover-bg: transparent;
 
     .button {
-      &:hover:not(:disabled):not([data-active='true']) {
+      &:hover:not(:disabled, [data-active='true']) {
         color: var(--theme-primary);
         background-color: transparent;
       }
@@ -89,6 +89,7 @@
 
 .button {
   @include button-reset;
+
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -105,7 +106,7 @@
     color var(--pagination-transition),
     border-color var(--pagination-transition);
 
-  &:hover:not(:disabled):not([data-active='true']) {
+  &:hover:not(:disabled, [data-active='true']) {
     background-color: var(--pagination-button-hover-bg);
   }
 

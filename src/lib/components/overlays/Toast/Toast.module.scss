@@ -1,6 +1,9 @@
 @use '../../../styles/mixins/component' as *;
 @use '../../../styles/mixins/spacing' as *;
 
+// Set inline by Toast.tsx:
+// @runtime-vars --toast-progress
+
 // Toast Container
 .toastContainer {
   // CSS Variables
@@ -60,7 +63,7 @@
   }
 
   // Mobile responsive
-  @media (max-width: 480px) {
+  @media (width <= 480px) {
     left: var(--toast-offset) !important;
     right: var(--toast-offset) !important;
     transform: none !important;
@@ -160,7 +163,7 @@
   }
 
   // Mobile responsive
-  @media (max-width: 480px) {
+  @media (width <= 480px) {
     width: 100%;
     max-width: 100%;
   }
@@ -175,19 +178,19 @@
 
   // Variant colors
   &[data-variant='info'] {
-    color: var(--theme-info, #3b82f6);
+    color: var(--theme-info-text);
   }
 
   &[data-variant='success'] {
-    color: var(--theme-success, #22c55e);
+    color: var(--theme-success-text);
   }
 
   &[data-variant='warning'] {
-    color: var(--theme-warning, #f59e0b);
+    color: var(--theme-warning-text);
   }
 
   &[data-variant='error'] {
-    color: var(--theme-error, #ef4444);
+    color: var(--theme-error-text);
   }
 
   &[data-variant='loading'] {
@@ -237,7 +240,7 @@
   transition: background-color 150ms ease;
 
   &:hover {
-    background-color: var(--theme-primary-bg, rgba(99, 102, 241, 0.1));
+    background-color: color-mix(in srgb, var(--theme-primary) 12%, transparent);
   }
 
   &:focus-visible {
@@ -266,21 +269,22 @@
 }
 
 // Variant accent borders
+// stylelint-disable-next-line no-duplicate-selectors -- accent borders intentionally follow the base rules above
 .toast {
   &[data-variant='info'] {
-    border-left: 3px solid var(--theme-info, #3b82f6);
+    border-left: 3px solid var(--theme-info-text);
   }
 
   &[data-variant='success'] {
-    border-left: 3px solid var(--theme-success, #22c55e);
+    border-left: 3px solid var(--theme-success-text);
   }
 
   &[data-variant='warning'] {
-    border-left: 3px solid var(--theme-warning, #f59e0b);
+    border-left: 3px solid var(--theme-warning-text);
   }
 
   &[data-variant='error'] {
-    border-left: 3px solid var(--theme-error, #ef4444);
+    border-left: 3px solid var(--theme-error-text);
   }
 
   &[data-variant='loading'] {

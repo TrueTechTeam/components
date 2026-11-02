@@ -1,1 +1,1 @@
-export { useClickOutside } from './useClickOutside';
+export { useClickOutside, registerOpenOverlay } from './useClickOutside';

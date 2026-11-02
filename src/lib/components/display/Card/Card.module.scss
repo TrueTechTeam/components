@@ -9,7 +9,7 @@
   --card-border-radius: var(--radius-md);
   --card-padding: var(--spacing-md);
   --card-shadow: none;
-  --card-shadow-hover: 0 8px 24px rgba(0, 0, 0, 0.15);
+  --card-shadow-hover: var(--theme-shadow-md);
   --card-transition: var(--transition-normal);
 
   // Base styles
@@ -27,7 +27,8 @@
   }
 
   &[data-variant='elevated'] {
-    --card-shadow: 0 1px 3px rgba(0, 0, 0, 0.08), 0 1px 2px rgba(0, 0, 0, 0.06);
+    --card-shadow: var(--theme-shadow-sm);
+
     box-shadow: var(--card-shadow);
   }
 

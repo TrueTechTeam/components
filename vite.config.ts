@@ -1,6 +1,22 @@
-import { defineConfig } from 'vite';
+import { defineConfig, type Plugin } from 'vite';
 import dts from 'vite-plugin-dts';
+import * as fs from 'fs';
 import * as path from 'path';
+
+// Ships the design guidelines inside the npm package so consumers' coding agents can read them
+// from node_modules/@true-tech-team/ui-components/guidelines/ (llms.txt sits at the package root).
+function copyGuidelines(): Plugin {
+  return {
+    name: 'copy-guidelines',
+    apply: 'build',
+    closeBundle() {
+      const src = path.join(__dirname, 'guidelines');
+      const out = path.join(__dirname, 'dist');
+      fs.cpSync(src, path.join(out, 'guidelines'), { recursive: true });
+      fs.copyFileSync(path.join(src, 'llms.txt'), path.join(out, 'llms.txt'));
+    },
+  };
+}
 
 export default defineConfig(async () => {
   const react = (await import('@vitejs/plugin-react')).default;
@@ -10,6 +26,7 @@ export default defineConfig(async () => {
     plugins: [
       react(),
       dts({ entryRoot: 'src', tsconfigPath: path.join(__dirname, 'tsconfig.lib.json') }),
+      copyGuidelines(),
     ],
     css: {
       preprocessorOptions: {

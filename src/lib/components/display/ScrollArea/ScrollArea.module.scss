@@ -59,13 +59,11 @@
 
   // Direction constraints
   .scrollArea[data-direction='vertical'] & {
-    overflow-x: hidden;
-    overflow-y: auto;
+    overflow: hidden auto;
   }
 
   .scrollArea[data-direction='horizontal'] & {
-    overflow-x: auto;
-    overflow-y: hidden;
+    overflow: auto hidden;
   }
 
   .scrollArea[data-direction='both'] & {

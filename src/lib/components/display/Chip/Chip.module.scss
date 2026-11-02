@@ -5,7 +5,7 @@
   // CSS variables with defaults
   --chip-bg: var(--theme-primary-100);
   --chip-color: var(--theme-primary-700);
-  --chip-padding: var(--spacing-xs) var(--spacing-sm);
+  --chip-padding: var(--spacing-xs) var(--spacing-md);
   --chip-font-size: var(--font-size-sm);
   --chip-border-radius: var(--radius-full);
   --chip-transition: background-color 0.15s ease;
@@ -15,14 +15,13 @@
   align-items: center;
   justify-content: center;
   gap: var(--spacing-xs);
-
   background: var(--chip-bg);
   color: var(--chip-color);
   padding: var(--chip-padding);
   font-size: var(--chip-font-size);
   border-radius: var(--chip-border-radius);
   font-weight: 500;
-  line-height: 1;
+  line-height: 1.5;
   white-space: nowrap;
   transition: var(--chip-transition);
 
@@ -34,27 +33,27 @@
 
   &[data-variant='secondary'] {
     --chip-bg: var(--theme-secondary-100);
-    --chip-color: var(--theme-secondary-700);
+    --chip-color: var(--theme-text-secondary);
   }
 
   &[data-variant='success'] {
     --chip-bg: var(--theme-success);
-    --chip-color: var(--theme-text-on-primary);
+    --chip-color: var(--theme-text-on-success);
   }
 
   &[data-variant='warning'] {
     --chip-bg: var(--theme-warning);
-    --chip-color: var(--theme-text-contrast);
+    --chip-color: var(--theme-text-on-warning);
   }
 
   &[data-variant='danger'] {
     --chip-bg: var(--theme-error);
-    --chip-color: var(--theme-text-on-primary);
+    --chip-color: var(--theme-text-on-error);
   }
 
   &[data-variant='info'] {
     --chip-bg: var(--theme-info);
-    --chip-color: var(--theme-text-on-primary);
+    --chip-color: var(--theme-text-on-info);
   }
 
   &[data-variant='neutral'] {
@@ -64,12 +63,12 @@
 
   // Size styles - Override CSS variables
   &[data-size='sm'] {
-    --chip-padding: 2px var(--spacing-xs);
+    --chip-padding: 2px var(--spacing-sm);
     --chip-font-size: var(--font-size-xs);
   }
 
   &[data-size='md'] {
-    --chip-padding: var(--spacing-xs) var(--spacing-sm);
+    --chip-padding: var(--spacing-xs) var(--spacing-md);
     --chip-font-size: var(--font-size-sm);
   }
 
@@ -96,7 +95,7 @@
   // CSS variables with defaults
   --chip-remove-size: 16px;
   --chip-remove-icon-size: 12px;
-  --chip-remove-hover-bg: rgba(0, 0, 0, 0.1);
+  --chip-remove-hover-bg: color-mix(in srgb, currentcolor 15%, transparent);
 
   display: inline-flex;
   align-items: center;
@@ -107,7 +106,7 @@
   margin: 0;
   border: none;
   background: transparent;
-  color: currentColor;
+  color: currentcolor;
   border-radius: var(--radius-full);
   cursor: pointer;
   transition: background-color 0.15s ease;
@@ -118,7 +117,7 @@
   }
 
   &:focus-visible {
-    outline: 2px solid currentColor;
+    outline: 2px solid currentcolor;
     outline-offset: 2px;
   }
 

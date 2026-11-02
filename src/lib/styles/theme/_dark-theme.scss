@@ -41,7 +41,7 @@
 
   // Semantic colors
   --theme-success: #15803d;
-  --theme-warning: var(--color-amber-700);
+  --theme-warning: #f5b800;
   --theme-error: var(--color-red-700);
   --theme-info: #0e7490;
   --theme-info-500: #0e7490;
@@ -53,11 +53,11 @@
   --theme-success-500: #16a34a;
 
   // Warning variant tokens
-  --theme-warning-hover: var(--color-amber-600);
-  --theme-warning-active: var(--color-amber-800);
+  --theme-warning-hover: #ffc933;
+  --theme-warning-active: #d9a200;
   --theme-warning-disabled: var(--color-amber-900);
-  --theme-warning-500: #d97706;
-  --theme-warning-600: #b45309;
+  --theme-warning-500: #eab308;
+  --theme-warning-600: #ca8a04;
 
   // Error/Danger variant tokens
   --theme-error-hover: var(--color-red-600);
@@ -78,10 +78,10 @@
   // Text
   --theme-text-primary: #eee;
   --theme-text-secondary: #ccc;
-  --theme-text-tertiary: #999;
+  --theme-text-tertiary: #a8adb5;
   --theme-text-disabled: #666;
   --theme-text-contrast: #1f2937;
-  --theme-text-on-primary: #fff;
+  --theme-text-on-primary: #0b1f21;
   --theme-text-placeholder: var(--theme-input-placeholder);
 
   // Borders
@@ -96,10 +96,10 @@
   --theme-interactive-disabled: #1a1e25;
 
   // Shadows
-  --theme-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 30%);
-  --theme-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 40%);
-  --theme-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 40%);
-  --theme-shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 50%);
+  --theme-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 30%), 0 1px 3px 0 rgb(0 0 0 / 25%);
+  --theme-shadow-md: 0 2px 4px -2px rgb(0 0 0 / 35%), 0 4px 8px -2px rgb(0 0 0 / 35%);
+  --theme-shadow-lg: 0 4px 6px -2px rgb(0 0 0 / 35%), 0 12px 16px -4px rgb(0 0 0 / 45%);
+  --theme-shadow-xl: 0 8px 8px -4px rgb(0 0 0 / 35%), 0 20px 24px -4px rgb(0 0 0 / 55%);
 
   // Form input colors
   --theme-white: #fff;
@@ -115,15 +115,32 @@
   // Input-specific tokens
   --theme-input-bg: #2a2e35;
   --theme-input-bg-disabled: #1a1e25;
-  --theme-input-border: #4a5058;
-  --theme-input-border-hover: #6b7280;
+  --theme-input-border: #8b94a3;
+  --theme-input-border-hover: #a8adb5;
   --theme-input-border-focus: #00adb5;
   --theme-input-text: #eee;
-  --theme-input-placeholder: #6b7280;
+  --theme-input-placeholder: #9ca3af;
 
   // Form control backgrounds
   --theme-control-bg: #2a2e35;
   --theme-control-bg-checked: #00adb5;
-  --theme-control-border: #4a5058;
-  --theme-control-border-hover: #6b7280;
+  --theme-control-border: #8b94a3;
+  --theme-control-border-hover: #a8adb5;
+
+  // Extra elevation: inset (pressed/recessed) and drag (item being dragged)
+  --theme-shadow-inset: inset 0 1px 2px 0 rgb(0 0 0 / 30%);
+  --theme-shadow-drag: 0 12px 24px -4px rgb(0 0 0 / 55%), 0 4px 8px -2px rgb(0 0 0 / 35%);
+
+  // Semantic text: text and icons in a semantic color on surfaces (>= 4.5:1)
+  --theme-success-text: #4ade80;
+  --theme-warning-text: #f0c75e;
+  --theme-error-text: #fca5a5;
+  --theme-info-text: #67e8f9;
+
+  // Text on semantic fills (solid badges, filled buttons, toasts)
+  --theme-text-on-success: #fff;
+  --theme-text-on-warning: #1f2937;
+  --theme-text-on-error: #fff;
+  --theme-text-on-info: #fff;
+  --theme-info-disabled: var(--color-cyan-900);
 }

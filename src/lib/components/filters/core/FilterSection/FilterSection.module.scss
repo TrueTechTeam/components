@@ -3,13 +3,13 @@
  */
 
 .filterSection {
-  --filter-section-border-color: var(--theme-border-primary, #e0e0e0);
+  --filter-section-border-color: var(--theme-border-primary);
   --filter-section-header-bg: transparent;
-  --filter-section-header-hover-bg: var(--theme-interactive-hover, rgba(0, 0, 0, 0.04));
-  --filter-section-header-color: var(--theme-text-primary, #1a1a1a);
-  --filter-section-description-color: var(--theme-text-tertiary, #666666);
-  --filter-section-badge-bg: var(--theme-primary, #2563eb);
-  --filter-section-badge-color: var(--theme-text-on-primary, #ffffff);
+  --filter-section-header-hover-bg: var(--theme-interactive-hover);
+  --filter-section-header-color: var(--theme-text-primary);
+  --filter-section-description-color: var(--theme-text-tertiary);
+  --filter-section-badge-bg: var(--theme-primary);
+  --filter-section-badge-color: var(--theme-text-on-primary);
   --filter-section-gap: var(--spacing-md, 16px);
   --filter-section-padding: var(--spacing-sm, 8px);
 
@@ -41,7 +41,7 @@
   }
 
   &:focus-visible {
-    outline: 2px solid var(--theme-primary, #2563eb);
+    outline: 2px solid var(--theme-primary);
     outline-offset: -2px;
   }
 
@@ -59,7 +59,7 @@
 .icon {
   display: flex;
   align-items: center;
-  color: var(--theme-text-secondary, #666666);
+  color: var(--theme-text-secondary);
 }
 
 .title {
@@ -83,7 +83,7 @@
 .chevron {
   display: flex;
   align-items: center;
-  color: var(--theme-text-secondary, #666666);
+  color: var(--theme-text-secondary);
   transition: transform 0.2s ease;
 
   &[data-open='true'] {

@@ -29,7 +29,7 @@
 
   &[data-dragging='true'] {
     opacity: 0.5;
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--theme-shadow-drag);
     z-index: 10;
     transform: scale(1.02);
   }
@@ -57,7 +57,7 @@
   }
 
   &:hover:not([data-dragging='true']) {
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--theme-shadow-md);
   }
 
   &:focus-visible {

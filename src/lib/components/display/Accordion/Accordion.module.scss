@@ -2,15 +2,15 @@
 
 .accordion {
   // CSS Variables for customization
-  --accordion-border-color: var(--theme-border-primary, #e0e0e0);
+  --accordion-border-color: var(--theme-border-primary);
   --accordion-border-radius: var(--radius-md, 8px);
-  --accordion-bg: var(--theme-surface-primary, #ffffff);
+  --accordion-bg: var(--theme-surface-primary);
   --accordion-header-bg: transparent;
-  --accordion-header-bg-hover: var(--theme-interactive-hover, rgba(0, 0, 0, 0.04));
-  --accordion-header-color: var(--theme-text-primary, #1a1a1a);
-  --accordion-header-color-disabled: var(--theme-text-disabled, #9e9e9e);
+  --accordion-header-bg-hover: var(--theme-interactive-hover);
+  --accordion-header-color: var(--theme-text-primary);
+  --accordion-header-color-disabled: var(--theme-text-disabled);
   --accordion-body-bg: transparent;
-  --accordion-icon-color: var(--theme-text-secondary, #666666);
+  --accordion-icon-color: var(--theme-text-secondary);
   --accordion-gap: var(--spacing-sm, 8px);
 
   background: var(--accordion-bg);
@@ -41,12 +41,12 @@
 
   @include transition(background-color);
 
-  &:hover:not([data-disabled='true']):not(:disabled) {
+  &:hover:not([data-disabled='true'], :disabled) {
     background: var(--accordion-header-bg-hover);
   }
 
   &:focus-visible {
-    outline: 2px solid var(--theme-primary, #2563eb);
+    outline: 2px solid var(--theme-primary);
     outline-offset: -2px;
   }
 
@@ -92,6 +92,7 @@
 }
 
 // Size variants
+// stylelint-disable-next-line no-duplicate-selectors -- size overrides intentionally follow the part rules above
 .accordion {
   &[data-size='sm'] {
     .accordionHeader {

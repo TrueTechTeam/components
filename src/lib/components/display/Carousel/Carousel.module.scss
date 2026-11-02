@@ -86,11 +86,9 @@
 }
 
 .slide {
-  flex: 0 0
-    calc(
-      (100% - (var(--carousel-slides-to-show) - 1) * var(--carousel-gap)) /
-        var(--carousel-slides-to-show)
-    );
+  --carousel-gaps-total: calc((var(--carousel-slides-to-show) - 1) * var(--carousel-gap));
+
+  flex: 0 0 calc((100% - var(--carousel-gaps-total)) / var(--carousel-slides-to-show));
   min-width: 0;
 }
 
@@ -117,6 +115,7 @@
 
   &:focus-visible {
     opacity: 1;
+
     @include focus-ring;
   }
 
@@ -128,7 +127,7 @@
 
 .arrowPrev {
   left: 0;
-  background: linear-gradient(to right, rgba(0, 0, 0, 0.3), transparent);
+  background: linear-gradient(to right, rgb(0 0 0 / 30%), transparent);
   justify-content: flex-start;
   padding-left: var(--spacing-sm);
   border-radius: var(--radius-md) 0 0 var(--radius-md);
@@ -136,7 +135,7 @@
 
 .arrowNext {
   right: 0;
-  background: linear-gradient(to left, rgba(0, 0, 0, 0.3), transparent);
+  background: linear-gradient(to left, rgb(0 0 0 / 30%), transparent);
   justify-content: flex-end;
   padding-right: var(--spacing-sm);
   border-radius: 0 var(--radius-md) var(--radius-md) 0;

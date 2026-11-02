@@ -476,7 +476,7 @@ export const AllStates: Story = {
             style={{
               padding: '8px 16px',
               background: 'var(--theme-background-secondary)',
-              borderBottom: '1px solid var(--theme-border)',
+              borderBottom: '1px solid var(--theme-border-primary)',
               fontWeight: 600,
             }}
           >

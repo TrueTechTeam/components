@@ -3,7 +3,7 @@ export { useTheme } from './useTheme';
 export { usePortal } from './usePortal';
 export type { UsePortalOptions } from './usePortal';
 
-export { useClickOutside } from './useClickOutside';
+export { useClickOutside, registerOpenOverlay } from './useClickOutside';
 
 export { useEscapeKey } from './useEscapeKey';
 

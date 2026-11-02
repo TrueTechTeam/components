@@ -691,3 +691,12 @@ export type {
   RatingFilterProps,
   ListSelectFilterProps,
 } from './filters';
+
+// Patterns
+export { DataTable, deriveFiltersFromColumns, applyDataTableFilters } from './patterns';
+export type {
+  DataTableProps,
+  DataTableColumnConfig,
+  DataTableFilterLayout,
+  DataTableQuery,
+} from './patterns';

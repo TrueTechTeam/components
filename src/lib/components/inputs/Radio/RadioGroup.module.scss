@@ -20,12 +20,12 @@
   padding: 0;
 
   .radioGroup[data-error='true'] & {
-    color: var(--theme-error);
+    color: var(--theme-error-text);
   }
 }
 
 .required {
-  color: var(--theme-error);
+  color: var(--theme-error-text);
 
   .legend[data-required='true'] & {
     margin-left: 2px;
@@ -53,6 +53,6 @@
   margin-top: var(--spacing-xs);
 
   &[data-error='true'] {
-    color: var(--theme-error);
+    color: var(--theme-error-text);
   }
 }

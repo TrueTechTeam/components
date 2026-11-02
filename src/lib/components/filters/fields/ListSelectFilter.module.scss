@@ -1,16 +1,18 @@
+@use '../../../styles/mixins/component' as *;
+
 /**
  * ListSelectFilter styles
  */
 
 .listSelectFilter {
   --list-select-gap: var(--spacing-sm, 8px);
-  --list-select-label-color: var(--theme-text-primary, #1a1a1a);
-  --list-select-helper-color: var(--theme-text-tertiary, #666666);
-  --list-select-error-color: var(--theme-error, #dc2626);
-  --list-select-border-color: var(--theme-border-primary, #e0e0e0);
-  --list-select-item-hover-bg: var(--theme-interactive-hover, rgba(0, 0, 0, 0.04));
-  --list-select-item-selected-bg: var(--theme-primary-50, #eff6ff);
-  --list-select-count-color: var(--theme-text-secondary, #4a5058);
+  --list-select-label-color: var(--theme-text-primary);
+  --list-select-helper-color: var(--theme-text-tertiary);
+  --list-select-error-color: var(--theme-error);
+  --list-select-border-color: var(--theme-border-primary);
+  --list-select-item-hover-bg: var(--theme-interactive-hover);
+  --list-select-item-selected-bg: var(--theme-primary-50);
+  --list-select-count-color: var(--theme-text-secondary);
 
   display: flex;
   flex-direction: column;
@@ -34,6 +36,10 @@
 }
 
 .listItem {
+  &:focus-visible {
+    @include focus-ring;
+  }
+
   padding: var(--spacing-xs, 4px) var(--spacing-sm, 8px);
   border-bottom: 1px solid var(--list-select-border-color);
 
@@ -85,13 +91,17 @@
 }
 
 .loadMoreButton {
+  &:focus-visible {
+    @include focus-ring;
+  }
+
   display: block;
   width: 100%;
   padding: var(--spacing-sm, 8px);
   background: none;
   border: none;
   border-top: 1px solid var(--list-select-border-color);
-  color: var(--theme-primary, #2563eb);
+  color: var(--theme-primary);
   cursor: pointer;
   font-size: var(--font-size-sm, 0.875rem);
 

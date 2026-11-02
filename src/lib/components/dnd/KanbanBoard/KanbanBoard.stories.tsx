@@ -194,7 +194,7 @@ function DefaultStory() {
             <span style={{ fontWeight: 600 }}>{column.title}</span>
             <span
               style={{
-                backgroundColor: 'var(--theme-surface-tertiary)',
+                backgroundColor: 'var(--theme-background-secondary)',
                 padding: '2px 8px',
                 borderRadius: '12px',
                 fontSize: '12px',

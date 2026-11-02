@@ -4,9 +4,9 @@
 
 .ratingFilter {
   --rating-filter-gap: var(--spacing-sm, 8px);
-  --rating-filter-label-color: var(--theme-text-primary, #1a1a1a);
-  --rating-filter-helper-color: var(--theme-text-tertiary, #666666);
-  --rating-filter-error-color: var(--theme-error, #dc2626);
+  --rating-filter-label-color: var(--theme-text-primary);
+  --rating-filter-helper-color: var(--theme-text-tertiary);
+  --rating-filter-error-color: var(--theme-error);
 
   display: flex;
   flex-direction: column;

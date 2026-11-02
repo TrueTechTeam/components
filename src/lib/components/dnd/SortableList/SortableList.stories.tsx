@@ -30,7 +30,7 @@ SortableList component for creating reorderable list layouts with drag-and-drop 
 </tr>
 <tr>
 <td><code>--shadow-md</code></td>
-<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--shadow-md)</code></a></td>
+<td><a href="?path=/story/theme-css-variables--theme-tokens"><code>var(--theme-shadow-md)</code></a></td>
 <td>Shadow for dragging items</td>
 </tr>
 <tr>

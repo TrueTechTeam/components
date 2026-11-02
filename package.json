@@ -10,7 +10,9 @@
       "import": "./index.mjs",
       "require": "./index.js"
     },
-    "./index.css": "./index.css"
+    "./index.css": "./index.css",
+    "./guidelines/*": "./guidelines/*",
+    "./llms.txt": "./llms.txt"
   },
   "scripts": {
     "build": "vite build",
@@ -93,7 +95,9 @@
     "**/*.mjs",
     "**/*.d.ts",
     "**/*.css",
-    "**/*.scss"
+    "**/*.scss",
+    "guidelines/**",
+    "llms.txt"
   ],
   "publishConfig": {
     "access": "public"

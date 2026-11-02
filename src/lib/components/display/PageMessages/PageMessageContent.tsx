@@ -95,15 +95,12 @@ export function PageMessageContent({
       );
     }
 
+    // Wrap rather than pass the class to Icon: Icon sets an inline --icon-color that would override
+    // the state color, so the wrapper carries the color and the icon inherits it via currentColor.
     return (
-      <Icon
-        name={icon as IconName}
-        size={ICON_SIZE_MAP[size]}
-        className={styles.pageMessagesIcon}
-        data-state={state}
-        data-size={size}
-        data-testid="page-messages-icon"
-      />
+      <div className={styles.pageMessagesIcon} data-state={state} data-size={size}>
+        <Icon name={icon as IconName} size={ICON_SIZE_MAP[size]} data-testid="page-messages-icon" />
+      </div>
     );
   };
 

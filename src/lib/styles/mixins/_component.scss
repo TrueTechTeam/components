@@ -18,8 +18,8 @@
 }
 
 // Focus ring
-@mixin focus-ring($color: var(--theme-border-focus), $offset: 2px) {
-  outline: 2px solid $color;
+@mixin focus-ring($color: var(--focus-ring-color), $offset: var(--focus-ring-offset)) {
+  outline: var(--focus-ring-width) solid $color;
   outline-offset: $offset;
 }
 
@@ -54,6 +54,17 @@
 // Transition helper
 @mixin transition($properties...) {
   transition-property: $properties;
-  transition-duration: var(--transition-normal);
-  transition-timing-function: ease-in-out;
+  transition-duration: var(--duration-normal);
+  transition-timing-function: var(--ease-standard);
+
+  // prefers-reduced-motion is handled globally in global/_reset.scss
+}
+
+// Focus treatment for bordered form fields (Input, Select, Textarea, TagInput...): the border takes
+// the focus color and a solid ring sits outside it. Solid ring >= 3:1 per WCAG 1.4.11 / 2.4.7;
+// soft translucent halos don't reach that contrast.
+@mixin field-focus($color: var(--focus-ring-color)) {
+  border-color: $color;
+  outline: var(--focus-ring-width) solid $color;
+  outline-offset: 0;
 }

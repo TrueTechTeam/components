@@ -4,9 +4,9 @@
 
 .filterSidebar {
   --sidebar-width: 280px;
-  --sidebar-bg: var(--theme-surface-primary, #ffffff);
-  --sidebar-border-color: var(--theme-border-primary, #e0e0e0);
-  --sidebar-header-bg: var(--theme-surface-secondary, #f5f5f5);
+  --sidebar-bg: var(--theme-surface-primary);
+  --sidebar-border-color: var(--theme-border-primary);
+  --sidebar-header-bg: var(--theme-surface-secondary);
   --sidebar-padding: var(--spacing-md, 16px);
 
   display: flex;
@@ -63,16 +63,16 @@
   background: none;
   border: none;
   border-radius: var(--radius-sm, 4px);
-  color: var(--theme-text-secondary, #666666);
+  color: var(--theme-text-secondary);
   cursor: pointer;
   transition: background-color 0.15s ease;
 
   &:hover {
-    background: var(--theme-interactive-hover, rgba(0, 0, 0, 0.04));
+    background: var(--theme-interactive-hover);
   }
 
   &:focus-visible {
-    outline: 2px solid var(--theme-primary, #2563eb);
+    outline: 2px solid var(--theme-primary);
     outline-offset: -2px;
   }
 

@@ -6,12 +6,11 @@
   --select-bg: var(--theme-input-bg);
   --select-border: var(--theme-input-border);
   --select-text: var(--theme-input-text);
-  --select-focus-border: var(--theme-input-border-focus);
-  --select-focus-ring: var(--theme-interactive-focus);
+  --select-focus-border: var(--focus-ring-color);
   --select-padding-y: var(--spacing-sm);
   --select-padding-x: var(--spacing-sm);
   --select-font-size: var(--font-size-base);
-  --select-height: 40px;
+  --select-height: var(--control-height-md);
 
   display: flex;
   flex-direction: column;
@@ -23,86 +22,53 @@
     --select-padding-y: var(--spacing-xs);
     --select-padding-x: var(--spacing-xs);
     --select-font-size: var(--font-size-sm);
-    --select-height: 32px;
+    --select-height: var(--control-height-sm);
   }
 
   &[data-size='md'] {
     --select-padding-y: var(--spacing-sm);
     --select-padding-x: var(--spacing-sm);
     --select-font-size: var(--font-size-base);
-    --select-height: 40px;
+    --select-height: var(--control-height-md);
   }
 
   &[data-size='lg'] {
     --select-padding-y: var(--spacing-md);
     --select-padding-x: var(--spacing-md);
     --select-font-size: var(--font-size-lg);
-    --select-height: 48px;
+    --select-height: var(--control-height-lg);
   }
 
   // Variants
   &[data-variant='primary'] {
     --select-focus-border: var(--theme-primary-500);
-    --select-focus-ring: var(--theme-primary-200);
   }
 
   &[data-variant='secondary'] {
     --select-focus-border: var(--theme-secondary-500);
-    --select-focus-ring: var(--theme-secondary-200);
   }
 
   &[data-variant='success'] {
     --select-focus-border: var(--theme-success-500);
-    --select-focus-ring: var(--theme-success-hover);
   }
 
   &[data-variant='warning'] {
     --select-focus-border: var(--theme-warning-500);
-    --select-focus-ring: var(--theme-warning-hover);
   }
 
   &[data-variant='danger'] {
     --select-focus-border: var(--theme-error);
-    --select-focus-ring: var(--theme-error-hover);
-  }
-
-  // Focus state
-  &:focus,
-  &[data-open='true'] {
-    border-color: var(--select-focus-border);
-    box-shadow: 0 0 0 3px var(--select-focus-ring);
-  }
-
-  // Hover state
-  &:not([data-disabled='true']):hover {
-    border-color: var(--select-focus-border);
-  }
-
-  // Error state
-  &[data-error='true'] {
-    --select-border: var(--theme-error);
-    --select-focus-border: var(--theme-error);
-    --select-focus-ring: var(--theme-error-hover);
-  }
-
-  // Disabled state
-  &[data-disabled='true'] {
-    background-color: var(--theme-neutral-100);
-    border-color: var(--theme-neutral-300);
-    color: var(--theme-text-disabled);
-    cursor: not-allowed;
-    opacity: 0.6;
   }
 }
 
 .label {
   font-size: var(--font-size-base);
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   color: var(--theme-text-primary);
 }
 
 .required {
-  color: var(--theme-error);
+  color: var(--theme-error-text);
 
   .label[data-required='true'] & {
     margin-left: 2px;
@@ -124,9 +90,32 @@
   border-radius: var(--radius-md);
   padding: var(--select-padding-y) var(--select-padding-x);
   cursor: pointer;
-  transition: all 0.15s ease-in-out;
   outline: none;
   user-select: none;
+
+  @include transition(border-color, background-color, outline-color);
+
+  // State attributes are rendered on the trigger (see Select.tsx)
+  &:hover:not([data-disabled='true']) {
+    border-color: var(--theme-input-border-hover);
+  }
+
+  &[data-error='true'] {
+    --select-border: var(--theme-error-text);
+    --select-focus-border: var(--theme-error-text);
+  }
+
+  &:focus-visible,
+  &[data-open='true'] {
+    @include field-focus(var(--select-focus-border));
+  }
+
+  &[data-disabled='true'] {
+    background-color: var(--theme-input-bg-disabled);
+    color: var(--theme-text-disabled);
+    cursor: not-allowed;
+    opacity: 0.6;
+  }
 }
 
 .selectValue {
@@ -136,8 +125,7 @@
   white-space: nowrap;
 
   &[data-placeholder='true'] {
-    color: var(--theme-text-secondary);
-    opacity: 0.7;
+    color: var(--theme-input-placeholder);
   }
 }
 
@@ -182,7 +170,7 @@
   color: var(--theme-text-secondary);
 
   &[data-error='true'] {
-    color: var(--theme-error);
+    color: var(--theme-error-text);
   }
 }
 

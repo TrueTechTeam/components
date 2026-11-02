@@ -58,7 +58,7 @@
 
   &[data-dragging='true'] {
     opacity: 0.7;
-    box-shadow: var(--shadow-lg);
+    box-shadow: var(--theme-shadow-drag);
     z-index: 10;
   }
 
@@ -118,7 +118,7 @@
 .kanbanCard {
   background-color: var(--theme-surface-primary);
   border-radius: var(--radius-md);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--theme-shadow-sm);
   transition:
     transform 200ms ease,
     opacity 200ms ease,
@@ -127,7 +127,7 @@
 
   &[data-dragging='true'] {
     opacity: 0.5;
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--theme-shadow-drag);
     z-index: 10;
   }
 
@@ -154,7 +154,7 @@
   }
 
   &:hover {
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--theme-shadow-md);
   }
 
   &:focus-visible {

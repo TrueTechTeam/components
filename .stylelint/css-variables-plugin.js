@@ -42,6 +42,15 @@ const ruleFunction = (primary, secondaryOptions, context) => {
       }
     });
 
+    // Variables a component sets inline from TSX at runtime are declared with a comment:
+    //   // @runtime-vars --dialog-width --dialog-max-height
+    root.walkComments((comment) => {
+      const match = comment.text.match(/^@runtime-vars\s+(.+)$/);
+      if (match) {
+        match[1].split(/\s+/).forEach((name) => fileVariables.add(name));
+      }
+    });
+
     // Combine theme variables and file-local variables
     const allValidVariables = new Set([...themeVariables, ...fileVariables]);
 

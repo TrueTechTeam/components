@@ -10,7 +10,7 @@
 
 .label {
   font-size: var(--font-size-base);
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   color: var(--theme-text-primary);
 }
 
@@ -31,7 +31,10 @@
   border-radius: var(--radius-md);
   background: var(--theme-neutral-50);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition-property:
+    color, background-color, border-color, outline-color, box-shadow, opacity, transform;
+  transition-duration: var(--duration-fast);
+  transition-timing-function: var(--ease-standard);
 
   &:focus-visible {
     outline: 2px solid var(--theme-primary-500);
@@ -88,7 +91,7 @@
 }
 
 .icon {
-  font-size: 2.5rem;
+  font-size: var(--font-size-4xl);
   color: var(--theme-text-secondary);
 }
 
@@ -112,7 +115,10 @@
   background: var(--theme-background-primary);
   border: 1px solid var(--theme-border-primary);
   border-radius: var(--radius-md);
-  transition: all 0.15s ease;
+  transition-property:
+    color, background-color, border-color, outline-color, box-shadow, opacity, transform;
+  transition-duration: var(--duration-fast);
+  transition-timing-function: var(--ease-standard);
 }
 
 .preview {
@@ -150,7 +156,7 @@
 }
 
 .required {
-  color: var(--theme-error);
+  color: var(--theme-error-text);
 
   .label[data-required='true'] & {
     margin-left: 2px;
@@ -162,6 +168,6 @@
   color: var(--theme-text-secondary);
 
   &[data-error='true'] {
-    color: var(--theme-error);
+    color: var(--theme-error-text);
   }
 }

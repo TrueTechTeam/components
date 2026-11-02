@@ -28,7 +28,10 @@
   border-radius: var(--button-radius);
   border: var(--button-border-width) solid var(--button-border-color);
   cursor: pointer;
-  transition: all var(--transition-normal);
+  transition-property:
+    color, background-color, border-color, outline-color, box-shadow, opacity, transform;
+  transition-duration: var(--duration-fast);
+  transition-timing-function: var(--ease-standard);
   user-select: none;
   white-space: nowrap;
 
@@ -64,7 +67,7 @@
     @include py(1);
 
     font-size: var(--font-size-xs);
-    min-height: 24px;
+    min-height: var(--control-height-xs);
   }
 
   &[data-size='sm'] {
@@ -72,7 +75,7 @@
     @include py(1.5);
 
     font-size: var(--font-size-sm);
-    min-height: 32px;
+    min-height: var(--control-height-sm);
   }
 
   &[data-size='md'] {
@@ -80,7 +83,7 @@
     @include py(2);
 
     font-size: var(--font-size-base);
-    min-height: 40px;
+    min-height: var(--control-height-md);
   }
 
   &[data-size='lg'] {
@@ -88,7 +91,7 @@
     @include py(3);
 
     font-size: var(--font-size-lg);
-    min-height: 48px;
+    min-height: var(--control-height-lg);
   }
 
   &[data-size='xl'] {
@@ -96,7 +99,7 @@
     @include py(4);
 
     font-size: var(--font-size-xl);
-    min-height: 56px;
+    min-height: var(--control-height-xl);
   }
 
   // Color variants
@@ -146,7 +149,7 @@
     --button-bg-hover: var(--theme-success-hover);
     --button-bg-active: var(--theme-success-active);
     --button-bg-disabled: var(--theme-success-disabled);
-    --button-color: var(--theme-text-on-primary);
+    --button-color: var(--theme-text-on-success);
     --button-border-color: transparent;
   }
 
@@ -155,7 +158,7 @@
     --button-bg-hover: var(--theme-warning-hover);
     --button-bg-active: var(--theme-warning-active);
     --button-bg-disabled: var(--theme-warning-disabled);
-    --button-color: var(--theme-text-primary);
+    --button-color: var(--theme-text-on-warning);
     --button-border-color: transparent;
   }
 
@@ -164,7 +167,7 @@
     --button-bg-hover: var(--theme-error-hover);
     --button-bg-active: var(--theme-error-active);
     --button-bg-disabled: var(--theme-error-disabled);
-    --button-color: var(--theme-text-on-primary);
+    --button-color: var(--theme-text-on-error);
     --button-border-color: transparent;
   }
 

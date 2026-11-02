@@ -36,28 +36,28 @@
 
   // Variant colors
   &[data-variant='info'] {
-    background-color: var(--theme-info-bg, rgba(59, 130, 246, 0.1));
-    color: var(--theme-info, #3b82f6);
+    background-color: color-mix(in srgb, var(--theme-info-text) 14%, transparent);
+    color: var(--theme-info-text);
   }
 
   &[data-variant='success'] {
-    background-color: var(--theme-success-bg, rgba(34, 197, 94, 0.1));
-    color: var(--theme-success, #22c55e);
+    background-color: color-mix(in srgb, var(--theme-success-text) 14%, transparent);
+    color: var(--theme-success-text);
   }
 
   &[data-variant='warning'] {
-    background-color: var(--theme-warning-bg, rgba(245, 158, 11, 0.1));
-    color: var(--theme-warning, #f59e0b);
+    background-color: color-mix(in srgb, var(--theme-warning-text) 14%, transparent);
+    color: var(--theme-warning-text);
   }
 
   &[data-variant='error'] {
-    background-color: var(--theme-error-bg, rgba(239, 68, 68, 0.1));
-    color: var(--theme-error, #ef4444);
+    background-color: color-mix(in srgb, var(--theme-error-text) 14%, transparent);
+    color: var(--theme-error-text);
   }
 
   &[data-variant='confirm'] {
-    background-color: var(--theme-primary-bg, rgba(99, 102, 241, 0.1));
-    color: var(--theme-primary, #6366f1);
+    background-color: color-mix(in srgb, var(--theme-primary) 12%, transparent);
+    color: var(--theme-primary);
   }
 }
 
@@ -89,36 +89,11 @@
   border-top: none;
 
   // Full width buttons on mobile
-  @media (max-width: 480px) {
+  @media (width <= 480px) {
     flex-direction: column-reverse;
 
     > * {
       width: 100%;
-    }
-  }
-}
-
-// Dark mode adjustments
-:root[data-theme='dark'] {
-  .alertIcon {
-    &[data-variant='info'] {
-      background-color: rgba(59, 130, 246, 0.15);
-    }
-
-    &[data-variant='success'] {
-      background-color: rgba(34, 197, 94, 0.15);
-    }
-
-    &[data-variant='warning'] {
-      background-color: rgba(245, 158, 11, 0.15);
-    }
-
-    &[data-variant='error'] {
-      background-color: rgba(239, 68, 68, 0.15);
-    }
-
-    &[data-variant='confirm'] {
-      background-color: rgba(99, 102, 241, 0.15);
     }
   }
 }

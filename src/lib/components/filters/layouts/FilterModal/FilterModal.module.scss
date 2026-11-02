@@ -31,7 +31,7 @@
 .activeFiltersContainer {
   padding-bottom: var(--spacing-md, 16px);
   margin-bottom: var(--spacing-md, 16px);
-  border-bottom: 1px solid var(--theme-border-primary, #e0e0e0);
+  border-bottom: 1px solid var(--theme-border-primary);
 
   &:last-child {
     margin-bottom: 0;
@@ -39,7 +39,7 @@
     margin-top: var(--spacing-md, 16px);
     padding-top: var(--spacing-md, 16px);
     border-bottom: none;
-    border-top: 1px solid var(--theme-border-primary, #e0e0e0);
+    border-top: 1px solid var(--theme-border-primary);
   }
 }
 

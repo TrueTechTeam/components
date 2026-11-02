@@ -66,6 +66,7 @@
   // Variant: blur
   &[data-variant='blur'] {
     --navbar-bg: var(--navbar-blur-bg);
+
     backdrop-filter: blur(var(--navbar-blur-amount));
 
     @supports not (backdrop-filter: blur(1px)) {
@@ -78,7 +79,7 @@
   display: flex;
   align-items: center;
   width: 100%;
-  max-width: var(--content-max-width, 1400px);
+  max-width: var(--content-width-page);
   margin: 0 auto;
   padding: 0 var(--navbar-padding-x);
   gap: var(--navbar-gap);
@@ -147,6 +148,7 @@
 
 .toggle {
   @include button-reset;
+
   display: none;
   align-items: center;
   justify-content: center;
@@ -200,7 +202,7 @@
 .hamburgerLine {
   width: 100%;
   height: 2px;
-  background-color: currentColor;
+  background-color: currentcolor;
   border-radius: 1px;
   transition:
     transform var(--navbar-transition-duration),

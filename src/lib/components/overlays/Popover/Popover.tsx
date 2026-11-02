@@ -5,6 +5,7 @@
 import {
   useState,
   useCallback,
+  useEffect,
   useMemo,
   cloneElement,
   isValidElement,
@@ -13,7 +14,12 @@ import {
   type RefObject,
 } from 'react';
 import { Portal } from '../Portal';
-import { useClickOutside, useEscapeKey, usePopoverPosition } from '../../../hooks';
+import {
+  useClickOutside,
+  useEscapeKey,
+  usePopoverPosition,
+  registerOpenOverlay,
+} from '../../../hooks';
 import type { PopoverPosition, PopoverWidth } from '../../../utils';
 import type { BaseComponentProps } from '../../../types';
 import styles from './Popover.module.scss';
@@ -155,6 +161,16 @@ export const Popover: React.FC<PopoverProps> = ({
 
   // Click outside detection - exclude trigger element
   useClickOutside(popoverRef, handleClose, isOpen && closeOnClickOutside, [triggerRef]);
+
+  // Register this popover while open so a click inside it is recognized as "inside" by any
+  // popover it happens to be nested inside (e.g. a Select's dropdown opened from within a
+  // FilterPopover) - see the registry's own comment for why that isn't automatic.
+  useEffect(() => {
+    if (!isOpen || !popoverRef.current) {
+      return;
+    }
+    return registerOpenOverlay(popoverRef.current);
+  }, [isOpen, popoverRef]);
 
   // Escape key handling
   useEscapeKey(handleClose, isOpen && closeOnEscape);

@@ -6,8 +6,8 @@
   --filter-bar-gap-sm: var(--spacing-sm, 8px);
   --filter-bar-gap-md: var(--spacing-md, 16px);
   --filter-bar-gap-lg: var(--spacing-lg, 24px);
-  --filter-bar-bg: var(--theme-surface-primary, #ffffff);
-  --filter-bar-border-color: var(--theme-border-primary, #e0e0e0);
+  --filter-bar-bg: var(--theme-surface-primary);
+  --filter-bar-border-color: var(--theme-border-primary);
   --filter-bar-padding: var(--spacing-md, 16px);
 
   display: flex;
@@ -60,8 +60,8 @@
   margin-left: var(--spacing-xs, 4px);
   padding: 0 var(--spacing-xs, 4px);
   border-radius: var(--radius-full, 9999px);
-  background: var(--theme-primary, #2563eb);
-  color: var(--theme-text-on-primary, #ffffff);
+  background: var(--theme-primary);
+  color: var(--theme-text-on-primary);
   font-size: var(--font-size-xs, 0.75rem);
   font-weight: var(--font-weight-semibold, 600);
 }

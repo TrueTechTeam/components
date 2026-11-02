@@ -8,11 +8,11 @@
 
   // Animation for visibility changes (optional)
   &[data-animating='true'] {
-    animation: filterFieldFadeIn 0.2s ease-out;
+    animation: filter-field-fade-in 0.2s ease-out;
   }
 }
 
-@keyframes filterFieldFadeIn {
+@keyframes filter-field-fade-in {
   from {
     opacity: 0;
     transform: translateY(-4px);
