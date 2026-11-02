@@ -44,7 +44,7 @@ export interface PageProps extends StateProps {
 export function slugify(text: string): string {
   const slug = text
     .normalize('NFKD')
-    .replace(/[̀-ͯ]/g, '')
+    .replace(/[\u0300-\u036f]/g, '')
     .toLowerCase()
     .replace(/[^a-z0-9]+/g, '-')
     .replace(/^-+|-+$/g, '');
@@ -131,7 +131,8 @@ export function Page({
             <ErrorBoundary
               onError={onError}
               resetKeys={[pageId]}
-              fallback={(error, reset) => <PageMessages error={error} onRetry={reset} />}
+              // Generic text only (R9): the raw error goes to logger.error, never to the screen.
+              fallback={(_error, reset) => <PageMessages error onRetry={reset} headingLevel={2} />}
             >
               <PageState
                 queries={queries}
@@ -140,6 +141,7 @@ export function Page({
                 empty={empty}
                 permission={permission}
                 size="md"
+                headingLevel={2}
                 defaultSkeleton={<Skeleton variant="rounded" height="12rem" />}
               >
                 {children}

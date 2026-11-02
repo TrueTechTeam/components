@@ -99,6 +99,7 @@ export const PageMessages = ({
     timeoutConfig,
     emptyConfig,
     size = 'md',
+    headingLevel = 2,
     fullScreen = false,
     centerVertically = true,
     minHeight,
@@ -203,6 +204,7 @@ export const PageMessages = ({
         state={activeState}
         config={activeConfig}
         size={resolvedSize}
+        headingLevel={headingLevel}
         errorMessage={errorMessage}
         actions={contextConfig.actions}
       />

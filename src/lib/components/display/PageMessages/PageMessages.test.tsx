@@ -122,3 +122,17 @@ describe('PageMessages action props', () => {
     errorSpy.mockRestore();
   });
 });
+
+describe('PageMessages headingLevel', () => {
+  it('renders the title as an h2 by default', () => {
+    render(<PageMessages error />);
+    expect(
+      screen.getByRole('heading', { level: 2, name: 'Something went wrong' })
+    ).toBeInTheDocument();
+  });
+
+  it('renders the title at the given heading level', () => {
+    render(<PageMessages empty headingLevel={4} />);
+    expect(screen.getByRole('heading', { level: 4, name: 'No Data' })).toBeInTheDocument();
+  });
+});

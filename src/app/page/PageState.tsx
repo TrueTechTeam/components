@@ -1,4 +1,5 @@
 import React, { useEffect, type ReactNode } from 'react';
+import { Button } from '../../lib/components/buttons/Button';
 import { PageMessages, type PageMessagesProps } from '../../lib/components/display/PageMessages';
 import { useLabels } from '../../lib/contexts/LabelsContext';
 import { useAuth } from '../AppProvider/hooks';
@@ -9,7 +10,10 @@ import styles from './Page.module.scss';
 export interface StateProps {
   /** Query results that drive the loading, error, empty and refreshing states. */
   queries?: QueryLike[];
-  /** Receives each query's `data`, in order; evaluated only when every query succeeded. */
+  /**
+   * Receives each query's `data`, in order. Evaluated only when every query has data: all
+   * succeeded, or a background refetch failed and the last loaded data is still shown.
+   */
   isEmpty?: (data: unknown[]) => boolean;
   /** Shown while any query is pending. @default a Skeleton block (Page) / 3 text lines (Section) */
   skeleton?: ReactNode;
@@ -22,6 +26,8 @@ export interface StateProps {
 
 interface PageStateProps extends StateProps {
   size: 'md' | 'sm';
+  /** Heading level of PageMessages titles. */
+  headingLevel: PageMessagesProps['headingLevel'];
   defaultSkeleton: ReactNode;
 }
 
@@ -31,8 +37,10 @@ function messageError(error: unknown): Error | string | true {
 
 /**
  * Renders the first matching state (STATE-1): forbidden, skeleton, error (retry refetches every
- * errored query), empty, then `children`. A refreshing bar overlays the top while any query
- * fetches in the background.
+ * errored query), empty, then `children`. A failed background refetch of a query that still has
+ * data keeps the content and shows a compact inline alert with Retry above it (R8); only errored
+ * queries without data show the full error state. A refreshing bar overlays the top while any
+ * query fetches in the background.
  */
 export function PageState({
   queries = [],
@@ -41,6 +49,7 @@ export function PageState({
   empty,
   permission,
   size,
+  headingLevel,
   defaultSkeleton,
   children,
 }: PageStateProps) {
@@ -48,7 +57,7 @@ export function PageState({
   const { can } = useAuth();
 
   if (permission && !can(permission.action, permission.subject)) {
-    return <PageMessages forbidden size={size} />;
+    return <PageMessages forbidden size={size} headingLevel={headingLevel} />;
   }
 
   if (queries.some((query) => query.isPending)) {
@@ -65,15 +74,32 @@ export function PageState({
   }
 
   const errored = queries.filter((query) => query.isError);
+  const retry = () => {
+    errored.forEach((query) => void query.refetch());
+  };
+  const failedWithoutData = errored.find((query) => query.data === undefined);
   let content: ReactNode = children;
-  if (errored.length > 0) {
-    const retry = () => {
-      errored.forEach((query) => void query.refetch());
-    };
-    content = <PageMessages error={messageError(errored[0].error)} onRetry={retry} size={size} />;
+  if (failedWithoutData) {
+    content = (
+      <PageMessages
+        error={messageError(failedWithoutData.error)}
+        onRetry={retry}
+        size={size}
+        headingLevel={headingLevel}
+      />
+    );
   } else if (isEmpty?.(queries.map((query) => query.data))) {
-    content = <PageMessages empty emptyConfig={empty} size={size} />;
+    content = <PageMessages empty emptyConfig={empty} size={size} headingLevel={headingLevel} />;
   }
+  const staleError =
+    !failedWithoutData && errored.length > 0 ? (
+      <div className={styles.refetchError} role="alert">
+        <span className={styles.refetchErrorText}>{t('page.refetchError')}</span>
+        <Button size="sm" variant="outline" onClick={retry}>
+          {t('pageMessages.retry')}
+        </Button>
+      </div>
+    ) : null;
 
   const refreshing = queries.some((query) => query.isFetching);
   return (
@@ -81,6 +107,7 @@ export function PageState({
       {refreshing && (
         <div className={styles.refreshing} role="progressbar" aria-label={t('page.refreshing')} />
       )}
+      {staleError}
       {content}
     </div>
   );

@@ -101,6 +101,47 @@ describe('Section', () => {
     expect(within(emptyRegion).getByText('No Data')).toBeInTheDocument();
   });
 
+  it('keeps its content with an inline alert when a background refetch fails', () => {
+    const stale = query({ isError: true, error: new Error('Server down'), data: [1] });
+    render(
+      wrap(
+        <Page title="Orders">
+          <Section title="Totals" queries={[stale]}>
+            <p>Totals table</p>
+          </Section>
+        </Page>
+      )
+    );
+    const region = screen.getByRole('region', { name: 'Totals' });
+    expect(within(region).getByText('Totals table')).toBeInTheDocument();
+    expect(within(region).getByRole('alert')).toHaveTextContent(
+      "Couldn't refresh. Showing the last loaded data."
+    );
+    fireEvent.click(within(region).getByRole('button', { name: 'Retry' }));
+    expect(stale.refetch).toHaveBeenCalledTimes(1);
+  });
+
+  it('uses the next heading level for state messages under a titled section', () => {
+    render(
+      wrap(
+        <Page title="Orders">
+          <Section title="Deep" headingLevel={4} queries={[query({ isError: true, error: 'x' })]}>
+            <p>Hidden</p>
+          </Section>
+          <Section headingLevel={3} queries={[query({ isError: true, error: 'y' })]}>
+            <p>Hidden</p>
+          </Section>
+        </Page>
+      )
+    );
+    expect(
+      screen.getByRole('heading', { level: 5, name: 'Something went wrong' })
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('heading', { level: 3, name: 'Something went wrong' })
+    ).toBeInTheDocument();
+  });
+
   it('shows forbidden when its permission check fails', () => {
     render(
       wrap(
@@ -146,7 +187,13 @@ describe('Section', () => {
     expect(screen.getByText('Page header')).toBeInTheDocument();
     expect(screen.getByText('Customer table')).toBeInTheDocument();
     const revenue = screen.getByRole('region', { name: 'Revenue' });
-    expect(within(revenue).getByText('Chart exploded')).toBeInTheDocument();
+    // Generic text only: the thrown message is logged, never shown (R9).
+    expect(within(revenue).getByText('Something went wrong')).toBeInTheDocument();
+    expect(screen.queryByText(/Chart exploded/)).not.toBeInTheDocument();
+    // The message title nests under the section's h2.
+    expect(
+      within(revenue).getByRole('heading', { level: 3, name: 'Something went wrong' })
+    ).toBeInTheDocument();
     expect(within(revenue).getByTestId('page-messages').getAttribute('data-size')).toBe('sm');
 
     expect(logger.error).toHaveBeenCalledTimes(1);

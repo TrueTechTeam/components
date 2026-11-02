@@ -13,7 +13,11 @@ export interface PageContextValue {
   description?: string;
   /** Registers `queries` under `id` (a Section or the page itself). Returns the unregister function. */
   registerQueries(id: string, queries: QueryLike[]): () => void;
-  /** Every registered query list by owner id (read by the debug panel). */
+  /**
+   * Every registered query list by owner id (read by the debug panel). Only the status fields
+   * (`isPending`, `isError`, `error`, `isFetching`, `dataUpdatedAt`) are tracked: an entry is
+   * replaced when one of them changes, so its `data` (and `refetch`) may be a stale reference.
+   */
   queries: Record<string, QueryLike[]>;
 }
 
