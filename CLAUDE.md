@@ -226,6 +226,10 @@ Commit messages matter here beyond style — semantic-release parses them to dec
 version number and to write the changelog (`feat` → minor, `fix` → patch, `BREAKING CHANGE:` in
 the body or `!` after the type → major). A vague message produces a vague changelog entry.
 
+Never write a bare `#` followed by hex digits or numbers in a commit message (colors, counts):
+the release-notes parser reads it as an issue reference and adds a bogus "closes #…" link to the
+changelog. Write colors without the `#` (`00777e`, not `#00777e`).
+
 ## Pull Requests
 
 Target `master`. `.github/workflows/pr.yml` runs commitlint on the PR title/commits plus lint,
