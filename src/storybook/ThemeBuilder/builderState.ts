@@ -1,13 +1,15 @@
 import type { ThemeColorOverrides, ThemeMode } from '../../lib/types/theme.types';
 import { hexToRgb, oklchToHex, parseColorToOklch, rgbToHex } from '../../lib/utils/colorUtils';
-import { generateColors } from './generateTheme';
+import { DENSITY_MULTIPLIER, buildShadows, generateColors } from './generateTheme';
 import { MOODS } from './moods';
 import type { PaletteSuggestion } from './suggestPalettes';
 import {
   DEFAULT_INPUTS,
   type ColorOverrides,
+  type Density,
   type Harmony,
   type Mood,
+  type ShadowDepth,
   type ThemeInputs,
 } from './types';
 
@@ -176,7 +178,7 @@ function isValidState(v: unknown): v is BuilderState {
     (v.path === null || v.path === 'guided' || v.path === 'direct') &&
     isOneOf(STEPS, v.step) &&
     Array.isArray(v.moods) &&
-    v.moods.every((m) => typeof m === 'string' && m in MOODS) &&
+    v.moods.every((m) => typeof m === 'string' && Object.hasOwn(MOODS, m)) &&
     isNum(v.hue) &&
     isOneOf(HARMONIES, v.harmony) &&
     isNum(v.shuffleSeed) &&
@@ -269,10 +271,18 @@ function toPx(value: unknown): number | null {
   return parseFloat(m[1]) * (m[2] === 'rem' ? 16 : 1);
 }
 
+let knownColorKeys: Set<string> | undefined;
+/** Every color token the builder knows (semantic tokens plus primary/secondary shades). */
+function isKnownColorKey(key: string): boolean {
+  knownColorKeys ??= new Set(Object.keys(generateColors(DEFAULT_INPUTS, 'light')));
+  return knownColorKeys.has(key);
+}
+
 function readColors(
   value: unknown,
   path: string,
-  errors: string[]
+  errors: string[],
+  warnings: string[]
 ): ThemeColorOverrides | undefined {
   if (value === undefined) {
     return undefined;
@@ -284,13 +294,229 @@ function readColors(
   const out: Record<string, string> = {};
   for (const [key, color] of Object.entries(value)) {
     const hex = typeof color === 'string' ? toHexColor(color) : null;
-    if (hex) {
-      out[key] = hex;
-    } else {
+    if (!hex) {
       errors.push(`${path}.${key} is not a valid color`);
+    } else if (!isKnownColorKey(key)) {
+      warnings.push(`${path}.${key} is not a known color token (ignored)`);
+    } else {
+      out[key] = hex;
     }
   }
   return out as ThemeColorOverrides;
+}
+
+const UNITS = [4, 5, 6];
+const RATIOS = [1.125, 1.2, 1.25, 1.333];
+const DENSITY_KEYS = Object.keys(DENSITY_MULTIPLIER) as Density[];
+const SHADOW_DEPTHS: Array<Exclude<ShadowDepth, 'flat'>> = ['subtle', 'medium', 'deep'];
+const SHADOW_KEYS = ['sm', 'md', 'lg', 'xl'] as const;
+const REGENERATED = 'regenerated from builder settings';
+
+/** The item whose `distance` is smallest (first wins ties). */
+function nearest<T>(items: readonly T[], distance: (item: T) => number): T {
+  return items.reduce((best, item) => (distance(item) < distance(best) ? item : best));
+}
+
+const mean = (values: number[]): number => values.reduce((a, b) => a + b, 0) / values.length;
+
+/** Alpha percentages in a builder-style shadow (`rgb(16 24 40 / 6%)`). */
+const shadowAlphas = (shadow: string): number[] =>
+  Array.from(shadow.matchAll(/(\d+(?:\.\d+)?)%\)/g), (m) => parseFloat(m[1]));
+
+/** Infer the builder shadow depth from `theme.shadows`. */
+function readShadows(
+  value: unknown,
+  inputs: ThemeInputs,
+  errors: string[],
+  warnings: string[]
+): void {
+  if (value === undefined) {
+    return;
+  }
+  if (!isRecord(value)) {
+    errors.push('theme.shadows must be an object');
+    return;
+  }
+  const shadows: Partial<Record<(typeof SHADOW_KEYS)[number], string>> = {};
+  for (const key of SHADOW_KEYS) {
+    const shadow = value[key];
+    if (typeof shadow === 'string') {
+      shadows[key] = shadow.trim();
+    } else if (shadow !== undefined) {
+      errors.push(`theme.shadows.${key} must be a string`);
+    }
+  }
+  const keys = SHADOW_KEYS.filter((k) => shadows[k] !== undefined);
+  if (keys.length > 0 && keys.every((k) => shadows[k] === 'none')) {
+    inputs.shadowDepth = 'flat';
+    return;
+  }
+  const exact = SHADOW_DEPTHS.find((depth) => {
+    const generated = buildShadows(depth);
+    return keys.length > 0 && keys.every((k) => shadows[k] === generated[k]);
+  });
+  if (exact) {
+    inputs.shadowDepth = exact;
+    return;
+  }
+  const tuned = keys.filter((k) => shadowAlphas(shadows[k] ?? '').length > 0);
+  if (tuned.length === 0) {
+    warnings.push(`theme.shadows could not be matched to a shadow depth; ${REGENERATED}`);
+    return;
+  }
+  const fileAlpha = mean(tuned.flatMap((k) => shadowAlphas(shadows[k] ?? '')));
+  const depth = nearest(SHADOW_DEPTHS, (d) => {
+    const generated = buildShadows(d);
+    return Math.abs(mean(tuned.flatMap((k) => shadowAlphas(generated[k]))) - fileAlpha);
+  });
+  inputs.shadowDepth = depth;
+  warnings.push(`theme.shadows do not match a builder shadow depth; using nearest "${depth}"`);
+}
+
+/** Infer spacing unit (4, 5 or 6px) and density from `theme.spacing`. */
+function readSpacing(
+  value: unknown,
+  inputs: ThemeInputs,
+  errors: string[],
+  warnings: string[]
+): void {
+  if (value === undefined) {
+    return;
+  }
+  if (!isRecord(value)) {
+    errors.push('theme.spacing must be an object');
+    return;
+  }
+  if (value.unit === undefined) {
+    warnings.push(`theme.spacing.unit is missing; ${REGENERATED}`);
+  } else if (!isNum(value.unit)) {
+    errors.push('theme.spacing.unit must be a number');
+  } else {
+    const fileUnit = value.unit;
+    inputs.spacingUnit = nearest(UNITS, (u) => Math.abs(u - fileUnit));
+    if (inputs.spacingUnit !== fileUnit) {
+      warnings.push(`theme.spacing.unit ${fileUnit} is not 4, 5 or 6; using ${inputs.spacingUnit}`);
+    }
+  }
+  if (value.md === undefined) {
+    warnings.push(`theme.spacing.md is missing; density ${REGENERATED}`);
+    return;
+  }
+  const md = toPx(value.md);
+  if (md === null) {
+    errors.push('theme.spacing.md must be a length');
+    return;
+  }
+  const unit = inputs.spacingUnit;
+  inputs.density = nearest(DENSITY_KEYS, (d) => Math.abs(4 * unit * DENSITY_MULTIPLIER[d] - md));
+  if (Math.round(4 * unit * DENSITY_MULTIPLIER[inputs.density]) !== md) {
+    warnings.push(
+      `theme.spacing.md ${md}px does not match a builder density; using "${inputs.density}"`
+    );
+  }
+}
+
+/** Read the md radius, clamped and rounded to the editor range (0-16px, whole px). */
+function readRadius(
+  value: unknown,
+  inputs: ThemeInputs,
+  errors: string[],
+  warnings: string[]
+): void {
+  if (value === undefined) {
+    return;
+  }
+  if (!isRecord(value)) {
+    errors.push('theme.borderRadius must be an object');
+    return;
+  }
+  if (value.md === undefined) {
+    warnings.push(`theme.borderRadius.md is missing; ${REGENERATED}`);
+    return;
+  }
+  const px = toPx(value.md);
+  if (px === null) {
+    errors.push('theme.borderRadius.md must be a length');
+    return;
+  }
+  inputs.radius = Math.min(16, Math.max(0, Math.round(px)));
+  if (inputs.radius !== px) {
+    warnings.push(`theme.borderRadius.md ${px}px is outside 0-16px; using ${inputs.radius}px`);
+  }
+}
+
+/** Read font stack, base size (whole px, 14-18) and scale ratio from `theme.typography`. */
+function readTypography(
+  value: unknown,
+  inputs: ThemeInputs,
+  errors: string[],
+  warnings: string[]
+): void {
+  if (value === undefined) {
+    return;
+  }
+  if (!isRecord(value)) {
+    errors.push('theme.typography must be an object');
+    return;
+  }
+  const family = value.fontFamily;
+  if (family !== undefined) {
+    if (!isRecord(family)) {
+      errors.push('theme.typography.fontFamily must be an object');
+    } else if (family.primary === undefined) {
+      warnings.push(`theme.typography.fontFamily.primary is missing; ${REGENERATED}`);
+    } else if (typeof family.primary === 'string') {
+      inputs.fontStack = family.primary;
+    } else {
+      errors.push('theme.typography.fontFamily.primary must be a string');
+    }
+  }
+
+  const sizes = value.fontSize;
+  if (sizes === undefined) {
+    return;
+  }
+  if (!isRecord(sizes)) {
+    errors.push('theme.typography.fontSize must be an object');
+    return;
+  }
+  if (sizes.base === undefined) {
+    warnings.push(`theme.typography.fontSize.base is missing; size and ratio ${REGENERATED}`);
+    return;
+  }
+  const base = toPx(sizes.base);
+  if (base === null) {
+    errors.push('theme.typography.fontSize.base must be a length');
+    return;
+  }
+  // Exported sizes are rem rounded to 3 decimals, so allow a little drift before warning.
+  inputs.baseFontSize = Math.min(18, Math.max(14, Math.round(base)));
+  if (Math.abs(inputs.baseFontSize - base) > 0.05) {
+    warnings.push(
+      `theme.typography.fontSize.base ${Math.round(base * 100) / 100}px is not a whole size from 14 to 18px; using ${inputs.baseFontSize}px`
+    );
+  }
+
+  if (sizes.lg === undefined) {
+    warnings.push(`theme.typography.fontSize.lg is missing; scale ratio ${REGENERATED}`);
+    return;
+  }
+  const lg = toPx(sizes.lg);
+  if (lg === null) {
+    errors.push('theme.typography.fontSize.lg must be a length');
+    return;
+  }
+  const ratio = lg / base;
+  if (!Number.isFinite(ratio) || ratio <= 0) {
+    warnings.push(`theme.typography.fontSize.lg gives no usable scale ratio; ${REGENERATED}`);
+    return;
+  }
+  inputs.typeScaleRatio = nearest(RATIOS, (r) => Math.abs(r - ratio));
+  if (Math.abs(inputs.typeScaleRatio - ratio) > 0.005) {
+    warnings.push(
+      `theme.typography.fontSize.lg gives scale ratio ${Math.round(ratio * 1000) / 1000}; using ${inputs.typeScaleRatio}`
+    );
+  }
 }
 
 /**
@@ -353,7 +579,7 @@ export function importThemeJson(text: string, current: BuilderState): ImportResu
     }
   }
 
-  const shared = readColors(theme.colors, 'theme.colors', errors);
+  const shared = readColors(theme.colors, 'theme.colors', errors, warnings);
   const perMode: Partial<Record<ThemeMode, ThemeColorOverrides>> = {};
   if (theme.modes !== undefined) {
     if (!isRecord(theme.modes)) {
@@ -368,7 +594,8 @@ export function importThemeJson(text: string, current: BuilderState): ImportResu
           perMode[mode as ThemeMode] = readColors(
             entry.colors,
             `theme.modes.${mode}.colors`,
-            errors
+            errors,
+            warnings
           );
         }
       }
@@ -376,55 +603,10 @@ export function importThemeJson(text: string, current: BuilderState): ImportResu
   }
 
   const inputs: ThemeInputs = { ...current.inputs };
-  const spacing = theme.spacing;
-  if (spacing !== undefined) {
-    if (!isRecord(spacing)) {
-      errors.push('theme.spacing must be an object');
-    } else if (spacing.unit !== undefined) {
-      if (isNum(spacing.unit)) {
-        inputs.spacingUnit = spacing.unit;
-      } else {
-        errors.push('theme.spacing.unit must be a number');
-      }
-    }
-  }
-  const radius = theme.borderRadius;
-  if (radius !== undefined) {
-    if (!isRecord(radius)) {
-      errors.push('theme.borderRadius must be an object');
-    } else if (radius.md !== undefined) {
-      const px = toPx(radius.md);
-      if (px === null) {
-        errors.push('theme.borderRadius.md must be a length');
-      } else {
-        inputs.radius = px;
-      }
-    }
-  }
-  const typography = theme.typography;
-  if (typography !== undefined) {
-    if (!isRecord(typography)) {
-      errors.push('theme.typography must be an object');
-    } else {
-      const family = typography.fontFamily;
-      if (isRecord(family) && family.primary !== undefined) {
-        if (typeof family.primary === 'string') {
-          inputs.fontStack = family.primary;
-        } else {
-          errors.push('theme.typography.fontFamily.primary must be a string');
-        }
-      }
-      const sizes = typography.fontSize;
-      if (isRecord(sizes) && sizes.base !== undefined) {
-        const px = toPx(sizes.base);
-        if (px === null) {
-          errors.push('theme.typography.fontSize.base must be a length');
-        } else {
-          inputs.baseFontSize = px;
-        }
-      }
-    }
-  }
+  readSpacing(theme.spacing, inputs, errors, warnings);
+  readRadius(theme.borderRadius, inputs, errors, warnings);
+  readTypography(theme.typography, inputs, errors, warnings);
+  readShadows(theme.shadows, inputs, errors, warnings);
 
   if (errors.length > 0) {
     return fail();

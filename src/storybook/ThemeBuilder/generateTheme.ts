@@ -215,7 +215,7 @@ const BASE_SHADOWS = {
 };
 const SHADOW_SCALE = { subtle: 0.6, medium: 1, deep: 1.6 } as const;
 
-function buildShadows(
+export function buildShadows(
   depth: ThemeInputs['shadowDepth']
 ): Record<keyof typeof BASE_SHADOWS, string> {
   const out = {} as Record<keyof typeof BASE_SHADOWS, string>;
@@ -234,7 +234,7 @@ function buildShadows(
   return out;
 }
 
-const DENSITY_MULTIPLIER = { compact: 0.75, comfortable: 1, spacious: 1.25 } as const;
+export const DENSITY_MULTIPLIER = { compact: 0.75, comfortable: 1, spacious: 1.25 } as const;
 // Steps relative to base; one modular-scale step per size from xs -2 up to 4xl +5.
 const FONT_STEPS = { xs: -2, sm: -1, base: 0, lg: 1, xl: 2, '2xl': 3, '3xl': 4, '4xl': 5 } as const;
 

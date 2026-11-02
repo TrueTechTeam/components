@@ -201,6 +201,10 @@ describe('persistence', () => {
     ['wrong shape', { getItem: () => JSON.stringify({ version: 1, step: 'editor' }) }],
     ['bad nested shape', { getItem: () => JSON.stringify({ ...INITIAL_STATE, inputs: null }) }],
     ['unknown step', { getItem: () => JSON.stringify({ ...INITIAL_STATE, step: 'nope' }) }],
+    [
+      'inherited mood name',
+      { getItem: () => JSON.stringify({ ...INITIAL_STATE, moods: ['toString'] }) },
+    ],
   ])('loadState falls back to INITIAL_STATE when storage %s', (_n, stub) => {
     expect(loadState(stub as unknown as Storage)).toEqual(INITIAL_STATE);
   });
@@ -265,6 +269,81 @@ describe('importThemeJson', () => {
     expect(r.state?.overrides).toEqual({ light: { success: '#00aa00' }, dark: {} });
   });
 
+  it.each([
+    { shadowDepth: 'flat', density: 'compact', typeScaleRatio: 1.333, baseFontSize: 15 },
+    { shadowDepth: 'deep', density: 'spacious', typeScaleRatio: 1.125, baseFontSize: 18 },
+    { shadowDepth: 'medium', density: 'comfortable', typeScaleRatio: 1.25, baseFontSize: 14 },
+  ] as const)('restores look settings from an exported theme.json (%o)', (look) => {
+    const inputs = { ...DEFAULT_INPUTS, ...look, spacingUnit: 5 };
+    // Start from different settings so a silent revert would be visible.
+    const current = {
+      ...INITIAL_STATE,
+      inputs: { ...DEFAULT_INPUTS, shadowDepth: 'subtle' as const, typeScaleRatio: 1.2 },
+    };
+    const r = importThemeJson(JSON.stringify(generateTheme(inputs)), current);
+    expect(r.ok).toBe(true);
+    expect(r.warnings).toEqual([]);
+    expect(r.state?.inputs).toEqual(inputs);
+  });
+
+  it('clamps an out-of-range radius with a warning naming the field', () => {
+    const r = importThemeJson('{"theme":{"borderRadius":{"md":"24px"}}}', INITIAL_STATE);
+    expect(r.ok).toBe(true);
+    expect(r.state?.inputs.radius).toBe(16);
+    expect(r.warnings).toEqual([expect.stringContaining('theme.borderRadius.md')]);
+  });
+
+  it('snaps spacing unit, base size and scale ratio to editor values with warnings', () => {
+    const text = JSON.stringify({
+      theme: {
+        spacing: { unit: 8, md: '32px' },
+        typography: { fontSize: { base: '20px', lg: '30px' } },
+      },
+    });
+    const r = importThemeJson(text, INITIAL_STATE);
+    expect(r.ok).toBe(true);
+    expect(r.state?.inputs).toMatchObject({
+      spacingUnit: 6,
+      baseFontSize: 18,
+      typeScaleRatio: 1.333,
+    });
+    expect(r.warnings.some((w) => w.includes('theme.spacing.unit'))).toBe(true);
+    expect(r.warnings.some((w) => w.includes('theme.spacing.md'))).toBe(true);
+    expect(r.warnings.some((w) => w.includes('theme.typography.fontSize.base'))).toBe(true);
+    expect(r.warnings.some((w) => w.includes('theme.typography.fontSize.lg'))).toBe(true);
+  });
+
+  it('warns when a present look field cannot be inferred', () => {
+    const text = JSON.stringify({
+      theme: { spacing: { unit: 4 }, shadows: { md: '0 1px 2px black' } },
+    });
+    const r = importThemeJson(text, INITIAL_STATE);
+    expect(r.ok).toBe(true);
+    expect(r.state?.inputs.shadowDepth).toBe(INITIAL_STATE.inputs.shadowDepth);
+    expect(r.warnings).toEqual([
+      expect.stringMatching(/theme\.spacing\.md.*regenerated from builder settings/),
+      expect.stringMatching(/theme\.shadows.*regenerated from builder settings/),
+    ]);
+  });
+
+  it('infers the nearest shadow depth for hand-tuned shadows with a warning', () => {
+    const text = JSON.stringify({ theme: { shadows: { md: '0 4px 8px rgb(0 0 0 / 15%)' } } });
+    const r = importThemeJson(text, INITIAL_STATE);
+    expect(r.state?.inputs.shadowDepth).toBe('deep');
+    expect(r.warnings).toEqual([expect.stringContaining('theme.shadows')]);
+  });
+
+  it('warns about and drops unknown color keys', () => {
+    const r = importThemeJson(
+      '{"theme":{"colors":{"primary":"#112233","brandPink":"#ff00ff"}}}',
+      INITIAL_STATE
+    );
+    expect(r.ok).toBe(true);
+    expect(r.warnings).toEqual([expect.stringContaining('theme.colors.brandPink')]);
+    expect('brandPink' in (r.state?.overrides.dark ?? {})).toBe(false);
+    expect('brandPink' in (r.state?.overrides.light ?? {})).toBe(false);
+  });
+
   it('puts shared colors into both modes and keeps only those that differ', () => {
     const r = importThemeJson('{"theme":{"colors":{"primary":"#112233"}}}', INITIAL_STATE);
     expect(r.ok).toBe(true);
@@ -274,15 +353,20 @@ describe('importThemeJson', () => {
     expect(r.state?.overrides.dark).toEqual({ primary: '#112233' });
   });
 
-  it.each(['not json', '[]', '{"mode":"sepia"}', '{"theme":{"colors":{"primary":"blue"}}}'])(
-    'rejects malformed theme.json %s with errors and no state',
-    (text) => {
-      const r = importThemeJson(text, INITIAL_STATE);
-      expect(r.ok).toBe(false);
-      expect(r.errors.length).toBeGreaterThan(0);
-      expect(r.state).toBeUndefined();
-    }
-  );
+  it.each([
+    'not json',
+    '[]',
+    '{"mode":"sepia"}',
+    '{"theme":{"colors":{"primary":"blue"}}}',
+    '{"theme":{"typography":{"fontFamily":"Inter"}}}',
+    '{"theme":{"typography":{"fontSize":16}}}',
+    '{"theme":{"shadows":"none"}}',
+  ])('rejects malformed theme.json %s with errors and no state', (text) => {
+    const r = importThemeJson(text, INITIAL_STATE);
+    expect(r.ok).toBe(false);
+    expect(r.errors.length).toBeGreaterThan(0);
+    expect(r.state).toBeUndefined();
+  });
 
   it('warns about unknown keys but still imports', () => {
     const r = importThemeJson('{"foo":1,"theme":{"foo":1}}', INITIAL_STATE);
