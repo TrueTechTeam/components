@@ -4,8 +4,8 @@ import { PreviewFrame } from './PreviewFrame';
 import { MSG_CONFIG, MSG_READY } from './messages';
 import type { ThemeConfig } from '../../../lib/types/theme.types';
 
-const A: ThemeConfig = { mode: 'light', theme: { colors: { primary: { 500: '#111111' } } } };
-const B: ThemeConfig = { mode: 'dark', theme: { colors: { primary: { 500: '#222222' } } } };
+const A: ThemeConfig = { mode: 'light', theme: { colors: { primary: '#111111' } } };
+const B: ThemeConfig = { mode: 'dark', theme: { colors: { primary: '#222222' } } };
 
 const dispatchReady = (source: MessageEventSource | null) =>
   act(() => {

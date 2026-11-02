@@ -23,6 +23,11 @@ const ThemeContext = createContext<ThemeContextValue | undefined>(undefined);
 export interface ThemeProviderProps {
   children: ReactNode;
   defaultMode?: ThemeMode;
+  /**
+   * Mode and theme override, re-synced when they change. Keep `themeConfig.theme` referentially stable (memoise or
+   * hoist it): a new object re-applies all variables. The provider assumes it is the only writer
+   * of the CSS variables it sets on the document root.
+   */
   themeConfig?: ThemeConfig;
   /**
    * Write theme overrides to the document root as CSS variables (default: true)

@@ -116,6 +116,9 @@ accents), `--font-family-mono`; `--font-size-xs` (12) · `sm` (14) · `base` (16
 | `borderRadius`            | `--radius-<key>`                                                                   |
 | `shadows`                 | `--theme-shadow-<key>`                                                             |
 
+`spacing.unit` only sets `--spacing-unit`; components read the `--spacing-xs`..`--spacing-xxl`
+scale, so set those keys too when changing spacing (the Theme Builder emits both).
+
 Empty or undefined values are skipped. Don't hand-write this object: generate it in Storybook's
 **Theme Builder** (first item in the sidebar), which checks contrast and exports `theme.json`.
 

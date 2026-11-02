@@ -312,6 +312,10 @@ export const CustomTheme: Story = {
  */
 export const FromThemeJson: Story = {
   name: 'From theme.json',
+  parameters: {
+    // The story brings its own provider; the toolbar provider would mix in its own mode.
+    globalDecorators: 'none',
+  },
   args: {
     themeConfig: generatedTheme,
     children: <ThemeShowcase />,

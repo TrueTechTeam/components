@@ -49,6 +49,9 @@ export function fixForeground(colors: ThemeColorOverrides, fg: TokenKey): string
   return ['#ffffff', '#000000'].find(acceptable) ?? null;
 }
 
+/** Two decimals, truncated: 4.478 shows "4.47", never a rounded-up "4.5" next to "Fail". */
+const formatRatio = (ratio: number): string => (Math.floor(ratio * 100) / 100).toFixed(2);
+
 export interface ContrastReportProps {
   colors: ThemeColorOverrides;
   mode: ThemeMode;
@@ -86,7 +89,7 @@ export function ContrastReport({ colors, mode, dispatch }: ContrastReportProps) 
           return (
             <li key={`${check.fg}-${check.bg}`} className={styles.failRow}>
               <span>
-                {check.fg} on {check.bg}: {check.ratio.toFixed(1)}:1 (needs {check.min}:1)
+                {check.fg} on {check.bg}: {formatRatio(check.ratio)}:1 (needs {check.min}:1)
               </span>
               <Badge variant={check.pass ? 'success' : 'danger'} size="sm">
                 {check.pass ? 'AA' : 'Fail'}

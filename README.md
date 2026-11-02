@@ -914,6 +914,15 @@ const hsl = rgbToHsl(255, 0, 0); // { h: 0, s: 100, l: 50 }
 const isLight = isLightColor('#ffffff'); // true
 ```
 
+OKLCH, contrast and theme helpers (used by the Theme Builder):
+
+- `hexToOklch` / `oklchToHex` - convert between hex and OKLCH (`oklchToHex` gamut-maps to sRGB)
+- `parseColorToOklch` - parse hex, `rgb()`, `hsl()` or `oklch()` into OKLCH (null if invalid)
+- `rotateHue` - rotate a hue angle and normalise it to [0, 360)
+- `getRelativeLuminance` / `getContrastRatio` - WCAG 2.x luminance and contrast for hex,
+  `rgb()` or `hsl()` colors (`NaN` for unparseable input)
+- `themeOverrideToCssVars` - turn a `ThemeOverride` into the CSS variables `GlobalProvider` sets
+
 ### Date Utils
 
 ```tsx
