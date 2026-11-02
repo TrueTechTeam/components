@@ -21,3 +21,14 @@ export type {
   PopoverSize,
   PopoverWidth,
 } from './positioning';
+
+export {
+  formatDateTime,
+  formatRelativeTime,
+  formatNumber,
+  formatCurrency,
+  formatPercent,
+  formatFileSize,
+  formatList,
+  resolveLocale,
+} from './format';
