@@ -155,6 +155,14 @@ SCSS mixins: `@include focus-ring` (outline ring for buttons and controls), `@in
 (border + ring for bordered form fields), `@include transition(prop, …)` (token duration and
 easing; reduced motion is handled globally).
 
+### Breakpoints
+
+Named min-widths: `phone` 0 · `tablet` 600px · `laptop` 1024px · `desktop` 1440px. SCSS:
+`@use '.../styles/mixins/breakpoints' as *;` then `@include bp(laptop)` (at or above) or
+`@include bp-down(laptop)` (below). React: `useBreakpoint()` and `useBreakpointValue({ phone, laptop })`.
+Consumers override the pixel values with `GlobalProvider breakpoints={{ tablet: 700 }}`. MUST NOT
+hardcode breakpoint pixel values in new code.
+
 ### Z-index
 
 `--z-dropdown` 1000 · `--z-sticky` 1100 · `--z-fixed` 1200 · `--z-modal-backdrop` 1300 ·

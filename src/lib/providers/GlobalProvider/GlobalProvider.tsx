@@ -8,6 +8,10 @@ import { DialogProvider, type DialogProviderProps } from '../../components/overl
 import { AlertProvider, type AlertProviderProps } from '../../components/overlays/Alert';
 import { ToastProvider, type ToastProviderProps } from '../../components/overlays/Toast';
 import { LabelsProvider, type LabelsProviderProps } from '../../contexts/LabelsContext';
+import {
+  BreakpointsProvider,
+  type BreakpointsProviderProps,
+} from '../../contexts/BreakpointsContext';
 import type { ThemeConfig } from '../../types';
 import '../../styles/index.scss';
 
@@ -41,6 +45,11 @@ export interface GlobalProviderProps {
    * BCP 47 locale (e.g. `fr-FR`) for month and weekday names in date pickers
    */
   locale?: LabelsProviderProps['locale'];
+
+  /**
+   * Override named breakpoint min-widths in px (phone, tablet, laptop, desktop)
+   */
+  breakpoints?: BreakpointsProviderProps['breakpoints'];
 
   /**
    * PageMessages default configuration
@@ -112,18 +121,21 @@ export function GlobalProvider({
   labels,
   translate,
   locale,
+  breakpoints,
 }: GlobalProviderProps) {
   return (
     <ThemeProvider themeConfig={themeConfig} applyOverrides={injectGlobalStyles}>
-      <LabelsProvider labels={labels} translate={translate} locale={locale}>
-        <PageMessagesProvider {...pageMessagesConfig}>
-          <DialogProvider {...dialogConfig}>
-            <AlertProvider {...alertConfig}>
-              <ToastProvider {...toastConfig}>{children}</ToastProvider>
-            </AlertProvider>
-          </DialogProvider>
-        </PageMessagesProvider>
-      </LabelsProvider>
+      <BreakpointsProvider breakpoints={breakpoints}>
+        <LabelsProvider labels={labels} translate={translate} locale={locale}>
+          <PageMessagesProvider {...pageMessagesConfig}>
+            <DialogProvider {...dialogConfig}>
+              <AlertProvider {...alertConfig}>
+                <ToastProvider {...toastConfig}>{children}</ToastProvider>
+              </AlertProvider>
+            </DialogProvider>
+          </PageMessagesProvider>
+        </LabelsProvider>
+      </BreakpointsProvider>
     </ThemeProvider>
   );
 }

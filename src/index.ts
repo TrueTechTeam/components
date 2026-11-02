@@ -22,6 +22,9 @@ export type {
 export { LabelsProvider, useLabels, useLocale, interpolate, DEFAULT_LABELS } from './lib/contexts';
 export type { LabelsProviderProps, LabelVars, TranslateFn, LabelKey } from './lib/contexts';
 
+export { BreakpointsProvider, useBreakpoints, DEFAULT_BREAKPOINTS } from './lib/contexts';
+export type { BreakpointName, Breakpoints, BreakpointsProviderProps } from './lib/contexts';
+
 // Hooks
 export { useTheme as useThemeHook } from './lib/hooks';
 export { useDialog } from './lib/hooks';
@@ -54,6 +57,8 @@ export type {
 
 // Media Query Hook
 export { useMediaQuery } from './lib/hooks';
+export { useBreakpoint, useBreakpointValue } from './lib/hooks';
+export type { UseBreakpointReturn } from './lib/hooks';
 export type { UseMediaQueryOptions, UseMediaQueryReturn } from './lib/hooks';
 
 // Previous Value Hook

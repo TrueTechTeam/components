@@ -54,6 +54,8 @@ export type {
 
 // Media Query
 export { useMediaQuery } from './useMediaQuery';
+export { useBreakpoint, useBreakpointValue } from './useBreakpoint';
+export type { UseBreakpointReturn } from './useBreakpoint';
 export type { UseMediaQueryOptions, UseMediaQueryReturn } from './useMediaQuery';
 
 // Previous Value
