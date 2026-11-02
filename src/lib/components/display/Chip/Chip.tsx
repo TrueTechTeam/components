@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './Chip.module.scss';
 import type { BaseComponentProps } from '../../../types/component.types';
 import { Icon } from '../Icon';
+import { useLabels } from '../../../contexts/LabelsContext';
 
 /**
  * Props for the Chip component
@@ -73,13 +74,14 @@ export const Chip = ({
   disabled = false,
   onRemove,
   removeButtonClassName,
-  removeButtonAriaLabel = 'Remove',
+  removeButtonAriaLabel,
   className,
   children,
   ...restProps
 }: ChipProps & {
   ref?: React.Ref<HTMLDivElement>;
 }) => {
+  const t = useLabels();
   // Merge className with component styles
   const componentClasses = [styles.chip, className].filter(Boolean).join(' ');
 
@@ -109,7 +111,7 @@ export const Chip = ({
           type="button"
           className={removeButtonClasses}
           onClick={handleRemoveClick}
-          aria-label={removeButtonAriaLabel}
+          aria-label={removeButtonAriaLabel ?? t('chip.remove')}
           disabled={disabled}
           tabIndex={disabled ? -1 : 0}
         >

@@ -1,5 +1,6 @@
 import React from 'react';
 import type { BaseComponentProps } from '../../../types';
+import { useLabels } from '../../../contexts/LabelsContext';
 import { useNavbarContextStrict } from './NavbarContext';
 import styles from './Navbar.module.scss';
 
@@ -32,6 +33,7 @@ export const NavbarToggle = ({
 }: NavbarToggleProps & {
   ref?: React.Ref<HTMLButtonElement>;
 }) => {
+  const t = useLabels();
   const { navbarId, isExpanded, toggle } = useNavbarContextStrict();
 
   const componentClasses = [styles.toggle, className].filter(Boolean).join(' ');
@@ -45,7 +47,7 @@ export const NavbarToggle = ({
       data-component="navbar-toggle"
       data-expanded={isExpanded || undefined}
       data-testid={testId}
-      aria-label={ariaLabel || (isExpanded ? 'Close menu' : 'Open menu')}
+      aria-label={ariaLabel || (isExpanded ? t('navbar.closeMenu') : t('navbar.openMenu'))}
       aria-expanded={isExpanded}
       aria-controls={`${navbarId}-collapse`}
       style={style}

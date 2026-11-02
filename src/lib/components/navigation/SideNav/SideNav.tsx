@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useMemo, useId } from 'react';
 import type { BaseComponentProps } from '../../../types';
+import { useLabels } from '../../../contexts/LabelsContext';
 import { SideNavContext, type SideNavContextValue } from './SideNavContext';
 import styles from './SideNav.module.scss';
 
@@ -122,6 +123,7 @@ export const SideNav = ({
 }: SideNavProps & {
   ref?: React.Ref<HTMLElement>;
 }) => {
+  const t = useLabels();
   const sideNavId = useId();
 
   // Collapsed state
@@ -215,7 +217,7 @@ export const SideNav = ({
       data-position={position}
       data-collapsed={collapsed || undefined}
       data-testid={testId}
-      aria-label={ariaLabel || 'Side navigation'}
+      aria-label={ariaLabel || t('sideNav.label')}
       {...restProps}
     >
       <SideNavContext.Provider value={contextValue}>

@@ -2,9 +2,11 @@ import React from 'react';
 import { useTableContextStrict } from './TableContext';
 import { Checkbox } from '../../inputs/Checkbox';
 import { Icon } from '../Icon';
+import { useLabels } from '../../../contexts/LabelsContext';
 import styles from './Table.module.scss';
 
 export function TableHeader() {
+  const t = useLabels();
   const {
     columns,
     size,
@@ -34,7 +36,7 @@ export function TableHeader() {
             className={styles.tableCell}
             data-type="expand"
             role="columnheader"
-            aria-label="Expand"
+            aria-label={t('table.expand')}
           />
         )}
 
@@ -46,7 +48,7 @@ export function TableHeader() {
               indeterminate={isIndeterminate}
               onChange={handleSelectAllChange}
               size={size}
-              aria-label={isAllSelected ? 'Deselect all rows' : 'Select all rows'}
+              aria-label={isAllSelected ? t('table.deselectAll') : t('table.selectAll')}
             />
           </div>
         )}
@@ -56,7 +58,7 @@ export function TableHeader() {
             className={styles.tableCell}
             data-type="selection"
             role="columnheader"
-            aria-label="Selection"
+            aria-label={t('table.selection')}
           />
         )}
 

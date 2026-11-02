@@ -3,6 +3,7 @@ import { SideNav } from './SideNav';
 import { SideNavItem } from './SideNavItem';
 import { SideNavGroup } from './SideNavGroup';
 import { SideNavDivider } from './SideNavDivider';
+import { LabelsProvider } from '../../../contexts/LabelsContext';
 
 describe('SideNav', () => {
   describe('rendering', () => {
@@ -211,5 +212,18 @@ describe('SideNav', () => {
       fireEvent.keyDown(item, { key: ' ' });
       expect(handleSelect).toHaveBeenCalledWith('home');
     });
+  });
+});
+
+describe('SideNav translated labels', () => {
+  it('translates the default navigation label', () => {
+    render(
+      <LabelsProvider labels={{ 'sideNav.label': 'Navigation laterale' }}>
+        <SideNav>
+          <SideNavItem value="home" icon="home" label="Home" />
+        </SideNav>
+      </LabelsProvider>
+    );
+    expect(screen.getByLabelText('Navigation laterale')).toBeInTheDocument();
   });
 });

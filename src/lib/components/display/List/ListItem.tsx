@@ -13,6 +13,7 @@ import { Icon } from '../Icon';
 import { Avatar } from '../Avatar';
 import { Collapse } from '../Collapse';
 import type { ListItemRenderContext } from './types';
+import { useLabels } from '../../../contexts/LabelsContext';
 import styles from './List.module.scss';
 
 // Local type matching Dropdown's item interface
@@ -48,6 +49,7 @@ function ListItemInner<T extends Record<string, unknown>>({
   index,
   filteredIndex,
 }: ListItemProps<T> & { ref?: React.Ref<HTMLDivElement> }) {
+  const t = useLabels();
   const context = useListContextStrict<T>();
   const itemRef = useRef<HTMLDivElement>(null);
 
@@ -218,7 +220,7 @@ function ListItemInner<T extends Record<string, unknown>>({
           onChange={handleSelectionChange}
           disabled={isDisabled}
           size={size === 'lg' ? 'md' : 'sm'}
-          aria-label={`Select item ${itemKey}`}
+          aria-label={t('list.selectItem', { key: itemKey })}
         />
       </div>
     );
@@ -239,7 +241,7 @@ function ListItemInner<T extends Record<string, unknown>>({
           disabled={isDisabled}
           data-expanded={isExpanded || undefined}
           aria-expanded={isExpanded}
-          aria-label={isExpanded ? 'Collapse' : 'Expand'}
+          aria-label={isExpanded ? t('list.collapse') : t('list.expand')}
         >
           <Icon name="chevron-right" size={size === 'lg' ? 'md' : 'sm'} />
         </button>

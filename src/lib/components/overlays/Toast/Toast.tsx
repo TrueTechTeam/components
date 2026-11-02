@@ -8,6 +8,7 @@ import { IconButton } from '../../buttons/IconButton';
 import { Spinner } from '../../display/Spinner';
 import type { IconName } from '../../display/Icon/icons';
 import type { BaseComponentProps } from '../../../types';
+import { useLabels } from '../../../contexts/LabelsContext';
 import styles from './Toast.module.scss';
 
 /**
@@ -171,6 +172,7 @@ export const Toast = ({
   pausedAt?: number;
   remainingDuration?: number;
 }) => {
+  const t = useLabels();
   const [isPaused, setIsPaused] = useState(false);
   const [progress, setProgress] = useState(100);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -342,7 +344,7 @@ export const Toast = ({
             variant="ghost"
             size="xs"
             onClick={handleDismiss}
-            aria-label="Dismiss toast"
+            aria-label={t('toast.dismiss')}
             className={styles.toastDismiss}
           />
         )}

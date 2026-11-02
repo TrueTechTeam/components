@@ -11,6 +11,7 @@ import type {
   PageMessageAction,
 } from './types';
 import type { PageMessagesGlobalActions } from '../../../contexts/PageMessagesContext';
+import { useLabels } from '../../../contexts/LabelsContext';
 import styles from './PageMessages.module.scss';
 
 /**
@@ -58,6 +59,7 @@ export function PageMessageContent({
   errorMessage,
   actions,
 }: PageMessageContentProps) {
+  const t = useLabels();
   // If custom render function is provided, use it
   if (config.render) {
     return <>{config.render()}</>;
@@ -136,7 +138,7 @@ export function PageMessageContent({
       case 'timeout':
         if (actions.onRetry) {
           defaultActions.push({
-            label: 'Try Again',
+            label: t('pageMessages.tryAgain'),
             onClick: actions.onRetry,
             variant: 'primary',
             icon: 'refresh',
@@ -146,7 +148,7 @@ export function PageMessageContent({
       case 'unauthorized':
         if (actions.onLogin) {
           defaultActions.push({
-            label: 'Log In',
+            label: t('pageMessages.logIn'),
             onClick: actions.onLogin,
             variant: 'primary',
             icon: 'lock',
@@ -156,7 +158,7 @@ export function PageMessageContent({
       case 'forbidden':
         if (actions.onGoBack) {
           defaultActions.push({
-            label: 'Go Back',
+            label: t('pageMessages.goBack'),
             onClick: actions.onGoBack,
             variant: 'primary',
             icon: 'arrow-left',
@@ -166,7 +168,7 @@ export function PageMessageContent({
       case 'not-found':
         if (actions.onGoHome) {
           defaultActions.push({
-            label: 'Go Home',
+            label: t('pageMessages.goHome'),
             onClick: actions.onGoHome,
             variant: 'primary',
             icon: 'home',
@@ -176,7 +178,7 @@ export function PageMessageContent({
       case 'offline':
         if (actions.onRetry) {
           defaultActions.push({
-            label: 'Retry',
+            label: t('pageMessages.retry'),
             onClick: actions.onRetry,
             variant: 'primary',
             icon: 'refresh',

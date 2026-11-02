@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { PageMessages } from './PageMessages';
+import { LabelsProvider } from '../../../contexts/LabelsContext';
 
 describe('PageMessages', () => {
   describe('rendering', () => {
@@ -76,5 +77,22 @@ describe('PageMessages', () => {
       );
       expect(ref.current).toBeInstanceOf(HTMLDivElement);
     });
+  });
+});
+
+describe('PageMessages translated labels', () => {
+  it('translates the default title, description and action label', () => {
+    render(
+      <LabelsProvider
+        labels={{
+          'pageMessages.error.title': 'Oups',
+          'pageMessages.error.description': 'Erreur inattendue',
+        }}
+      >
+        <PageMessages error>content</PageMessages>
+      </LabelsProvider>
+    );
+    expect(screen.getByText('Oups')).toBeInTheDocument();
+    expect(screen.getByText('Erreur inattendue')).toBeInTheDocument();
   });
 });

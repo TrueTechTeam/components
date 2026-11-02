@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { List } from './List';
+import { LabelsProvider } from '../../../contexts/LabelsContext';
 
 interface TestItem {
   id: string;
@@ -1141,5 +1142,31 @@ describe('List', () => {
       render(<List data={zeroData} primaryTextField="name" />);
       expect(screen.getByText('0')).toBeInTheDocument();
     });
+  });
+});
+
+describe('List translated labels', () => {
+  it('translates the search placeholder, empty text, select-all and item labels', () => {
+    const labels = {
+      'list.searchPlaceholder': 'Suchen',
+      'list.empty': 'Nichts da',
+      'list.selectAll': 'Alle waehlen',
+      'list.selectItem': 'Eintrag {key} waehlen',
+    };
+    const { unmount } = render(
+      <LabelsProvider labels={labels}>
+        <List data={mockData} primaryTextField="name" searchable selectionMode="multiple" />
+      </LabelsProvider>
+    );
+    expect(screen.getByPlaceholderText('Suchen')).toBeInTheDocument();
+    expect(screen.getByLabelText('Alle waehlen')).toBeInTheDocument();
+    expect(screen.getByLabelText('Eintrag 1 waehlen')).toBeInTheDocument();
+    unmount();
+    render(
+      <LabelsProvider labels={labels}>
+        <List data={[]} primaryTextField="name" />
+      </LabelsProvider>
+    );
+    expect(screen.getByText('Nichts da')).toBeInTheDocument();
   });
 });

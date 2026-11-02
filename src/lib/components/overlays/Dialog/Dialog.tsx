@@ -7,6 +7,7 @@ import { Portal } from '../Portal';
 import { useEscapeKey, useFocusTrap } from '../../../hooks';
 import { IconButton } from '../../buttons/IconButton';
 import type { BaseComponentProps } from '../../../types';
+import { useLabels } from '../../../contexts/LabelsContext';
 import styles from './Dialog.module.scss';
 
 /**
@@ -237,6 +238,7 @@ export const DialogHeader: React.FC<DialogHeaderProps> = ({
   style,
   ...restProps
 }) => {
+  const t = useLabels();
   const classes = [styles.dialogHeader, className].filter(Boolean).join(' ');
 
   return (
@@ -254,7 +256,7 @@ export const DialogHeader: React.FC<DialogHeaderProps> = ({
           variant="ghost"
           size="sm"
           onClick={onClose}
-          aria-label="Close dialog"
+          aria-label={t('dialog.close')}
           data-testid="dialog-close-button"
         />
       )}

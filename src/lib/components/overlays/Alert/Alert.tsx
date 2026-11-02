@@ -6,6 +6,7 @@ import React, { useCallback, type ReactNode } from 'react';
 import { Dialog, type DialogProps, type DialogSize } from '../Dialog';
 import { Button } from '../../buttons/Button';
 import { Icon } from '../../display/Icon';
+import { useLabels } from '../../../contexts/LabelsContext';
 import type { IconName } from '../../display/Icon/icons';
 import { ALERT_PRESETS, type AlertVariant } from './AlertPresets';
 import styles from './Alert.module.scss';
@@ -145,6 +146,7 @@ export const Alert = ({
 }: AlertProps & {
   ref?: React.Ref<HTMLDivElement>;
 }) => {
+  const t = useLabels();
   // Get preset configuration
   const preset = ALERT_PRESETS[variant];
 
@@ -194,7 +196,7 @@ export const Alert = ({
       {extraActions}
       {shouldShowCancel && (
         <Button variant="ghost" onClick={handleCancel} data-testid="alert-cancel-button">
-          {cancelText ?? preset.cancelText ?? 'Cancel'}
+          {cancelText ?? t('alert.cancel')}
         </Button>
       )}
       <Button
@@ -204,7 +206,7 @@ export const Alert = ({
         disabled={confirmDisabled}
         data-testid="alert-confirm-button"
       >
-        {confirmText ?? preset.confirmText}
+        {confirmText ?? (variant === 'confirm' ? t('alert.confirm') : t('alert.ok'))}
       </Button>
     </div>
   );

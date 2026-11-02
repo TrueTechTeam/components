@@ -1,6 +1,7 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Dialog, DialogHeader, DialogBody, DialogFooter } from './Dialog';
 import React from 'react';
+import { LabelsProvider } from '../../../contexts/LabelsContext';
 
 describe('Dialog', () => {
   it('should not render when closed', () => {
@@ -129,5 +130,16 @@ describe('Dialog', () => {
     expect(screen.getByText('Header')).toBeInTheDocument();
     expect(screen.getByText('Body')).toBeInTheDocument();
     expect(screen.getByText('Footer')).toBeInTheDocument();
+  });
+});
+
+describe('Dialog translated labels', () => {
+  it('translates the close button label', () => {
+    render(
+      <LabelsProvider labels={{ 'dialog.close': 'Fenster schliessen' }}>
+        <Dialog isOpen title="T" />
+      </LabelsProvider>
+    );
+    expect(screen.getByLabelText('Fenster schliessen')).toBeInTheDocument();
   });
 });

@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useResizeObserver } from '../../../hooks';
 import type { BaseComponentProps } from '../../../types';
+import { useLabels } from '../../../contexts/LabelsContext';
 import styles from './CollapsibleSidebar.module.scss';
 
 /**
@@ -150,6 +151,7 @@ export const CollapsibleSidebar = ({
 }: CollapsibleSidebarProps & {
   ref?: React.Ref<HTMLDivElement>;
 }) => {
+  const t = useLabels();
   const isControlled = controlledCollapsed !== undefined;
   const [internalCollapsed, setInternalCollapsed] = useState(defaultCollapsed);
   const [isHidden, setIsHidden] = useState(false);
@@ -273,7 +275,7 @@ export const CollapsibleSidebar = ({
       data-collapsed={collapsed || undefined}
       data-position={position}
       data-testid={testId}
-      aria-label={ariaLabel || 'Sidebar navigation'}
+      aria-label={ariaLabel || t('collapsibleSidebar.label')}
       aria-expanded={!collapsed}
       role="navigation"
       {...restProps}
@@ -298,7 +300,7 @@ export const CollapsibleSidebar = ({
         type="button"
         className={styles.toggleButton}
         onClick={toggle}
-        aria-label={collapsed ? 'Expand sidebar' : 'Collapse sidebar'}
+        aria-label={collapsed ? t('collapsibleSidebar.expand') : t('collapsibleSidebar.collapse')}
         data-position={position}
       >
         <svg

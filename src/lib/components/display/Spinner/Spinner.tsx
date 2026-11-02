@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './Spinner.module.scss';
 import type { BaseComponentProps, ExtendedComponentSize } from '../../../types/component.types';
+import { useLabels } from '../../../contexts/LabelsContext';
 
 /**
  * Visual style of the spinner animation
@@ -102,7 +103,7 @@ export const Spinner = ({
   variant = 'primary',
   speed = 'normal',
   strokeWidth = 3,
-  srText = 'Loading...',
+  srText,
   showSrText = false,
   className,
   'aria-label': ariaLabel,
@@ -112,6 +113,8 @@ export const Spinner = ({
 }: SpinnerProps & {
   ref?: React.Ref<HTMLDivElement>;
 }) => {
+  const t = useLabels();
+  const resolvedSrText = srText ?? t('spinner.loading');
   const componentClasses = [styles.spinner, className].filter(Boolean).join(' ');
 
   const renderCircular = () => (
@@ -181,7 +184,7 @@ export const Spinner = ({
       data-show-text={showSrText ? 'true' : undefined}
       data-testid={testId || 'spinner'}
       role="status"
-      aria-label={ariaLabel || srText}
+      aria-label={ariaLabel || resolvedSrText}
       style={style}
       {...restProps}
     >
@@ -190,7 +193,7 @@ export const Spinner = ({
       ) : (
         renderSpinner()
       )}
-      <span className={showSrText ? styles.spinnerText : styles.srOnly}>{srText}</span>
+      <span className={showSrText ? styles.spinnerText : styles.srOnly}>{resolvedSrText}</span>
     </div>
   );
 };

@@ -5,6 +5,7 @@
 import React, { type ReactNode } from 'react';
 import { Portal } from '../Portal';
 import type { BaseComponentProps } from '../../../types';
+import { useLabels } from '../../../contexts/LabelsContext';
 import type { ToastPosition } from './Toast';
 import styles from './Toast.module.scss';
 
@@ -56,6 +57,7 @@ export const ToastContainer: React.FC<ToastContainerProps> = ({
   style,
   ...restProps
 }) => {
+  const t = useLabels();
   const cssVariables = {
     '--toast-gap': `${gap}px`,
     '--toast-offset': `${offset}px`,
@@ -79,7 +81,7 @@ export const ToastContainer: React.FC<ToastContainerProps> = ({
         data-testid={testId || 'toast-container'}
         style={cssVariables}
         aria-live="polite"
-        aria-label="Notifications"
+        aria-label={t('toast.notifications')}
         {...restProps}
       >
         {children}

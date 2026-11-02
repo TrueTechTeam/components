@@ -70,7 +70,7 @@ function ListInner<T extends Record<string, any>>({
 
   // Search/Filter
   searchable = false,
-  searchPlaceholder = 'Search...',
+  searchPlaceholder,
   searchFields,
   searchFn,
   searchQuery: controlledSearchQuery,
@@ -89,7 +89,7 @@ function ListInner<T extends Record<string, any>>({
   loading = false,
   loadingContent,
   skeleton,
-  emptyContent = 'No items to display',
+  emptyContent,
   renderEmpty,
 
   // Responsive

@@ -14,6 +14,7 @@ import {
 } from 'react';
 import type { BaseComponentProps, ComponentSize } from '../../../types';
 import { Button } from '../../buttons/Button';
+import { useLabels } from '../../../contexts/LabelsContext';
 import {
   AccordionContext,
   type AccordionMode,
@@ -158,8 +159,8 @@ export const AccordionContainer: React.FC<AccordionContainerProps> = ({
   defaultExpandedIds = [],
   onExpandedChange,
   showExpandAllControls = false,
-  expandAllLabel = 'Expand All',
-  collapseAllLabel = 'Collapse All',
+  expandAllLabel,
+  collapseAllLabel,
   controlsPosition = 'top-right',
   size = 'md',
   gap = 8,
@@ -171,6 +172,7 @@ export const AccordionContainer: React.FC<AccordionContainerProps> = ({
   'aria-label': ariaLabel,
   ...restProps
 }) => {
+  const t = useLabels();
   // Internal state for uncontrolled usage
   const [uncontrolledExpandedIds, setUncontrolledExpandedIds] = useState<Set<string>>(
     new Set(defaultExpandedIds)
@@ -284,7 +286,9 @@ export const AccordionContainer: React.FC<AccordionContainerProps> = ({
       return null;
     }
 
-    const label = allExpanded ? collapseAllLabel : expandAllLabel;
+    const label = allExpanded
+      ? (collapseAllLabel ?? t('accordionContainer.collapseAll'))
+      : (expandAllLabel ?? t('accordionContainer.expandAll'));
     const handler = allExpanded ? handleCollapseAll : handleExpandAll;
 
     return (

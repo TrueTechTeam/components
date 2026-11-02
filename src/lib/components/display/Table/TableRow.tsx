@@ -4,6 +4,7 @@ import { TableCell } from './TableCell';
 import { Checkbox } from '../../inputs/Checkbox';
 import { Collapse } from '../Collapse';
 import { Icon } from '../Icon';
+import { useLabels } from '../../../contexts/LabelsContext';
 import styles from './Table.module.scss';
 
 interface TableRowProps<T = Record<string, unknown>> {
@@ -12,6 +13,7 @@ interface TableRowProps<T = Record<string, unknown>> {
 }
 
 export function TableRow<T extends Record<string, unknown>>({ row, rowIndex }: TableRowProps<T>) {
+  const t = useLabels();
   const {
     columns,
     getRowKey,
@@ -88,7 +90,7 @@ export function TableRow<T extends Record<string, unknown>>({ row, rowIndex }: T
               type="button"
               className={styles.expandButton}
               onClick={handleExpandClick}
-              aria-label={isExpanded ? 'Collapse row' : 'Expand row'}
+              aria-label={isExpanded ? t('table.collapseRow') : t('table.expandRow')}
               aria-expanded={isExpanded}
             >
               <Icon name={isExpanded ? 'chevron-down' : 'chevron-right'} size={16} />

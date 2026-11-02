@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Table } from './Table';
 import type { ColumnConfig } from './types';
+import { LabelsProvider } from '../../../contexts/LabelsContext';
 
 interface User {
   id: string;
@@ -216,5 +217,49 @@ describe('Table', () => {
       expect(screen.queryByText('John Doe')).not.toBeInTheDocument();
       expect(screen.getByText('Jane Smith')).toBeInTheDocument();
     });
+  });
+});
+
+describe('Table translated labels', () => {
+  it('translates search, selection and empty labels', () => {
+    const labels = {
+      'table.searchPlaceholder': 'Rechercher',
+      'table.selectAll': 'Tout selectionner',
+      'table.empty': 'Aucune donnee',
+    };
+    const { unmount } = render(
+      <LabelsProvider labels={labels}>
+        <Table data={sampleUsers} columns={basicColumns} searchable selectionMode="multiple" />
+      </LabelsProvider>
+    );
+    expect(screen.getByPlaceholderText('Rechercher')).toBeInTheDocument();
+    expect(screen.getByLabelText('Tout selectionner')).toBeInTheDocument();
+    unmount();
+    render(
+      <LabelsProvider labels={labels}>
+        <Table data={[]} columns={basicColumns} />
+      </LabelsProvider>
+    );
+    expect(screen.getByText('Aucune donnee')).toBeInTheDocument();
+  });
+
+  it('translates the rows-per-page label', () => {
+    render(
+      <LabelsProvider labels={{ 'table.rowsPerPage': 'Lignes par page' }}>
+        <Table
+          data={sampleUsers}
+          columns={basicColumns}
+          pagination={{
+            currentPage: 1,
+            pageSize: 10,
+            totalItems: 3,
+            onPageChange: () => {},
+            pageSizeOptions: [10, 20],
+            onPageSizeChange: () => {},
+          }}
+        />
+      </LabelsProvider>
+    );
+    expect(screen.getByText('Lignes par page:')).toBeInTheDocument();
   });
 });

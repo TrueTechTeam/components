@@ -1,6 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { AccordionContainer } from './AccordionContainer';
 import { Accordion } from './Accordion';
+import { LabelsProvider } from '../../../contexts/LabelsContext';
 
 // Helper to count open accordions (only count accordion components, not collapse)
 const getOpenAccordionCount = (container: HTMLElement) => {
@@ -452,5 +453,20 @@ describe('AccordionContainer', () => {
       const buttons = screen.getAllByRole('button', { name: /Section/ });
       expect(buttons.length).toBe(2);
     });
+  });
+});
+
+describe('AccordionContainer translated labels', () => {
+  it('renders the expand-all control with the translated label', () => {
+    render(
+      <LabelsProvider labels={{ 'accordionContainer.expandAll': 'Tout ouvrir' }}>
+        <AccordionContainer showExpandAllControls>
+          <Accordion id="a" header="A">
+            Body
+          </Accordion>
+        </AccordionContainer>
+      </LabelsProvider>
+    );
+    expect(screen.getByRole('button', { name: 'Tout ouvrir' })).toBeInTheDocument();
   });
 });

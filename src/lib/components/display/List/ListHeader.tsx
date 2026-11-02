@@ -3,6 +3,7 @@ import { Button } from '../../buttons/Button';
 import { Checkbox } from '../../inputs/Checkbox';
 import type { BulkAction, SelectionMode } from './types';
 import type { ComponentSize } from '../../../types';
+import { useLabels } from '../../../contexts/LabelsContext';
 import styles from './List.module.scss';
 
 export interface ListHeaderProps<T extends Record<string, unknown> = Record<string, unknown>> {
@@ -91,6 +92,7 @@ export function ListHeader<T extends Record<string, unknown>>({
   size,
   searchComponent,
 }: ListHeaderProps<T>) {
+  const t = useLabels();
   const showSelectAll = selectionMode === 'multiple';
   const hasSelectedItems = selectedCount > 0;
   const isSticky = position === 'sticky-top' || position === 'sticky-bottom';
@@ -118,7 +120,7 @@ export function ListHeader<T extends Record<string, unknown>>({
             indeterminate={isIndeterminate}
             onChange={(checked) => onSelectAll(checked)}
             size={size === 'lg' ? 'md' : 'sm'}
-            aria-label="Select all items"
+            aria-label={t('list.selectAll')}
           />
         )}
 

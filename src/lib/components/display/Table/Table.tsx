@@ -15,6 +15,7 @@ import { useInfiniteScroll } from './hooks/useInfiniteScroll';
 import { useTableFilter } from './hooks/useTableFilter';
 import { TableSearch } from './TableSearch';
 import { autoGenerateColumns, sortData, calculateColumnWidths } from './utils';
+import { useLabels } from '../../../contexts/LabelsContext';
 import styles from './Table.module.scss';
 
 // Generic component with ref as prop
@@ -47,7 +48,7 @@ function TableInner<T extends Record<string, any>>({
   infiniteScroll,
   // Search/Filter
   searchable = false,
-  searchPlaceholder = 'Search...',
+  searchPlaceholder,
   searchFields,
   searchFn,
   searchQuery: controlledSearchQuery,
@@ -58,7 +59,7 @@ function TableInner<T extends Record<string, any>>({
   stickyFirstColumn = false,
   maxHeight,
   // Empty & Loading
-  emptyContent = 'No data available',
+  emptyContent,
   loading = false,
   loadingContent,
   skeleton,
@@ -72,6 +73,7 @@ function TableInner<T extends Record<string, any>>({
   'aria-label': ariaLabel,
   ...restProps
 }: TableProps<T> & { ref?: React.Ref<HTMLDivElement> }) {
+  const t = useLabels();
   // Generate or use provided columns
   const columns = useMemo<Array<ColumnConfig<T>>>(
     () => columnsProp || autoGenerateColumns(data),
@@ -267,7 +269,7 @@ function TableInner<T extends Record<string, any>>({
           ) : loading && !sortedData.length ? (
             <div className={styles.loadingState}>{loadingContent || <Spinner size="md" />}</div>
           ) : sortedData.length === 0 ? (
-            <div className={styles.emptyState}>{emptyContent}</div>
+            <div className={styles.emptyState}>{emptyContent ?? t('table.empty')}</div>
           ) : (
             <TableBody />
           )}
@@ -286,7 +288,7 @@ function TableInner<T extends Record<string, any>>({
         <div className={styles.paginationWrapper}>
           {pagination.pageSizeOptions && pagination.onPageSizeChange && (
             <div className={styles.pageSizeSelector}>
-              <span className={styles.pageSizeLabel}>Rows per page:</span>
+              <span className={styles.pageSizeLabel}>{t('table.rowsPerPage')}:</span>
               <Select
                 options={pagination.pageSizeOptions.map((size) => ({
                   value: String(size),
@@ -294,7 +296,7 @@ function TableInner<T extends Record<string, any>>({
                 }))}
                 value={String(pagination.pageSize)}
                 onChange={(value) => pagination.onPageSizeChange?.(Number(value))}
-                aria-label="Rows per page"
+                aria-label={t('table.rowsPerPage')}
               />
             </div>
           )}
