@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Badge } from '../../../lib/components/display/Badge';
 import { Button } from '../../../lib/components/buttons/Button';
 import type { ThemeColorTokens, ThemeMode, ThemeShadeKey } from '../../../lib/types/theme.types';
@@ -87,12 +87,38 @@ interface TokenRowProps {
 function TokenRow({ token, value, overridden, onOverride, onAuto }: TokenRowProps) {
   const [editing, setEditing] = useState(false);
   const showInput = editing || overridden;
+  const overrideButton = useRef<HTMLButtonElement>(null);
+  const restoreFocus = useRef(false);
+
+  // The Override button is unmounted while editing; hand focus back once it returns.
+  useEffect(() => {
+    if (restoreFocus.current && !showInput) {
+      restoreFocus.current = false;
+      overrideButton.current?.focus();
+    }
+  }, [showInput]);
+
+  const cancelEdit = () => {
+    restoreFocus.current = true;
+    setEditing(false);
+  };
   return (
     <li className={styles.tokenRow}>
       <span className={styles.swatch} style={{ background: value }} aria-hidden="true" />
       <span className={styles.tokenName}>{token}</span>
       {showInput ? (
-        <ColorInput aria-label={`${token} override`} value={value} onCommit={onOverride} />
+        <ColorInput
+          aria-label={`${token} override`}
+          value={value}
+          onCommit={onOverride}
+          autoFocus={editing && !overridden}
+          onCancel={overridden ? undefined : cancelEdit}
+          onDone={() => {
+            if (!overridden) {
+              setEditing(false);
+            }
+          }}
+        />
       ) : (
         <code className={styles.tokenValue}>{value}</code>
       )}
@@ -107,7 +133,7 @@ function TokenRow({ token, value, overridden, onOverride, onAuto }: TokenRowProp
           size="sm"
           aria-label={`Auto ${token}`}
           onClick={() => {
-            setEditing(false);
+            cancelEdit();
             onAuto();
           }}
         >
@@ -116,6 +142,7 @@ function TokenRow({ token, value, overridden, onOverride, onAuto }: TokenRowProp
       ) : (
         !editing && (
           <Button
+            ref={overrideButton}
             variant="ghost"
             size="sm"
             aria-label={`Override ${token}`}

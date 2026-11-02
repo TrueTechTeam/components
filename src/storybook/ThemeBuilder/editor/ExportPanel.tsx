@@ -10,7 +10,7 @@ const USAGE = `import theme from './theme.json';
 /** Copy feedback is a transient inline "Copied" status (no toast provider needed). */
 export function ExportPanel({ config }: { config: ThemeConfig }) {
   const json = useMemo(() => JSON.stringify(config, null, 2), [config]);
-  const { copy, copied } = useClipboard();
+  const { copy, copied, error } = useClipboard();
 
   const download = () => {
     const url = URL.createObjectURL(new Blob([json], { type: 'application/json' }));
@@ -18,7 +18,8 @@ export function ExportPanel({ config }: { config: ThemeConfig }) {
     anchor.href = url;
     anchor.download = 'theme.json';
     anchor.click();
-    URL.revokeObjectURL(url);
+    // Deferred so the browser has started the download before the URL is released.
+    setTimeout(() => URL.revokeObjectURL(url), 0);
   };
 
   return (
@@ -32,7 +33,7 @@ export function ExportPanel({ config }: { config: ThemeConfig }) {
           <Button size="sm" onClick={download}>
             Download theme.json
           </Button>
-          <span aria-live="polite">{copied ? 'Copied' : ''}</span>
+          <span aria-live="polite">{copied ? 'Copied' : error ? 'Copy failed' : ''}</span>
         </div>
       </div>
       <pre className={styles.json} tabIndex={0}>

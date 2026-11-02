@@ -1,5 +1,5 @@
 import React from 'react';
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { ThemeBuilder } from '../ThemeBuilder';
 import { INITIAL_STATE, STORAGE_KEY } from '../builderState';
@@ -93,6 +93,10 @@ describe('Theme Builder editor', () => {
     renderEditor();
     const report = screen.getByRole('region', { name: 'Contrast report' });
     expect(within(report).getByText('All pairs pass AA')).toBeInTheDocument();
+    const passRow = within(report)
+      .getByText(/^textPrimary on backgroundPrimary/)
+      .closest('li')!;
+    expect(within(passRow).getByText('AA')).toBeInTheDocument();
 
     await user.click(screen.getByRole('button', { name: 'Override textPrimary' }));
     const input = screen.getByLabelText('textPrimary override');
@@ -106,6 +110,7 @@ describe('Theme Builder editor', () => {
 
   it('download creates a theme.json blob', async () => {
     const user = userEvent.setup();
+    const original = { create: URL.createObjectURL, revoke: URL.revokeObjectURL };
     const createObjectURL = jest.fn(() => 'blob:theme');
     const revokeObjectURL = jest.fn();
     Object.assign(URL, { createObjectURL, revokeObjectURL });
@@ -116,11 +121,15 @@ describe('Theme Builder editor', () => {
       downloads.push(this.download);
     });
     renderEditor();
-    await user.click(screen.getByRole('button', { name: 'Download theme.json' }));
-    expect(createObjectURL).toHaveBeenCalledWith(expect.any(Blob));
-    expect(downloads).toEqual(['theme.json']);
-    expect(revokeObjectURL).toHaveBeenCalledWith('blob:theme');
-    click.mockRestore();
+    try {
+      await user.click(screen.getByRole('button', { name: 'Download theme.json' }));
+      expect(createObjectURL).toHaveBeenCalledWith(expect.any(Blob));
+      expect(downloads).toEqual(['theme.json']);
+      await waitFor(() => expect(revokeObjectURL).toHaveBeenCalledWith('blob:theme'));
+    } finally {
+      click.mockRestore();
+      Object.assign(URL, { createObjectURL: original.create, revokeObjectURL: original.revoke });
+    }
   });
 
   it('copy JSON writes the JSON to the clipboard and confirms', async () => {
@@ -148,5 +157,22 @@ describe('Theme Builder editor', () => {
     expect(json()).toContain('"sm": "none"');
     await user.click(screen.getByRole('radio', { name: 'dark' }));
     expect(json()).toContain('"mode": "dark"');
+  });
+
+  it('moves focus into the override input, back after Escape or Auto', async () => {
+    const user = userEvent.setup();
+    renderEditor();
+    await user.click(screen.getByRole('button', { name: 'Override textPrimary' }));
+    expect(screen.getByLabelText('textPrimary override')).toHaveFocus();
+    await user.keyboard('{Escape}');
+    expect(screen.queryByLabelText('textPrimary override')).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Override textPrimary' })).toHaveFocus();
+
+    await user.click(screen.getByRole('button', { name: 'Override textPrimary' }));
+    const input = screen.getByLabelText('textPrimary override');
+    await user.clear(input);
+    await user.type(input, '#123456');
+    await user.click(screen.getByRole('button', { name: 'Auto textPrimary' }));
+    expect(screen.getByRole('button', { name: 'Override textPrimary' })).toHaveFocus();
   });
 });

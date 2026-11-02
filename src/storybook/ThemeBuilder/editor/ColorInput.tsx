@@ -9,19 +9,41 @@ export interface ColorInputProps {
   onCommit: (value: string) => void;
   label?: string;
   'aria-label'?: string;
+  autoFocus?: boolean;
+  /** Escape pressed (draft already dropped). */
+  onCancel?: () => void;
+  /** Field lost focus (draft already dropped). */
+  onDone?: () => void;
 }
 
 /**
  * Text input (hex/rgb/oklch) with a swatch. Invalid text shows the error state and is never
  * committed; the draft is dropped on blur so the field falls back to the real value.
  */
-export function ColorInput({ value, onCommit, label, 'aria-label': ariaLabel }: ColorInputProps) {
+export function ColorInput({
+  value,
+  onCommit,
+  label,
+  'aria-label': ariaLabel,
+  autoFocus,
+  onCancel,
+  onDone,
+}: ColorInputProps) {
   const [draft, setDraft] = useState<string | null>(null);
   const text = draft ?? value;
   const invalid = draft !== null && parseColorToOklch(draft) === null;
 
   return (
-    <div className={styles.colorInput}>
+    <div
+      className={styles.colorInput}
+      onKeyDown={(event) => {
+        if (event.key === 'Escape' && onCancel) {
+          event.stopPropagation();
+          setDraft(null);
+          onCancel();
+        }
+      }}
+    >
       <span
         className={styles.swatch}
         style={{ background: invalid ? 'transparent' : text }}
@@ -30,6 +52,7 @@ export function ColorInput({ value, onCommit, label, 'aria-label': ariaLabel }: 
       <Input
         label={label}
         aria-label={ariaLabel}
+        autoFocus={autoFocus}
         value={text}
         error={invalid}
         errorMessage={invalid ? 'Enter a hex, rgb() or oklch() color' : undefined}
@@ -40,7 +63,10 @@ export function ColorInput({ value, onCommit, label, 'aria-label': ariaLabel }: 
             onCommit(next);
           }
         }}
-        onBlur={() => setDraft(null)}
+        onBlur={() => {
+          setDraft(null);
+          onDone?.();
+        }}
       />
     </div>
   );

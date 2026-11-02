@@ -34,6 +34,7 @@ export interface TypographySectionProps {
 export function TypographySection({ inputs, config, dispatch }: TypographySectionProps) {
   const preset = FONT_PRESETS.find((p) => p.stack === inputs.fontStack);
   const [forceCustom, setForceCustom] = useState(false);
+  const [stackDraft, setStackDraft] = useState<string | null>(null);
   const fontValue = preset && !forceCustom ? preset.value : 'custom';
 
   return (
@@ -53,9 +54,11 @@ export function TypographySection({ inputs, config, dispatch }: TypographySectio
       {fontValue === 'custom' && (
         <Input
           label="Custom font stack"
-          value={inputs.fontStack}
+          value={stackDraft ?? inputs.fontStack}
+          onBlur={() => setStackDraft(null)}
           onChange={(event) => {
             const value = event.target.value;
+            setStackDraft(value);
             if (value.trim() !== '') {
               dispatch({ type: 'setInput', key: 'fontStack', value });
             }
@@ -69,7 +72,7 @@ export function TypographySection({ inputs, config, dispatch }: TypographySectio
         step={1}
         value={inputs.baseFontSize}
         onChange={(value) => {
-          if (Number.isFinite(value) && value >= 14 && value <= 18) {
+          if (Number.isInteger(value) && value >= 14 && value <= 18) {
             dispatch({ type: 'setInput', key: 'baseFontSize', value });
           }
         }}
