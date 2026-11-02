@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState, type ReactNode } from 'react';
+import React, { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { LabelsProvider, type TranslateFn } from '../../lib/contexts/LabelsContext';
 import { BreakpointsProvider, type Breakpoints } from '../../lib/contexts/BreakpointsContext';
@@ -76,6 +76,11 @@ export function AppProvider({
   const routerAdapter = useRouter();
   const guard = useNavigationGuard();
   const pendingSearch = useRef<PendingSearch | null>(null);
+  // Pending param writes belong to the page they were made on; drop them when the path changes,
+  // even if the hook that wrote them has unmounted.
+  useEffect(() => {
+    pendingSearch.current = null;
+  }, [routerAdapter.pathname]);
   // Created once and kept, so dropping the `queryClient` prop later never loses the cache.
   const [defaultClient] = useState(createDefaultQueryClient);
   const [logBuffer] = useState(() => createLogBuffer());

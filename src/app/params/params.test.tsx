@@ -1,7 +1,7 @@
 import React, { useMemo, useSyncExternalStore, type ReactNode } from 'react';
-import { act, renderHook } from '@testing-library/react';
+import { act, fireEvent, render, renderHook, screen } from '@testing-library/react';
 import { AppProvider } from '../AppProvider';
-import type { RouterAdapter } from '../router';
+import { useRouterAdapter, type RouterAdapter } from '../router';
 import { param } from './codecs';
 import { PageIdContext } from './PageIdContext';
 import { usePageParams } from './usePageParams';
@@ -135,6 +135,43 @@ describe('usePageParams', () => {
     // After the URL commits, later writes start from it (no stale pending state).
     act(() => result.current.p[1]({ page: 2 }));
     expect(window.location.search).toBe('?size=50&page=2');
+    window.history.replaceState(null, '', '/');
+  });
+
+  it('a pending write does not carry over to another path', () => {
+    window.history.replaceState(null, '', '/orders');
+    function Orders() {
+      const [, set] = usePageParams({ page: param.number(1) });
+      const navigate = useRouterAdapter().navigate;
+      return (
+        <button
+          type="button"
+          onClick={() => {
+            set({ page: 2 });
+            navigate('/reports');
+          }}
+        >
+          Go
+        </button>
+      );
+    }
+    let setReports: ((patch: { q?: string }) => void) | undefined;
+    function Reports() {
+      setReports = usePageParams({ q: param.string() })[1];
+      return null;
+    }
+    function Routes() {
+      return useRouterAdapter().pathname === '/orders' ? <Orders /> : <Reports />;
+    }
+    render(
+      <AppProvider logger={silentLogger}>
+        <Routes />
+      </AppProvider>
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Go' }));
+    expect(window.location.pathname).toBe('/reports');
+    act(() => setReports?.({ q: 'x' }));
+    expect(window.location.pathname + window.location.search).toBe('/reports?q=x');
     window.history.replaceState(null, '', '/');
   });
 
