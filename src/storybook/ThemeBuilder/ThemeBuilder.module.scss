@@ -183,12 +183,6 @@
   font-size: var(--font-size-sm);
 }
 
-.editor {
-  display: flex;
-  flex-direction: column;
-  gap: var(--spacing-md);
-}
-
 .feedbackError,
 .feedbackWarning {
   display: flex;

@@ -9,6 +9,7 @@ import {
   loadState,
   saveState,
 } from './builderState';
+import { Editor } from './editor/Editor';
 import { EntryScreen } from './EntryScreen';
 import { GuidedSteps } from './GuidedSteps';
 import styles from './ThemeBuilder.module.scss';
@@ -91,25 +92,27 @@ export function ThemeBuilder({ storage }: ThemeBuilderProps) {
           <GuidedSteps state={state} dispatch={dispatch} step={step} />
         )}
         {step === 'editor' && (
-          <div className={styles.editor}>
-            {importWarnings.length > 0 && (
-              <div className={styles.feedbackWarning} role="status">
-                <div className={styles.feedbackBody}>
-                  <strong>Imported with warnings</strong>
-                  <ul>
-                    {importWarnings.map((warning) => (
-                      <li key={warning}>{warning}</li>
-                    ))}
-                  </ul>
+          <Editor
+            state={state}
+            dispatch={dispatch}
+            banner={
+              importWarnings.length > 0 && (
+                <div className={styles.feedbackWarning} role="status">
+                  <div className={styles.feedbackBody}>
+                    <strong>Imported with warnings</strong>
+                    <ul>
+                      {importWarnings.map((warning) => (
+                        <li key={warning}>{warning}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  <Button variant="ghost" size="sm" onClick={() => setImportWarnings([])}>
+                    Dismiss
+                  </Button>
                 </div>
-                <Button variant="ghost" size="sm" onClick={() => setImportWarnings([])}>
-                  Dismiss
-                </Button>
-              </div>
-            )}
-            {/* Task 9 replaces this placeholder with the editor. */}
-            <h2>Colors</h2>
-          </div>
+              )
+            }
+          />
         )}
       </main>
 

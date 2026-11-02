@@ -48,7 +48,7 @@ describe('ThemeBuilder', () => {
     await user.click(screen.getByRole('button', { name: /Shuffle/ }));
     expect(screen.getAllByTestId('palette-card')).toHaveLength(6);
     await user.click(screen.getAllByTestId('palette-card')[0]);
-    expect(screen.getByRole('heading', { name: 'Colors' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Colors' })).toBeInTheDocument();
   });
 
   it('Back returns to the previous guided step', async () => {
@@ -64,7 +64,7 @@ describe('ThemeBuilder', () => {
     const user = userEvent.setup();
     render(<ThemeBuilder storage={makeStorage()} />);
     await user.click(screen.getByRole('button', { name: /I know my theme/ }));
-    expect(screen.getByRole('heading', { name: 'Colors' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Colors' })).toBeInTheDocument();
   });
 
   it('Start over asks for confirmation then returns to entry and clears storage', async () => {
@@ -89,7 +89,7 @@ describe('ThemeBuilder', () => {
     await user.click(screen.getByRole('button', { name: /I know my theme/ }));
     await user.click(screen.getByRole('button', { name: /Start over/ }));
     await user.click(within(screen.getByTestId('dialog')).getByRole('button', { name: 'Cancel' }));
-    expect(screen.getByRole('heading', { name: 'Colors' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Colors' })).toBeInTheDocument();
   });
 
   it('restores progress from storage on mount', () => {
@@ -97,7 +97,7 @@ describe('ThemeBuilder', () => {
       [STORAGE_KEY]: JSON.stringify({ ...INITIAL_STATE, path: 'direct', step: 'editor' }),
     });
     render(<ThemeBuilder storage={storage} />);
-    expect(screen.getByRole('heading', { name: 'Colors' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Colors' })).toBeInTheDocument();
   });
 
   it('shows import errors and stays on entry for a malformed file', async () => {
@@ -114,7 +114,7 @@ describe('ThemeBuilder', () => {
     render(<ThemeBuilder storage={makeStorage()} />);
     const file = new File([JSON.stringify({ extra: 1, theme: {} })], 'theme.json');
     await user.upload(screen.getByLabelText('Load theme.json file'), file);
-    expect(await screen.findByRole('heading', { name: 'Colors' })).toBeInTheDocument();
+    expect(await screen.findByRole('button', { name: 'Colors' })).toBeInTheDocument();
     const status = screen.getByRole('status');
     expect(status).toHaveTextContent('extra is not a known theme.json key');
     await user.click(within(status).getByRole('button', { name: 'Dismiss' }));
