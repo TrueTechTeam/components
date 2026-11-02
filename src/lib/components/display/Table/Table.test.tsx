@@ -263,3 +263,27 @@ describe('Table translated labels', () => {
     expect(screen.getByText('Lignes par page:')).toBeInTheDocument();
   });
 });
+
+describe('Table fix-round labels', () => {
+  it('translates the row selection labels (checkbox and radio)', () => {
+    const labels = { 'table.selectRow': 'Ligne {n}' };
+    const { unmount } = render(
+      <LabelsProvider labels={labels}>
+        <Table data={sampleUsers} columns={basicColumns} selectionMode="multiple" />
+      </LabelsProvider>
+    );
+    expect(screen.getByLabelText('Ligne 1')).toBeInTheDocument();
+    unmount();
+    render(
+      <LabelsProvider labels={labels}>
+        <Table data={sampleUsers} columns={basicColumns} selectionMode="single" />
+      </LabelsProvider>
+    );
+    expect(screen.getByLabelText('Ligne 2')).toBeInTheDocument();
+  });
+
+  it('renders no empty text when emptyContent is null', () => {
+    render(<Table data={[]} columns={basicColumns} emptyContent={null} />);
+    expect(screen.queryByText('No data available')).not.toBeInTheDocument();
+  });
+});

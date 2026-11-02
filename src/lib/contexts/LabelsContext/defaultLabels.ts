@@ -96,6 +96,9 @@ export const DEFAULT_LABELS = {
   'pagination.page': 'Page {n}',
   'sideNav.label': 'Side navigation',
   'stepper.label': 'Progress steps',
+  'table.selectRow': 'Select row {n}',
+  'truncatedList.more': '+{count} more',
+  'list.selectedCount': '{count} of {total} selected',
 } as const satisfies Record<string, string>;
 
 export type LabelKey = keyof typeof DEFAULT_LABELS;

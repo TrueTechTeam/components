@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { PageMessages } from './PageMessages';
 import { LabelsProvider } from '../../../contexts/LabelsContext';
+import { PageMessagesProvider } from '../../../contexts/PageMessagesContext';
 
 describe('PageMessages', () => {
   describe('rendering', () => {
@@ -81,7 +82,7 @@ describe('PageMessages', () => {
 });
 
 describe('PageMessages translated labels', () => {
-  it('translates the default title, description and action label', () => {
+  it('translates the default title and description', () => {
     render(
       <LabelsProvider
         labels={{
@@ -94,5 +95,18 @@ describe('PageMessages translated labels', () => {
     );
     expect(screen.getByText('Oups')).toBeInTheDocument();
     expect(screen.getByText('Erreur inattendue')).toBeInTheDocument();
+  });
+});
+
+describe('PageMessages action labels', () => {
+  it('translates the default retry action', () => {
+    render(
+      <LabelsProvider labels={{ 'pageMessages.tryAgain': 'Reessayer' }}>
+        <PageMessagesProvider actions={{ onRetry: () => {} }}>
+          <PageMessages error>content</PageMessages>
+        </PageMessagesProvider>
+      </LabelsProvider>
+    );
+    expect(screen.getByRole('button', { name: 'Reessayer' })).toBeInTheDocument();
   });
 });

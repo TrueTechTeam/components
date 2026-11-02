@@ -287,8 +287,12 @@ export const AccordionContainer: React.FC<AccordionContainerProps> = ({
     }
 
     const label = allExpanded
-      ? (collapseAllLabel ?? t('accordionContainer.collapseAll'))
-      : (expandAllLabel ?? t('accordionContainer.expandAll'));
+      ? collapseAllLabel === undefined
+        ? t('accordionContainer.collapseAll')
+        : collapseAllLabel
+      : expandAllLabel === undefined
+        ? t('accordionContainer.expandAll')
+        : expandAllLabel;
     const handler = allExpanded ? handleCollapseAll : handleExpandAll;
 
     return (

@@ -269,7 +269,9 @@ function TableInner<T extends Record<string, any>>({
           ) : loading && !sortedData.length ? (
             <div className={styles.loadingState}>{loadingContent || <Spinner size="md" />}</div>
           ) : sortedData.length === 0 ? (
-            <div className={styles.emptyState}>{emptyContent ?? t('table.empty')}</div>
+            <div className={styles.emptyState}>
+              {emptyContent === undefined ? t('table.empty') : emptyContent}
+            </div>
           ) : (
             <TableBody />
           )}

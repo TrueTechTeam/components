@@ -126,7 +126,7 @@ export function ListHeader<T extends Record<string, unknown>>({
 
         {hasSelectedItems && (
           <span className={styles.selectionInfo}>
-            {selectedCount} of {totalCount} selected
+            {t('list.selectedCount', { count: selectedCount, total: totalCount })}
           </span>
         )}
 

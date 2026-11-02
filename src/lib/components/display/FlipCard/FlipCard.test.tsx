@@ -182,3 +182,14 @@ describe('FlipCard translated labels', () => {
     expect(screen.getByLabelText('Karte drehen')).toBeInTheDocument();
   });
 });
+
+describe('FlipCard label semantics', () => {
+  it('keeps an explicit empty flipButtonAriaLabel', () => {
+    render(
+      <LabelsProvider labels={{ 'flipCard.flip': 'Karte drehen' }}>
+        <FlipCard front="Front" back="Back" flipButtonAriaLabel="" />
+      </LabelsProvider>
+    );
+    expect(screen.queryByLabelText('Karte drehen')).not.toBeInTheDocument();
+  });
+});

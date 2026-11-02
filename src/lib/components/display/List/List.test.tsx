@@ -1170,3 +1170,24 @@ describe('List translated labels', () => {
     expect(screen.getByText('Nichts da')).toBeInTheDocument();
   });
 });
+
+describe('List fix-round labels', () => {
+  it('renders no empty text when emptyContent is null', () => {
+    render(<List data={[]} primaryTextField="name" emptyContent={null} />);
+    expect(screen.queryByText('No items to display')).not.toBeInTheDocument();
+  });
+
+  it('translates the selected count', () => {
+    render(
+      <LabelsProvider labels={{ 'list.selectedCount': '{count} sur {total}' }}>
+        <List
+          data={mockData}
+          primaryTextField="name"
+          selectionMode="multiple"
+          defaultSelectedKeys={['1']}
+        />
+      </LabelsProvider>
+    );
+    expect(screen.getByText('1 sur 5')).toBeInTheDocument();
+  });
+});

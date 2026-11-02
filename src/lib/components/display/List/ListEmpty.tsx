@@ -44,7 +44,9 @@ export function ListEmpty({
       <span>
         {isNoResults && searchQuery
           ? t('list.noResults', { query: searchQuery })
-          : (content ?? t('list.empty'))}
+          : content === undefined
+            ? t('list.empty')
+            : content}
       </span>
     </div>
   );

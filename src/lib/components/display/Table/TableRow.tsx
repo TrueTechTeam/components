@@ -105,7 +105,7 @@ export function TableRow<T extends Record<string, unknown>>({ row, rowIndex }: T
               checked={isSelected}
               onChange={handleCheckboxChange}
               size={size}
-              aria-label={`Select row ${rowIndex + 1}`}
+              aria-label={t('table.selectRow', { n: rowIndex + 1 })}
             />
           </div>
         )}
@@ -117,7 +117,7 @@ export function TableRow<T extends Record<string, unknown>>({ row, rowIndex }: T
               type="button"
               className={styles.radioButton}
               onClick={() => onSelectRow(rowKey, true)}
-              aria-label={`Select row ${rowIndex + 1}`}
+              aria-label={t('table.selectRow', { n: rowIndex + 1 })}
               aria-pressed={isSelected}
             >
               <span className={styles.radioIndicator} data-selected={isSelected || undefined} />

@@ -123,3 +123,6 @@ Build translation files from the exported `DEFAULT_LABELS` (prefix each key with
 | `pagination.page`                       | Page {n}                                                        |
 | `sideNav.label`                         | Side navigation                                                 |
 | `stepper.label`                         | Progress steps                                                  |
+| `table.selectRow`                       | Select row {n}                                                  |
+| `truncatedList.more`                    | +{count} more                                                   |
+| `list.selectedCount`                    | {count} of {total} selected                                     |

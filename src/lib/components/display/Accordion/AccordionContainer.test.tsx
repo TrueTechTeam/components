@@ -470,3 +470,18 @@ describe('AccordionContainer translated labels', () => {
     expect(screen.getByRole('button', { name: 'Tout ouvrir' })).toBeInTheDocument();
   });
 });
+
+describe('AccordionContainer label semantics', () => {
+  it('renders a null expandAllLabel as empty instead of the translated default', () => {
+    render(
+      <LabelsProvider labels={{ 'accordionContainer.expandAll': 'Tout ouvrir' }}>
+        <AccordionContainer showExpandAllControls expandAllLabel={null}>
+          <Accordion id="a" header="A">
+            Body
+          </Accordion>
+        </AccordionContainer>
+      </LabelsProvider>
+    );
+    expect(screen.queryByText('Tout ouvrir')).not.toBeInTheDocument();
+  });
+});
