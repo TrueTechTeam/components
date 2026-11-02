@@ -24,7 +24,7 @@
     "test:ci": "jest --ci --coverage --passWithNoTests",
     "lint": "eslint . --max-warnings=0",
     "lint:fix": "eslint . --max-warnings=0 --fix",
-    "typecheck": "tsc --noEmit -p tsconfig.lib.json",
+    "typecheck": "tsc --noEmit -p tsconfig.lib.json && tsc --noEmit -p tsconfig.storybook.json",
     "storybook": "storybook dev -p 6006",
     "storybook:build": "storybook build -o dist/storybook",
     "prepare": "husky"
