@@ -1,2 +1,10 @@
 export { useBrowserRouter } from './browserRouter';
+export { createNextRouter } from './createNextRouter';
+export type { NextRouterDeps, ReadonlyURLSearchParamsLike } from './createNextRouter';
+export { createReactRouter } from './createReactRouter';
+export type { ReactRouterBlocker, ReactRouterDeps } from './createReactRouter';
+export { useRouterAdapter } from './RouterContext';
+export { AppLink } from './AppLink';
+export type { AppLinkProps } from './AppLink';
+export { useAppNavigate } from './useAppNavigate';
 export type { RouterAdapter, RouterLinkProps } from './types';

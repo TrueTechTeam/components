@@ -1,6 +1,5 @@
 import { createContext } from 'react';
 import type { TranslateFn } from '../../lib/contexts/LabelsContext';
-import type { RouterAdapter } from '../router/types';
 import type { LogBuffer, Logger } from './logger';
 
 export interface Analytics {
@@ -16,8 +15,8 @@ export interface FlagsConfig {
   isEnabled(flag: string): boolean;
 }
 
+/** App configuration. The router is not part of it: read it with `useRouterAdapter()`. */
 export interface AppConfigValue {
-  router: RouterAdapter;
   /** The logger calls are forwarded to (custom, console in development, no-op in production). */
   logger: Logger;
   logBuffer: LogBuffer;

@@ -9,6 +9,7 @@ import {
   useNavigationGuard,
   type NavigationGuardApi,
 } from '../../lib/contexts/NavigationGuardContext';
+import { isInAppLinkClick } from './linkClick';
 import type { RouterAdapter, RouterLinkProps } from './types';
 
 const hasWindow = () => typeof window !== 'undefined';
@@ -81,18 +82,6 @@ function setSearchParams(next: URLSearchParams, opts?: { replace?: boolean }) {
   navigate(`${window.location.pathname}${qs ? `?${qs}` : ''}${window.location.hash}`, opts);
 }
 
-function isModifiedClick(e: MouseEvent<HTMLAnchorElement>) {
-  return e.button !== 0 || e.metaKey || e.ctrlKey || e.shiftKey || e.altKey;
-}
-
-function isSameOrigin(href: string) {
-  try {
-    return new URL(href, window.location.href).origin === window.location.origin;
-  } catch {
-    return false;
-  }
-}
-
 /**
  * `<a href>` that handles plain left-clicks on same-origin links in-app. Modified clicks, other
  * origins and schemes (`mailto:`, `tel:`), `download` and a non-`_self` `target` keep browser behavior.
@@ -103,21 +92,16 @@ function BrowserLink({
   onClick,
   target,
   download,
+  replace,
   ...rest
 }: RouterLinkProps & AnchorHTMLAttributes<HTMLAnchorElement>) {
   const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
     onClick?.(e);
-    if (
-      e.defaultPrevented ||
-      isModifiedClick(e) ||
-      (target && target !== '_self') ||
-      (download !== undefined && download !== false) ||
-      !isSameOrigin(href)
-    ) {
+    if (!isInAppLinkClick(e, { href, target, download })) {
       return;
     }
     e.preventDefault();
-    navigate(href);
+    navigate(href, { replace });
   };
   return (
     <a href={href} target={target} download={download} onClick={handleClick} {...rest}>
