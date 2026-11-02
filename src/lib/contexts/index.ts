@@ -13,3 +13,13 @@ export { BreakpointsProvider, useBreakpoints, DEFAULT_BREAKPOINTS } from './Brea
 export type { BreakpointName, Breakpoints, BreakpointsProviderProps } from './BreakpointsContext';
 export { LabelsProvider, useLabels, useLocale, interpolate, DEFAULT_LABELS } from './LabelsContext';
 export type { LabelsProviderProps, LabelVars, TranslateFn, LabelKey } from './LabelsContext';
+export {
+  NavigationGuardProvider,
+  useNavigationGuard,
+  createNavigationGuardRegistry,
+} from './NavigationGuardContext';
+export type {
+  NavigationGuard,
+  NavigationGuardApi,
+  NavigationGuardProviderProps,
+} from './NavigationGuardContext';

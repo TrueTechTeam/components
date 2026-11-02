@@ -71,3 +71,6 @@ export type { UseTimeoutOptions, UseTimeoutReturn } from './useTimeout';
 
 export { useInterval } from './useInterval';
 export type { UseIntervalOptions, UseIntervalReturn } from './useInterval';
+
+export { useUnsavedChanges } from './useUnsavedChanges';
+export type { UseUnsavedChangesOptions } from './useUnsavedChanges';

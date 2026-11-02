@@ -12,6 +12,7 @@ import {
   BreakpointsProvider,
   type BreakpointsProviderProps,
 } from '../../contexts/BreakpointsContext';
+import { NavigationGuardProvider } from '../../contexts/NavigationGuardContext';
 import type { ThemeConfig } from '../../types';
 import '../../styles/index.scss';
 
@@ -127,13 +128,15 @@ export function GlobalProvider({
     <ThemeProvider themeConfig={themeConfig} applyOverrides={injectGlobalStyles}>
       <BreakpointsProvider breakpoints={breakpoints}>
         <LabelsProvider labels={labels} translate={translate} locale={locale}>
-          <PageMessagesProvider {...pageMessagesConfig}>
-            <DialogProvider {...dialogConfig}>
-              <AlertProvider {...alertConfig}>
-                <ToastProvider {...toastConfig}>{children}</ToastProvider>
-              </AlertProvider>
-            </DialogProvider>
-          </PageMessagesProvider>
+          <NavigationGuardProvider>
+            <PageMessagesProvider {...pageMessagesConfig}>
+              <DialogProvider {...dialogConfig}>
+                <AlertProvider {...alertConfig}>
+                  <ToastProvider {...toastConfig}>{children}</ToastProvider>
+                </AlertProvider>
+              </DialogProvider>
+            </PageMessagesProvider>
+          </NavigationGuardProvider>
         </LabelsProvider>
       </BreakpointsProvider>
     </ThemeProvider>
