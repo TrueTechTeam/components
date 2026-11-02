@@ -1,0 +1,84 @@
+@keyframes page-refreshing {
+  0% {
+    transform: translateX(-100%);
+  }
+
+  100% {
+    transform: translateX(400%);
+  }
+}
+
+.page {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  min-width: 0;
+}
+
+.section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  min-width: 0;
+}
+
+.sectionTitle {
+  margin: 0;
+  color: var(--theme-text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  overflow-wrap: break-word;
+}
+
+// Wraps state content so the refreshing bar overlays its top edge without shifting layout.
+.content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: inherit;
+  min-width: 0;
+}
+
+.refreshing {
+  position: absolute;
+  inset-block-start: 0;
+  inset-inline: 0;
+  z-index: 1;
+  height: var(--spacing-xs);
+  overflow: hidden;
+  border-radius: var(--radius-full);
+  background: var(--theme-border-primary);
+  pointer-events: none;
+
+  &::after {
+    content: '';
+    position: absolute;
+    inset-block: 0;
+    inset-inline-start: 0;
+    width: 25%;
+    border-radius: inherit;
+    background: var(--theme-primary);
+    animation: page-refreshing 1.5s var(--ease-standard) infinite;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    &::after {
+      animation-duration: 2.5s;
+    }
+  }
+
+  @media (forced-colors: active) {
+    border: 1px solid CanvasText;
+
+    &::after {
+      background: Highlight;
+    }
+  }
+}
+
+.skeleton {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+}

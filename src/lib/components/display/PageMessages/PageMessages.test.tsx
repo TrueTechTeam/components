@@ -110,3 +110,15 @@ describe('PageMessages action labels', () => {
     expect(screen.getByRole('button', { name: 'Reessayer' })).toBeInTheDocument();
   });
 });
+
+describe('PageMessages action props', () => {
+  it('uses onRetry for the retry action without forwarding it to the DOM', () => {
+    const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined);
+    const onRetry = jest.fn();
+    render(<PageMessages error onRetry={onRetry} onGoBack={jest.fn()} />);
+    screen.getByRole('button', { name: 'Try Again' }).click();
+    expect(onRetry).toHaveBeenCalledTimes(1);
+    expect(errorSpy).not.toHaveBeenCalled();
+    errorSpy.mockRestore();
+  });
+});

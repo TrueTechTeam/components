@@ -7,6 +7,7 @@ export const DEFAULT_LABELS = {
   'common.close': 'Close',
   'common.loading': 'Loading…',
   'unsavedChanges.confirm': 'You have unsaved changes. Leave anyway?',
+  'page.refreshing': 'Refreshing…',
   'accordionContainer.expandAll': 'Expand All',
   'accordionContainer.collapseAll': 'Collapse All',
   'alert.ok': 'OK',

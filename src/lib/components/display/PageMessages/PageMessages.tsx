@@ -106,6 +106,11 @@ export const PageMessages = ({
     style,
     'data-testid': testId,
     'aria-label': ariaLabel,
+    // Action callbacks are read by usePageMessagesConfig(props); keep them off the DOM element.
+    onRetry: _onRetry,
+    onGoBack: _onGoBack,
+    onGoHome: _onGoHome,
+    onLogin: _onLogin,
     ...restProps
   } = props;
 
