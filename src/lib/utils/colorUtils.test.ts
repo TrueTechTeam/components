@@ -17,6 +17,7 @@ import {
   parseColorToOklch,
   rotateHue,
   getContrastRatio,
+  getRelativeLuminance,
   type RGB,
   type HSL,
 } from './colorUtils';
@@ -480,5 +481,18 @@ describe('oklch', () => {
     expect(getContrastRatio('#000000', '#ffffff')).toBeCloseTo(21, 0);
     expect(getContrastRatio('#ffffff', '#ffffff')).toBeCloseTo(1, 5);
     expect(getContrastRatio('#767676', '#ffffff')).toBeGreaterThanOrEqual(4.5);
+  });
+  it('accepts rgb() and hsl() input in contrast helpers', () => {
+    expect(getContrastRatio('rgb(255,255,255)', '#000000')).toBeCloseTo(21, 1);
+    expect(getContrastRatio('hsl(0, 0%, 100%)', '#000')).toBeCloseTo(21, 1);
+    expect(getRelativeLuminance('rgb(255, 255, 255)')).toBeCloseTo(1, 5);
+  });
+  it('returns NaN for unparseable contrast input', () => {
+    expect(getContrastRatio('garbage', '#fff')).toBeNaN();
+    expect(getRelativeLuminance('nope')).toBeNaN();
+  });
+  it('treats non-finite OKLCH components as 0', () => {
+    expect(oklchToHex({ l: NaN, c: 0.1, h: 10 })).toMatch(/^#[0-9a-f]{6}$/);
+    expect(oklchToHex({ l: 0.5, c: Infinity, h: NaN })).toMatch(/^#[0-9a-f]{6}$/);
   });
 });

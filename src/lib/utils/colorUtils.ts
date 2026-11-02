@@ -273,8 +273,7 @@ const linearToSrgb = (value: number): number => {
  * Normalise a hue angle to [0, 360)
  */
 export const rotateHue = (h: number, degrees: number): number => {
-  const result = (((h + degrees) % 360) + 360) % 360;
-  return result === 360 ? 0 : result;
+  return (((h + degrees) % 360) + 360) % 360;
 };
 
 const rgbToOklch = (rgb: RGB): OKLCH => {
@@ -321,13 +320,16 @@ export const hexToOklch = (hex: string): OKLCH | null => {
   return rgb ? rgbToOklch(rgb) : null;
 };
 
+const finiteOrZero = (value: number): number => (Number.isFinite(value) ? value : 0);
+
 /**
  * Convert OKLCH to HEX, reducing chroma (keeping lightness and hue) until the color fits sRGB.
+ * Non-finite components (NaN, ±Infinity) are treated as 0.
  */
 export const oklchToHex = (color: OKLCH): string => {
-  const l = clamp(color.l, 0, 1);
-  const h = color.h;
-  let c = Math.max(0, color.c);
+  const l = clamp(finiteOrZero(color.l), 0, 1);
+  const h = finiteOrZero(color.h);
+  let c = Math.max(0, finiteOrZero(color.c));
 
   let linear = oklchToLinearRgb({ l, c, h });
   if (!inGamut(linear)) {
@@ -372,15 +374,21 @@ export const parseColorToOklch = (input: string): OKLCH | null => {
 };
 
 /**
- * WCAG 2.x relative luminance of a hex color (0..1). Invalid input is treated as black.
+ * WCAG 2.x relative luminance (0..1) of any color `parseColorToRgb` accepts (hex, rgb(), hsl();
+ * a bare hex without `#` also works). Returns `NaN` when the color cannot be parsed.
  */
-export const getRelativeLuminance = (hex: string): number => {
-  const rgb = hexToRgb(hex) ?? { r: 0, g: 0, b: 0 };
+export const getRelativeLuminance = (color: string): number => {
+  const value = color.trim();
+  const rgb = hexToRgb(value) ?? parseColorToRgb(value);
+  if (!rgb) {
+    return NaN;
+  }
   return 0.2126 * srgbToLinear(rgb.r) + 0.7152 * srgbToLinear(rgb.g) + 0.0722 * srgbToLinear(rgb.b);
 };
 
 /**
- * WCAG 2.x contrast ratio between two hex colors (1..21)
+ * WCAG 2.x contrast ratio (1..21) between two colors in any format `getRelativeLuminance`
+ * accepts. Returns `NaN` when either color cannot be parsed.
  */
 export const getContrastRatio = (a: string, b: string): number => {
   const la = getRelativeLuminance(a);
