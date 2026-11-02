@@ -120,4 +120,20 @@ describe('ThemeBuilder', () => {
     await user.click(within(status).getByRole('button', { name: 'Dismiss' }));
     expect(screen.queryByRole('status')).not.toBeInTheDocument();
   });
+
+  it('reports a file that cannot be read', async () => {
+    const user = userEvent.setup();
+    const spy = jest.spyOn(FileReader.prototype, 'readAsText').mockImplementation(function (
+      this: FileReader
+    ) {
+      setTimeout(() => this.onerror?.(new ProgressEvent('error') as ProgressEvent<FileReader>));
+    });
+    render(<ThemeBuilder storage={makeStorage()} />);
+    await user.upload(
+      screen.getByLabelText('Load theme.json file'),
+      new File(['{}'], 'theme.json')
+    );
+    expect(await screen.findByRole('alert')).toHaveTextContent('Could not read the file.');
+    spy.mockRestore();
+  });
 });

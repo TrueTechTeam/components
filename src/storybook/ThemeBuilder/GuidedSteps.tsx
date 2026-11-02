@@ -7,7 +7,7 @@ import {
 import { Chip } from '../../lib/components/display/Chip';
 import { Slider } from '../../lib/components/inputs/Slider';
 import { Step, Stepper } from '../../lib/components/navigation/Stepper';
-import { oklchToHex } from '../../lib/utils/colorUtils';
+import { getContrastRatio, oklchToHex } from '../../lib/utils/colorUtils';
 import type { BuilderAction, BuilderState, Step as BuilderStep } from './builderState';
 import { MOODS, harmonyHues } from './moods';
 import { suggestPalettes } from './suggestPalettes';
@@ -23,6 +23,11 @@ const HARMONY_OPTIONS: Array<{ value: Harmony; label: string }> = [
   { value: 'split-complementary', label: 'Split-complementary' },
   { value: 'monochrome', label: 'Monochrome' },
 ];
+
+const onColor = (background: string) =>
+  getContrastRatio('#ffffff', background) >= getContrastRatio('#111111', background)
+    ? '#ffffff'
+    : '#111111';
 
 const hueToHex = (hue: number) => oklchToHex({ l: 0.62, c: 0.15, h: hue });
 
@@ -165,7 +170,10 @@ function PaletteStep({ state, dispatch }: PartProps) {
               <span className={styles.swatch} style={{ background: palette.secondary }} />
             </span>
             <span className={styles.sample} aria-hidden="true">
-              <span className={styles.sampleButton} style={{ background: palette.primary }}>
+              <span
+                className={styles.sampleButton}
+                style={{ background: palette.primary, color: onColor(palette.primary) }}
+              >
                 Button
               </span>
               <span style={{ color: palette.secondary }}>Sample text</span>

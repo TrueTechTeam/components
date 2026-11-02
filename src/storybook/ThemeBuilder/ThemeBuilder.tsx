@@ -40,7 +40,15 @@ export function ThemeBuilder({ storage }: ThemeBuilderProps) {
   }, [state, storage]);
 
   const handleLoadFile = async (file: File) => {
-    const result = importThemeJson(await readFile(file), state);
+    let text: string;
+    try {
+      text = await readFile(file);
+    } catch {
+      setImportWarnings([]);
+      setImportErrors(['Could not read the file.']);
+      return;
+    }
+    const result = importThemeJson(text, state);
     if (result.ok && result.state) {
       setImportErrors([]);
       setImportWarnings(result.warnings);

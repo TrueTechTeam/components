@@ -180,7 +180,6 @@
 .sampleButton {
   padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: var(--radius-md);
-  color: white;
   font-size: var(--font-size-sm);
 }
 
@@ -203,11 +202,11 @@
 }
 
 .feedbackError {
-  border-color: var(--theme-error, currentColor);
+  border-color: var(--theme-error);
 }
 
 .feedbackWarning {
-  border-color: var(--theme-warning, currentColor);
+  border-color: var(--theme-warning);
 }
 
 .feedbackBody ul {
