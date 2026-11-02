@@ -238,16 +238,40 @@ describe('importThemeJson', () => {
     expect(r.state?.inputs.primary).toBe(
       generateTheme(inputs).theme?.modes?.light?.colors?.primary
     );
-    expect(Object.keys(r.state?.overrides.light ?? {}).length).toBeGreaterThan(10);
-    expect(Object.keys(r.state?.overrides.dark ?? {}).length).toBeGreaterThan(10);
   });
 
-  it('puts shared colors into both modes', () => {
+  it('keeps no overrides for an unedited export, so brand changes still regenerate', () => {
+    const inputs = { ...DEFAULT_INPUTS, primary: '#2563eb', secondary: '#9333ea' };
+    const r = importThemeJson(JSON.stringify(generateTheme(inputs)), INITIAL_STATE);
+    expect(r.ok).toBe(true);
+    expect(r.state?.overrides).toEqual({ light: {}, dark: {} });
+
+    const state = r.state ?? INITIAL_STATE;
+    const before = generateTheme(state.inputs, state.overrides).theme?.modes;
+    const next = builderReducer(state, { type: 'setInput', key: 'primary', value: '#dc2626' });
+    const after = generateTheme(next.inputs, next.overrides).theme?.modes;
+    expect(after?.light?.colors?.primary).toBe('#dc2626');
+    expect(after?.light?.colors?.primary).not.toBe(before?.light?.colors?.primary);
+    expect(after?.dark?.colors?.primary500).not.toBe(before?.dark?.colors?.primary500);
+  });
+
+  it('keeps exactly the hand-edited token as an override', () => {
+    const config = generateTheme(DEFAULT_INPUTS);
+    const light = config.theme?.modes?.light?.colors;
+    if (light) {
+      light.success = '#00AA00';
+    }
+    const r = importThemeJson(JSON.stringify(config), INITIAL_STATE);
+    expect(r.state?.overrides).toEqual({ light: { success: '#00aa00' }, dark: {} });
+  });
+
+  it('puts shared colors into both modes and keeps only those that differ', () => {
     const r = importThemeJson('{"theme":{"colors":{"primary":"#112233"}}}', INITIAL_STATE);
     expect(r.ok).toBe(true);
-    expect(r.state?.overrides.light.primary).toBe('#112233');
-    expect(r.state?.overrides.dark.primary).toBe('#112233');
     expect(r.state?.inputs.primary).toBe('#112233');
+    // Light primary is the seed itself, so nothing to pin; dark normally lightens it.
+    expect(r.state?.overrides.light).toEqual({});
+    expect(r.state?.overrides.dark).toEqual({ primary: '#112233' });
   });
 
   it.each(['not json', '[]', '{"mode":"sepia"}', '{"theme":{"colors":{"primary":"blue"}}}'])(

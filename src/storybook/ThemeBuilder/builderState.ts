@@ -1,5 +1,6 @@
 import type { ThemeColorOverrides, ThemeMode } from '../../lib/types/theme.types';
 import { hexToRgb, oklchToHex, parseColorToOklch, rgbToHex } from '../../lib/utils/colorUtils';
+import { generateColors } from './generateTheme';
 import { MOODS } from './moods';
 import type { PaletteSuggestion } from './suggestPalettes';
 import {
@@ -292,6 +293,26 @@ function readColors(
   return out as ThemeColorOverrides;
 }
 
+/**
+ * An exported theme.json carries every color token. Keep as overrides only the colors that differ
+ * from what the builder would generate for the recovered inputs, so unedited tokens keep following
+ * brand changes. Both sides are lowercase #rrggbb.
+ */
+function editedColors(
+  colors: ThemeColorOverrides,
+  inputs: ThemeInputs,
+  mode: ThemeMode
+): ThemeColorOverrides {
+  const generated: Record<string, string | undefined> = { ...generateColors(inputs, mode) };
+  const out: Record<string, string> = {};
+  for (const [key, color] of Object.entries(colors)) {
+    if (typeof color === 'string' && generated[key]?.toLowerCase() !== color) {
+      out[key] = color;
+    }
+  }
+  return out as ThemeColorOverrides;
+}
+
 export function importThemeJson(text: string, current: BuilderState): ImportResult {
   const errors: string[] = [];
   const warnings: string[] = [];
@@ -430,7 +451,10 @@ export function importThemeJson(text: string, current: BuilderState): ImportResu
       path: 'direct',
       step: 'editor',
       inputs,
-      overrides: { light, dark },
+      overrides: {
+        light: editedColors(light, inputs, 'light'),
+        dark: editedColors(dark, inputs, 'dark'),
+      },
     },
   };
 }
