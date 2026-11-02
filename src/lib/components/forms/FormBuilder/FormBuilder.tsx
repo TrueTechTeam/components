@@ -30,6 +30,7 @@ import { ColorPicker } from '../../inputs/ColorPicker';
 import { DatePicker } from '../../inputs/DatePicker';
 import { DateRangePicker } from '../../inputs/DateRangePicker';
 import { useLabels } from '../../../contexts/LabelsContext';
+import { useUnsavedChanges } from '../../../hooks/useUnsavedChanges';
 
 /**
  * Form context
@@ -137,6 +138,18 @@ export interface FormBuilderProps extends Omit<BaseComponentProps, 'children'> {
    * Loading state (disables form)
    */
   loading?: boolean;
+
+  /**
+   * Warn before the user leaves (page unload, guarded navigation, closing a parent Dialog)
+   * while the form has unsaved changes
+   * @default false
+   */
+  guardUnsaved?: boolean;
+
+  /**
+   * Confirmation message for the unsaved-changes guard (defaults to the `unsavedChanges.confirm` label)
+   */
+  guardMessage?: string;
 
   /**
    * Disabled state
@@ -329,6 +342,8 @@ export const FormBuilder = ({
   gap,
   loading = false,
   disabled = false,
+  guardUnsaved = false,
+  guardMessage,
   className,
   'data-testid': dataTestId,
   style,
@@ -352,6 +367,7 @@ export const FormBuilder = ({
   };
 
   const formContext = useFormState(formOptions);
+  useUnsavedChanges(formContext.isDirty, { enabled: guardUnsaved, message: guardMessage });
 
   // Handle form submit
   const handleSubmit = useCallback(

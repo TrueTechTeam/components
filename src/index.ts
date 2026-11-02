@@ -36,6 +36,15 @@ export type { UseToastOptions, UseToastReturn } from './lib/hooks';
 export { useAsyncToast } from './lib/hooks';
 export type { UseAsyncToastReturn, AsyncToastConfig } from './lib/hooks';
 
+export { NavigationGuardProvider, useNavigationGuard } from './lib/contexts';
+export type {
+  NavigationGuard,
+  NavigationGuardApi,
+  NavigationGuardProviderProps,
+} from './lib/contexts';
+export { useUnsavedChanges } from './lib/hooks';
+export type { UseUnsavedChangesOptions } from './lib/hooks';
+
 export { useResizeObserver } from './lib/hooks';
 export type { UseResizeObserverOptions, UseResizeObserverReturn } from './lib/hooks';
 

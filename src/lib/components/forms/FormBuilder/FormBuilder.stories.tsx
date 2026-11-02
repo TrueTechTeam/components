@@ -990,3 +990,31 @@ export const Playground: Story = {
     );
   },
 };
+
+/**
+ * `guardUnsaved` warns before the page unloads, before guarded navigation and before closing a
+ * parent Dialog while the form has unsaved changes. Submitting successfully clears the guard.
+ */
+export const GuardedUnsavedChanges: Story = {
+  name: 'Guarded (unsaved changes)',
+  render: (args) => {
+    const fields: FormFieldConfig[] = [
+      { name: 'title', type: 'input', label: 'Title' },
+      { name: 'notes', type: 'textarea', label: 'Notes' },
+    ];
+
+    return (
+      <div style={{ maxWidth: '600px' }}>
+        <FormBuilder
+          {...args}
+          fields={fields}
+          guardUnsaved
+          onSubmit={async (values) => {
+            await new Promise((resolve) => setTimeout(resolve, 300));
+            action('form-submitted')(values);
+          }}
+        />
+      </div>
+    );
+  },
+};
