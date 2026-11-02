@@ -102,6 +102,23 @@ describe('builderReducer', () => {
     expect('success' in s.overrides.dark).toBe(false);
   });
 
+  it('stores override colors as lowercase #rrggbb hex', () => {
+    const set = (value: string) =>
+      builderReducer(INITIAL_STATE, { type: 'setOverride', mode: 'light', key: 'error', value })
+        .overrides.light.error;
+    expect(set('rgb(255, 0, 0)')).toBe('#ff0000');
+    expect(set('#ABC')).toBe('#aabbcc');
+    expect(set('#2563EB')).toBe('#2563eb');
+    expect(set('oklch(0.62 0.19 260)')).toMatch(/^#[0-9a-f]{6}$/);
+    const s = builderReducer(INITIAL_STATE, {
+      type: 'setOverride',
+      mode: 'dark',
+      key: 'info',
+      value: 'hsl(0, 100%, 50%)',
+    });
+    expect(generateTheme(s.inputs, s.overrides).theme?.modes?.dark?.colors?.info).toBe('#ff0000');
+  });
+
   it('ignores invalid override colors', () => {
     const s = builderReducer(INITIAL_STATE, {
       type: 'setOverride',

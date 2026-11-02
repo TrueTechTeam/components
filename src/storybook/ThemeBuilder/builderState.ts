@@ -1,5 +1,5 @@
 import type { ThemeColorOverrides, ThemeMode } from '../../lib/types/theme.types';
-import { parseColorToOklch } from '../../lib/utils/colorUtils';
+import { hexToRgb, oklchToHex, parseColorToOklch, rgbToHex } from '../../lib/utils/colorUtils';
 import { MOODS } from './moods';
 import type { PaletteSuggestion } from './suggestPalettes';
 import {
@@ -58,6 +58,20 @@ export type BuilderAction =
 const isValidColor = (value: unknown): value is string =>
   typeof value === 'string' && parseColorToOklch(value) !== null;
 
+/**
+ * Normalise any parseable color to lowercase `#rrggbb` (spec §4.6: exported colors are hex).
+ * Hex input is expanded exactly so it round-trips; other formats go through OKLCH.
+ */
+export function toHexColor(value: string): string | null {
+  const trimmed = value.trim();
+  const rgb = trimmed.startsWith('#') ? hexToRgb(trimmed) : null;
+  if (rgb) {
+    return rgbToHex(rgb);
+  }
+  const oklch = parseColorToOklch(trimmed);
+  return oklch ? oklchToHex(oklch) : null;
+}
+
 export function builderReducer(state: BuilderState, action: BuilderAction): BuilderState {
   switch (action.type) {
     case 'start':
@@ -98,14 +112,15 @@ export function builderReducer(state: BuilderState, action: BuilderAction): Buil
       if (action.value === null) {
         return { ...state, overrides: { ...state.overrides, [action.mode]: rest } };
       }
-      if (!isValidColor(action.value)) {
+      const hex = toHexColor(action.value);
+      if (!hex) {
         return state;
       }
       return {
         ...state,
         overrides: {
           ...state.overrides,
-          [action.mode]: { ...state.overrides[action.mode], [action.key]: action.value },
+          [action.mode]: { ...state.overrides[action.mode], [action.key]: hex },
         },
       };
     }
@@ -267,8 +282,9 @@ function readColors(
   }
   const out: Record<string, string> = {};
   for (const [key, color] of Object.entries(value)) {
-    if (isValidColor(color)) {
-      out[key] = color;
+    const hex = typeof color === 'string' ? toHexColor(color) : null;
+    if (hex) {
+      out[key] = hex;
     } else {
       errors.push(`${path}.${key} is not a valid color`);
     }
