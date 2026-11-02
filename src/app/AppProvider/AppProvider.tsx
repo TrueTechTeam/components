@@ -1,0 +1,111 @@
+import React, { useMemo, useState, type ReactNode } from 'react';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import { LabelsProvider, type TranslateFn } from '../../lib/contexts/LabelsContext';
+import { BreakpointsProvider, type Breakpoints } from '../../lib/contexts/BreakpointsContext';
+import { useBrowserRouter } from '../router/browserRouter';
+import type { RouterAdapter } from '../router/types';
+import {
+  AppContext,
+  type Analytics,
+  type AppConfigValue,
+  type AuthConfig,
+  type FlagsConfig,
+} from './AppContext';
+import { consoleLogger, createLogBuffer, isDevelopment, noopLogger, type Logger } from './logger';
+
+export interface AppProviderProps {
+  children: ReactNode;
+  /** Router adapter hook. Must stay the same function for the provider's lifetime. Default: History API. */
+  router?: () => RouterAdapter;
+  /** Default: a QueryClient with `staleTime: 30_000, retry: 1, refetchOnWindowFocus: true`, created once. */
+  queryClient?: QueryClient;
+  /** App translate function; also feeds core component labels (as `ui.<key>`). */
+  translate?: TranslateFn;
+  /** BCP 47 locale for labels and formatters. */
+  locale?: string;
+  /** Default: console in development, no-op in production. */
+  logger?: Logger;
+  analytics?: Analytics;
+  /** Default: `{ user: null, can: () => true }`. */
+  auth?: AuthConfig;
+  /** Default: every flag off. */
+  flags?: FlagsConfig;
+  breakpoints?: Partial<Breakpoints>;
+  /** Formats page titles. Default: the title unchanged. */
+  titleTemplate?: (title: string) => string;
+  /** Enables developer aids. Default: `process.env.NODE_ENV !== 'production'`. */
+  debug?: boolean;
+}
+
+const defaultAnalytics: Analytics = { track: () => undefined };
+const defaultAuth: AuthConfig = { user: null, can: () => true };
+const defaultFlags: FlagsConfig = { isEnabled: () => false };
+const identity = (title: string) => title;
+
+function createDefaultQueryClient() {
+  return new QueryClient({
+    defaultOptions: { queries: { staleTime: 30_000, retry: 1, refetchOnWindowFocus: true } },
+  });
+}
+
+/**
+ * Root of an `/app` application: data fetching (TanStack Query), routing, labels/locale,
+ * breakpoints, auth, feature flags, logging and analytics. Render it inside `GlobalProvider`.
+ */
+export function AppProvider({
+  children,
+  router,
+  queryClient,
+  translate,
+  locale,
+  logger,
+  analytics = defaultAnalytics,
+  auth = defaultAuth,
+  flags = defaultFlags,
+  breakpoints,
+  titleTemplate = identity,
+  debug = isDevelopment(),
+}: AppProviderProps) {
+  const useRouter = router ?? useBrowserRouter;
+  const routerAdapter = useRouter();
+  // Created once and kept, so dropping the `queryClient` prop later never loses the cache.
+  const [defaultClient] = useState(createDefaultQueryClient);
+  const [logBuffer] = useState(() => createLogBuffer());
+  const client = queryClient ?? defaultClient;
+  const resolvedLogger = logger ?? (debug ? consoleLogger : noopLogger);
+
+  const value = useMemo<AppConfigValue>(
+    () => ({
+      router: routerAdapter,
+      logger: resolvedLogger,
+      logBuffer,
+      analytics,
+      auth,
+      flags,
+      translate,
+      titleTemplate,
+      debug,
+    }),
+    [
+      routerAdapter,
+      resolvedLogger,
+      logBuffer,
+      analytics,
+      auth,
+      flags,
+      translate,
+      titleTemplate,
+      debug,
+    ]
+  );
+
+  return (
+    <QueryClientProvider client={client}>
+      <LabelsProvider translate={translate} locale={locale}>
+        <BreakpointsProvider breakpoints={breakpoints}>
+          <AppContext.Provider value={value}>{children}</AppContext.Provider>
+        </BreakpointsProvider>
+      </LabelsProvider>
+    </QueryClientProvider>
+  );
+}

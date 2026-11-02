@@ -126,6 +126,8 @@ const preview: Preview = {
           'Forms',
           'Filters',
           'DnD',
+          'App Builder',
+          ['Foundation', 'Templates', 'Guides'],
           'Patterns',
           'Hooks',
           'Providers',

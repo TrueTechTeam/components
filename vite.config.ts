@@ -49,22 +49,29 @@ export default defineConfig(async () => {
         transformMixedEsModules: true,
       },
       lib: {
-        // Could also be a dictionary or array of multiple entry points.
-        entry: 'src/index.ts',
+        // `index` is the core library, `app` the opt-in `/app` entry point. Modules both import
+        // (contexts, utils) land in shared chunks, so context identity is the same in both.
+        entry: { index: 'src/index.ts', app: 'src/app/index.ts' },
         name: 'ui-components',
-        fileName: 'index',
+        fileName: (format: string, entryName: string) =>
+          `${entryName}.${format === 'es' ? 'mjs' : 'js'}`,
+        // Keep the single extracted stylesheet at dist/index.css (documented consumer import).
+        cssFileName: 'index',
         // Change this to the formats you want to support.
         // Don't forget to update your package.json as well.
         formats: ['es', 'cjs'],
       },
       rollupOptions: {
         // External packages that should not be bundled into your library.
-        external: ['react', 'react-dom', 'react/jsx-runtime'],
+        // `@tanstack/react-query` is an optional peer dependency used only by the `/app` entry.
+        external: (id: string) =>
+          ['react', 'react-dom', 'react/jsx-runtime'].includes(id) || id.startsWith('@tanstack/'),
         output: {
           // Vite/Rollup strips directive prologues (like the 'use client' at the
           // top of src/index.ts) from library builds, which breaks consumers on
           // React Server Components frameworks (Next.js App Router) - every
-          // component here is client-only, so restore it unconditionally.
+          // component here is client-only, so restore it unconditionally. A string banner
+          // applies to every output chunk, shared chunks included.
           banner: "'use client';",
         },
       },
