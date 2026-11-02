@@ -4,7 +4,7 @@ import type { RouterAdapter } from './types';
 
 /** Search params written but not yet committed by the router, shared by every params hook. */
 export interface PendingSearch {
-  /** The committed search string the write was based on. */
+  /** The committed `pathname?search` the write was based on. */
   from: string;
   params: URLSearchParams;
 }

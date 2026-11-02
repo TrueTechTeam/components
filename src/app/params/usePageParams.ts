@@ -21,7 +21,9 @@ export function useParamsFromRouter<S extends ParamSchema>(
   // Picked once so the hook order never changes (an adapter keeps its `useSearchParams`).
   const [useAdapterSearchParams] = useState(() => adapter?.useSearchParams ?? useNoSearchParams);
   const searchParams = useAdapterSearchParams() ?? adapter?.searchParams;
-  const committed = searchParams?.toString() ?? '';
+  const committedSearch = searchParams?.toString() ?? '';
+  // Keyed on the path too: a write followed by navigating elsewhere must not carry over.
+  const committed = `${adapter?.pathname ?? ''}?${committedSearch}`;
 
   const keys = Object.keys(schema);
   // The first value of a repeated key wins; codecs turn malformed values into their default.
@@ -38,19 +40,20 @@ export function useParamsFromRouter<S extends ParamSchema>(
 
   const schemaRef = useRef(schema);
   const routerRef = useRef(router);
-  const committedRef = useRef(committed);
+  const committedRef = useRef({ key: committed, search: committedSearch });
   useEffect(() => {
     schemaRef.current = schema;
     routerRef.current = router;
   });
   useEffect(() => {
-    committedRef.current = committed;
+    committedRef.current = { key: committed, search: committedSearch };
     // The router committed a different URL (our write landed, or the user navigated): any pending
     // write is now reflected in, or superseded by, the committed params.
     const pending = routerRef.current?.pendingSearch;
     if (pending?.current && pending.current.from !== committed) {
       pending.current = null;
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- committedSearch is part of committed
   }, [committed]);
 
   const setParams = useCallback<SetParams<S>>((patch, opts) => {
@@ -59,10 +62,10 @@ export function useParamsFromRouter<S extends ParamSchema>(
       return;
     }
     const current = schemaRef.current;
-    const from = committedRef.current;
+    const { key: from, search } = committedRef.current;
     const pending = ctx.pendingSearch.current;
     // Writes made before the router re-renders (from any params hook) build on each other.
-    const before = pending && pending.from === from ? pending.params : new URLSearchParams(from);
+    const before = pending && pending.from === from ? pending.params : new URLSearchParams(search);
     const next = new URLSearchParams(before);
     for (const key of Object.keys(patch)) {
       const codec = current[key];
