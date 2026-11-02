@@ -217,7 +217,7 @@ export const FilePicker = ({
 
         // Check file type
         if (accept) {
-          const acceptedTypes = accept.split(',').map((t) => t.trim());
+          const acceptedTypes = accept.split(',').map((part) => part.trim());
           const isAccepted = acceptedTypes.some((type) => {
             if (type.startsWith('.')) {
               return file.name.toLowerCase().endsWith(type.toLowerCase());

@@ -114,10 +114,12 @@ export const ListSelectFilter = ({
         className={styles.listContainer}
         style={{ maxHeight: typeof maxHeight === 'number' ? `${maxHeight}px` : maxHeight }}
       >
-        {options.loading && <div className={styles.loadingState}>Loading...</div>}
+        {options.loading && (
+          <div className={styles.loadingState}>{t('listSelectFilter.loading')}</div>
+        )}
 
         {!options.loading && filteredOptions.length === 0 && (
-          <div className={styles.emptyState}>No options found</div>
+          <div className={styles.emptyState}>{t('listSelectFilter.noOptions')}</div>
         )}
 
         {!options.loading &&

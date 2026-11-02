@@ -7,6 +7,7 @@ import type { BaseComponentProps } from '../../../types/component.types';
 import { useKanbanBoardContextOptional } from './KanbanBoardContext';
 import { useDroppable, useSortable } from '../hooks';
 import styles from './KanbanBoard.module.scss';
+import { useLabels } from '../../../contexts/LabelsContext';
 
 export interface KanbanColumnProps extends BaseComponentProps {
   /**
@@ -69,6 +70,7 @@ export const KanbanColumn = ({
 }: KanbanColumnProps & {
   ref?: React.Ref<HTMLDivElement>;
 }) => {
+  const t = useLabels();
   const boardContext = useKanbanBoardContextOptional();
   const isDisabled = disabled || boardContext?.disabled;
   const allowColumnReorder = boardContext?.allowColumnReorder ?? false;
@@ -156,7 +158,7 @@ export const KanbanColumn = ({
 
         {/* Empty state indicator */}
         {!React.Children.count(children) && (
-          <div className={styles.emptyColumn}>Drop items here</div>
+          <div className={styles.emptyColumn}>{t('kanbanColumn.empty')}</div>
         )}
       </div>
     </div>

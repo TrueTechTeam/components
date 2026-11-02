@@ -178,4 +178,20 @@ describe('filter labels', () => {
     );
     expect(screen.getByText('Plus de filtres')).toBeInTheDocument();
   });
+
+  it('ListSelectFilter translates empty state', () => {
+    render(
+      <LabelsProvider labels={{ 'listSelectFilter.noOptions': 'Aucune option' }}>
+        <FilterProvider filters={[{ id: 'e', type: 'list-select', label: 'E', options: [] }]}>
+          <FilterField filterId="e" />
+        </FilterProvider>
+      </LabelsProvider>
+    );
+    expect(screen.getByText('Aucune option')).toBeInTheDocument();
+  });
+
+  it('FilterAccordion translates the General section', () => {
+    renderWith({ 'filterAccordion.general': 'Général' }, <FilterAccordion />);
+    expect(screen.getByText('Général')).toBeInTheDocument();
+  });
 });

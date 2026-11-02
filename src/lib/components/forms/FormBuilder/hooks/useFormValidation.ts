@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import {
   translateDefault,
   useLabels,
@@ -88,8 +89,12 @@ export const validateField = (
  */
 export const useFormValidation = () => {
   const t = useLabels();
-  return {
-    validateField: (value: unknown, validation: FormFieldValidation, allValues: FormValues = {}) =>
+  const boundValidate = useCallback(
+    (value: unknown, validation: FormFieldValidation, allValues: FormValues = {}) =>
       validateField(value, validation, allValues, t),
+    [t]
+  );
+  return {
+    validateField: boundValidate,
   };
 };
