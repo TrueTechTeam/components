@@ -76,12 +76,27 @@ describe('generateColors', () => {
     }
   });
 
-  it('produces strictly decreasing lightness from 50 to 900', () => {
-    const colors = generateColors(DEFAULT_INPUTS, 'light') as Record<string, string>;
+  it.each(SEEDS)('produces strictly decreasing lightness from 50 to 900 for seed %s', (seed) => {
+    const colors = generateColors({ ...DEFAULT_INPUTS, primary: seed }, 'light') as Record<
+      string,
+      string
+    >;
     const ls = SHADES.map((s) => hexToOklch(colors[`primary${s}`])!.l);
     for (let i = 1; i < ls.length; i++) {
       expect(ls[i]).toBeLessThan(ls[i - 1]);
     }
+  });
+
+  it('normalises shorthand seeds to 6-digit lowercase hex in both modes', () => {
+    for (const mode of MODES) {
+      const colors = generateColors({ primary: '#F90', secondary: 'ABC' }, mode);
+      for (const value of Object.values(colors)) {
+        expect(value).toMatch(/^#[0-9a-f]{6}$/);
+      }
+    }
+    expect(generateColors({ primary: '#f90', secondary: '#64748b' }, 'light').primary).toBe(
+      '#ff9900'
+    );
   });
 
   it('keeps the seed as light-mode primary', () =>
@@ -120,6 +135,17 @@ describe('generateTheme', () => {
     const medium = generateTheme({ ...DEFAULT_INPUTS, shadowDepth: 'medium' }).theme!.shadows!;
     expect(medium.sm).toContain('6%');
     expect(deep.sm).toContain('9.6%');
+  });
+
+  it('scales the type scale one step per size', () => {
+    const fs = generateTheme(DEFAULT_INPUTS).theme!.typography!.fontSize!;
+    expect(fs).toMatchObject({
+      xs: '0.694rem',
+      lg: '1.2rem',
+      '2xl': '1.728rem',
+      '3xl': '2.074rem',
+      '4xl': '2.488rem',
+    });
   });
 
   it('uses defaultMode as the config mode', () =>

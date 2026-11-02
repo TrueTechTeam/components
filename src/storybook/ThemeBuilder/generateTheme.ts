@@ -7,8 +7,10 @@ import type {
 import {
   getContrastRatio,
   hexToOklch,
+  hexToRgb,
   oklchToHex,
   parseColorToOklch,
+  rgbToHex,
   type OKLCH,
 } from '../../lib/utils/colorUtils';
 import { auditContrast } from './contrast';
@@ -53,7 +55,8 @@ function parseSeed(input: string, fallback: string): Seed {
   for (const candidate of [input, fallback]) {
     const oklch = parseColorToOklch(candidate ?? '');
     if (oklch) {
-      const hex = hexToOklch(candidate) ? candidate.trim().toLowerCase() : oklchToHex(oklch);
+      const rgb = hexToRgb(candidate.trim());
+      const hex = rgb ? rgbToHex(rgb) : oklchToHex(oklch);
       return { oklch, hex };
     }
   }
@@ -232,8 +235,8 @@ function buildShadows(
 }
 
 const DENSITY_MULTIPLIER = { compact: 0.75, comfortable: 1, spacious: 1.25 } as const;
-// Steps relative to base; the brief fixes xs -2, sm -1, lg +1 and 4xl +6.
-const FONT_STEPS = { xs: -2, sm: -1, base: 0, lg: 1, xl: 2, '2xl': 4, '3xl': 5, '4xl': 6 } as const;
+// Steps relative to base; one modular-scale step per size from xs -2 up to 4xl +5.
+const FONT_STEPS = { xs: -2, sm: -1, base: 0, lg: 1, xl: 2, '2xl': 3, '3xl': 4, '4xl': 5 } as const;
 
 function buildFontSizes(base: number, ratio: number): Record<keyof typeof FONT_STEPS, string> {
   const out = {} as Record<keyof typeof FONT_STEPS, string>;
