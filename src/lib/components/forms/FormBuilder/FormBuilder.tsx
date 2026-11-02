@@ -6,6 +6,7 @@ import React, {
   isValidElement,
   Children,
   cloneElement,
+  useRef,
 } from 'react';
 import type { ComponentVariant, ComponentSize, BaseComponentProps } from '../../../types';
 import type { FormFieldConfig, FormContext as FormContextType, UseFormStateOptions } from './types';
@@ -356,18 +357,29 @@ export const FormBuilder = ({
     submitButtonTextProp === undefined ? t('formBuilder.submit') : submitButtonTextProp;
   const resetButtonText =
     resetButtonTextProp === undefined ? t('formBuilder.reset') : resetButtonTextProp;
+  // Unsaved-changes baseline: starts at defaultValues and moves to the submitted values after a
+  // successful submit. Kept apart from useFormState's baseline so isDirty/Reset are unaffected.
+  const savedValuesRef = useRef<Record<string, any>>(defaultValues);
+  const submitAndMarkSaved = async (values: Record<string, any>) => {
+    await onSubmit?.(values);
+    savedValuesRef.current = values;
+  };
+
   // Initialize form state
   const formOptions: UseFormStateOptions = {
     initialValues: defaultValues,
     fields,
     validateOn,
-    onSubmit,
+    onSubmit: guardUnsaved ? submitAndMarkSaved : onSubmit,
     onChange,
     onValidate,
   };
 
   const formContext = useFormState(formOptions);
-  useUnsavedChanges(formContext.isDirty, { enabled: guardUnsaved, message: guardMessage });
+  const hasUnsavedChanges = Object.keys(formContext.values).some(
+    (key) => formContext.values[key] !== savedValuesRef.current[key]
+  );
+  useUnsavedChanges(hasUnsavedChanges, { enabled: guardUnsaved, message: guardMessage });
 
   // Handle form submit
   const handleSubmit = useCallback(
