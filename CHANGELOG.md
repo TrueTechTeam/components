@@ -1,3 +1,9 @@
+# [1.3.0](https://github.com/TrueTechTeam/components/compare/v1.2.1...v1.3.0) (2026-11-02)
+
+### Features
+
+- add design guidelines and fix component accessibility and theming ([#1](https://github.com/TrueTechTeam/components/issues/1)) ([9d6f522](https://github.com/TrueTechTeam/components/commit/9d6f5229f295792928d4254e9616860bc33e8443)), closes [#00777e](https://github.com/TrueTechTeam/components/issues/00777e)
+
 ## [1.2.1](https://github.com/TrueTechTeam/components/compare/v1.2.0...v1.2.1) (2026-09-05)
 
 ### Bug Fixes
