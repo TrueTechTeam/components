@@ -97,11 +97,45 @@ describe('DebugPanel', () => {
   });
 
   it('shows URL params', () => {
-    window.history.replaceState(null, '', '/?tab=open');
+    try {
+      window.history.replaceState(null, '', '/?tab=open');
+      setup(true);
+      fireEvent.click(screen.getByRole('button', { name: 'Open debug panel' }));
+      expect(within(screen.getByRole('dialog')).getByText('tab')).toBeInTheDocument();
+      expect(within(screen.getByRole('dialog')).getByText('open')).toBeInTheDocument();
+    } finally {
+      window.history.replaceState(null, '', '/');
+    }
+  });
+
+  it('closes on Escape even when focus is outside the panel', () => {
     setup(true);
+    const toggle = screen.getByRole('button', { name: 'Open debug panel' });
+    fireEvent.click(toggle);
+    document.body.focus();
+    fireEvent.keyDown(document.body, { key: 'Escape' });
+    expect(screen.queryByRole('dialog')).not.toBeInTheDocument();
+    expect(toggle).toHaveFocus();
+  });
+
+  it('shows pending and error statuses and never renders query data', () => {
+    render(
+      <AppProvider logger={silentLogger} debug>
+        <Page
+          title="Orders"
+          queries={[
+            query({ isPending: true, dataUpdatedAt: 0 }),
+            query({ isError: true, error: new Error('boom'), data: { secret: 'SECRET-DATA' } }),
+          ]}
+        >
+          <p>content</p>
+        </Page>
+      </AppProvider>
+    );
     fireEvent.click(screen.getByRole('button', { name: 'Open debug panel' }));
-    expect(within(screen.getByRole('dialog')).getByText('tab')).toBeInTheDocument();
-    expect(within(screen.getByRole('dialog')).getByText('open')).toBeInTheDocument();
-    window.history.replaceState(null, '', '/');
+    const dialog = screen.getByRole('dialog');
+    expect(within(dialog).getByText('Pending')).toBeInTheDocument();
+    expect(within(dialog).getByText('Error')).toBeInTheDocument();
+    expect(dialog).not.toHaveTextContent('SECRET-DATA');
   });
 });

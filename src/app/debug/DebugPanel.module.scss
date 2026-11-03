@@ -1,21 +1,11 @@
+@use '../../lib/styles/mixins/component' as *;
+
+// Positions the Button; its own styles cover the rest.
 .toggle {
   position: fixed;
   inset-block-end: var(--spacing-md);
   inset-inline-end: var(--spacing-md);
   z-index: var(--z-popover);
-  min-height: var(--target-size-min);
-  padding: var(--spacing-xs) var(--spacing-md);
-  border: 1px solid var(--theme-border-primary);
-  border-radius: var(--radius-full);
-  background: var(--theme-surface-elevated);
-  color: var(--theme-text-primary);
-  font-size: var(--font-size-sm);
-  cursor: pointer;
-
-  &:focus-visible {
-    outline: var(--focus-ring-width) solid var(--focus-ring-color);
-    outline-offset: var(--focus-ring-offset);
-  }
 }
 
 .panel {
@@ -38,8 +28,7 @@
   font-size: var(--font-size-sm);
 
   &:focus-visible {
-    outline: var(--focus-ring-width) solid var(--focus-ring-color);
-    outline-offset: var(--focus-ring-offset);
+    @include focus-ring;
   }
 }
 
@@ -56,36 +45,9 @@
   font-weight: var(--font-weight-semibold);
 }
 
-.close,
-.sectionToggle {
-  min-height: var(--target-size-min);
-  padding: var(--spacing-xs) var(--spacing-sm);
-  border: 0;
-  border-radius: var(--radius-md);
-  background: transparent;
-  color: inherit;
-  font: inherit;
-  cursor: pointer;
-
-  &:focus-visible {
-    outline: var(--focus-ring-width) solid var(--focus-ring-color);
-    outline-offset: var(--focus-ring-offset);
-  }
-}
-
 .section {
   border-block-start: 1px solid var(--theme-border-primary);
   padding-block-start: var(--spacing-xs);
-}
-
-.sectionHeading {
-  margin: 0;
-}
-
-.sectionToggle {
-  width: 100%;
-  font-weight: var(--font-weight-semibold);
-  text-align: start;
 }
 
 .sectionBody {
