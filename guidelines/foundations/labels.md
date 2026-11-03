@@ -218,3 +218,20 @@ Build translation files from the exported `DEFAULT_LABELS` (prefix each key with
 | `mutation.error`                        | Something went wrong. Please try again.                         |
 | `lastUpdated.text`                      | Updated {time}                                                  |
 | `lastUpdated.refresh`                   | Refresh                                                         |
+| `debug.open`                            | Open debug panel                                                |
+| `debug.close`                           | Close                                                           |
+| `debug.title`                           | Debug panel                                                     |
+| `debug.queries`                         | Queries                                                         |
+| `debug.store`                           | Page store                                                      |
+| `debug.params`                          | URL params                                                      |
+| `debug.log`                             | Log                                                             |
+| `debug.empty`                           | Nothing to show                                                 |
+| `debug.pending`                         | Pending                                                         |
+| `debug.error`                           | Error                                                           |
+| `debug.success`                         | Success                                                         |
+| `debug.fetching`                        | Fetching                                                        |
+| `debug.updated`                         | Updated {time}                                                  |
+| `debug.truncated`                       | Truncated at 20 kB                                              |
+| `debug.noStore`                         | This page has no store                                          |
+| `debug.param`                           | Param                                                           |
+| `debug.value`                           | Value                                                           |

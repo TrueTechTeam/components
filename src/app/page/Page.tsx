@@ -10,7 +10,8 @@ import React, {
 } from 'react';
 import { PageMessages } from '../../lib/components/display/PageMessages';
 import { Skeleton } from '../../lib/components/display/Skeleton';
-import { useLogger, useTrack } from '../AppProvider/hooks';
+import { DebugPanel } from '../debug';
+import { useAppConfig, useLogger, useTrack } from '../AppProvider/hooks';
 import { PageIdContext } from '../params/PageIdContext';
 import { ErrorBoundary } from './ErrorBoundary';
 import {
@@ -76,6 +77,7 @@ export function Page({
   const pageId = id ?? slugify(title);
   const logger = useLogger(`page:${pageId}`);
   const track = useTrack();
+  const { debug } = useAppConfig();
   usePageMeta({ title, description });
 
   const trackedId = useRef<string | null>(null);
@@ -147,6 +149,7 @@ export function Page({
                 {children}
               </PageState>
             </ErrorBoundary>
+            {debug && <DebugPanel />}
           </div>
         </PageStoreContext.Provider>
       </PageContext.Provider>
