@@ -68,7 +68,11 @@ npm install @tanstack/react-query
 ```
 
 Nest the providers with `GlobalProvider` **outside** and `AppProvider` **inside**. With the order
-reversed, `AppLink` navigation guards silently stop working.
+reversed, `AppLink` navigation guards silently stop working. In development, `AppProvider` warns when it finds no
+`GlobalProvider` above it. `AppProvider` renders its own Dialog, Alert and Toast providers inside
+the app contexts, so toasts (including `useMutationFeedback`), `useAlert` and `useDialog` content
+get your `translate` and `locale` and can use `/app` hooks; configure them with its `toastConfig`,
+`alertConfig` and `dialogConfig` props.
 
 ```tsx
 import { GlobalProvider } from '@true-tech-team/ui-components';

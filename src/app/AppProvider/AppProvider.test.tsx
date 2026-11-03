@@ -1,6 +1,9 @@
 import React, { type ReactNode } from 'react';
-import { act, render, renderHook, screen } from '@testing-library/react';
-import { useQueryClient } from '@tanstack/react-query';
+import { act, fireEvent, render, renderHook, screen } from '@testing-library/react';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { GlobalProvider } from '../../lib/providers/GlobalProvider';
+import { useDialog } from '../../lib/hooks/useDialog';
+import { useMutationFeedback } from '../data';
 import { Dialog } from '../../lib/components/overlays/Dialog';
 import { useBreakpoints } from '../../lib/contexts/BreakpointsContext';
 import {
@@ -302,6 +305,96 @@ describe('AppProvider', () => {
     const spy = jest.spyOn(console, 'error').mockImplementation(() => undefined);
     expect(() => renderHook(() => useAuth())).toThrow('useAuth must be used within AppProvider');
     expect(() => renderHook(() => useFlag('x'))).toThrow('useFlag must be used within AppProvider');
+    spy.mockRestore();
+  });
+});
+
+describe('AppProvider overlays', () => {
+  it('toasts raised by useMutationFeedback get the app translate under GlobalProvider', async () => {
+    const translate = (key: string) => (key === 'ui.toast.dismiss' ? 'Fermer' : undefined);
+    function Saver() {
+      const m = useMutation<string, Error, void>({ mutationFn: async () => 'ok' });
+      const fb = useMutationFeedback(m, { success: 'Saved' });
+      return (
+        <button type="button" onClick={() => fb.mutate()}>
+          Save
+        </button>
+      );
+    }
+    render(
+      <GlobalProvider>
+        <AppProvider logger={silentLogger} translate={translate}>
+          <Saver />
+        </AppProvider>
+      </GlobalProvider>
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Save' }));
+    expect(await screen.findByText('Saved')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Fermer' })).toBeInTheDocument();
+  });
+
+  it('dialog content opened with useDialog can use app hooks', async () => {
+    function Content() {
+      const beta = useFlag('beta');
+      const { number } = useFormatters();
+      return <p>{`beta ${String(beta)} ${number(1234.5)}`}</p>;
+    }
+    function Opener() {
+      const dialog = useDialog();
+      return (
+        <button
+          type="button"
+          onClick={() => void dialog.open({ title: 'D', children: <Content /> })}
+        >
+          Open
+        </button>
+      );
+    }
+    render(
+      <GlobalProvider>
+        <AppProvider logger={silentLogger} locale="en-US" flags={{ isEnabled: () => true }}>
+          <Opener />
+        </AppProvider>
+      </GlobalProvider>
+    );
+    fireEvent.click(screen.getByRole('button', { name: 'Open' }));
+    expect(await screen.findByText('beta true 1,234.5')).toBeInTheDocument();
+  });
+
+  it('warns in development when there is no GlobalProvider above it, and not with one', () => {
+    const logger: Logger = { debug: jest.fn(), info: jest.fn(), warn: jest.fn(), error: jest.fn() };
+    const { unmount } = render(
+      <AppProvider logger={logger} debug>
+        <span>x</span>
+      </AppProvider>
+    );
+    expect(logger.warn).toHaveBeenCalledTimes(1);
+    expect(logger.warn).toHaveBeenCalledWith(
+      expect.stringContaining('Place AppProvider inside GlobalProvider')
+    );
+    unmount();
+
+    const inside: Logger = { debug: jest.fn(), info: jest.fn(), warn: jest.fn(), error: jest.fn() };
+    render(
+      <GlobalProvider>
+        <AppProvider logger={inside} debug>
+          <span>y</span>
+        </AppProvider>
+      </GlobalProvider>
+    );
+    expect(inside.warn).not.toHaveBeenCalled();
+  });
+
+  it('warns through console in development by default', () => {
+    const spy = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+    render(
+      <AppProvider>
+        <span>z</span>
+      </AppProvider>
+    );
+    expect(spy).toHaveBeenCalledWith(
+      expect.stringContaining('Place AppProvider inside GlobalProvider')
+    );
     spy.mockRestore();
   });
 });

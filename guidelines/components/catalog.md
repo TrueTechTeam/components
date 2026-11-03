@@ -177,7 +177,11 @@ import { AppProvider, Page, Section, usePageParams } from '@true-tech-team/ui-co
 ```
 
 Provider order is `GlobalProvider` outside, `AppProvider` inside. With the order reversed, `AppLink`
-navigation guards silently stop working.
+navigation guards silently stop working. In development, `AppProvider` warns when no `GlobalProvider` is above it.
+`AppProvider` renders its own Dialog, Alert and Toast providers inside the app contexts, so toasts
+(including `useMutationFeedback`), `useAlert` and `useDialog` content get the app `translate` and
+`locale` and can use `/app` hooks. Configure them with its `toastConfig`, `alertConfig` and
+`dialogConfig` props.
 
 | Export                                                                          | Purpose / use when                                                                                                                                                                                                                   |
 | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
