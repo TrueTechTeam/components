@@ -1,7 +1,8 @@
 import React, { useEffect } from 'react';
-import { fireEvent, render, screen, within } from '@testing-library/react';
+import { act, fireEvent, render, screen, within } from '@testing-library/react';
 import { AppProvider, useLogger, type Logger } from '../AppProvider';
 import { Page, usePageStore, type QueryLike } from '../page';
+import { useRouterAdapter } from '../router';
 
 const silentLogger: Logger = {
   debug: jest.fn(),
@@ -103,6 +104,38 @@ describe('DebugPanel', () => {
       fireEvent.click(screen.getByRole('button', { name: 'Open debug panel' }));
       expect(within(screen.getByRole('dialog')).getByText('tab')).toBeInTheDocument();
       expect(within(screen.getByRole('dialog')).getByText('open')).toBeInTheDocument();
+    } finally {
+      window.history.replaceState(null, '', '/');
+    }
+  });
+
+  it('updates URL params after they change with the panel open', () => {
+    function SetTab() {
+      const adapter = useRouterAdapter();
+      return (
+        <button
+          type="button"
+          onClick={() => adapter.setSearchParams(new URLSearchParams('tab=closed'))}
+        >
+          Close tab
+        </button>
+      );
+    }
+    try {
+      window.history.replaceState(null, '', '/?tab=open');
+      render(
+        <AppProvider logger={silentLogger} debug>
+          <Page title="Orders">
+            <SetTab />
+          </Page>
+        </AppProvider>
+      );
+      fireEvent.click(screen.getByRole('button', { name: 'Open debug panel' }));
+      expect(within(screen.getByRole('dialog')).getByText('open')).toBeInTheDocument();
+      act(() => {
+        fireEvent.click(screen.getByRole('button', { name: 'Close tab' }));
+      });
+      expect(within(screen.getByRole('dialog')).getByText('closed')).toBeInTheDocument();
     } finally {
       window.history.replaceState(null, '', '/');
     }

@@ -30,7 +30,12 @@ export interface PageProps extends StateProps {
   title: string;
   /** Sets `<meta name="description">` while mounted. */
   description?: string;
-  /** Stable page id, used to namespace preferences and in the debug panel. @default slug of `title` */
+  /**
+   * Stable page id: namespaces preferences, keys the `page_view` event and the error boundary
+   * reset, and names the page in the debug panel. Pass it when the title is dynamic or
+   * translated, so the id doesn't change with the title or the language.
+   * @default slug of `title`
+   */
   id?: string;
   /** Name sent with the `page_view` event. @default `title` */
   analyticsName?: string;
@@ -59,6 +64,8 @@ const keepState = (state: unknown) => state;
  * an error boundary around its content, `document.title`/description, one `page_view` event per
  * mount, a page store (`reducer`) and the query registry its Sections report to. It renders no
  * heading of its own; render the page heading (an `h1`) in `children` or use a template.
+ *
+ * The id defaults to a slug of `title`; pass `id` when the title is dynamic or translated.
  */
 export function Page({
   title,
@@ -72,6 +79,7 @@ export function Page({
   skeleton,
   empty,
   permission,
+  showErrorDetails,
   children,
 }: PageProps) {
   const pageId = id ?? slugify(title);
@@ -142,6 +150,7 @@ export function Page({
                 skeleton={skeleton}
                 empty={empty}
                 permission={permission}
+                showErrorDetails={showErrorDetails}
                 size="md"
                 headingLevel={2}
                 defaultSkeleton={<Skeleton variant="rounded" height="12rem" />}

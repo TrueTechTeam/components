@@ -108,12 +108,16 @@ function StoreSection() {
   );
 }
 
+const useNoSearchParams = (): URLSearchParams | undefined => undefined;
+
 function ParamsSection() {
   const t = useLabels();
   const adapter = useRouterAdapter();
-  // Same selection as usePageParams: the adapter's reactive hook when it has one.
-  const [useParams] = useState(() => adapter.useSearchParams ?? (() => adapter.searchParams));
-  const entries = Array.from(useParams().entries());
+  // Same selection as usePageParams: the adapter's reactive hook when it has one, picked once so
+  // the hook order never changes. Without one, read the current adapter's params each render.
+  const [useAdapterSearchParams] = useState(() => adapter.useSearchParams ?? useNoSearchParams);
+  const searchParams = useAdapterSearchParams() ?? adapter.searchParams;
+  const entries = Array.from(searchParams.entries());
   if (entries.length === 0) {
     return <p className={styles.muted}>{t('debug.empty')}</p>;
   }

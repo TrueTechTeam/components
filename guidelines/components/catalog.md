@@ -203,6 +203,10 @@ navigation guards silently stop working. In development, `AppProvider` warns whe
 | `useAppTranslation`, `useFormatters`, `useAppConfig`                            | App `t()`, locale-bound formatters, the raw provider config                                                                                                                                                                          |
 | `DebugPanel`                                                                    | Query, store, param and log inspector, mounted by `Page` when `debug` is on (default outside production)                                                                                                                             |
 
+`Page` ids default to a slug of the title; pass `id` when the title is dynamic or translated, so
+stored preferences and analytics keep a stable key. `Page` and `Section` show generic error text
+for failed queries; `showErrorDetails` opts in to showing the query error's message.
+
 Next.js notes: `AppProvider` needs no `<Suspense>`, but components that read URL params
 (`usePageParams`, `usePreference`) need a `<Suspense>` boundary above them. Next.js cannot block
 navigation, so unsaved-changes guards cover `AppLink`, `useAppNavigate`, Dialog close and page

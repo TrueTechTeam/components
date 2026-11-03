@@ -109,7 +109,9 @@ describe('Page', () => {
     );
     expect(screen.queryByText('Order list')).not.toBeInTheDocument();
     expect(screen.getByText('Something went wrong')).toBeInTheDocument();
-    expect(screen.getByText('Orders failed')).toBeInTheDocument();
+    // Raw error messages are not shown to end users by default.
+    expect(screen.getByText('An unexpected error occurred. Please try again.')).toBeInTheDocument();
+    expect(screen.queryByText('Orders failed')).not.toBeInTheDocument();
 
     fireEvent.click(screen.getByRole('button', { name: /try again/i }));
     expect(failedA.refetch).toHaveBeenCalledTimes(1);
@@ -161,10 +163,22 @@ describe('Page', () => {
     );
     expect(screen.queryByText('Order list')).not.toBeInTheDocument();
     expect(screen.queryByRole('alert')).not.toBeInTheDocument();
-    expect(screen.getByText('No data')).toBeInTheDocument();
+    expect(screen.getByText('Something went wrong')).toBeInTheDocument();
     fireEvent.click(screen.getByRole('button', { name: /try again/i }));
     expect(stale.refetch).toHaveBeenCalledTimes(1);
     expect(failed.refetch).toHaveBeenCalledTimes(1);
+  });
+
+  it('shows the query error message only with showErrorDetails', () => {
+    const failed = query({ isError: true, error: new Error('Orders failed') });
+    render(
+      wrap(
+        <Page title="Orders" queries={[failed]} showErrorDetails>
+          <p>Order list</p>
+        </Page>
+      )
+    );
+    expect(screen.getByText('Orders failed')).toBeInTheDocument();
   });
 
   it('shows empty state when isEmpty returns true', () => {

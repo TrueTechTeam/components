@@ -30,6 +30,7 @@ export function Section({
   skeleton,
   empty,
   permission,
+  showErrorDetails,
   children,
 }: SectionProps) {
   const generatedId = useId();
@@ -69,6 +70,7 @@ export function Section({
           skeleton={skeleton}
           empty={empty}
           permission={permission}
+          showErrorDetails={showErrorDetails}
           size="sm"
           headingLevel={messageLevel}
           defaultSkeleton={<Skeleton variant="text" lines={3} />}
