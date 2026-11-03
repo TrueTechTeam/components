@@ -142,7 +142,8 @@ export interface FormBuilderProps extends Omit<BaseComponentProps, 'children'> {
 
   /**
    * Warn before the user leaves (page unload, guarded navigation, closing a parent Dialog)
-   * while the form has unsaved changes
+   * while the form has unsaved changes. Not blocking while a submit is in flight, so `onSubmit`
+   * can navigate or close the Dialog after saving
    * @default false
    */
   guardUnsaved?: boolean;
@@ -376,9 +377,13 @@ export const FormBuilder = ({
   };
 
   const formContext = useFormState(formOptions);
-  const hasUnsavedChanges = Object.keys(formContext.values).some(
-    (key) => formContext.values[key] !== savedValuesRef.current[key]
-  );
+  // Not blocking while a submit is in flight, so onSubmit can navigate or close a dialog after
+  // saving. A failed submit ends the flight with the values still unsaved, so it blocks again.
+  const hasUnsavedChanges =
+    !formContext.isSubmitting &&
+    Object.keys(formContext.values).some(
+      (key) => formContext.values[key] !== savedValuesRef.current[key]
+    );
   useUnsavedChanges(hasUnsavedChanges, { enabled: guardUnsaved, message: guardMessage });
 
   // Handle form submit
