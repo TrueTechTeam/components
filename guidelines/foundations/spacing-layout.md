@@ -90,15 +90,15 @@ Design mobile-first and add layout at wider widths. Use the named breakpoints in
 
 ## LAYOUT-3 - Layout components
 
-| Need                                                 | Component            | Key props                                                 |
-| ---------------------------------------------------- | -------------------- | --------------------------------------------------------- |
-| Responsive grid of equal-width items (cards, tiles)  | `AdaptiveGrid`       | `minItemWidth` (≈ 240–320 for cards), `gap`, `maxColumns` |
-| Items of varying height (gallery, notes)             | `MasonryLayout`      | column width                                              |
-| Row on desktop, column on mobile                     | `ResponsiveStack`    | breakpoint (default 768)                                  |
-| Persistent split view (list + detail, nav + content) | `Panes` / `Pane`     | sizes, gap                                                |
-| User-resizable split                                 | `ResizablePanels`    | min/max sizes                                             |
-| Scrollable region with styled scrollbar              | `ScrollArea`         | -                                                         |
-| Collapsible app sidebar                              | `CollapsibleSidebar` | `position`                                                |
+| Need                                                 | Component            | Key props                                                                |
+| ---------------------------------------------------- | -------------------- | ------------------------------------------------------------------------ |
+| Responsive grid of equal-width items (cards, tiles)  | `AdaptiveGrid`       | `minItemWidth` (≈ 240–320 for cards), `gap`, `maxColumns`                |
+| Items of varying height (gallery, notes)             | `MasonryLayout`      | column width                                                             |
+| Row on desktop, column on mobile                     | `ResponsiveStack`    | breakpoint (default 768, a legacy default; prefer the named breakpoints) |
+| Persistent split view (list + detail, nav + content) | `Panes` / `Pane`     | sizes, gap                                                               |
+| User-resizable split                                 | `ResizablePanels`    | min/max sizes                                                            |
+| Scrollable region with styled scrollbar              | `ScrollArea`         | -                                                                        |
+| Collapsible app sidebar                              | `CollapsibleSidebar` | `position`                                                               |
 
 Gaps passed as numbers to layout components SHOULD be 4px-grid values that match the tokens (8,
 16, 24, 32).

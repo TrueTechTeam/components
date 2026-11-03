@@ -32,6 +32,8 @@ Q: What are you doing?
 ├─ Showing a collection of records ............... → patterns/data-display.md
 ├─ Showing loading / empty / error / success ..... → patterns/feedback-states.md
 ├─ Building a page shell, nav, or dashboard ...... → patterns/page-layout.md
+├─ Wiring page data, URL state, permissions or app services
+│                                                  → app builder (`/app`), see components/catalog.md
 └─ Creating or modifying a library component ..... → contributing/component-checklist.md
 ```
 

@@ -3,7 +3,7 @@
 > React + TypeScript component library (SCSS modules, CSS custom-property theming, light/dark).
 > Import components from '@true-tech-team/ui-components', import
 > '@true-tech-team/ui-components/index.css' once at the app root, and wrap the app in
-> <GlobalProvider>. All components are client-only. Design guidelines for coding agents ship in
+> <GlobalProvider>. The app-builder layer (Page, Section, URL params, mutations, router adapters) is a separate entry, '@true-tech-team/ui-components/app', and needs @tanstack/react-query. All components are client-only. Design guidelines for coding agents ship in
 > ./guidelines/ inside this package.
 
 ## Start here
@@ -11,7 +11,7 @@
 - [Guidelines index](guidelines/README.md): how to apply the rules, rule vocabulary, precedence
 - [Design decision tree](guidelines/decision-tree.md): routes any UI task to the right rule
 - [Choosing components](guidelines/components/choosing.md): actions, inputs, feedback, overlays, navigation, labels, loading
-- [Component catalog](guidelines/components/catalog.md): every export with use-when / avoid-when
+- [Component catalog](guidelines/components/catalog.md): every export with use-when / avoid-when, including the app builder (`/app`)
 
 ## Foundations
 

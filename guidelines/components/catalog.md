@@ -167,6 +167,52 @@ Storybook docs.
 | `DragHandle`                  | Visible grab affordance (always provide one) |
 | `DragOverlay`                 | Custom drag preview                          |
 
+## App builder (`/app`)
+
+A separate entry for wiring pages to data, the URL, permissions and app services. Import from
+`@true-tech-team/ui-components/app` (needs `@tanstack/react-query`; the main entry does not).
+
+```ts
+import { AppProvider, Page, Section, usePageParams } from '@true-tech-team/ui-components/app';
+```
+
+Provider order is `GlobalProvider` outside, `AppProvider` inside. With the order reversed, `AppLink`
+navigation guards silently stop working.
+
+| Export                                                                          | Purpose / use when                                                                                                                                                                                                                   |
+| ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `AppProvider`                                                                   | Once at the root, inside `GlobalProvider`. Props: `router`, `queryClient`, `translate`, `locale`, `logger`, `analytics`, `auth`, `flags`, `breakpoints`, `titleTemplate`, `debug`                                                    |
+| `Page`                                                                          | A routed page: sets the title, sends `page_view`, shows forbidden / loading / error+retry / empty states from `queries`, keeps loaded content on refetch errors (inline alert), error boundary, page store. Render the `h1` yourself |
+| `Section`                                                                       | A region of a page with its own states and error boundary, so one failure does not take down siblings                                                                                                                                |
+| `ErrorBoundary`                                                                 | Catch render errors in a custom region (Page and Section already include one)                                                                                                                                                        |
+| `usePage`, `usePageMeta`                                                        | Read the enclosing page id and title; set title and description in custom layouts                                                                                                                                                    |
+| `usePageStore`                                                                  | `[state, dispatch]` of the Page `reducer`, for UI state shared across the page                                                                                                                                                       |
+| `usePageParams(schema)`, `param`                                                | Typed URL search params (`param.string/number/boolean/enum/array`); shareable filters, sort, page                                                                                                                                    |
+| `usePreference(key, default, { storage })`                                      | One remembered setting: in the URL (default) or `localStorage` (`'local'`)                                                                                                                                                           |
+| `useMutationFeedback`, `createOptimisticHandlers`                               | Toast or inline success/error for a mutation; optimistic cache update with rollback                                                                                                                                                  |
+| `LastUpdated`                                                                   | "Updated 3 minutes ago" with a refresh button for a query                                                                                                                                                                            |
+| `AppLink`, `useAppNavigate`                                                     | In-app navigation that respects unsaved-changes guards. Use instead of the router's own Link or push when a form can be dirty                                                                                                        |
+| `useBrowserRouter`, `createNextRouter`, `createReactRouter`, `useRouterAdapter` | Router adapters: History API (default), Next.js App Router, React Router. Built from your router's own hooks, so the library imports neither                                                                                         |
+| `useLogger`, `useLogBuffer`, `useTrack`                                         | Scoped logging and analytics events                                                                                                                                                                                                  |
+| `useAuth`, `useCan`, `Can`                                                      | Permission checks; hide or disable what the user cannot do                                                                                                                                                                           |
+| `useFlag`, `Feature`                                                            | Feature flags                                                                                                                                                                                                                        |
+| `useAppTranslation`, `useFormatters`, `useAppConfig`                            | App `t()`, locale-bound formatters, the raw provider config                                                                                                                                                                          |
+| `DebugPanel`                                                                    | Query, store, param and log inspector, mounted by `Page` when `debug` is on (default outside production)                                                                                                                             |
+
+Next.js notes: `AppProvider` needs no `<Suspense>`, but components that read URL params
+(`usePageParams`, `usePreference`) need a `<Suspense>` boundary above them. Next.js cannot block
+navigation, so unsaved-changes guards cover `AppLink`, `useAppNavigate`, Dialog close and page
+unload, but not the browser Back button or your own `router.push`.
+
+### Core additions used with `/app` (main entry)
+
+| Export                                                                                                                    | Purpose / use when                                                                                                                                 |
+| ------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `formatDateTime`, `formatRelativeTime`, `formatNumber`, `formatCurrency`, `formatPercent`, `formatFileSize`, `formatList` | Locale-aware formatting that never throws. Take a trailing `locale`; in `/app` use `useFormatters()`                                               |
+| `useBreakpoint`, `useBreakpointValue`, `BreakpointsProvider`                                                              | Current named breakpoint (`phone`/`tablet`/`laptop`/`desktop`), `up()`/`down()`, per-breakpoint values. SCSS: `@include bp(name)`, `bp-down(name)` |
+| `useUnsavedChanges(isDirty)`                                                                                              | Guard a custom form; `FormBuilder guardUnsaved` does it for config forms                                                                           |
+| `LabelsProvider`, `useLabels`, `useLocale`, `DEFAULT_LABELS`                                                              | Translatable built-in text (see `foundations/labels.md`). `GlobalProvider` and `AppProvider` take `labels`, `translate`, `locale`                  |
+
 ## Hooks (non-visual)
 
 `useDialog`, `useAlert`, `useToast`, `useAsyncToast`, `usePageMessages` (feedback) ·
