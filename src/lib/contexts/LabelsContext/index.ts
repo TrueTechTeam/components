@@ -2,6 +2,7 @@ export {
   LabelsProvider,
   useLabels,
   useLocale,
+  useProvidedLocale,
   interpolate,
   translateDefault,
 } from './LabelsContext';
