@@ -215,3 +215,6 @@ Build translation files from the exported `DEFAULT_LABELS` (prefix each key with
 | `listSelectFilter.noOptions`            | No options found                                                |
 | `kanbanColumn.empty`                    | Drop items here                                                 |
 | `filterAccordion.general`               | General                                                         |
+| `mutation.error`                        | Something went wrong. Please try again.                         |
+| `lastUpdated.text`                      | Updated {time}                                                  |
+| `lastUpdated.refresh`                   | Refresh                                                         |

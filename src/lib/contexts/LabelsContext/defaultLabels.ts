@@ -188,6 +188,9 @@ export const DEFAULT_LABELS = {
   'listSelectFilter.noOptions': 'No options found',
   'kanbanColumn.empty': 'Drop items here',
   'filterAccordion.general': 'General',
+  'mutation.error': 'Something went wrong. Please try again.',
+  'lastUpdated.text': 'Updated {time}',
+  'lastUpdated.refresh': 'Refresh',
 } as const satisfies Record<string, string>;
 
 export type LabelKey = keyof typeof DEFAULT_LABELS;
