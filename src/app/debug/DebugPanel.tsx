@@ -1,4 +1,6 @@
 import React, { useContext, useEffect, useId, useRef, useState, type ReactNode } from 'react';
+import { Button } from '../../lib/components/buttons/Button';
+import { Accordion } from '../../lib/components/display/Accordion';
 import { Badge } from '../../lib/components/display/Badge';
 import { useLabels } from '../../lib/contexts/LabelsContext';
 import { useFormatters, useLogBuffer } from '../AppProvider/hooks';
@@ -40,25 +42,10 @@ function formatArg(arg: unknown): string {
 }
 
 function DebugSection({ title, children }: { title: string; children: ReactNode }) {
-  const [open, setOpen] = useState(true);
-  const bodyId = useId();
   return (
-    <section className={styles.section}>
-      <h3 className={styles.sectionHeading}>
-        <button
-          type="button"
-          className={styles.sectionToggle}
-          aria-expanded={open}
-          aria-controls={bodyId}
-          onClick={() => setOpen((o) => !o)}
-        >
-          {title}
-        </button>
-      </h3>
-      <div id={bodyId} hidden={!open} className={styles.sectionBody}>
-        {children}
-      </div>
-    </section>
+    <Accordion header={title} defaultOpen size="sm" className={styles.section}>
+      <div className={styles.sectionBody}>{children}</div>
+    </Accordion>
   );
 }
 
@@ -154,13 +141,14 @@ function LogSection() {
   const t = useLabels();
   const buffer = useLogBuffer();
   const lines = buffer.slice(-MAX_LOG_LINES).reverse();
+  // Newest first, so the index counts back from the end of the (append-only) buffer.
   if (lines.length === 0) {
     return <p className={styles.muted}>{t('debug.empty')}</p>;
   }
   return (
     <ul className={styles.list}>
       {lines.map((entry, i) => (
-        <li key={`${entry.time}:${i}`} className={styles.item}>
+        <li key={`${entry.time}:${buffer.length - i}`} className={styles.item}>
           <Badge size="sm" variant={LEVEL_VARIANT[entry.level]}>
             {entry.level}
           </Badge>{' '}
@@ -196,6 +184,19 @@ export function DebugPanel() {
   }, []);
 
   useEffect(() => {
+    if (!open) {
+      return undefined;
+    }
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setOpen(false);
+      }
+    };
+    document.addEventListener('keydown', onKeyDown);
+    return () => document.removeEventListener('keydown', onKeyDown);
+  }, [open]);
+
+  useEffect(() => {
     if (open) {
       panelRef.current?.focus();
     } else if (wasOpen.current) {
@@ -206,15 +207,16 @@ export function DebugPanel() {
 
   return (
     <>
-      <button
+      <Button
         ref={toggleRef}
-        type="button"
+        variant="secondary"
+        size="sm"
         className={styles.toggle}
         aria-expanded={open}
         onClick={() => setOpen((o) => !o)}
       >
         {t('debug.open')}
-      </button>
+      </Button>
       {open && (
         <div
           ref={panelRef}
@@ -222,20 +224,14 @@ export function DebugPanel() {
           aria-labelledby={titleId}
           tabIndex={-1}
           className={styles.panel}
-          onKeyDown={(event) => {
-            if (event.key === 'Escape') {
-              event.stopPropagation();
-              setOpen(false);
-            }
-          }}
         >
           <div className={styles.header}>
             <h2 id={titleId} className={styles.title}>
               {t('debug.title')}
             </h2>
-            <button type="button" className={styles.close} onClick={() => setOpen(false)}>
+            <Button variant="ghost" size="sm" onClick={() => setOpen(false)}>
               {t('debug.close')}
-            </button>
+            </Button>
           </div>
           <DebugSection title={t('debug.queries')}>
             <QueriesSection />
