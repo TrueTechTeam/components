@@ -226,6 +226,16 @@ describe('AppProvider', () => {
     expect(result.current.number(1234.5)).toBe(new Intl.NumberFormat('de-DE').format(1234.5));
   });
 
+  it('useFormatters and useAppTranslation follow the browser locale when none is provided', () => {
+    const languageSpy = jest.spyOn(navigator, 'language', 'get').mockReturnValue('de-DE');
+    const { result } = renderHook(() => ({ f: useFormatters(), tr: useAppTranslation() }), {
+      wrapper: makeWrapper(),
+    });
+    expect(result.current.f.number(1234.5)).toBe(new Intl.NumberFormat('de-DE').format(1234.5));
+    expect(result.current.tr.locale).toBe('de-DE');
+    languageSpy.mockRestore();
+  });
+
   it('provides a default QueryClient with the documented defaults, or the given one', () => {
     const { result } = renderHook(() => useQueryClient(), { wrapper: makeWrapper() });
     expect(result.current.getDefaultOptions().queries).toMatchObject({

@@ -86,6 +86,17 @@ describe('input labels', () => {
     }
   });
 
+  it('DatePicker ignores the browser locale without a provider', async () => {
+    const languageSpy = jest.spyOn(navigator, 'language', 'get').mockReturnValue('de-DE');
+    const user = userEvent.setup();
+    render(<DatePicker defaultValue={new Date(2024, 0, 15)} />);
+    await user.click(screen.getByRole('textbox'));
+    expect(await screen.findByText('Jan')).toBeInTheDocument();
+    expect(screen.queryByText('Januar')).not.toBeInTheDocument();
+    expect(screen.getByText('Mo')).toBeInTheDocument();
+    languageSpy.mockRestore();
+  });
+
   it('DatePicker renders month names in the GlobalProvider locale', async () => {
     const user = userEvent.setup();
     render(

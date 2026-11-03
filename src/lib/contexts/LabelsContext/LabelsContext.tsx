@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useMemo, type ReactNode } from 'react';
 import { DEFAULT_LABELS } from './defaultLabels';
-import { resolveLocale } from '../../utils/format';
 
 export type LabelVars = Record<string, string | number>;
 export type LabelTranslator = (key: string, vars?: LabelVars) => string;
@@ -21,6 +20,8 @@ interface LabelsContextValue {
   translate?: TranslateFn;
   locale?: string;
 }
+
+const DEFAULT_LOCALE = 'en-US';
 
 const LabelsContext = createContext<LabelsContextValue>({ labels: {} });
 
@@ -69,10 +70,22 @@ export function useLabels(): (key: string, vars?: LabelVars) => string {
   );
 }
 
-/** The nearest provider's locale, else the browser locale, else `en-US`. */
+/**
+ * Locale for built-in text such as date picker month and weekday names: the nearest provider's
+ * `locale`, else `en-US`. Never the browser locale, so built-in text stays English unless the app
+ * opts in (matching the English label defaults).
+ */
 export function useLocale(): string {
   const { locale } = useContext(LabelsContext);
-  return resolveLocale(locale);
+  return locale ?? DEFAULT_LOCALE;
+}
+
+/**
+ * The locale an app provided, if any (`undefined` without one). For formatters that should
+ * follow the browser locale by default: pass it to `resolveLocale`.
+ */
+export function useProvidedLocale(): string | undefined {
+  return useContext(LabelsContext).locale;
 }
 
 /** English-only translator for helpers that run outside React (no provider available). */

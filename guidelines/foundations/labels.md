@@ -29,6 +29,15 @@ placeholders are left as-is. Nested providers: inner `labels` merge over outer; 
 In a component: `const t = useLabels(); <button aria-label={t('common.close')} />`.
 Build translation files from the exported `DEFAULT_LABELS` (prefix each key with `ui.`).
 
+## Locale
+
+`locale` (on `GlobalProvider`, `AppProvider` or `LabelsProvider`, inherited by nested providers)
+sets the language of built-in date text such as DatePicker and DateRangePicker month and weekday
+names. `useLocale()` returns the nearest provider's `locale`, else `en-US`: built-in text stays
+English unless the app passes a locale, even when the browser's language differs. The `/app`
+formatters (`useFormatters`) and `useAppTranslation().locale` instead fall back to the browser
+locale (`navigator.language`) when no locale is provided.
+
 ## Keys
 
 | Key                                     | English default                                                 |

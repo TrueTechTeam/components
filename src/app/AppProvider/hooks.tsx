@@ -1,5 +1,5 @@
 import React, { useContext, useMemo, useSyncExternalStore, type ReactNode } from 'react';
-import { interpolate, useLocale, type LabelVars } from '../../lib/contexts/LabelsContext';
+import { interpolate, useProvidedLocale, type LabelVars } from '../../lib/contexts/LabelsContext';
 import {
   formatCurrency,
   formatDateTime,
@@ -8,6 +8,7 @@ import {
   formatNumber,
   formatPercent,
   formatRelativeTime,
+  resolveLocale,
 } from '../../lib/utils/format';
 import { AppContext, type Analytics, type AppConfigValue, type AuthConfig } from './AppContext';
 import { createScopedLogger, type LogEntry, type Logger } from './logger';
@@ -93,7 +94,8 @@ export function useAppTranslation(): {
   locale: string;
 } {
   const { translate } = useAppContextFor('useAppTranslation');
-  const locale = useLocale();
+  // App text follows the browser locale when none is provided (unlike built-in text).
+  const locale = resolveLocale(useProvidedLocale());
   return useMemo(
     () => ({
       t: (key: string, vars?: LabelVars) => translate?.(key, vars) || interpolate(key, vars),
@@ -106,7 +108,8 @@ export function useAppTranslation(): {
 /** Core formatters bound to the provider locale. */
 export function useFormatters() {
   useAppContextFor('useFormatters');
-  const locale = useLocale();
+  // App text follows the browser locale when none is provided (unlike built-in text).
+  const locale = resolveLocale(useProvidedLocale());
   return useMemo(
     () => ({
       dateTime: (value: Date | string | number, opts?: Parameters<typeof formatDateTime>[1]) =>

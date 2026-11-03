@@ -94,9 +94,11 @@ describe('LabelsContext', () => {
 });
 
 describe('useLocale', () => {
-  it('falls back to the browser locale without a provider', () => {
+  it('defaults to en-US without a provider, ignoring the browser locale', () => {
+    const languageSpy = jest.spyOn(navigator, 'language', 'get').mockReturnValue('de-DE');
     const { result } = renderHook(() => useLocale());
-    expect(result.current).toBe(navigator.language || 'en-US');
+    expect(result.current).toBe('en-US');
+    languageSpy.mockRestore();
   });
 
   it('uses the nearest provider locale and inherits from outer providers', () => {
