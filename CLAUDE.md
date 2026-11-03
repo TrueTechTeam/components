@@ -40,6 +40,17 @@ src/lib/
 ├── utils/               # Theme utils, color utils, date utils, validation
 ├── types/               # TypeScript type definitions
 └── assets/              # Icons and static assets
+
+src/app/                 # App builder, published as the `/app` entry (needs @tanstack/react-query)
+├── AppProvider/         # AppProvider, logger, auth/flags/analytics/format hooks
+├── router/              # Router adapters (browser, Next.js, React Router), AppLink, useAppNavigate
+├── params/              # usePageParams, usePreference, param codecs
+├── page/                # Page, Section, ErrorBoundary, usePageStore, usePageMeta
+├── data/                # useMutationFeedback, createOptimisticHandlers, LastUpdated
+├── debug/               # DebugPanel
+└── stories/             # Storybook stories (App Builder/Foundation)
+
+src/storybook/           # Storybook-only apps (ThemeBuilder); not part of the published package
 ```
 
 ## Design Guidelines (read before any UI or style change)

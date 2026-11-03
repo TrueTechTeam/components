@@ -56,6 +56,82 @@ function MyComponent() {
 }
 ```
 
+## App builder
+
+`@true-tech-team/ui-components/app` is an optional layer for pages that load data, keep state in
+the URL, check permissions or need app services: `AppProvider`, `Page`, `Section`, URL param and
+preference hooks, mutation feedback, router adapters, auth, flags, logging and a debug panel. It
+is built on TanStack Query, which is an optional peer dependency (the main entry never imports it).
+
+```bash
+npm install @tanstack/react-query
+```
+
+Nest the providers with `GlobalProvider` **outside** and `AppProvider` **inside**. With the order
+reversed, `AppLink` navigation guards silently stop working.
+
+```tsx
+import { GlobalProvider } from '@true-tech-team/ui-components';
+import { AppProvider } from '@true-tech-team/ui-components/app';
+
+<GlobalProvider>
+  <AppProvider router={useAppRouter} translate={i18n.t} locale={i18n.language}>
+    <Routes />
+  </AppProvider>
+</GlobalProvider>;
+```
+
+Without `router`, `AppProvider` uses the browser History API. For a framework, build an adapter
+once at module scope from your router's own hooks (the library imports neither framework).
+
+**Next.js App Router**
+
+```tsx
+'use client';
+import Link from 'next/link';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { createNextRouter } from '@true-tech-team/ui-components/app';
+
+export const useAppRouter = createNextRouter({ useRouter, usePathname, useSearchParams, Link });
+```
+
+`AppProvider` needs no `<Suspense>`, but components that read URL params (`usePageParams`,
+`usePreference`) need a `<Suspense>` boundary above them, per Next.js's rules for
+`useSearchParams`. **Limitation:** Next.js cannot block navigation, so unsaved-changes guards
+(`FormBuilder guardUnsaved`, `useUnsavedChanges`) protect `AppLink`, `useAppNavigate`, Dialog
+close and tab close or reload, but not the browser Back button or your own `router.push` calls.
+
+**React Router**
+
+```tsx
+import { Link, useBlocker, useLocation, useNavigate } from 'react-router';
+import { createReactRouter } from '@true-tech-team/ui-components/app';
+
+export const useAppRouter = createReactRouter({ useNavigate, useLocation, Link, useBlocker });
+```
+
+`useBlocker` (data routers only) is optional; with it, Back and Forward also ask the guards.
+
+**Translation.** Pass your translate function and locale to the provider. Built-in text is
+requested as `ui.<key>` (for example `ui.pageMessages.retry`); return nothing for keys you have
+not translated and the English default is used. See `guidelines/foundations/labels.md`.
+
+```tsx
+<AppProvider translate={i18n.t} locale="fr-FR">
+```
+
+A loading, error, empty and forbidden state, a page title and `page_view` tracking come with
+`Page`; a failed background refetch keeps the loaded content and shows an inline alert with Retry.
+
+```tsx
+<Page title="Orders" queries={[orders]} isEmpty={([rows]) => rows.length === 0}>
+  <h1>Orders</h1>
+  <OrdersTable rows={orders.data} />
+</Page>
+```
+
+See the Storybook stories under "App Builder / Foundation" for each piece.
+
 ## Design guidelines & AI coding agents
 
 The package ships research-backed design guidelines (WCAG 2.2 AA, NN/g, Baymard, Material 3,
@@ -70,8 +146,8 @@ node_modules/@true-tech-team/ui-components/
     ├── README.md                # how to apply the rules
     ├── decision-tree.md         # start here
     ├── SKILL.md                 # Claude Code skill wrapper
-    ├── components/              # choosing.md, catalog.md
-    ├── foundations/             # tokens, color, typography, spacing-layout, elevation-shape, motion, accessibility
+    ├── components/              # choosing.md, catalog.md (includes the app builder, /app)
+    ├── foundations/             # tokens, color, typography, spacing-layout, elevation-shape, motion, accessibility, labels
     └── patterns/                # forms, data-display, feedback-states, page-layout
 ```
 

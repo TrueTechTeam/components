@@ -14,6 +14,11 @@ this library and for changes to the library itself.
 
 Full index: [README.md](README.md).
 
+For pages that load data, keep state in the URL, check permissions or translate text, use the app
+builder entry `@true-tech-team/ui-components/app` (`GlobalProvider` outside, `AppProvider` inside);
+see the "App builder (`/app`)" section of [components/catalog.md](components/catalog.md). Built-in
+text is translatable: see [foundations/labels.md](foundations/labels.md).
+
 Non-negotiables:
 
 - Use library components before custom markup, and CSS tokens (`var(--…)`) instead of raw values.
