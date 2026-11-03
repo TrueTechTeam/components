@@ -1,0 +1,27 @@
+@keyframes last-updated-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.root {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  color: var(--theme-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.refresh {
+  display: inline-flex;
+
+  &[data-fetching] svg {
+    animation: last-updated-spin 1s linear infinite;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .refresh[data-fetching] svg {
+    animation: none;
+  }
+}
