@@ -1181,7 +1181,8 @@ describe('guardUnsaved', () => {
     type('abc');
     fireEvent.click(screen.getByText('Submit'));
     await waitFor(() => expect(onSubmit).toHaveBeenCalledWith({ name: 'abc' }));
-    expect(api.isBlocked()).toBe(true);
+    // A submit in flight does not block, so the save can navigate or close a dialog.
+    expect(api.isBlocked()).toBe(false);
 
     await act(async () => resolveSubmit());
     await waitFor(() => expect(api.isBlocked()).toBe(false));
@@ -1201,7 +1202,39 @@ describe('guardUnsaved', () => {
     type('abc');
     fireEvent.click(screen.getByText('Submit'));
     await waitFor(() => expect(errorSpy).toHaveBeenCalled());
-    expect(api.isBlocked()).toBe(true);
+    await waitFor(() => expect(api.isBlocked()).toBe(true));
+    errorSpy.mockRestore();
+  });
+
+  it('does not prompt when onSubmit navigates after saving; a failed save blocks afterwards', async () => {
+    const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    let navigated: boolean | undefined;
+    let fail = false;
+    const onSubmit = jest.fn(async () => {
+      await Promise.resolve();
+      if (fail) {
+        throw new Error('nope');
+      }
+      navigated = api.confirmNavigation();
+    });
+    render(
+      <>
+        <Probe />
+        <FormBuilder fields={guardFields} guardUnsaved onSubmit={onSubmit} />
+      </>
+    );
+    type('abc');
+    fireEvent.click(screen.getByText('Submit'));
+    await waitFor(() => expect(navigated).toBe(true));
+    expect(confirmSpy).not.toHaveBeenCalled();
+
+    fail = true;
+    type('abcd');
+    fireEvent.click(screen.getByText('Submit'));
+    await waitFor(() => expect(errorSpy).toHaveBeenCalled());
+    await waitFor(() => expect(api.isBlocked()).toBe(true));
+    api.confirmNavigation();
+    expect(confirmSpy).toHaveBeenCalledTimes(1);
     errorSpy.mockRestore();
   });
 
