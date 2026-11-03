@@ -21,6 +21,12 @@ export interface StateProps {
   empty?: PageMessagesProps['emptyConfig'];
   /** Checked with `AppProvider` `auth.can`; when it fails the forbidden state is shown. */
   permission?: { action: string; subject?: string };
+  /**
+   * Show a failed query's error message in the error state. Off by default: raw messages can be
+   * technical or leak server details, so end users see the generic error text.
+   * @default false
+   */
+  showErrorDetails?: boolean;
   children: ReactNode;
 }
 
@@ -48,6 +54,7 @@ export function PageState({
   skeleton,
   empty,
   permission,
+  showErrorDetails = false,
   size,
   headingLevel,
   defaultSkeleton,
@@ -82,7 +89,7 @@ export function PageState({
   if (failedWithoutData) {
     content = (
       <PageMessages
-        error={messageError(failedWithoutData.error)}
+        error={showErrorDetails ? messageError(failedWithoutData.error) : true}
         onRetry={retry}
         size={size}
         headingLevel={headingLevel}

@@ -17,21 +17,22 @@ export const DEFAULT_BREAKPOINTS: Breakpoints = {
 const BreakpointsContext = createContext<Breakpoints>(DEFAULT_BREAKPOINTS);
 
 export interface BreakpointsProviderProps {
-  /** Override any breakpoint min-width (px). Unspecified names keep their defaults. */
+  /** Override any breakpoint min-width (px). Merged over outer providers; unspecified names keep theirs. */
   breakpoints?: Partial<Breakpoints>;
   children: ReactNode;
 }
 
 export function BreakpointsProvider({ breakpoints, children }: BreakpointsProviderProps) {
+  const parent = useContext(BreakpointsContext);
   const { tablet, laptop, desktop } = breakpoints ?? {};
   const value = useMemo<Breakpoints>(
     () => ({
       phone: 0,
-      tablet: tablet ?? DEFAULT_BREAKPOINTS.tablet,
-      laptop: laptop ?? DEFAULT_BREAKPOINTS.laptop,
-      desktop: desktop ?? DEFAULT_BREAKPOINTS.desktop,
+      tablet: tablet ?? parent.tablet,
+      laptop: laptop ?? parent.laptop,
+      desktop: desktop ?? parent.desktop,
     }),
-    [tablet, laptop, desktop]
+    [parent, tablet, laptop, desktop]
   );
   return <BreakpointsContext.Provider value={value}>{children}</BreakpointsContext.Provider>;
 }

@@ -25,7 +25,13 @@ export default defineConfig(async () => {
     cacheDir: 'node_modules/.vite',
     plugins: [
       react(),
-      dts({ entryRoot: 'src', tsconfigPath: path.join(__dirname, 'tsconfig.lib.json') }),
+      dts({
+        entryRoot: 'src',
+        tsconfigPath: path.join(__dirname, 'tsconfig.lib.json'),
+        // Story-only code (stories and their helpers) is type-checked but never shipped.
+        beforeWriteFile: (filePath) =>
+          /[\\/]app[\\/]stories[\\/]|\.stories\.d\.ts$/.test(filePath) ? false : undefined,
+      }),
       copyGuidelines(),
     ],
     css: {

@@ -63,6 +63,20 @@ describe('Section', () => {
     expect(untitled).not.toHaveAttribute('aria-labelledby');
   });
 
+  it('shows the query error message only with showErrorDetails', () => {
+    const failed = query({ isError: true, error: new Error('Totals failed') });
+    render(
+      wrap(
+        <Page title="Orders">
+          <Section title="Failed" queries={[failed]} showErrorDetails>
+            <p>Failed content</p>
+          </Section>
+        </Page>
+      )
+    );
+    expect(screen.getByText('Totals failed')).toBeInTheDocument();
+  });
+
   it('shows its own skeleton, error and empty states while the page keeps rendering', () => {
     const failed = query({ isError: true, error: new Error('Totals failed') });
     render(
@@ -92,7 +106,8 @@ describe('Section', () => {
     expect(within(pendingRegion).queryByText('Pending content')).not.toBeInTheDocument();
 
     const failedRegion = screen.getByRole('region', { name: 'Failed' });
-    expect(within(failedRegion).getByText('Totals failed')).toBeInTheDocument();
+    expect(within(failedRegion).getByText('Something went wrong')).toBeInTheDocument();
+    expect(within(failedRegion).queryByText('Totals failed')).not.toBeInTheDocument();
     expect(within(failedRegion).getByTestId('page-messages').getAttribute('data-size')).toBe('sm');
     fireEvent.click(within(failedRegion).getByRole('button', { name: /try again/i }));
     expect(failed.refetch).toHaveBeenCalledTimes(1);

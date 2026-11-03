@@ -1,7 +1,7 @@
 import React from 'react';
 import { renderHook } from '@testing-library/react';
 import { useBreakpoint, useBreakpointValue } from './useBreakpoint';
-import { BreakpointsProvider } from '../../contexts/BreakpointsContext';
+import { BreakpointsProvider, useBreakpoints } from '../../contexts/BreakpointsContext';
 
 function mockViewport(width: number) {
   Object.defineProperty(window, 'matchMedia', {
@@ -84,5 +84,17 @@ describe('useBreakpointValue', () => {
     mockViewport(375);
     const { result } = renderHook(() => useBreakpointValue({ desktop: 3 }));
     expect(result.current).toBeUndefined();
+  });
+});
+
+describe('BreakpointsProvider nesting', () => {
+  it('merges an inner override over the outer provider, keeping outer values', () => {
+    const wrapper = ({ children }: { children: React.ReactNode }) => (
+      <BreakpointsProvider breakpoints={{ tablet: 700, desktop: 1600 }}>
+        <BreakpointsProvider breakpoints={{ laptop: 1100 }}>{children}</BreakpointsProvider>
+      </BreakpointsProvider>
+    );
+    const { result } = renderHook(() => useBreakpoints(), { wrapper });
+    expect(result.current).toEqual({ phone: 0, tablet: 700, laptop: 1100, desktop: 1600 });
   });
 });
