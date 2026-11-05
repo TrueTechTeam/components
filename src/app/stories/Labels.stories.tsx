@@ -2,17 +2,22 @@ import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { PageMessages } from '../../lib/components/display/PageMessages';
 import { Pagination } from '../../lib/components/navigation/Pagination';
-import { StoryApp } from './storyHelpers';
+import { AdaptiveGrid } from '../../lib/components/layout/AdaptiveGrid';
+import { ActionRow, Code, DemoPanel, StoryApp, StoryFrame } from './storyHelpers';
 
+// Every built-in key this demo renders, so nothing falls back to English.
 const FRENCH: Record<string, string> = {
   'ui.pageMessages.error.title': 'Une erreur est survenue',
   'ui.pageMessages.error.description': "Une erreur inattendue s'est produite. Veuillez réessayer.",
+  'ui.pageMessages.tryAgain': 'Réessayer',
   'ui.pageMessages.retry': 'Réessayer',
   'ui.pageMessages.empty.title': 'Aucune donnée',
   'ui.pageMessages.empty.description': "Il n'y a encore rien ici.",
   'ui.pagination.label': 'Pagination',
-  'ui.pagination.next': 'Aller à la page suivante',
+  'ui.pagination.first': 'Aller à la première page',
   'ui.pagination.previous': 'Aller à la page précédente',
+  'ui.pagination.next': 'Aller à la page suivante',
+  'ui.pagination.last': 'Aller à la dernière page',
   'ui.pagination.page': 'Page {n}',
 };
 
@@ -28,14 +33,36 @@ interface DemoProps {
   language: 'English' | 'French';
 }
 
-function Samples() {
+function Samples({ language }: DemoProps) {
   const [page, setPage] = useState(2);
   return (
-    <div style={{ display: 'grid', gap: 'var(--spacing-lg)', padding: 'var(--spacing-lg)' }}>
-      <PageMessages error size="sm" onRetry={() => undefined} />
-      <PageMessages empty size="sm" />
-      <Pagination currentPage={page} totalPages={8} onPageChange={setPage} />
-    </div>
+    <StoryFrame
+      title="Labels and translation"
+      description={
+        <>
+          Built-in text comes from the app <Code>translate</Code> function (keys{' '}
+          <Code>ui.&lt;key&gt;</Code>), then <Code>labels</Code> overrides, then English. Showing:{' '}
+          {language}.
+        </>
+      }
+    >
+      <AdaptiveGrid minItemWidth={320} gap={16} justifyItems="stretch" fillMode="auto-fit">
+        <DemoPanel title="Error state">
+          <PageMessages error size="sm" onRetry={() => undefined} headingLevel={3} />
+        </DemoPanel>
+        <DemoPanel title="Empty state">
+          <PageMessages empty size="sm" headingLevel={3} />
+        </DemoPanel>
+      </AdaptiveGrid>
+      <DemoPanel
+        title="Pagination"
+        description="Button names (first, previous, page n, next, last) are translated too."
+      >
+        <ActionRow justify="center">
+          <Pagination currentPage={page} totalPages={8} onPageChange={setPage} />
+        </ActionRow>
+      </DemoPanel>
+    </StoryFrame>
   );
 }
 
@@ -67,7 +94,7 @@ export const EnglishAndFrench: StoryObj<DemoProps> = {
       translate={language === 'French' ? translateFr : undefined}
       locale={language === 'French' ? 'fr-FR' : 'en-US'}
     >
-      <Samples />
+      <Samples language={language} />
     </StoryApp>
   ),
 };

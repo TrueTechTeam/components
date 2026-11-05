@@ -1,45 +1,72 @@
 import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { useBreakpoint, useBreakpointValue } from '../../lib/hooks/useBreakpoint';
-import { StoryApp } from './storyHelpers';
+import { Badge } from '../../lib/components/display/Badge';
+import { Card } from '../../lib/components/display/Card';
+import { Table, type ColumnConfig } from '../../lib/components/display/Table';
+import { Code, DemoPanel, StoryApp, StoryFrame, storyStyles } from './storyHelpers';
+
+interface Row {
+  call: string;
+  value: React.ReactNode;
+}
+
+const columns: Array<ColumnConfig<Row>> = [
+  {
+    key: 'call',
+    header: 'Call',
+    render: (call) => <span className={storyStyles.mono}>{String(call)}</span>,
+  },
+  { key: 'value', header: 'Value', width: '12rem', render: (value) => value as React.ReactNode },
+];
+
+const yesNo = (value: boolean) => (
+  <Badge variant={value ? 'success' : 'neutral'} size="sm">
+    {String(value)}
+  </Badge>
+);
 
 function BreakpointReadout() {
   const bp = useBreakpoint();
-  const columns = useBreakpointValue({ phone: 1, tablet: 2, laptop: 3, desktop: 4 });
-  const padding = useBreakpointValue({ phone: 'var(--spacing-sm)', laptop: 'var(--spacing-lg)' });
+  const columnsCount = useBreakpointValue({ phone: 1, tablet: 2, laptop: 3, desktop: 4 }) ?? 1;
+  const rows: Row[] = [
+    { call: 'useBreakpoint().name', value: <Badge variant="primary">{bp.name}</Badge> },
+    { call: "up('tablet')", value: yesNo(bp.up('tablet')) },
+    { call: "down('laptop')", value: yesNo(bp.down('laptop')) },
+    {
+      call: 'useBreakpointValue({ phone: 1, tablet: 2, laptop: 3, desktop: 4 })',
+      value: <span className={storyStyles.mono}>{columnsCount}</span>,
+    },
+  ];
   return (
-    <div style={{ display: 'grid', gap: 'var(--spacing-md)', padding }}>
-      <h1 style={{ margin: 0 }}>Current breakpoint: {bp.name}</h1>
-      <p>
-        Resize the preview to change it. Phone below 600px, tablet 600+, laptop 1024+, desktop
-        1440+.
-      </p>
-      <ul style={{ margin: 0 }}>
-        <li>up(&quot;tablet&quot;): {String(bp.up('tablet'))}</li>
-        <li>down(&quot;laptop&quot;): {String(bp.down('laptop'))}</li>
-        <li>useBreakpointValue columns: {columns}</li>
-      </ul>
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: `repeat(${columns}, 1fr)`,
-          gap: 'var(--spacing-sm)',
-        }}
+    <StoryFrame
+      title="Breakpoints"
+      description={
+        <>
+          Resize the preview: phone below 600px, tablet 600+, laptop 1024+, desktop 1440+. In SCSS
+          use <Code>@include bp(tablet)</Code>.
+        </>
+      }
+    >
+      <DemoPanel title="Current breakpoint">
+        <Table<Row> data={rows} columns={columns} rowKey="call" size="sm" />
+      </DemoPanel>
+      <DemoPanel
+        title={`${columnsCount} column${columnsCount === 1 ? '' : 's'}`}
+        description="A grid whose column count comes from useBreakpointValue."
       >
-        {Array.from({ length: 4 }, (_, i) => (
-          <div
-            key={i}
-            style={{
-              padding: 'var(--spacing-md)',
-              border: '1px solid var(--theme-border, currentColor)',
-              borderRadius: 'var(--radius-md)',
-            }}
-          >
-            Card {i + 1}
-          </div>
-        ))}
-      </div>
-    </div>
+        <div
+          className={storyStyles.grid}
+          style={{ gridTemplateColumns: `repeat(${columnsCount}, minmax(0, 1fr))` }}
+        >
+          {Array.from({ length: 4 }, (_, i) => (
+            <Card key={i} variant="filled" padding="md">
+              Card {i + 1}
+            </Card>
+          ))}
+        </div>
+      </DemoPanel>
+    </StoryFrame>
   );
 }
 

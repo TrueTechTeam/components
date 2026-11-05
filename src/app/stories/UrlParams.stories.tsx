@@ -2,13 +2,19 @@ import React from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { Page, param, usePageParams, usePreference } from '../index';
 import { Button } from '../../lib/components/buttons/Button';
+import {
+  ButtonToggleGroup,
+  ButtonToggleGroupItem,
+} from '../../lib/components/buttons/ButtonToggleGroup';
 import { Input } from '../../lib/components/inputs/Input';
-import { StoryApp } from './storyHelpers';
+import { ActionRow, Code, CodeBlock, DemoPanel, StoryApp, StoryFrame } from './storyHelpers';
+
+const SORTS = ['name', 'date', 'total'] as const;
 
 const schema = {
   q: param.string(''),
   page: param.number(1),
-  sort: param.enum(['name', 'date', 'total'] as const, 'name'),
+  sort: param.enum(SORTS, 'name'),
   archived: param.boolean(false),
 };
 
@@ -21,65 +27,75 @@ function Demo() {
 
   return (
     <Page title="URL params and preferences">
-      <div
-        style={{
-          padding: 'var(--spacing-lg)',
-          display: 'grid',
-          gap: 'var(--spacing-md)',
-          maxWidth: 640,
-        }}
+      <StoryFrame
+        title="URL params and preferences"
+        width="form"
+        description="State lives in the URL search string (this story uses the History API adapter, so the preview URL changes). Reload to see it restored."
       >
-        <h1 style={{ margin: 0 }}>URL params and preferences</h1>
-        <p>
-          State lives in the URL search string (this uses the History API adapter, so the preview
-          iframe URL changes). Reload to see it restored.
-        </p>
-        <Input
-          label="Search (q)"
-          value={params.q}
-          onChange={(e) => setParams({ q: e.target.value, page: 1 }, { replace: true })}
-        />
-        <div style={{ display: 'flex', gap: 'var(--spacing-sm)', flexWrap: 'wrap' }}>
-          <Button size="sm" onClick={() => setParams({ page: params.page + 1 })}>
-            Next page ({params.page})
-          </Button>
-          {(['name', 'date', 'total'] as const).map((s) => (
-            <Button
-              key={s}
+        <DemoPanel title="URL params" description={<Code>usePageParams(schema)</Code>}>
+          <Input
+            label="Search (q)"
+            value={params.q}
+            onChange={(e) => setParams({ q: e.target.value, page: 1 }, { replace: true })}
+          />
+          <ActionRow>
+            <ButtonToggleGroup
+              aria-label="Sort"
               size="sm"
-              variant={params.sort === s ? 'primary' : 'outline'}
-              onClick={() => setParams({ sort: s })}
+              value={params.sort}
+              onChange={(sort) => setParams({ sort: sort as (typeof SORTS)[number] })}
             >
-              Sort: {s}
+              {SORTS.map((s) => (
+                <ButtonToggleGroupItem key={s} value={s}>
+                  Sort by {s}
+                </ButtonToggleGroupItem>
+              ))}
+            </ButtonToggleGroup>
+          </ActionRow>
+          <ActionRow>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => setParams({ page: params.page + 1 })}
+            >
+              Next page ({params.page})
             </Button>
-          ))}
-          <Button
-            size="sm"
-            variant="ghost"
-            onClick={() => setParams({ archived: !params.archived })}
-          >
-            Archived: {String(params.archived)}
-          </Button>
-        </div>
-        <h2 style={{ margin: 0 }}>Preferences</h2>
-        <div style={{ display: 'flex', gap: 'var(--spacing-sm)' }}>
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => setDensity(density === 'compact' ? 'comfortable' : 'compact')}
-          >
-            Density (this browser): {density}
-          </Button>
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={() => setView(view === 'list' ? 'grid' : 'list')}
-          >
-            View (in URL): {view}
-          </Button>
-        </div>
-        <pre style={{ margin: 0 }}>{JSON.stringify({ ...params, density, view }, null, 2)}</pre>
-      </div>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => setParams({ archived: !params.archived })}
+            >
+              Archived: {params.archived ? 'shown' : 'hidden'}
+            </Button>
+          </ActionRow>
+        </DemoPanel>
+        <DemoPanel
+          title="Preferences"
+          description={<Code>usePreference(key, default, options)</Code>}
+        >
+          <ActionRow>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => setDensity(density === 'compact' ? 'comfortable' : 'compact')}
+            >
+              Density (this browser): {density}
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => setView(view === 'list' ? 'grid' : 'list')}
+            >
+              View (in URL): {view}
+            </Button>
+          </ActionRow>
+        </DemoPanel>
+        <DemoPanel title="Current state">
+          <CodeBlock label="Current params and preferences">
+            {JSON.stringify({ ...params, density, view }, null, 2)}
+          </CodeBlock>
+        </DemoPanel>
+      </StoryFrame>
     </Page>
   );
 }

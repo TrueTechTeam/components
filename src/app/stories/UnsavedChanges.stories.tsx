@@ -4,7 +4,7 @@ import { AppLink, Page } from '../index';
 import { FormBuilder, type FormFieldConfig } from '../../lib/components/forms/FormBuilder';
 import { Button } from '../../lib/components/buttons/Button';
 import { useDialog } from '../../lib/hooks/useDialog';
-import { StoryApp, wait } from './storyHelpers';
+import { ActionRow, DemoPanel, StoryApp, StoryFrame, wait } from './storyHelpers';
 
 const fields: FormFieldConfig[] = [
   { name: 'title', type: 'input', label: 'Title' },
@@ -46,22 +46,18 @@ type Story = StoryObj;
 function EditPage() {
   return (
     <Page title="Edit article">
-      <div
-        style={{
-          padding: 'var(--spacing-lg)',
-          display: 'grid',
-          gap: 'var(--spacing-md)',
-          maxWidth: 640,
-        }}
+      <StoryFrame
+        title="Edit article"
+        width="form"
+        description="Type in a field, then follow the link below: you are asked before leaving. The browser Back button is blocked too (not on Next.js)."
       >
-        <h1 style={{ margin: 0 }}>Edit article</h1>
-        <p>
-          Type in a field, then click the link below: you are asked before leaving. Try the browser
-          Back button too (blocked here, not on Next.js).
-        </p>
-        <FormBuilder fields={fields} guardUnsaved onSubmit={save} />
-        <AppLink href="?left=true">Leave this page (guarded link)</AppLink>
-      </div>
+        <DemoPanel>
+          <FormBuilder fields={fields} guardUnsaved onSubmit={save} />
+        </DemoPanel>
+        <ActionRow>
+          <AppLink href="?left=true">Leave this page (guarded link)</AppLink>
+        </ActionRow>
+      </StoryFrame>
     </Page>
   );
 }
@@ -76,26 +72,30 @@ export const InAPage: Story = {
 };
 
 function DialogForm() {
-  return (
-    <div style={{ minWidth: 320 }}>
-      <FormBuilder fields={fields} guardUnsaved onSubmit={save} />
-    </div>
-  );
+  return <FormBuilder fields={fields} guardUnsaved onSubmit={save} />;
 }
 
 function DialogDemo() {
   const dialog = useDialog();
   return (
     <Page title="Edit in dialog">
-      <div style={{ padding: 'var(--spacing-lg)' }}>
-        <h1>Edit in dialog</h1>
-        <Button
-          onClick={() => void dialog.open({ title: 'Edit article', children: <DialogForm /> })}
-        >
-          Open dialog
-        </Button>
-        <p>Edit a field, then press Escape or click the close button: the dialog asks first.</p>
-      </div>
+      <StoryFrame
+        title="Edit in dialog"
+        width="form"
+        description="Edit a field, then press Escape or the close button: the dialog asks before discarding your changes."
+      >
+        <DemoPanel>
+          <ActionRow>
+            <Button
+              onClick={() =>
+                void dialog.open({ title: 'Edit article', size: 'md', children: <DialogForm /> })
+              }
+            >
+              Open dialog
+            </Button>
+          </ActionRow>
+        </DemoPanel>
+      </StoryFrame>
     </Page>
   );
 }
