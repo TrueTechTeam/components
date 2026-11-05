@@ -13,8 +13,13 @@ export interface LastUpdatedProps {
 }
 
 const TICK_MS = 30_000;
+/** Updates newer than this read "just now" instead of "0 seconds ago" / "in 2 seconds". */
+const JUST_NOW_MS = 45_000;
 
-/** "Updated 3 minutes ago" with an optional refresh button. */
+/**
+ * "Updated 3 minutes ago" with an optional refresh button. Updates under 45 s old read "Updated
+ * just now"; timestamps in the future (clock skew) are treated as now.
+ */
 export function LastUpdated({ query, refreshable = true, className }: LastUpdatedProps) {
   const t = useLabels();
   const { relativeTime } = useFormatters();
@@ -36,7 +41,9 @@ export function LastUpdated({ query, refreshable = true, className }: LastUpdate
   return (
     <span className={[styles.root, className].filter(Boolean).join(' ')}>
       <span className={styles.text}>
-        {t('lastUpdated.text', { time: relativeTime(dataUpdatedAt) })}
+        {Date.now() - dataUpdatedAt < JUST_NOW_MS
+          ? t('lastUpdated.justNow')
+          : t('lastUpdated.text', { time: relativeTime(dataUpdatedAt) })}
       </span>
       {refreshable && (
         <span className={styles.refresh} data-fetching={isFetching || undefined}>

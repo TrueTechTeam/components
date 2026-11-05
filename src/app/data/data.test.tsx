@@ -139,6 +139,36 @@ describe('LastUpdated', () => {
     expect(screen.getByText('Updated 3 minutes ago')).toBeInTheDocument();
   });
 
+  it('says "just now" for fresh data and never phrases it in the future', () => {
+    const now = Date.now();
+    const { rerender } = render(
+      <LastUpdated query={{ dataUpdatedAt: now, isFetching: false, refetch: jest.fn() }} />,
+      { wrapper }
+    );
+    expect(screen.getByText('Updated just now')).toBeInTheDocument();
+    // Clock skew: an update stamped slightly in the future is still "just now".
+    rerender(
+      <LastUpdated query={{ dataUpdatedAt: now + 5_000, isFetching: false, refetch: jest.fn() }} />
+    );
+    expect(screen.getByText('Updated just now')).toBeInTheDocument();
+    // Far in the future is clamped to now, never "in 10 minutes".
+    rerender(
+      <LastUpdated
+        query={{ dataUpdatedAt: now + 600_000, isFetching: false, refetch: jest.fn() }}
+      />
+    );
+    expect(screen.getByText('Updated just now')).toBeInTheDocument();
+    rerender(
+      <LastUpdated query={{ dataUpdatedAt: now - 44_000, isFetching: false, refetch: jest.fn() }} />
+    );
+    expect(screen.getByText('Updated just now')).toBeInTheDocument();
+    rerender(
+      <LastUpdated query={{ dataUpdatedAt: now - 50_000, isFetching: false, refetch: jest.fn() }} />
+    );
+    expect(screen.getByText('Updated 50 seconds ago')).toBeInTheDocument();
+    expect(screen.queryByText(/ in /)).not.toBeInTheDocument();
+  });
+
   it('refresh button calls refetch and is disabled while fetching', () => {
     const refetch = jest.fn().mockResolvedValue(undefined);
     const { rerender } = render(
