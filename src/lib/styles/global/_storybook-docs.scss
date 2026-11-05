@@ -1,3 +1,8 @@
+// Styles for the Storybook docs pages (description markdown, args table, doc blocks).
+// Element rules MUST skip story content: stories render inside `.sb-unstyled` and must look the
+// same in docs as on the canvas (no docs input borders around inputs, no h1 underline).
+$outside-stories: ':not(.sb-unstyled *)';
+
 // =============================================================================
 // DOCS PAGE CONTAINER & BASE STYLES
 // =============================================================================
@@ -23,7 +28,7 @@
 // =============================================================================
 
 .docblock-argstable,
-.sbdocs table {
+.sbdocs table#{$outside-stories} {
   width: 100%;
   border-collapse: separate;
   border-spacing: 0;
@@ -84,9 +89,9 @@
 .docblock-argstable input[type='text'],
 .docblock-argstable input[type='number'],
 .docblock-argstable textarea,
-.sbdocs input[type='text'],
-.sbdocs input[type='number'],
-.sbdocs textarea {
+.sbdocs input[type='text']#{$outside-stories},
+.sbdocs input[type='number']#{$outside-stories},
+.sbdocs textarea#{$outside-stories} {
   background: var(--theme-input-bg);
   border: 1px solid var(--theme-input-border);
   border-radius: var(--radius-md);
@@ -115,7 +120,7 @@
 
 // Select dropdowns
 .docblock-argstable select,
-.sbdocs select {
+.sbdocs select#{$outside-stories} {
   background: var(--theme-input-bg);
   border: 1px solid var(--theme-input-border);
   border-radius: var(--radius-md);
@@ -188,7 +193,7 @@
 // =============================================================================
 
 // Code blocks
-.sbdocs code {
+.sbdocs code#{$outside-stories} {
   background: var(--theme-surface-secondary);
   color: var(--theme-text-primary);
   border-radius: var(--radius-sm);
@@ -198,7 +203,7 @@
 }
 
 // Pre blocks (code snippets)
-.sbdocs pre {
+.sbdocs pre#{$outside-stories} {
   background: var(--theme-surface-secondary);
   border: 1px solid var(--theme-border-primary);
   border-radius: var(--radius-md);
@@ -211,7 +216,7 @@
 }
 
 // Links
-.sbdocs a {
+.sbdocs a#{$outside-stories} {
   color: var(--theme-primary);
 
   &:hover {
@@ -220,12 +225,12 @@
 }
 
 // Headings
-.sbdocs h1,
-.sbdocs h2,
-.sbdocs h3,
-.sbdocs h4,
-.sbdocs h5,
-.sbdocs h6 {
+.sbdocs h1#{$outside-stories},
+.sbdocs h2#{$outside-stories},
+.sbdocs h3#{$outside-stories},
+.sbdocs h4#{$outside-stories},
+.sbdocs h5#{$outside-stories},
+.sbdocs h6#{$outside-stories} {
   color: var(--theme-text-primary);
   font-family: var(--font-family-primary);
   font-weight: var(--font-weight-bold);
@@ -234,7 +239,7 @@
   margin-bottom: var(--spacing-sm);
 }
 
-.sbdocs h1 {
+.sbdocs h1#{$outside-stories} {
   font-size: var(--font-size-4xl);
   font-weight: var(--font-weight-bold);
   margin-top: 0;
@@ -243,24 +248,24 @@
   border-bottom: 1px solid var(--theme-border-primary);
 }
 
-.sbdocs h2 {
+.sbdocs h2#{$outside-stories} {
   font-size: var(--font-size-2xl);
   margin-top: var(--spacing-xl);
   padding-bottom: var(--spacing-xs);
   border-bottom: 1px solid var(--theme-border-primary);
 }
 
-.sbdocs h3 {
+.sbdocs h3#{$outside-stories} {
   font-size: var(--font-size-xl);
 }
 
-.sbdocs h4 {
+.sbdocs h4#{$outside-stories} {
   font-size: var(--font-size-lg);
   font-weight: var(--font-weight-semibold);
 }
 
 // Paragraphs
-.sbdocs p {
+.sbdocs p#{$outside-stories} {
   color: var(--theme-text-secondary);
   line-height: var(--line-height-normal);
   margin-bottom: var(--spacing-sm);
@@ -397,9 +402,13 @@
 // STORY CANVAS
 // =============================================================================
 
-// Story container background
+// Story container: the same surface and base text as the canvas body, so a story doesn't
+// inherit the docs page's secondary text color.
 .docs-story {
   background: var(--theme-surface-primary);
+  color: var(--theme-text-primary);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-normal);
 }
 
 // =============================================================================
@@ -407,7 +416,7 @@
 // =============================================================================
 
 // Addon panel tabs
-[class*='tabbutton'] {
+.sbdocs [class*='tabbutton']#{$outside-stories} {
   background: transparent;
   border: none;
   color: var(--theme-text-secondary);
@@ -424,13 +433,13 @@
 }
 
 // Panel content area
-[class*='panelInner'] {
+.sbdocs [class*='panelInner']#{$outside-stories} {
   background: var(--theme-surface-primary);
 }
 
 // Separator lines
-[class*='Separator'],
-hr {
+.sbdocs [class*='Separator']#{$outside-stories},
+.sbdocs hr#{$outside-stories} {
   border-color: var(--theme-border-primary);
   background-color: var(--theme-border-primary);
 }
@@ -439,8 +448,8 @@ hr {
 // TOOLTIP & POPOVERS
 // =============================================================================
 
-[class*='TooltipWrapper'],
-[class*='Tooltip'] {
+.sbdocs [class*='TooltipWrapper']#{$outside-stories},
+.sbdocs [class*='Tooltip']#{$outside-stories} {
   background: var(--theme-surface-secondary);
   border: 1px solid var(--theme-border-primary);
   color: var(--theme-text-primary);
@@ -481,8 +490,8 @@ hr {
 // =============================================================================
 
 // Lists (scoped to both .sbdocs and .sbdocs-content)
-.sbdocs ul,
-.sbdocs ol {
+.sbdocs ul#{$outside-stories},
+.sbdocs ol#{$outside-stories} {
   color: var(--theme-text-secondary);
   padding-left: var(--spacing-lg);
   margin-bottom: var(--spacing-sm);
@@ -498,7 +507,7 @@ hr {
   }
 }
 
-.sbdocs ul {
+.sbdocs ul#{$outside-stories} {
   list-style-type: disc;
 
   ul {
@@ -507,12 +516,12 @@ hr {
   }
 }
 
-.sbdocs ol {
+.sbdocs ol#{$outside-stories} {
   list-style-type: decimal;
 }
 
 // Blockquotes
-.sbdocs blockquote {
+.sbdocs blockquote#{$outside-stories} {
   border-left: 4px solid var(--theme-primary);
   background: var(--theme-surface-secondary);
   color: var(--theme-text-secondary);
@@ -522,21 +531,21 @@ hr {
 }
 
 // Horizontal rules
-.sbdocs hr {
+.sbdocs hr#{$outside-stories} {
   border: none;
   border-top: 1px solid var(--theme-border-primary);
   margin: var(--spacing-lg) 0;
 }
 
 // Strong/bold
-.sbdocs strong,
-.sbdocs b {
+.sbdocs strong#{$outside-stories},
+.sbdocs b#{$outside-stories} {
   color: var(--theme-text-primary);
   font-weight: var(--font-weight-semibold);
 }
 
 // Emphasis
-.sbdocs em {
+.sbdocs em#{$outside-stories} {
   color: var(--theme-text-secondary);
 }
 
@@ -545,8 +554,8 @@ hr {
 // =============================================================================
 
 // Show code toggle button
-[class*='showCodeButton'],
-button[title*='Show code'] {
+.sbdocs [class*='showCodeButton']#{$outside-stories},
+.sbdocs button[title*='Show code']#{$outside-stories} {
   background: var(--theme-surface-secondary);
   border: 1px solid var(--theme-border-primary);
   color: var(--theme-text-secondary);
@@ -559,16 +568,16 @@ button[title*='Show code'] {
 }
 
 // Source code panel
-[class*='docblock-source'],
-.docblock-source {
+.sbdocs [class*='docblock-source']#{$outside-stories},
+.sbdocs .docblock-source#{$outside-stories} {
   background: var(--theme-surface-secondary);
   border: 1px solid var(--theme-border-primary);
   border-radius: var(--radius-md);
 }
 
 // Copy button in code blocks
-[class*='copyButton'],
-button[title*='Copy'] {
+.sbdocs [class*='copyButton']#{$outside-stories},
+.sbdocs button[title*='Copy']#{$outside-stories} {
   background: var(--theme-surface-secondary);
   border: 1px solid var(--theme-border-primary);
   color: var(--theme-text-secondary);
