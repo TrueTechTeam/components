@@ -184,6 +184,13 @@ export const Toast = ({
     onDismiss?.();
   }, [onDismiss]);
 
+  // (Re-)arm the full duration whenever it changes: a loading toast (duration 0) that settles
+  // into success/error must count from the update, not from the stale 0 it mounted with.
+  // `createdAt` changes when the provider re-arms a toast on update.
+  useEffect(() => {
+    remainingTimeRef.current = duration;
+  }, [duration, variant, _createdAt]);
+
   // Auto-dismiss timer
   useEffect(() => {
     if (duration === 0 || variant === 'loading' || animationState !== 'entered') {

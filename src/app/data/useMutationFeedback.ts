@@ -18,7 +18,8 @@ export interface MutationFeedback {
   message: string;
 }
 
-const SETTLED_TOAST_MS = 5000;
+/** How long settled toasts stay up: long enough to read; errors need more time to act on. */
+const TOAST_MS = { success: 5000, error: 8000 } as const;
 
 /** Wraps a TanStack Query mutation with toast or inline success/error messaging. */
 export function useMutationFeedback<TData, TErr, TVars>(
@@ -53,11 +54,11 @@ export function useMutationFeedback<TData, TErr, TVars>(
           setFeedback({ type, message });
         }
       } else if (pendingId) {
-        tst.update(pendingId, { message, variant: type, duration: SETTLED_TOAST_MS });
+        tst.update(pendingId, { message, variant: type, duration: TOAST_MS[type] });
       } else if (type === 'success') {
-        tst.success(message);
+        tst.success(message, { duration: TOAST_MS.success });
       } else {
-        tst.error(message);
+        tst.error(message, { duration: TOAST_MS.error });
       }
     };
 
