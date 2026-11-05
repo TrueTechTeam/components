@@ -188,6 +188,7 @@ navigation guards silently stop working. In development, `AppProvider` warns whe
 | `AppProvider`                                                                   | Once at the root, inside `GlobalProvider`. Props: `router`, `queryClient`, `translate`, `locale`, `logger`, `analytics`, `auth`, `flags`, `breakpoints`, `titleTemplate`, `debug`                                                    |
 | `Page`                                                                          | A routed page: sets the title, sends `page_view`, shows forbidden / loading / error+retry / empty states from `queries`, keeps loaded content on refetch errors (inline alert), error boundary, page store. Render the `h1` yourself |
 | `Section`                                                                       | A region of a page with its own states and error boundary, so one failure does not take down siblings                                                                                                                                |
+| `Loadable`                                                                      | Marks a data-dependent piece of a `Page`/`Section` and its skeleton `shape` (`text`, `heading`, `box`, `card`, `avatar`, `table`) while the owner's queries are pending. Function children run only once loaded                      |
 | `ErrorBoundary`                                                                 | Catch render errors in a custom region (Page and Section already include one)                                                                                                                                                        |
 | `usePage`, `usePageMeta`                                                        | Read the enclosing page id and title; set title and description in custom layouts                                                                                                                                                    |
 | `usePageStore`                                                                  | `[state, dispatch]` of the Page `reducer`, for UI state shared across the page                                                                                                                                                       |
@@ -202,6 +203,11 @@ navigation guards silently stop working. In development, `AppProvider` warns whe
 | `useFlag`, `Feature`                                                            | Feature flags                                                                                                                                                                                                                        |
 | `useAppTranslation`, `useFormatters`, `useAppConfig`                            | App `t()`, locale-bound formatters, the raw provider config                                                                                                                                                                          |
 | `DebugPanel`                                                                    | Query, store, param and log inspector, mounted by `Page` when `debug` is on (default outside production)                                                                                                                             |
+
+While its queries are pending, a `Page` or `Section` still renders its children (headings, static
+text, layout) inside a disabled, `aria-busy` region; wrap only the data-dependent parts in
+`Loadable` so they show a skeleton in the same shape. The `skeleton` prop replaces the whole body
+instead.
 
 `Page` ids default to a slug of the title; pass `id` when the title is dynamic or translated, so
 stored preferences and analytics keep a stable key. `Page` and `Section` show generic error text

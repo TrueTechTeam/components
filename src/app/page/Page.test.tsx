@@ -3,7 +3,8 @@ import { act, fireEvent, render, screen } from '@testing-library/react';
 import { QueryClient, useQuery } from '@tanstack/react-query';
 import { AppProvider, type AppProviderProps, type Logger } from '../AppProvider';
 import { PageIdContext } from '../params';
-import { Page, usePage, usePageStore, type QueryLike } from './index';
+import { Button } from '../../lib/components/buttons/Button';
+import { Loadable, Page, usePage, usePageStore, type QueryLike } from './index';
 
 const silentLogger: Logger = {
   debug: jest.fn(),
@@ -42,26 +43,111 @@ describe('Page', () => {
     document.head.querySelectorAll('meta[name="description"]').forEach((m) => m.remove());
   });
 
-  it('shows skeleton while pending, then children', () => {
+  it('renders its structure while pending, disabled, with Loadable skeletons', () => {
+    const rows = jest.fn(() => <p>Order rows</p>);
+    const ui = (queries: QueryLike[]) =>
+      wrap(
+        <Page title="Orders" queries={queries}>
+          <h1>Orders</h1>
+          <Button>New order</Button>
+          <Loadable shape="text" lines={3}>
+            {rows}
+          </Loadable>
+        </Page>
+      );
+    const { container, rerender } = render(ui([pending()]));
+
+    // Structure renders immediately; native controls are disabled by the busy fieldset.
+    expect(screen.getByRole('heading', { level: 1, name: 'Orders' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'New order' })).toBeDisabled();
+    const region = screen.getByRole('group');
+    expect(region.tagName).toBe('FIELDSET');
+    expect(region).toHaveAttribute('aria-busy', 'true');
+    expect(screen.getByRole('status')).toHaveTextContent('Loading…');
+    // Only the data-dependent piece is a skeleton, shaped as 3 text lines, hidden from AT.
+    const skeletons = container.querySelectorAll('[data-component="skeleton"]');
+    expect(skeletons).toHaveLength(3);
+    skeletons.forEach((el) => expect(el.closest('[aria-hidden="true"]')).not.toBeNull());
+    expect(rows).not.toHaveBeenCalled();
+
+    rerender(ui([success([1])]));
+    expect(screen.getByText('Order rows')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'New order' })).toBeEnabled();
+    expect(screen.queryByRole('group')).not.toBeInTheDocument();
+    expect(screen.queryByRole('status')).not.toBeInTheDocument();
+    expect(container.querySelector('[aria-busy="true"]')).toBeNull();
+    expect(container.querySelector('[data-component="skeleton"]')).toBeNull();
+  });
+
+  it('keeps the same child instances when loading finishes (no remount)', () => {
+    const mounts = jest.fn();
+    function Child() {
+      React.useEffect(() => mounts(), []);
+      return <p>Child</p>;
+    }
     const { rerender } = render(
       wrap(
         <Page title="Orders" queries={[pending()]}>
-          <p>Order list</p>
+          <Child />
         </Page>
       )
     );
-    expect(screen.queryByText('Order list')).not.toBeInTheDocument();
-    expect(screen.getByRole('status', { name: 'Loading…' })).toHaveAttribute('aria-busy', 'true');
-
     rerender(
       wrap(
         <Page title="Orders" queries={[success([1])]}>
-          <p>Order list</p>
+          <Child />
         </Page>
       )
     );
-    expect(screen.getByText('Order list')).toBeInTheDocument();
-    expect(screen.queryByRole('status', { name: 'Loading…' })).not.toBeInTheDocument();
+    expect(mounts).toHaveBeenCalledTimes(1);
+  });
+
+  it('never shows a skeleton when the data is already cached', () => {
+    const rows = jest.fn(() => <p>Order rows</p>);
+    const { container } = render(
+      wrap(
+        <Page title="Orders" queries={[success([1])]}>
+          <Loadable shape="table">{rows}</Loadable>
+        </Page>
+      )
+    );
+    expect(screen.getByText('Order rows')).toBeInTheDocument();
+    expect(container.querySelector('[data-component="skeleton"]')).toBeNull();
+    expect(container.querySelector('[aria-busy="true"]')).toBeNull();
+  });
+
+  it('renders each Loadable shape while pending', () => {
+    const { container } = render(
+      wrap(
+        <Page title="Orders" queries={[pending()]}>
+          <Loadable shape="heading">Heading</Loadable>
+          <Loadable shape="box" height={80}>
+            Box
+          </Loadable>
+          <Loadable shape="avatar">Avatar</Loadable>
+          <Loadable shape="card">Card</Loadable>
+          <Loadable shape="table" rows={2} columns={3}>
+            Table
+          </Loadable>
+        </Page>
+      )
+    );
+    const shape = (name: string) => container.querySelector(`[data-loadable="${name}"]`);
+    ['heading', 'box', 'avatar', 'card', 'table'].forEach((name) => {
+      expect(shape(name)).toHaveAttribute('aria-hidden', 'true');
+      expect(shape(name)?.querySelector('[data-component="skeleton"]')).not.toBeNull();
+    });
+    expect(shape('avatar')?.querySelector('[data-variant="circular"]')).not.toBeNull();
+    // Header row + 2 body rows, 3 cells each.
+    expect(shape('table')?.querySelectorAll('[data-component="skeleton"]')).toHaveLength(9);
+    ['Heading', 'Box', 'Avatar', 'Card', 'Table'].forEach((text) =>
+      expect(screen.queryByText(text)).not.toBeInTheDocument()
+    );
+  });
+
+  it('renders Loadable children directly outside a Page', () => {
+    render(wrap(<Loadable>{() => <p>Loaded</p>}</Loadable>));
+    expect(screen.getByText('Loaded')).toBeInTheDocument();
   });
 
   it('drives its states from a real useQuery result', async () => {
@@ -79,7 +165,7 @@ describe('Page', () => {
       );
     }
     render(wrap(<OrdersPage />, { queryClient }));
-    expect(screen.getByRole('status', { name: 'Loading…' })).toBeInTheDocument();
+    expect(screen.getByRole('status')).toHaveTextContent('Loading…');
     await act(async () => resolve(['A-1', 'A-2']));
     expect(await screen.findByText('A-1, A-2')).toBeInTheDocument();
     queryClient.clear();
@@ -94,6 +180,9 @@ describe('Page', () => {
       )
     );
     expect(screen.getByText('Custom skeleton')).toBeInTheDocument();
+    // The override replaces the structure: children are not rendered while pending.
+    expect(screen.queryByText('Order list')).not.toBeInTheDocument();
+    expect(screen.getByRole('status', { name: 'Loading…' })).toHaveAttribute('aria-busy', 'true');
   });
 
   it('shows error with retry that refetches every errored query', () => {
@@ -127,7 +216,7 @@ describe('Page', () => {
         </Page>
       )
     );
-    expect(screen.getByRole('status', { name: 'Loading…' })).toBeInTheDocument();
+    expect(screen.getByRole('status')).toHaveTextContent('Loading…');
     expect(screen.queryByText('Something went wrong')).not.toBeInTheDocument();
   });
 
@@ -229,7 +318,7 @@ describe('Page', () => {
     expect(can).toHaveBeenCalledWith('view', 'orders');
     expect(screen.getByText('Access Denied')).toBeInTheDocument();
     expect(screen.queryByText('Order list')).not.toBeInTheDocument();
-    expect(screen.queryByRole('status', { name: 'Loading…' })).not.toBeInTheDocument();
+    expect(screen.queryByText('Loading…')).not.toBeInTheDocument();
   });
 
   it('keeps content and shows refreshing bar while background fetching', () => {

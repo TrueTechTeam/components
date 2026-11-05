@@ -1,8 +1,9 @@
-import React, { useEffect, type ReactNode } from 'react';
+import React, { useContext, useEffect, useMemo, type ReactNode } from 'react';
 import { Button } from '../../lib/components/buttons/Button';
 import { PageMessages, type PageMessagesProps } from '../../lib/components/display/PageMessages';
 import { useLabels } from '../../lib/contexts/LabelsContext';
 import { useAuth } from '../AppProvider/hooks';
+import { LoadingContext, type LoadingContextValue } from './LoadingContext';
 import type { PageContextValue, QueryLike } from './PageContext';
 import styles from './Page.module.scss';
 
@@ -15,7 +16,11 @@ export interface StateProps {
    * succeeded, or a background refetch failed and the last loaded data is still shown.
    */
   isEmpty?: (data: unknown[]) => boolean;
-  /** Shown while any query is pending. @default a Skeleton block (Page) / 3 text lines (Section) */
+  /**
+   * Custom loading markup that replaces the children while any query is pending. By default the
+   * children render while pending (inside a disabled, `aria-busy` region) and each `Loadable`
+   * shows a skeleton in its shape.
+   */
   skeleton?: ReactNode;
   /** Empty-state configuration passed to `PageMessages` as `emptyConfig`. */
   empty?: PageMessagesProps['emptyConfig'];
@@ -34,7 +39,11 @@ interface PageStateProps extends StateProps {
   size: 'md' | 'sm';
   /** Heading level of PageMessages titles. */
   headingLevel: PageMessagesProps['headingLevel'];
-  defaultSkeleton: ReactNode;
+  /**
+   * This region's `queries` drive the `Loadable`s inside it. False for a Section without
+   * queries, whose Loadables follow the Page.
+   */
+  ownsLoading: boolean;
 }
 
 function messageError(error: unknown): Error | string | true {
@@ -42,11 +51,14 @@ function messageError(error: unknown): Error | string | true {
 }
 
 /**
- * Renders the first matching state (STATE-1): forbidden, skeleton, error (retry refetches every
- * errored query), empty, then `children`. A failed background refetch of a query that still has
- * data keeps the content and shows a compact inline alert with Retry above it (R8); only errored
- * queries without data show the full error state. A refreshing bar overlays the top while any
- * query fetches in the background.
+ * Renders the first matching state (STATE-1): forbidden, pending, error (retry refetches every
+ * errored query), empty, then `children`. While pending the children still render (STATE-2,
+ * structure first) inside a borderless `<fieldset disabled aria-busy>`, so native controls are
+ * disabled, and each `Loadable` shows a skeleton in its shape; a `skeleton` prop replaces the
+ * children instead. A failed background refetch of a query that still has data keeps the
+ * content and shows a compact inline alert with Retry above it (R8); only errored queries
+ * without data show the full error state. A refreshing bar overlays the top while any query
+ * fetches in the background.
  */
 export function PageState({
   queries = [],
@@ -57,17 +69,23 @@ export function PageState({
   showErrorDetails = false,
   size,
   headingLevel,
-  defaultSkeleton,
+  ownsLoading,
   children,
 }: PageStateProps) {
   const t = useLabels();
   const { can } = useAuth();
+  const parent = useContext(LoadingContext);
+  const pending = queries.some((query) => query.isPending);
+  const loading = useMemo<LoadingContextValue>(
+    () => (ownsLoading ? { pending, busyAncestor: parent.busyAncestor || pending } : parent),
+    [ownsLoading, pending, parent]
+  );
 
   if (permission && !can(permission.action, permission.subject)) {
     return <PageMessages forbidden size={size} headingLevel={headingLevel} />;
   }
 
-  if (queries.some((query) => query.isPending)) {
+  if (pending && skeleton !== undefined) {
     return (
       <div
         className={styles.skeleton}
@@ -75,12 +93,12 @@ export function PageState({
         aria-busy="true"
         aria-label={t('common.loading')}
       >
-        {skeleton ?? defaultSkeleton}
+        {skeleton}
       </div>
     );
   }
 
-  const errored = queries.filter((query) => query.isError);
+  const errored = pending ? [] : queries.filter((query) => query.isError);
   const retry = () => {
     errored.forEach((query) => void query.refetch());
   };
@@ -95,7 +113,7 @@ export function PageState({
         headingLevel={headingLevel}
       />
     );
-  } else if (isEmpty?.(queries.map((query) => query.data))) {
+  } else if (!pending && isEmpty?.(queries.map((query) => query.data))) {
     content = <PageMessages empty emptyConfig={empty} size={size} headingLevel={headingLevel} />;
   }
   const staleError =
@@ -108,14 +126,30 @@ export function PageState({
       </div>
     ) : null;
 
-  const refreshing = queries.some((query) => query.isFetching);
+  const refreshing = !pending && queries.some((query) => query.isFetching);
   return (
     <div className={styles.content}>
       {refreshing && (
         <div className={styles.refreshing} role="progressbar" aria-label={t('page.refreshing')} />
       )}
       {staleError}
-      {content}
+      {/*
+        Always rendered so the children keep their state when loading finishes; while loaded it
+        is an enabled, presentational wrapper with the same flex layout as its parent.
+      */}
+      <fieldset
+        className={styles.region}
+        disabled={pending}
+        aria-busy={pending || undefined}
+        role={pending ? undefined : 'presentation'}
+      >
+        {pending && !parent.busyAncestor && (
+          <span role="status" className={styles.visuallyHidden}>
+            {t('page.loading')}
+          </span>
+        )}
+        <LoadingContext.Provider value={loading}>{content}</LoadingContext.Provider>
+      </fieldset>
     </div>
   );
 }

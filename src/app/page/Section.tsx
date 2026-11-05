@@ -1,6 +1,5 @@
 import React, { useCallback, useContext, useId, type ErrorInfo } from 'react';
 import { PageMessages } from '../../lib/components/display/PageMessages';
-import { Skeleton } from '../../lib/components/display/Skeleton';
 import { useLogger } from '../AppProvider/hooks';
 import { ErrorBoundary } from './ErrorBoundary';
 import { PageContext } from './PageContext';
@@ -73,7 +72,7 @@ export function Section({
           showErrorDetails={showErrorDetails}
           size="sm"
           headingLevel={messageLevel}
-          defaultSkeleton={<Skeleton variant="text" lines={3} />}
+          ownsLoading={queries !== undefined && queries.length > 0}
         >
           {children}
         </PageState>

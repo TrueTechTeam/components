@@ -1,3 +1,5 @@
+@use '../../lib/styles/mixins/component' as *;
+
 @keyframes page-refreshing {
   0% {
     transform: translateX(-100%);
@@ -29,6 +31,23 @@
   font-weight: var(--font-weight-semibold);
   line-height: var(--line-height-tight);
   overflow-wrap: break-word;
+}
+
+// Borderless fieldset around the state content: `disabled` while pending disables the native
+// controls inside; otherwise it lays out exactly like `.content`.
+.region {
+  display: flex;
+  flex-direction: column;
+  gap: inherit;
+  min-inline-size: 0;
+  min-width: 0;
+  margin: 0;
+  padding: 0;
+  border: 0;
+}
+
+.visuallyHidden {
+  @include visually-hidden;
 }
 
 // Wraps state content so the refreshing bar overlays its top edge without shifting layout.

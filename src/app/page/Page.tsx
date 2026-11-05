@@ -9,7 +9,6 @@ import React, {
   type Reducer,
 } from 'react';
 import { PageMessages } from '../../lib/components/display/PageMessages';
-import { Skeleton } from '../../lib/components/display/Skeleton';
 import { DebugPanel } from '../debug';
 import { useAppConfig, useLogger, useTrack } from '../AppProvider/hooks';
 import { PageIdContext } from '../params/PageIdContext';
@@ -153,7 +152,7 @@ export function Page({
                 showErrorDetails={showErrorDetails}
                 size="md"
                 headingLevel={2}
-                defaultSkeleton={<Skeleton variant="rounded" height="12rem" />}
+                ownsLoading
               >
                 {children}
               </PageState>
