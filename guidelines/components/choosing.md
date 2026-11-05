@@ -361,6 +361,7 @@ services. Plain presentational screens need only the main entry.
 | ----------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
 | A routed screen that loads data                                   | `Page` with `queries`; it provides loading, error+retry, empty and forbidden states (STATE-1) |
 | A region that can fail on its own                                 | `Section` with its own `queries`                                                              |
+| Skeleton for the data-dependent part of a Page or Section         | `Loadable` with a `shape` (text, heading, box, card, avatar, table); the structure stays      |
 | Filters, sort, tab or page number that survive reload and sharing | `usePageParams`                                                                               |
 | A remembered setting (density, view)                              | `usePreference` (URL by default, `storage: 'local'` for this browser only)                    |
 | Feedback after a save                                             | `useMutationFeedback`: toast by default, `via: 'inline'` inside a form                        |

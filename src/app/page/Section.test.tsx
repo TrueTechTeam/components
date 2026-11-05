@@ -1,7 +1,8 @@
 import React, { StrictMode, type ReactNode } from 'react';
 import { fireEvent, render, screen, within } from '@testing-library/react';
 import { AppProvider, type AppProviderProps, type Logger } from '../AppProvider';
-import { Page, Section, usePage, type QueryLike } from './index';
+import { Button } from '../../lib/components/buttons/Button';
+import { Loadable, Page, Section, usePage, type QueryLike } from './index';
 
 function makeLogger(): Logger {
   return { debug: jest.fn(), info: jest.fn(), warn: jest.fn(), error: jest.fn() };
@@ -84,7 +85,8 @@ describe('Section', () => {
         <Page title="Orders">
           <p>Page content</p>
           <Section title="Pending" queries={[query({ isPending: true })]}>
-            <p>Pending content</p>
+            <p>Pending structure</p>
+            <Loadable>{() => <p>Pending content</p>}</Loadable>
           </Section>
           <Section title="Failed" queries={[failed]}>
             <p>Failed content</p>
@@ -102,7 +104,8 @@ describe('Section', () => {
     expect(screen.getByText('Page content')).toBeInTheDocument();
 
     const pendingRegion = screen.getByRole('region', { name: 'Pending' });
-    expect(within(pendingRegion).getByRole('status', { name: 'Loading…' })).toBeInTheDocument();
+    expect(within(pendingRegion).getByRole('status')).toHaveTextContent('Loading…');
+    expect(within(pendingRegion).getByText('Pending structure')).toBeInTheDocument();
     expect(within(pendingRegion).queryByText('Pending content')).not.toBeInTheDocument();
 
     const failedRegion = screen.getByRole('region', { name: 'Failed' });
@@ -114,6 +117,52 @@ describe('Section', () => {
 
     const emptyRegion = screen.getByRole('region', { name: 'Empty' });
     expect(within(emptyRegion).getByText('No Data')).toBeInTheDocument();
+  });
+
+  it('skeletonizes only its own Loadables while its query is pending', () => {
+    const { container } = render(
+      wrap(
+        <Page title="Orders" queries={[query({ data: [1], dataUpdatedAt: 1 })]}>
+          <Loadable>{() => <p>Page data</p>}</Loadable>
+          <Button>Page action</Button>
+          <Section title="Totals" queries={[query({ isPending: true })]}>
+            <Button>Export</Button>
+            <Loadable shape="box">{() => <p>Totals data</p>}</Loadable>
+          </Section>
+        </Page>
+      )
+    );
+    expect(screen.getByText('Page data')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Page action' })).toBeEnabled();
+    const region = screen.getByRole('region', { name: 'Totals' });
+    expect(within(region).getByRole('button', { name: 'Export' })).toBeDisabled();
+    expect(within(region).queryByText('Totals data')).not.toBeInTheDocument();
+    expect(region.querySelector('[data-loadable="box"]')).not.toBeNull();
+    expect(container.querySelectorAll('[data-loadable]')).toHaveLength(1);
+  });
+
+  it('follows the page loading state unless it has queries of its own', () => {
+    const { container } = render(
+      wrap(
+        <Page title="Orders" queries={[query({ isPending: true })]}>
+          <Section title="Loaded" queries={[query({ data: [1], dataUpdatedAt: 1 })]}>
+            <Loadable>{() => <p>Own data</p>}</Loadable>
+          </Section>
+          <Section title="Plain">
+            <Loadable>{() => <p>Page data</p>}</Loadable>
+          </Section>
+          <Section title="Also pending" queries={[query({ isPending: true })]}>
+            <Loadable>{() => <p>Pending data</p>}</Loadable>
+          </Section>
+        </Page>
+      )
+    );
+    expect(screen.getByText('Own data')).toBeInTheDocument();
+    expect(screen.queryByText('Page data')).not.toBeInTheDocument();
+    expect(screen.queryByText('Pending data')).not.toBeInTheDocument();
+    expect(container.querySelectorAll('[data-loadable]')).toHaveLength(2);
+    // Loading is announced once, by the outermost busy region.
+    expect(screen.getAllByRole('status')).toHaveLength(1);
   });
 
   it('keeps its content with an inline alert when a background refetch fails', () => {

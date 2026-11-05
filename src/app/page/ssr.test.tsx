@@ -2,7 +2,7 @@
 import React from 'react';
 import { renderToString } from 'react-dom/server';
 import { AppProvider } from '../AppProvider';
-import { Page, Section, type QueryLike } from './index';
+import { Loadable, Page, Section, type QueryLike } from './index';
 
 function query(overrides: Partial<QueryLike> = {}): QueryLike {
   return {
@@ -31,7 +31,8 @@ describe('Page without a DOM (server rendering)', () => {
               <p>Recent orders</p>
             </Section>
             <Section title="Loading" queries={[query({ isPending: true })]}>
-              <p>Hidden</p>
+              <p>Loading structure</p>
+              <Loadable shape="table">{() => <p>Loaded rows</p>}</Loadable>
             </Section>
           </Page>
         </AppProvider>
@@ -40,6 +41,8 @@ describe('Page without a DOM (server rendering)', () => {
     expect(html).toContain('Page body');
     expect(html).toContain('Recent orders');
     expect(html).toContain('Refreshing…');
-    expect(html).not.toContain('Hidden');
+    expect(html).toContain('Loading structure');
+    expect(html).toContain('aria-busy="true"');
+    expect(html).not.toContain('Loaded rows');
   });
 });

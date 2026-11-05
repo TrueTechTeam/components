@@ -1,5 +1,7 @@
 export { ErrorBoundary } from './ErrorBoundary';
 export type { ErrorBoundaryProps } from './ErrorBoundary';
+export { Loadable } from './Loadable';
+export type { LoadableProps, LoadableShape } from './Loadable';
 export { Page } from './Page';
 export type { PageProps } from './Page';
 export { Section } from './Section';

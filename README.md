@@ -126,11 +126,15 @@ not translated and the English default is used. See `guidelines/foundations/labe
 
 A loading, error, empty and forbidden state, a page title and `page_view` tracking come with
 `Page`; a failed background refetch keeps the loaded content and shows an inline alert with Retry.
+While loading, the page structure renders right away (controls disabled) and each `Loadable`
+shows a skeleton shaped like its content; its function children run only once the data is there.
 
 ```tsx
 <Page title="Orders" queries={[orders]} isEmpty={([rows]) => rows.length === 0}>
   <h1>Orders</h1>
-  <OrdersTable rows={orders.data} />
+  <Loadable shape="table" rows={8}>
+    {() => <OrdersTable rows={orders.data} />}
+  </Loadable>
 </Page>
 ```
 
