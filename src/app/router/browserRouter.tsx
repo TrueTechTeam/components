@@ -10,6 +10,7 @@ import {
   type NavigationGuardApi,
 } from '../../lib/contexts/NavigationGuardContext';
 import { isInAppLinkClick } from './linkClick';
+import { linkClassName } from './linkClassName';
 import type { RouterAdapter, RouterLinkProps } from './types';
 
 const hasWindow = () => typeof window !== 'undefined';
@@ -93,6 +94,7 @@ function BrowserLink({
   target,
   download,
   replace,
+  className,
   ...rest
 }: RouterLinkProps & AnchorHTMLAttributes<HTMLAnchorElement>) {
   const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
@@ -104,7 +106,14 @@ function BrowserLink({
     navigate(href, { replace });
   };
   return (
-    <a href={href} target={target} download={download} onClick={handleClick} {...rest}>
+    <a
+      href={href}
+      target={target}
+      download={download}
+      onClick={handleClick}
+      className={linkClassName(className)}
+      {...rest}
+    >
       {children}
     </a>
   );

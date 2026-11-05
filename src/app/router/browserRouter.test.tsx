@@ -63,6 +63,7 @@ describe('useBrowserRouter', () => {
     render(<Nav />);
     const link = screen.getByRole('link', { name: 'Reports' });
     expect(link).toHaveAttribute('href', '/reports');
+    expect(link).toHaveClass('link');
 
     const notPrevented = fireEvent.click(link);
 
