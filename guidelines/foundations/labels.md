@@ -227,6 +227,7 @@ locale (`navigator.language`) when no locale is provided.
 | `filterAccordion.general`               | General                                                         |
 | `mutation.error`                        | Something went wrong. Please try again.                         |
 | `lastUpdated.text`                      | Updated {time}                                                  |
+| `lastUpdated.justNow`                   | Updated just now                                                |
 | `lastUpdated.refresh`                   | Refresh                                                         |
 | `debug.open`                            | Open debug panel                                                |
 | `debug.close`                           | Close                                                           |
