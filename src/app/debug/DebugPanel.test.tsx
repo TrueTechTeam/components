@@ -95,6 +95,9 @@ describe('DebugPanel', () => {
     expect(within(dialog).getByText(/"count": 7/)).toBeInTheDocument();
     expect(within(dialog).getByText(/something odd happened/)).toBeInTheDocument();
     expect(within(dialog).getByText('warn')).toBeInTheDocument();
+    // A query that just updated reads "just now", never "in 0 seconds".
+    expect(within(dialog).getByText('Updated just now')).toBeInTheDocument();
+    expect(within(dialog).queryByText(/in 0 seconds/)).not.toBeInTheDocument();
   });
 
   it('shows URL params', () => {
