@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { createOptimisticHandlers, Page, useMutationFeedback } from '../index';
+import { createOptimisticHandlers, Loadable, Page, Section, useMutationFeedback } from '../index';
 import { Button } from '../../lib/components/buttons/Button';
-import { StoryApp, wait } from './storyHelpers';
+import { Badge } from '../../lib/components/display/Badge';
+import { List } from '../../lib/components/display/List';
+import { AdaptiveGrid } from '../../lib/components/layout/AdaptiveGrid';
+import { ActionRow, Code, DemoPanel, Note, StoryApp, StoryFrame, wait } from './storyHelpers';
 
 const KEY = ['story-todos'];
 let serverTodos = ['Write docs', 'Review PR'];
@@ -24,9 +27,16 @@ function ToastDemo({ fail }: { fail: boolean }) {
     error: 'Could not save. Try again.',
   });
   return (
-    <Button loading={isPending} onClick={() => mutate('Quarterly report')}>
-      Save with toast
-    </Button>
+    <DemoPanel
+      title="Toast"
+      description="The default. A loading toast turns into success (5 s) or error (8 s)."
+    >
+      <ActionRow>
+        <Button loading={isPending} onClick={() => mutate('Quarterly report')}>
+          Save with toast
+        </Button>
+      </ActionRow>
+    </DemoPanel>
   );
 }
 
@@ -44,17 +54,27 @@ function InlineDemo({ fail }: { fail: boolean }) {
     success: 'Settings saved',
   });
   return (
-    <div style={{ display: 'grid', gap: 'var(--spacing-sm)', justifyItems: 'start' }}>
-      <Button variant="outline" loading={isPending} onClick={() => mutate()}>
-        Save with inline message
-      </Button>
-      {feedback && (
-        <div role={feedback.type === 'error' ? 'alert' : 'status'}>
-          {feedback.type === 'error' ? 'Error: ' : 'Done: '}
-          {feedback.message}
-        </div>
-      )}
-    </div>
+    <DemoPanel
+      title="Inline"
+      description={
+        <>
+          <Code>via: &apos;inline&apos;</Code> returns the message to render next to the form.
+        </>
+      }
+    >
+      <ActionRow>
+        <Button variant="outline" loading={isPending} onClick={() => mutate()}>
+          Save with inline message
+        </Button>
+        {feedback && (
+          <span role={feedback.type === 'error' ? 'alert' : 'status'}>
+            <Badge variant={feedback.type === 'error' ? 'danger' : 'success'}>
+              {feedback.message}
+            </Badge>
+          </span>
+        )}
+      </ActionRow>
+    </DemoPanel>
   );
 }
 
@@ -82,35 +102,49 @@ function OptimisticDemo({ fail }: { fail: boolean }) {
   });
   const { mutate } = useMutationFeedback(add, { error: 'Could not add. The list was restored.' });
   const [count, setCount] = useState(1);
+  const items = (todos.data ?? []).map((title, i) => ({ id: `${title}-${i}`, title }));
   return (
-    <div style={{ display: 'grid', gap: 'var(--spacing-sm)' }}>
-      <Button
-        variant="secondary"
-        onClick={() => {
-          mutate(`New item ${count}`);
-          setCount(count + 1);
-        }}
-      >
-        Add item (optimistic)
-      </Button>
-      <ul style={{ margin: 0 }}>
-        {todos.data?.map((t, i) => (
-          <li key={`${t}-${i}`}>{t}</li>
-        ))}
-      </ul>
-    </div>
+    <DemoPanel
+      title="Optimistic update"
+      description="The item appears at once and is rolled back if the server fails."
+    >
+      <ActionRow>
+        <Button
+          variant="secondary"
+          onClick={() => {
+            mutate(`New item ${count}`);
+            setCount(count + 1);
+          }}
+        >
+          Add item
+        </Button>
+      </ActionRow>
+      <Section queries={[todos]}>
+        <Loadable shape="text" lines={2}>
+          {() => <List data={items} primaryTextField="title" variant="bordered" size="sm" />}
+        </Loadable>
+      </Section>
+    </DemoPanel>
   );
 }
 
 function Demo({ fail }: { fail: boolean }) {
   return (
     <Page title="Mutations">
-      <div style={{ padding: 'var(--spacing-lg)', display: 'grid', gap: 'var(--spacing-lg)' }}>
-        <h1 style={{ margin: 0 }}>Mutations</h1>
-        <ToastDemo fail={fail} />
-        <InlineDemo fail={fail} />
-        <OptimisticDemo fail={fail} />
-      </div>
+      <StoryFrame
+        title="Mutations"
+        description="Success and error feedback for TanStack Query mutations, and optimistic cache updates."
+      >
+        <Note>
+          Toggle the <Code>fail</Code> control to see the error toast, the inline error and the
+          optimistic rollback.
+        </Note>
+        <AdaptiveGrid minItemWidth={300} gap={16} justifyItems="stretch" fillMode="auto-fit">
+          <ToastDemo fail={fail} />
+          <InlineDemo fail={fail} />
+          <OptimisticDemo fail={fail} />
+        </AdaptiveGrid>
+      </StoryFrame>
     </Page>
   );
 }
@@ -124,7 +158,7 @@ const meta: Meta<{ fail: boolean }> = {
     docs: {
       description: {
         component:
-          '`useMutationFeedback(mutation, opts)` adds toast (default) or inline success and error messaging to a TanStack Query mutation. `createOptimisticHandlers(queryClient, key, update)` spreads into `useMutation` to update the cache immediately, roll back on error and refetch on settle. Toggle `fail` to see the error and rollback paths.',
+          '`useMutationFeedback(mutation, opts)` adds toast (default) or inline success and error messaging to a TanStack Query mutation; settled toasts stay 5 s (success) or 8 s (error). `createOptimisticHandlers(queryClient, key, update)` spreads into `useMutation` to update the cache immediately, roll back on error and refetch on settle. Toggle `fail` to see the error and rollback paths.',
       },
     },
   },

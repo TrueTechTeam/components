@@ -10,13 +10,24 @@ import {
   useTrack,
 } from '../index';
 import { Button } from '../../lib/components/buttons/Button';
-import { StoryApp } from './storyHelpers';
+import { Badge } from '../../lib/components/display/Badge';
+import { AdaptiveGrid } from '../../lib/components/layout/AdaptiveGrid';
+import {
+  ActionRow,
+  Code,
+  CodeBlock,
+  DemoPanel,
+  StoryApp,
+  StoryFrame,
+  storyStyles,
+} from './storyHelpers';
 
 const meta: Meta<typeof AppProvider> = {
   title: 'App Builder/Foundation/AppProvider',
   component: AppProvider,
   tags: ['autodocs'],
   parameters: {
+    layout: 'fullscreen',
     globalDecorators: 'provider',
     docs: {
       description: {
@@ -69,30 +80,103 @@ function Services() {
   const { t, locale } = useAppTranslation();
   const { currency, dateTime } = useFormatters();
   return (
-    <div style={{ display: 'grid', gap: 'var(--spacing-md)', maxWidth: 520 }}>
-      <p>
-        {t('Hello, {name}', { name: 'Ada' })} ({locale}): {currency(1234.5, 'EUR')},{' '}
-        {dateTime(new Date(2026, 10, 2))}
-      </p>
-      <Can action="orders.delete" fallback={<em>You cannot delete orders.</em>}>
-        <span>You can delete orders.</span>
-      </Can>
-      <Feature name="newCheckout" fallback={<em>New checkout is off.</em>}>
-        <span>New checkout is on.</span>
-      </Feature>
-      <div style={{ display: 'flex', gap: 'var(--spacing-sm)' }}>
-        <Button size="sm" onClick={() => logger.info('Clicked', { at: Date.now() })}>
-          Log (see console)
-        </Button>
-        <Button
-          size="sm"
-          variant="outline"
-          onClick={() => track('story_clicked', { story: 'app' })}
+    <StoryFrame
+      title="AppProvider"
+      description="Services configured once on the provider, read through hooks anywhere below it."
+    >
+      <AdaptiveGrid minItemWidth={280} gap={16} justifyItems="stretch" fillMode="auto-fit">
+        <DemoPanel
+          title="Translation and formats"
+          description={<Code>useAppTranslation, useFormatters</Code>}
         >
-          Track event
-        </Button>
-      </div>
-    </div>
+          <ul className={storyStyles.checks}>
+            <li>{t('Hello, {name}', { name: 'Ada' })}</li>
+            <li>
+              Locale{' '}
+              <Badge variant="primary" size="sm">
+                {locale}
+              </Badge>
+            </li>
+            <li>
+              {currency(1234.5, 'EUR')} · {dateTime(new Date(2026, 10, 2))}
+            </li>
+          </ul>
+        </DemoPanel>
+        <DemoPanel title="Permissions and flags" description={<Code>Can, Feature</Code>}>
+          <ul className={storyStyles.checks}>
+            <li>
+              <Can
+                action="orders.delete"
+                fallback={
+                  <Badge variant="danger" size="sm">
+                    Denied
+                  </Badge>
+                }
+              >
+                <Badge variant="success" size="sm">
+                  Allowed
+                </Badge>
+              </Can>{' '}
+              Delete orders
+            </li>
+            <li>
+              <Can
+                action="orders.read"
+                fallback={
+                  <Badge variant="danger" size="sm">
+                    Denied
+                  </Badge>
+                }
+              >
+                <Badge variant="success" size="sm">
+                  Allowed
+                </Badge>
+              </Can>{' '}
+              Read orders
+            </li>
+            <li>
+              <Feature
+                name="newCheckout"
+                fallback={
+                  <Badge variant="neutral" size="sm">
+                    Off
+                  </Badge>
+                }
+              >
+                <Badge variant="success" size="sm">
+                  On
+                </Badge>
+              </Feature>{' '}
+              New checkout flag
+            </li>
+          </ul>
+        </DemoPanel>
+        <DemoPanel title="Logging and analytics" description={<Code>useLogger, useTrack</Code>}>
+          <p className={storyStyles.panelDescription}>Both print to the browser console here.</p>
+          <ActionRow>
+            <Button size="sm" onClick={() => logger.info('Clicked', { at: Date.now() })}>
+              Log a line
+            </Button>
+            <Button
+              size="sm"
+              variant="outline"
+              onClick={() => track('story_clicked', { story: 'app' })}
+            >
+              Track event
+            </Button>
+          </ActionRow>
+        </DemoPanel>
+      </AdaptiveGrid>
+      <DemoPanel title="This story's provider">
+        <CodeBlock label="AppProvider configuration">{`<AppProvider
+  locale="en-GB"
+  auth={{ user: { name: 'Ada' }, can: (action) => action !== 'orders.delete' }}
+  flags={{ isEnabled: (flag) => flag === 'newCheckout' }}
+  logger={console}
+  analytics={{ track: (event, props) => console.info('track', event, props) }}
+>`}</CodeBlock>
+      </DemoPanel>
+    </StoryFrame>
   );
 }
 
