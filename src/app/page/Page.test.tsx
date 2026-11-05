@@ -121,6 +121,9 @@ describe('Page', () => {
       wrap(
         <Page title="Orders" queries={[pending()]}>
           <Loadable shape="heading">Heading</Loadable>
+          <Loadable shape="text" width="12rem">
+            Text
+          </Loadable>
           <Loadable shape="box" height={80}>
             Box
           </Loadable>
@@ -138,6 +141,7 @@ describe('Page', () => {
       expect(shape(name)?.querySelector('[data-component="skeleton"]')).not.toBeNull();
     });
     expect(shape('avatar')?.querySelector('[data-variant="circular"]')).not.toBeNull();
+    expect(shape('text')?.firstElementChild).toHaveStyle({ width: '12rem' });
     // Header row + 2 body rows, 3 cells each.
     expect(shape('table')?.querySelectorAll('[data-component="skeleton"]')).toHaveLength(9);
     ['Heading', 'Box', 'Avatar', 'Card', 'Table'].forEach((text) =>

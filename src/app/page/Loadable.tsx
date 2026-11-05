@@ -15,7 +15,7 @@ export interface LoadableProps {
   rows?: number;
   /** Columns (`table`). @default 4 */
   columns?: number;
-  /** Width override (`box`, `card`, `avatar`, `heading`). */
+  /** Width override (`text`, `heading`, `box`, `card`, `avatar`). */
   width?: string | number;
   /** Height override (`box`, `card`, `avatar`). */
   height?: string | number;
@@ -25,10 +25,10 @@ export interface LoadableProps {
 
 const range = (n: number) => Array.from({ length: Math.max(1, Math.floor(n)) }, (_, i) => i);
 
-function TextLines({ lines }: { lines: number }) {
+function TextLines({ lines, width }: { lines: number; width?: string | number }) {
   const all = range(lines);
   return (
-    <div className={styles.lines}>
+    <div className={styles.lines} style={width === undefined ? undefined : { width }}>
       {all.map((i) => (
         <Skeleton
           key={i}
@@ -101,7 +101,7 @@ function ShapeSkeleton({
       );
     }
     default:
-      return <TextLines lines={lines} />;
+      return <TextLines lines={lines} width={width} />;
   }
 }
 
