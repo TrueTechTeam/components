@@ -35,7 +35,9 @@ describe('useMutationFeedback', () => {
       { wrapper }
     );
     act(() => result.current.mutate('a'));
-    await waitFor(() => expect(toastMock.success).toHaveBeenCalledWith('Saved A'));
+    await waitFor(() =>
+      expect(toastMock.success).toHaveBeenCalledWith('Saved A', { duration: 5000 })
+    );
     expect(toastMock.error).not.toHaveBeenCalled();
   });
 
@@ -49,7 +51,9 @@ describe('useMutationFeedback', () => {
     );
     act(() => result.current.mutate('a'));
     await waitFor(() =>
-      expect(toastMock.error).toHaveBeenCalledWith('Something went wrong. Please try again.')
+      expect(toastMock.error).toHaveBeenCalledWith('Something went wrong. Please try again.', {
+        duration: 8000,
+      })
     );
   });
 
@@ -67,7 +71,7 @@ describe('useMutationFeedback', () => {
     await act(async () => {
       await expect(result.current.mutateAsync('a')).rejects.toThrow('x');
     });
-    expect(toastMock.error).toHaveBeenCalledWith('Failed: x');
+    expect(toastMock.error).toHaveBeenCalledWith('Failed: x', { duration: 8000 });
   });
 
   it('updates a pending toast on settle', async () => {

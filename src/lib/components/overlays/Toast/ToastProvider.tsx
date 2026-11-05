@@ -195,23 +195,32 @@ export function ToastProvider({
   );
 
   // Update a toast
-  const updateToast = useCallback((id: string, data: Partial<ToastData>) => {
-    setToasts((prev) =>
-      prev.map((t) =>
-        t.id === id
-          ? {
-              ...t,
-              ...data,
-              // Reset duration if updating variant from loading
-              ...(t.variant === 'loading' &&
-                data.variant !== 'loading' && {
-                  createdAt: Date.now(),
-                }),
-            }
-          : t
-      )
-    );
-  }, []);
+  const updateToast = useCallback(
+    (id: string, data: Partial<ToastData>) => {
+      setToasts((prev) =>
+        prev.map((t) => {
+          if (t.id !== id) {
+            return t;
+          }
+          const settles =
+            t.variant === 'loading' && data.variant !== undefined && data.variant !== 'loading';
+          return {
+            ...t,
+            ...data,
+            // A loading toast that settles starts a fresh timer from now. It was created with
+            // duration 0 (no auto-dismiss), so fall back to the default duration.
+            ...(settles && {
+              createdAt: Date.now(),
+              duration: data.duration ?? defaultDuration,
+              remainingDuration: undefined,
+              pausedAt: undefined,
+            }),
+          };
+        })
+      );
+    },
+    [defaultDuration]
+  );
 
   // Remove all toasts
   const removeAllToasts = useCallback(() => {
