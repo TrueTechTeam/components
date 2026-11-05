@@ -4,6 +4,7 @@ import { Accordion } from '../../lib/components/display/Accordion';
 import { Badge } from '../../lib/components/display/Badge';
 import { useLabels } from '../../lib/contexts/LabelsContext';
 import { useFormatters, useLogBuffer } from '../AppProvider/hooks';
+import { updatedText } from '../data/updatedText';
 import type { LogLevel } from '../AppProvider/logger';
 import { PageStoreContext, usePage } from '../page/PageContext';
 import { useRouterAdapter } from '../router/RouterContext';
@@ -82,7 +83,7 @@ function QueriesSection() {
             {q.dataUpdatedAt > 0 && (
               <span className={styles.muted}>
                 {' '}
-                {t('debug.updated', { time: relativeTime(q.dataUpdatedAt) })}
+                {updatedText(t, relativeTime, q.dataUpdatedAt, 'debug.updated')}
               </span>
             )}
           </li>
