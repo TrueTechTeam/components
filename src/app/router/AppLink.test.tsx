@@ -46,7 +46,9 @@ describe('AppLink', () => {
     );
     const link = screen.getByRole('link', { name: 'Orders' });
     expect(link).toHaveAttribute('href', '/orders');
-    expect(link).toHaveClass('nav');
+    // Library link styling, merged with the consumer's class (once, not per wrapper).
+    expect(link).toHaveClass('link', 'nav');
+    expect(link.className.split(' ').filter((c) => c === 'link')).toHaveLength(1);
     expect(link).toHaveAttribute('aria-current', 'page');
 
     fireEvent.click(link);

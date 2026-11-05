@@ -4,6 +4,7 @@ import { AppProvider } from '../AppProvider';
 import { param, usePageParams } from '../params';
 import { AppLink } from './AppLink';
 import { createNextRouter } from './createNextRouter';
+import { useRouterAdapter } from './RouterContext';
 
 function setup(
   search: URLSearchParams | { toString(): string } | null = new URLSearchParams('page=2')
@@ -103,6 +104,24 @@ describe('createNextRouter', () => {
     expect(result.current).toBe(first);
   });
 
+  it('gives its Link the library link styling', () => {
+    const { useNextRouter } = setup();
+    function Nav() {
+      const { Link } = useRouterAdapter();
+      return (
+        <Link href="/reports" className="x">
+          Reports
+        </Link>
+      );
+    }
+    render(
+      <AppProvider router={useNextRouter} debug={false}>
+        <Nav />
+      </AppProvider>
+    );
+    expect(screen.getByRole('link', { name: 'Reports' })).toHaveClass('link', 'x');
+  });
+
   it('renders the injected Link with href and replace through AppLink', () => {
     const { linkProps, useNextRouter } = setup();
     render(
@@ -114,7 +133,8 @@ describe('createNextRouter', () => {
     );
     const link = screen.getByRole('link', { name: 'Reports' });
     expect(link).toHaveAttribute('href', '/reports');
-    expect(link).toHaveClass('x');
+    expect(link).toHaveClass('link', 'x');
+    expect(link.className.split(' ').filter((c) => c === 'link')).toHaveLength(1);
     expect(linkProps).toHaveBeenLastCalledWith(
       expect.objectContaining({ href: '/reports', replace: true })
     );

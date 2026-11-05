@@ -6,6 +6,7 @@ import React, {
   type MouseEvent,
 } from 'react';
 import { useNavigationGuard } from '../../lib/contexts/NavigationGuardContext';
+import { linkClassName } from './linkClassName';
 import type { RouterAdapter, RouterLinkProps } from './types';
 
 export interface ReactRouterBlocker {
@@ -64,6 +65,7 @@ export function createReactRouter(deps: ReactRouterDeps): () => RouterAdapter {
   function ReactRouterLink({
     href,
     onClick,
+    className,
     ...rest
   }: RouterLinkProps & AnchorHTMLAttributes<HTMLAnchorElement>) {
     const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
@@ -76,7 +78,7 @@ export function createReactRouter(deps: ReactRouterDeps): () => RouterAdapter {
         });
       }
     };
-    return <Link to={href} onClick={handleClick} {...rest} />;
+    return <Link to={href} onClick={handleClick} className={linkClassName(className)} {...rest} />;
   }
 
   return function useReactRouter(): RouterAdapter {

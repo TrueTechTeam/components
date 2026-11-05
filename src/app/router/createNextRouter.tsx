@@ -1,4 +1,5 @@
 import React, { useMemo, type AnchorHTMLAttributes, type ComponentType } from 'react';
+import { linkClassName } from './linkClassName';
 import type { RouterAdapter, RouterLinkProps } from './types';
 
 /** What `next/navigation`'s `useSearchParams` returns (`ReadonlyURLSearchParams`), structurally. */
@@ -45,8 +46,11 @@ export interface NextRouterDeps {
 export function createNextRouter(deps: NextRouterDeps): () => RouterAdapter {
   const { useRouter, usePathname, useSearchParams, Link } = deps;
 
-  function NextLink(props: RouterLinkProps & AnchorHTMLAttributes<HTMLAnchorElement>) {
-    return <Link {...props} />;
+  function NextLink({
+    className,
+    ...props
+  }: RouterLinkProps & AnchorHTMLAttributes<HTMLAnchorElement>) {
+    return <Link {...props} className={linkClassName(className)} />;
   }
 
   /** Reactive search params; only components that read URL params call it. */

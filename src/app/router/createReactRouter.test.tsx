@@ -105,6 +105,24 @@ describe('createReactRouter', () => {
     expect(navigate).toHaveBeenLastCalledWith('/doc?a=1#intro', undefined);
   });
 
+  it('gives its Link the library link styling', () => {
+    const { useRR } = setup({});
+    function Nav() {
+      const { Link } = useRouterAdapter();
+      return (
+        <Link href="/reports" className="x">
+          Reports
+        </Link>
+      );
+    }
+    render(
+      <AppProvider router={useRR} logger={silentLogger}>
+        <Nav />
+      </AppProvider>
+    );
+    expect(screen.getByRole('link', { name: 'Reports' })).toHaveClass('link', 'x');
+  });
+
   it('maps href to the Link "to" prop and passes replace', () => {
     const { useRR, navigate } = setup({});
     render(
@@ -116,6 +134,7 @@ describe('createReactRouter', () => {
     );
     const link = screen.getByRole('link', { name: 'Reports' });
     expect(link).toHaveAttribute('href', '/reports');
+    expect(link).toHaveClass('link');
     fireEvent.click(link);
     expect(navigate).toHaveBeenCalledWith('/reports', { replace: true });
   });
