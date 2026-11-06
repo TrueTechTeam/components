@@ -209,6 +209,15 @@ text, layout) inside a disabled, `aria-busy` region; wrap only the data-dependen
 `Loadable` so they show a skeleton in the same shape. The `skeleton` prop replaces the whole body
 instead.
 
+- Children render during loading: read query data through `Loadable` function children
+  (`{() => <Rows rows={orders.data} />}`) or guard it with `?.`. A child that throws before its
+  data exists is retried when loading finishes; a crash after that shows the error state.
+- Only native controls (`button`, `input`, `select`, `textarea`) are disabled while pending. A
+  Section's controls stay disabled while its parent Page is pending, even if the Section's own
+  data has loaded.
+- For paginated or filtered queries use `placeholderData: keepPreviousData`, so changing the key
+  keeps the current rows instead of returning to skeletons and dropping focus.
+
 `Page` ids default to a slug of the title; pass `id` when the title is dynamic or translated, so
 stored preferences and analytics keep a stable key. `Page` and `Section` show generic error text
 for failed queries; `showErrorDetails` opts in to showing the query error's message.
