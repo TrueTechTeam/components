@@ -3,8 +3,9 @@
 // Library link styling for AppLink and the router adapters' Link. `--theme-primary-700` is the
 // primary tone that passes 4.5:1 for text on `--theme-background-primary` in both themes
 // (light 7.0:1, dark 6.0:1); `--theme-primary` is only 3.9:1 in dark (COLOR-1). The underline
-// keeps links distinguishable without color (COLOR-2).
-.link {
+// keeps links distinguishable without color (COLOR-2). Every rule is wrapped in :where() (zero
+// specificity) so a consumer's `className` overrides it regardless of stylesheet order.
+:where(.link) {
   color: var(--theme-primary-700);
   text-decoration: underline;
   text-decoration-thickness: 1px;
@@ -12,9 +13,8 @@
   border-radius: var(--radius-sm);
   cursor: pointer;
 
-  &:visited {
-    color: var(--theme-primary-700);
-  }
+  // No :visited rule: this author color already applies to visited links (the browser's purple
+  // is a user-agent style), so visited looks the same as normal.
 
   &:hover {
     text-decoration-thickness: 2px;
