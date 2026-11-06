@@ -162,7 +162,32 @@ describe('Section', () => {
     expect(screen.queryByText('Pending data')).not.toBeInTheDocument();
     expect(container.querySelectorAll('[data-loadable]')).toHaveLength(2);
     // Loading is announced once, by the outermost busy region.
-    expect(screen.getAllByRole('status')).toHaveLength(1);
+    expect(
+      screen.getAllByRole('status').filter((el) => el.textContent === 'Loading…')
+    ).toHaveLength(1);
+  });
+
+  it('recovers a child that crashed while the page was pending (section without queries)', () => {
+    function Rows({ data }: { data?: number[] }) {
+      return <p>Rows: {data!.length}</p>;
+    }
+    const ui = (q: QueryLike) =>
+      wrap(
+        <Page title="Orders" queries={[q]}>
+          <Section title="Totals">
+            <Rows data={q.data as number[] | undefined} />
+          </Section>
+        </Page>
+      );
+    const spy = jest.spyOn(console, 'error').mockImplementation(() => undefined);
+    try {
+      const { rerender } = render(ui(query({ isPending: true })));
+      expect(screen.queryByText('Something went wrong')).not.toBeInTheDocument();
+      rerender(ui(query({ data: [1, 2, 3], dataUpdatedAt: 1 })));
+      expect(screen.getByText('Rows: 3')).toBeInTheDocument();
+    } finally {
+      spy.mockRestore();
+    }
   });
 
   it('keeps its content with an inline alert when a background refetch fails', () => {

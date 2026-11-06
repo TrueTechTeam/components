@@ -20,7 +20,13 @@ import {
   type PageStoreValue,
   type QueryLike,
 } from './PageContext';
-import { PageState, sameQueries, useRegisterQueries, type StateProps } from './PageState';
+import {
+  PageState,
+  PendingFallback,
+  sameQueries,
+  useRegisterQueries,
+  type StateProps,
+} from './PageState';
 import { usePageMeta } from './usePageMeta';
 import styles from './Page.module.scss';
 
@@ -63,6 +69,13 @@ const keepState = (state: unknown) => state;
  * an error boundary around its content, `document.title`/description, one `page_view` event per
  * mount, a page store (`reducer`) and the query registry its Sections report to. It renders no
  * heading of its own; render the page heading (an `h1`) in `children` or use a template.
+ *
+ * Loading: children render while `queries` are pending (structure first), inside a disabled,
+ * `aria-busy` region. Read query data through `Loadable` function children or guard it with
+ * `?.`; a child that throws before its data exists is retried once loading finishes. Only native
+ * controls (`button`, `input`, …) are disabled while pending. For paginated or filtered queries
+ * pass `placeholderData: keepPreviousData` so a key change keeps the current content instead of
+ * going back to skeletons (and dropping focus).
  *
  * The id defaults to a slug of `title`; pass `id` when the title is dynamic or translated.
  */
@@ -119,6 +132,7 @@ export function Page({
     };
   }, []);
   useRegisterQueries(registerQueries, pageId, queries);
+  const pending = queries?.some((query) => query.isPending) ?? false;
 
   const page = useMemo<PageContextValue>(
     () => ({ id: pageId, title, description, registerQueries, queries: registry }),
@@ -139,9 +153,17 @@ export function Page({
           <div className={styles.page} data-page-id={pageId}>
             <ErrorBoundary
               onError={onError}
-              resetKeys={[pageId]}
+              // `pending`: children render while loading and may throw before their data exists;
+              // the boundary retries them once loading finishes. A crash after that still shows.
+              resetKeys={[pageId, pending]}
               // Generic text only (R9): the raw error goes to logger.error, never to the screen.
-              fallback={(_error, reset) => <PageMessages error onRetry={reset} headingLevel={2} />}
+              fallback={(_error, reset) =>
+                pending ? (
+                  <PendingFallback />
+                ) : (
+                  <PageMessages error onRetry={reset} headingLevel={2} />
+                )
+              }
             >
               <PageState
                 queries={queries}

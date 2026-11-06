@@ -63,7 +63,10 @@ describe('Page', () => {
     const region = screen.getByRole('group');
     expect(region.tagName).toBe('FIELDSET');
     expect(region).toHaveAttribute('aria-busy', 'true');
-    expect(screen.getByRole('status')).toHaveTextContent('Loading…');
+    const status = screen.getByRole('status');
+    expect(status).toHaveTextContent('Loading…');
+    // The live region sits outside the busy fieldset, so screen readers speak it.
+    expect(region).not.toContainElement(status);
     // Only the data-dependent piece is a skeleton, shaped as 3 text lines, hidden from AT.
     const skeletons = container.querySelectorAll('[data-component="skeleton"]');
     expect(skeletons).toHaveLength(3);
@@ -74,9 +77,73 @@ describe('Page', () => {
     expect(screen.getByText('Order rows')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'New order' })).toBeEnabled();
     expect(screen.queryByRole('group')).not.toBeInTheDocument();
-    expect(screen.queryByRole('status')).not.toBeInTheDocument();
+    // Same element, always mounted: only its text changes, so the change is announced.
+    expect(screen.getByRole('status')).toBe(status);
+    expect(status).toBeEmptyDOMElement();
     expect(container.querySelector('[aria-busy="true"]')).toBeNull();
     expect(container.querySelector('[data-component="skeleton"]')).toBeNull();
+  });
+
+  it('mounts its loading status before the load starts and keeps it afterwards', () => {
+    const ui = (queries: QueryLike[]) =>
+      wrap(
+        <Page title="Orders" queries={queries}>
+          <p>Body</p>
+        </Page>
+      );
+    const { rerender } = render(ui([success([1])]));
+    const status = screen.getByRole('status');
+    expect(status).toBeEmptyDOMElement();
+    rerender(ui([pending()]));
+    expect(screen.getByRole('status')).toBe(status);
+    expect(status).toHaveTextContent('Loading…');
+    rerender(ui([success([2])]));
+    expect(screen.getByRole('status')).toBe(status);
+    expect(status).toBeEmptyDOMElement();
+  });
+
+  it('recovers a child that crashed while pending once the data arrives', () => {
+    function Rows({ data }: { data?: number[] }) {
+      // Reads the data without a guard: throws while pending.
+      return <p>Rows: {data!.length}</p>;
+    }
+    const ui = (q: QueryLike) =>
+      wrap(
+        <Page title="Orders" queries={[q]}>
+          <h1>Orders</h1>
+          <Rows data={q.data as number[] | undefined} />
+        </Page>
+      );
+    const spy = jest.spyOn(console, 'error').mockImplementation(() => undefined);
+    try {
+      const { rerender } = render(ui(pending()));
+      // No error flash while loading.
+      expect(screen.queryByText('Something went wrong')).not.toBeInTheDocument();
+      rerender(ui(success([1, 2])));
+      expect(screen.getByText('Rows: 2')).toBeInTheDocument();
+      expect(screen.queryByRole('button', { name: /try again/i })).not.toBeInTheDocument();
+    } finally {
+      spy.mockRestore();
+    }
+  });
+
+  it('still shows the error state for a child that crashes after loading', () => {
+    function Broken(): never {
+      throw new Error('boom');
+    }
+    const spy = jest.spyOn(console, 'error').mockImplementation(() => undefined);
+    try {
+      render(
+        wrap(
+          <Page title="Orders" queries={[success([1])]}>
+            <Broken />
+          </Page>
+        )
+      );
+      expect(screen.getByText('Something went wrong')).toBeInTheDocument();
+    } finally {
+      spy.mockRestore();
+    }
   });
 
   it('keeps the same child instances when loading finishes (no remount)', () => {
