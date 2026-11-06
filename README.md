@@ -128,6 +128,9 @@ A loading, error, empty and forbidden state, a page title and `page_view` tracki
 `Page`; a failed background refetch keeps the loaded content and shows an inline alert with Retry.
 While loading, the page structure renders right away (controls disabled) and each `Loadable`
 shows a skeleton shaped like its content; its function children run only once the data is there.
+Because children render during loading, read query data through `Loadable` function children or
+guard it with `?.`. For paginated or filtered queries pass `placeholderData: keepPreviousData` so
+a key change does not return the page to skeletons.
 
 ```tsx
 <Page title="Orders" queries={[orders]} isEmpty={([rows]) => rows.length === 0}>

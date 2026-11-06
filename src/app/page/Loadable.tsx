@@ -15,7 +15,11 @@ export interface LoadableProps {
   rows?: number;
   /** Columns (`table`). @default 4 */
   columns?: number;
-  /** Width override (`text`, `heading`, `box`, `card`, `avatar`). */
+  /**
+   * Width override (`text`, `heading`, `box`, `card`, `avatar`). Set it when the Loadable sits in
+   * a row flex container (a toolbar, an inline group): skeletons size to their container, so
+   * without a width the placeholder collapses or stretches there.
+   */
   width?: string | number;
   /** Height override (`box`, `card`, `avatar`). */
   height?: string | number;
