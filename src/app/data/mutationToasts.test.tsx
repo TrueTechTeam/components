@@ -29,13 +29,33 @@ function Demo({ fail, pending }: { fail: boolean; pending: boolean }) {
   );
 }
 
-// Small steps, so React renders (and arms the dismiss timer) as the clock moves, like a browser.
-async function advance(ms: number) {
-  for (let elapsed = 0; elapsed < ms; elapsed += 50) {
-    await act(async () => {
-      await jest.advanceTimersByTimeAsync(Math.min(50, ms - elapsed));
-    });
+const ENTER_MS = 200; // ToastProvider default animationDuration
+const EXIT_MS = 200;
+
+/** One fake-clock advance inside act; React renders and runs effects when it ends. */
+const tick = (ms: number) =>
+  act(async () => {
+    await jest.advanceTimersByTimeAsync(ms);
+  });
+
+/**
+ * Steps the clock until the settled toast has finished entering (its dismiss timer is armed in
+ * the effect committed by that render) and returns the fake time it armed at. Stepping keeps
+ * React rendering between timers, as a browser would; a single large advance would defer the
+ * entering -> entered render and arm the timer late.
+ */
+async function waitUntilArmed(message: string): Promise<number> {
+  for (let i = 0; i < 20; i++) {
+    const toast = screen.queryByText(message)?.closest('[data-component="toast"]');
+    if (
+      toast?.getAttribute('data-state') === 'entered' &&
+      ['success', 'error'].includes(toast.getAttribute('data-variant') ?? '')
+    ) {
+      return Date.now();
+    }
+    await tick(ENTER_MS / 4);
   }
+  throw new Error(`"${message}" never settled and entered`);
 }
 
 describe('useMutationFeedback toasts (real ToastProvider)', () => {
@@ -58,15 +78,16 @@ describe('useMutationFeedback toasts (real ToastProvider)', () => {
         </GlobalProvider>
       );
       fireEvent.click(screen.getByRole('button', { name: 'Save' }));
-      // Let the mutation settle and the toast enter.
-      await advance(10);
+      const armedAt = await waitUntilArmed(message);
+
+      // Measured from the moment the settled toast's timer is armed: 1 ms before the minimum
+      // it is still on screen...
+      await tick(minimum - 1);
+      expect(Date.now() - armedAt).toBe(minimum - 1);
       expect(screen.getByText(message)).toBeInTheDocument();
 
-      await advance(minimum - 100);
-      expect(screen.getByText(message)).toBeInTheDocument();
-
-      // Past the duration plus the enter and exit animations.
-      await advance(1000);
+      // ...and once the minimum and the exit animation have passed, it is gone.
+      await tick(1 + EXIT_MS);
       expect(screen.queryByText(message)).not.toBeInTheDocument();
     }
   );
