@@ -1,5 +1,6 @@
 import React, { useContext, useEffect, useMemo, type ReactNode } from 'react';
 import { Button } from '../../lib/components/buttons/Button';
+import { Skeleton } from '../../lib/components/display/Skeleton';
 import { PageMessages, type PageMessagesProps } from '../../lib/components/display/PageMessages';
 import { useLabels } from '../../lib/contexts/LabelsContext';
 import { useAuth } from '../AppProvider/hooks';
@@ -59,6 +60,9 @@ function messageError(error: unknown): Error | string | true {
  * content and shows a compact inline alert with Retry above it (R8); only errored queries
  * without data show the full error state. A refreshing bar overlays the top while any query
  * fetches in the background.
+ *
+ * Migration note: children now render while pending, so code that reads `query.data.x`
+ * directly must move into `Loadable` function children or use `?.`.
  */
 export function PageState({
   queries = [],
@@ -137,19 +141,40 @@ export function PageState({
         Always rendered so the children keep their state when loading finishes; while loaded it
         is an enabled, presentational wrapper with the same flex layout as its parent.
       */}
+      {ownsLoading && (
+        // Always mounted and outside the busy fieldset: only its text changes, which screen
+        // readers announce. Nested regions stay silent while an ancestor is already busy.
+        <span role="status" className={styles.visuallyHidden}>
+          {pending && !parent.busyAncestor ? t('page.loading') : ''}
+        </span>
+      )}
       <fieldset
         className={styles.region}
         disabled={pending}
         aria-busy={pending || undefined}
         role={pending ? undefined : 'presentation'}
       >
-        {pending && !parent.busyAncestor && (
-          <span role="status" className={styles.visuallyHidden}>
-            {t('page.loading')}
-          </span>
-        )}
         <LoadingContext.Provider value={loading}>{content}</LoadingContext.Provider>
       </fieldset>
+    </div>
+  );
+}
+
+/**
+ * Error-boundary fallback while the owning region is still pending: a child that reads data
+ * before it exists may throw during loading. Show loading instead of an error flash; the
+ * boundary resets when loading finishes (`pending` is in its reset keys).
+ */
+export function PendingFallback() {
+  const t = useLabels();
+  return (
+    <div
+      className={styles.skeleton}
+      role="status"
+      aria-busy="true"
+      aria-label={t('common.loading')}
+    >
+      <Skeleton variant="text" lines={3} />
     </div>
   );
 }
