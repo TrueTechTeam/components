@@ -35,14 +35,11 @@ describe('ToastProvider dismiss timer', () => {
   beforeEach(() => jest.useFakeTimers());
   afterEach(() => jest.useRealTimers());
 
-  // Small steps, so React renders (and arms the dismiss timer) as the clock moves.
-  async function advance(ms: number) {
-    for (let elapsed = 0; elapsed < ms; elapsed += 50) {
-      await act(async () => {
-        await jest.advanceTimersByTimeAsync(Math.min(50, ms - elapsed));
-      });
-    }
-  }
+  // One fake-clock advance inside act; React renders and runs effects when it ends.
+  const tick = (ms: number) =>
+    act(async () => {
+      await jest.advanceTimersByTimeAsync(ms);
+    });
 
   function Trigger() {
     const toast = useToast();
@@ -66,11 +63,19 @@ describe('ToastProvider dismiss timer', () => {
       </ToastProvider>
     );
     fireEvent.click(screen.getByRole('button', { name: 'Save' }));
-    await advance(1000);
+    // Let the loading toast finish entering (200 ms), then settle it at 1000 ms. The update
+    // renders when that tick ends, which re-arms the dismiss timer from 1000 ms.
+    await tick(200);
+    expect(screen.getByText('Saving').closest('[data-component="toast"]')).toHaveAttribute(
+      'data-state',
+      'entered'
+    );
+    await tick(800);
     expect(screen.getByText('Saved')).toBeInTheDocument();
-    await advance(4900);
+    await tick(4999);
     expect(screen.getByText('Saved')).toBeInTheDocument();
-    await advance(400);
+    // Duration plus the 200 ms exit animation.
+    await tick(1 + 200);
     expect(screen.queryByText('Saved')).not.toBeInTheDocument();
   });
 });
