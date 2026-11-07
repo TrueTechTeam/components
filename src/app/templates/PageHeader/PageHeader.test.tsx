@@ -4,7 +4,7 @@ import { LabelsProvider } from '../../../lib/contexts/LabelsContext';
 import { NavigationGuardProvider } from '../../../lib/contexts/NavigationGuardContext';
 import { AppProvider } from '../../AppProvider';
 import type { RouterAdapter } from '../../router';
-import { PageHeader, type PageHeaderProps } from './PageHeader';
+import { PageHeader, getPageTabId, type PageHeaderProps } from './PageHeader';
 
 const silentLogger = { debug: jest.fn(), info: jest.fn(), warn: jest.fn(), error: jest.fn() };
 
@@ -188,7 +188,51 @@ describe('PageHeader', () => {
     expect(screen.getByRole('button', { name: 'Delete' })).toBeInTheDocument();
   });
 
+  it('hides the "More actions" trigger when every other action is permission-hidden', () => {
+    mockViewport(360);
+    setup(
+      {
+        actions: [
+          { id: 'a', label: 'Export', permission: { action: 'export' } },
+          { id: 'p', label: 'Create', variant: 'primary' },
+        ],
+      },
+      { can: () => false }
+    );
+    expect(screen.getAllByRole('button').map((b) => b.textContent)).toEqual(['Create']);
+  });
+
+  it('warns once about extra primary actions and renders them as secondary', () => {
+    const warn = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
+    setup({
+      actions: [
+        { id: 'p1', label: 'One', variant: 'primary' },
+        { id: 'p2', label: 'Two', variant: 'primary' },
+      ],
+    });
+    expect(warn).toHaveBeenCalledTimes(1);
+    expect(screen.getByRole('button', { name: 'One' })).toHaveAttribute('data-variant', 'primary');
+    expect(screen.getByRole('button', { name: 'Two' })).toHaveAttribute('data-variant', 'outline');
+    warn.mockRestore();
+  });
+
   describe('tabs', () => {
+    it('gives tabs stable ids and no dangling aria-controls', () => {
+      setup({
+        tabs: [
+          { value: 'overview', label: 'Overview' },
+          { value: 'items', label: 'Items' },
+        ],
+      });
+      const tab = screen.getByRole('tab', { name: 'Items' });
+      expect(tab).toHaveAttribute('id', getPageTabId('items'));
+      expect(getPageTabId('items', 'view')).toBe('pagetab-view-items');
+      document.querySelectorAll('[aria-controls]').forEach((el) => {
+        expect(document.getElementById(el.getAttribute('aria-controls') ?? '')).not.toBeNull();
+      });
+      expect(tab).not.toHaveAttribute('aria-controls');
+    });
+
     const tabs = [
       { value: 'overview', label: 'Overview' },
       { value: 'items', label: 'Items', badge: 3 },
