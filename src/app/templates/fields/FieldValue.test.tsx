@@ -5,6 +5,9 @@ import { NavigationGuardProvider } from '../../../lib/contexts/NavigationGuardCo
 import { AppProvider } from '../../AppProvider';
 import { FieldValue, fieldAlign, isEmptyFieldValue, type FieldValueProps } from './FieldValue';
 
+// Pinned west of UTC so a UTC-midnight parse of a date-only string would render the previous day.
+process.env.TZ = 'America/Los_Angeles';
+
 const silentLogger = { debug: jest.fn(), info: jest.fn(), warn: jest.fn(), error: jest.fn() };
 
 function renderField(props: FieldValueProps) {
@@ -28,6 +31,12 @@ describe('FieldValue', () => {
   it('formats percent with fractionDigits', () => {
     renderField({ kind: 'percent', value: 0.256, fractionDigits: 1 });
     expect(screen.getByText('25.6%')).toBeInTheDocument();
+  });
+
+  it('renders date-only strings as that calendar day regardless of time zone', () => {
+    expect(new Date(2026, 0, 5).getTimezoneOffset()).toBeGreaterThan(0);
+    renderField({ kind: 'date', value: '2026-01-05' });
+    expect(screen.getByText('Jan 5, 2026')).toBeInTheDocument();
   });
 
   it('formats number and fileSize', () => {
@@ -93,6 +102,20 @@ describe('FieldValue', () => {
     expect(screen.getByText('Not set')).toBeInTheDocument();
   });
 
+  it('accepts http, relative, data:image and blob image sources', () => {
+    for (const src of [
+      'https://x.co/a.png',
+      '/a.png',
+      'a.png',
+      'data:image/png;base64,AA',
+      'blob:abc',
+    ]) {
+      const { container, unmount } = renderField({ kind: 'image', value: src });
+      expect(container.querySelector('img')).toHaveAttribute('src', src);
+      unmount();
+    }
+  });
+
   it('copies an id', async () => {
     const writeText = jest.fn().mockResolvedValue(undefined);
     Object.assign(navigator, { clipboard: { writeText } });
@@ -143,6 +166,9 @@ describe('FieldValue', () => {
     ['number', NaN],
     ['currency', 'abc'],
     ['list', []],
+    ['phone', 'n/a'],
+    ['image', 'javascript:alert(1)'],
+    ['image', 'ftp://x/a.png'],
   ] as const)('renders an empty marker for %s %p', (kind, value) => {
     const { container } = renderField({ kind, value });
     expect(container.textContent).toContain('—');
