@@ -1,0 +1,130 @@
+@use '../../../lib/styles/mixins/component' as *;
+
+.shell {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background: var(--theme-background-primary);
+  color: var(--theme-text-primary);
+}
+
+// Visually hidden until focused, then pinned top-left above everything.
+.skipLink {
+  position: absolute;
+  inset-block-start: var(--spacing-sm);
+  inset-inline-start: var(--spacing-sm);
+  z-index: var(--z-tooltip);
+  padding: var(--spacing-sm) var(--spacing-md);
+  border-radius: var(--radius-md);
+  background: var(--theme-background-primary);
+  color: var(--theme-primary-700);
+  font-weight: var(--font-weight-medium);
+  transform: translateY(-200%);
+
+  &:focus {
+    transform: none;
+  }
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+.body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.sidebar {
+  position: sticky;
+  inset-block-start: 0;
+  align-self: flex-start;
+  height: 100vh;
+}
+
+.main {
+  flex: 1;
+  min-width: 0;
+  padding: var(--spacing-lg);
+
+  &:focus {
+    outline: none;
+  }
+
+  &[data-bottom-nav] {
+    // Keep content clear of the fixed bottom bar.
+    padding-block-end: calc(var(--spacing-lg) + 56px + env(safe-area-inset-bottom, 0px));
+  }
+}
+
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  margin: 0;
+  padding: var(--spacing-sm);
+  list-style: none;
+
+  &[data-level='1'] {
+    padding-block: var(--spacing-xs) 0;
+    padding-inline-start: var(--spacing-lg);
+  }
+}
+
+.item {
+  margin: 0;
+}
+
+// Library link styles are :where() (zero specificity), so these win.
+.link {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  min-height: var(--target-size-min);
+  padding: var(--spacing-sm);
+  border-radius: var(--radius-md);
+  color: var(--theme-text-primary);
+  text-decoration: none;
+
+  &:hover {
+    background: var(--theme-background-secondary);
+    text-decoration: none;
+  }
+
+  &[data-active] {
+    background: var(--theme-background-secondary);
+    color: var(--theme-primary-700);
+    font-weight: var(--font-weight-semibold, 600);
+  }
+
+  &[data-collapsed] {
+    justify-content: center;
+  }
+
+  @media (forced-colors: active) {
+    &[data-active] {
+      outline: 2px solid highlight;
+    }
+  }
+}
+
+.icon {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+}
+
+.label {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.badge {
+  flex-shrink: 0;
+}
