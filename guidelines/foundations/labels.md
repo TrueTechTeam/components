@@ -257,3 +257,4 @@ locale (`navigator.language`) when no locale is provided.
 | `blocks.addNote`                        | Add note                                                        |
 | `blocks.noteLabel`                      | Add a note                                                      |
 | `blocks.noteAdded`                      | Note added.                                                     |
+| `blocks.relatedRecords`                 | Related records                                                 |

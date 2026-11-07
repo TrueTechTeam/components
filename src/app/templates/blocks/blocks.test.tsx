@@ -164,6 +164,12 @@ describe('ActivityTimeline', () => {
     expect(screen.getAllByRole('listitem')).toHaveLength(4);
   });
 
+  it('moves focus to the first revealed item after Show all', () => {
+    wrap(<ActivityTimeline items={items} limit={2} />);
+    fireEvent.click(screen.getByRole('button', { name: /Show all/ }));
+    expect(screen.getAllByRole('listitem')[2]).toHaveFocus();
+  });
+
   it('shows a skeleton while pending', () => {
     const { container } = wrap(<ActivityTimeline query={pending} />);
     expect(skeletons(container)).toHaveLength(1);
@@ -188,6 +194,19 @@ describe('MediaGallery', () => {
     expect(screen.getByText('front.png')).toBeInTheDocument();
     expect(screen.getByText('2 kB')).toBeInTheDocument();
     expect(screen.getByAltText('Back view').closest('a')).toHaveAttribute('href', '/files/b.png');
+  });
+
+  it('never renders a javascript: href or src; shows the alt text as a placeholder', () => {
+    const { container } = wrap(
+      <MediaGallery
+        items={[
+          { id: 'x', src: 'java	script:alert(1)', alt: 'Bad image', href: 'javascript:alert(1)' },
+        ]}
+      />
+    );
+    expect(container.querySelector('img')).toBeNull();
+    expect(container.querySelector('a')).toBeNull();
+    expect(screen.getByText('Bad image')).toBeInTheDocument();
   });
 
   it('shows a grid of box skeletons while pending', () => {
@@ -281,6 +300,24 @@ describe('RelatedRecords', () => {
   it('shows a table skeleton while pending', () => {
     const { container } = wrap(<RelatedRecords query={pending} columns={columns} />);
     expect(skeletons(container, 'table')).toHaveLength(1);
+  });
+
+  it('names the table when there is no title', () => {
+    wrap(<RelatedRecords rows={rows.slice(0, 2)} columns={columns} />);
+    expect(screen.getByLabelText('Related records')).toBeInTheDocument();
+  });
+
+  it('shows the error state when the query failed', () => {
+    wrap(
+      <RelatedRecords columns={columns} query={query({ isError: true, error: new Error('x') })} />
+    );
+    expect(screen.queryByRole('table')).not.toBeInTheDocument();
+    expect(screen.getByTestId('page-messages')).toHaveAttribute('data-state', 'error');
+  });
+
+  it('shows the empty state for an empty query result', () => {
+    wrap(<RelatedRecords columns={columns} query={query({ data: [] })} empty={emptyCfg} />);
+    expect(screen.getByText('Nothing to show')).toBeInTheDocument();
   });
 
   it('shows the empty state', () => {

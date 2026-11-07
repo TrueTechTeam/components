@@ -67,7 +67,7 @@ export function RelatedRecords<T>({
               columns={tableColumns}
               rowKey={(row, i) => String(row.id ?? i)}
               size="sm"
-              aria-label={section.title}
+              aria-label={section.title ?? t('blocks.relatedRecords')}
             />
             {viewAllHref && count > shown.length && (
               <AppLink href={viewAllHref}>{t('blocks.viewAll', { count })}</AppLink>

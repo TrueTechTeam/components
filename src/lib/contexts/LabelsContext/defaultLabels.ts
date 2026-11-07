@@ -222,6 +222,7 @@ export const DEFAULT_LABELS = {
   'blocks.addNote': 'Add note',
   'blocks.noteLabel': 'Add a note',
   'blocks.noteAdded': 'Note added.',
+  'blocks.relatedRecords': 'Related records',
 } as const satisfies Record<string, string>;
 
 export type LabelKey = keyof typeof DEFAULT_LABELS;

@@ -6,6 +6,7 @@ import { IconButton } from '../../../lib/components/buttons/IconButton';
 import { useClipboard } from '../../../lib/hooks/useClipboard';
 import { useFormatters } from '../../AppProvider';
 import { linkClassName } from '../../router/linkClassName';
+import { safeHttpUrl, safeImageSrc } from '../shared/safeUrl';
 import styles from './FieldValue.module.scss';
 
 export type FieldKind =
@@ -89,27 +90,6 @@ function toDate(value: unknown): Date | null {
   return Number.isFinite(d.getTime()) ? d : null;
 }
 
-function toImageSrc(value: unknown): string | null {
-  const src = toText(value)?.trim();
-  if (!src) {
-    return null;
-  }
-  const hasScheme = /^[a-z][a-z0-9+.-]*:/i.test(src);
-  return !hasScheme || /^(https?:|blob:|data:image\/)/i.test(src) ? src : null;
-}
-
-function toHttpUrl(value: unknown): URL | null {
-  if (typeof value !== 'string' || value.trim() === '') {
-    return null;
-  }
-  try {
-    const url = new URL(value.trim());
-    return url.protocol === 'http:' || url.protocol === 'https:' ? url : null;
-  } catch {
-    return null;
-  }
-}
-
 function toText(value: unknown): string | null {
   if (typeof value === 'string') {
     return value.trim() === '' ? null : value;
@@ -144,9 +124,9 @@ export function isEmptyFieldValue(kind: FieldKind, value: unknown): boolean {
     case 'boolean':
       return typeof value !== 'boolean';
     case 'url':
-      return toHttpUrl(value) === null;
+      return safeHttpUrl(value) === null;
     case 'image':
-      return toImageSrc(value) === null;
+      return safeImageSrc(value) === undefined;
     case 'phone':
       return !/\d/.test(toText(value) ?? '');
     case 'list':
@@ -289,7 +269,7 @@ export function FieldValue({
       );
     }
     case 'url': {
-      const url = toHttpUrl(value) as URL;
+      const url = safeHttpUrl(value) as URL;
       return (
         <a
           className={linkClassName(className)}
@@ -307,7 +287,7 @@ export function FieldValue({
       return (
         <img
           className={[styles.image, className].filter(Boolean).join(' ')}
-          src={toImageSrc(value) as string}
+          src={safeImageSrc(value) as string}
           alt={imageAlt ?? ''}
           width={imageSize}
           height={imageSize}

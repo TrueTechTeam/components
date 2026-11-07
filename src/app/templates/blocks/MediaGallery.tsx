@@ -4,7 +4,7 @@ import { AdaptiveGrid } from '../../../lib/components/layout/AdaptiveGrid';
 import { useFormatters } from '../../AppProvider';
 import { Loadable } from '../../page/Loadable';
 import { BlockSection, usePending, type BlockSectionProps } from './BlockSection';
-import { safeHref, safeImageSrc } from './safeUrl';
+import { safeHref, safeImageSrc } from '../shared/safeUrl';
 import styles from './blocks.module.scss';
 
 export interface MediaItem {
@@ -37,8 +37,10 @@ function Gallery({ items }: { items: MediaItem[] }) {
         : items.map((item) => {
             const src = safeImageSrc(item.src);
             const href = item.href === undefined ? undefined : safeHref(item.href);
-            const img = src && (
+            const img = src ? (
               <img className={styles.thumb} src={src} alt={item.alt} loading="lazy" />
+            ) : (
+              <div className={styles.thumbFallback}>{item.alt}</div>
             );
             return (
               <Card key={item.id} padding="sm">
