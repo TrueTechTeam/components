@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { act, fireEvent, render, screen, waitFor, within } from '@testing-library/react';
 import { QueryClient } from '@tanstack/react-query';
 import { LabelsProvider } from '../../../lib/contexts/LabelsContext';
 import { NavigationGuardProvider } from '../../../lib/contexts/NavigationGuardContext';
 import type { FilterDefinition } from '../../../lib/components/filters';
+import { Menu, MenuItem, MenuList } from '../../../lib/components/overlays/Menu';
 import { AppProvider } from '../../AppProvider';
 import type { FieldDef } from '../blocks';
 import { DataTablePage, type DataTablePageProps } from './DataTablePage';
@@ -146,6 +147,47 @@ function setup(
   return { ...result, fetch };
 }
 
+const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+
+/** A server that answers after `ms`, so placeholder states are observable. */
+function slowServer(ms = 40) {
+  const server = createServer();
+  return jest.fn(async (state: TableState) => {
+    await delay(ms);
+    return server(state);
+  });
+}
+
+/** Records whether `text` was ever in the document while observing. */
+function watchFor(text: string) {
+  const state = { seen: false };
+  const check = () => {
+    if (document.body.textContent?.includes(text)) {
+      state.seen = true;
+    }
+  };
+  const observer = new MutationObserver(check);
+  observer.observe(document.body, { childList: true, subtree: true, characterData: true });
+  return {
+    seen: () => {
+      check();
+      observer.disconnect();
+      return state.seen;
+    },
+  };
+}
+
+function NestedMenu() {
+  const [open, setOpen] = useState(false);
+  return (
+    <Menu isOpen={open} onOpenChange={setOpen} trigger={<button type="button">More</button>}>
+      <MenuList>
+        <MenuItem itemKey="archive">Archive</MenuItem>
+      </MenuList>
+    </Menu>
+  );
+}
+
 const rowsShown = () =>
   screen
     .getAllByRole('row')
@@ -234,6 +276,26 @@ describe('DataTablePage', () => {
     expect(screen.queryByText('No results')).not.toBeInTheDocument();
   });
 
+  it('never shows an empty table while clamping a page past the end', async () => {
+    const empty = watchFor('No data available');
+    setup('/issues?page=99', {}, slowServer());
+    await screen.findByText('Issue 21');
+    expect(params().get('page')).toBe('3');
+    expect(empty.seen()).toBe(false);
+    expect(screen.getByText('21–23 of 23')).toHaveAttribute('role', 'status');
+  });
+
+  it('keeps the range text of the rows shown while the next page loads', async () => {
+    setup('/issues', {}, slowServer());
+    await screen.findByText('1–10 of 23');
+    fireEvent.click(screen.getByRole('button', { name: 'Go to next page' }));
+    await waitFor(() => expect(params().get('page')).toBe('2'));
+    // Page 1 rows are still shown, so the range still describes them.
+    expect(screen.getByText('Issue 1')).toBeInTheDocument();
+    expect(screen.getByText('1–10 of 23')).toBeInTheDocument();
+    expect(await screen.findByText('11–20 of 23')).toBeInTheDocument();
+  });
+
   it('shows "nothing yet" with the create action for an empty collection', async () => {
     const onCreate = jest.fn();
     setup(
@@ -281,6 +343,10 @@ describe('DataTablePage', () => {
 
     const panel = screen.getByRole('complementary', { name: 'Issue ISS-3' });
     expect(within(panel).getByText('Details of ISS-3')).toBeInTheDocument();
+    expect(within(row).getByRole('button', { name: 'Issue 3' })).toHaveAttribute(
+      'aria-current',
+      'true'
+    );
     expect(within(panel).getByRole('link', { name: 'Open full page' })).toHaveAttribute(
       'href',
       '/issues/ISS-3'
@@ -305,6 +371,38 @@ describe('DataTablePage', () => {
     await screen.findByText('Issue 1');
     const panel = screen.getByRole('complementary', { name: 'Issue ISS-999' });
     expect(within(panel).getByText('Details of ISS-999')).toBeInTheDocument();
+    // A deep link does not steal focus on load.
+    expect(panel).not.toContainElement(document.activeElement as HTMLElement);
+    // ISS-999 has no row here: closing focuses the content region instead.
+    fireEvent.click(within(panel).getByRole('button', { name: 'Close details' }));
+    await waitFor(() => expect(params().get('selected')).toBeNull());
+    expect(document.activeElement).toContainElement(screen.getByRole('table'));
+  });
+
+  it('closes the detail with Back: opening it adds a history entry', async () => {
+    setup('/issues');
+    await screen.findByText('Issue 3');
+    fireEvent.click(screen.getByRole('button', { name: 'Issue 3' }));
+    await waitFor(() => expect(params().get('selected')).toBe('ISS-3'));
+    act(() => window.history.back());
+    await waitFor(() => expect(params().get('selected')).toBeNull());
+    await waitFor(() => expect(screen.queryByRole('complementary')).not.toBeInTheDocument());
+  });
+
+  it('Escape in an overlay inside the detail closes the overlay, not the panel', async () => {
+    setup('/issues?selected=ISS-2', {
+      detail: { title: (id) => `Issue ${id}`, render: () => <NestedMenu /> },
+    });
+    const panel = await screen.findByRole('complementary', { name: 'Issue ISS-2' });
+    fireEvent.click(within(panel).getByRole('button', { name: 'More' }));
+    const item = await screen.findByRole('menuitem', { name: 'Archive' });
+    expect(panel).not.toContainElement(item);
+    fireEvent.keyDown(item, { key: 'Escape' });
+    await waitFor(() =>
+      expect(screen.queryByRole('menuitem', { name: 'Archive' })).not.toBeInTheDocument()
+    );
+    expect(screen.getByRole('complementary', { name: 'Issue ISS-2' })).toBeInTheDocument();
+    expect(params().get('selected')).toBe('ISS-2');
   });
 
   it('uses a full-screen dialog for details below laptop', async () => {
@@ -341,9 +439,17 @@ describe('DataTablePage', () => {
       ],
     });
     await screen.findByText('Issue 1');
+    // Page 2 is cached too; the action makes every page of the collection stale.
+    fireEvent.click(screen.getByRole('button', { name: 'Go to next page' }));
+    await screen.findByText('Issue 11');
+    fireEvent.click(screen.getByRole('button', { name: 'Go to previous page' }));
+    await screen.findByText('Issue 1');
     const calls = fetch.mock.calls.length;
+    // Each trigger names its row; the column header keeps the generic label.
+    expect(screen.getByRole('columnheader', { name: 'Row actions' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Row actions for Issue 2' })).toBeInTheDocument();
     const row = screen.getByText('Issue 1').closest('[role="row"]') as HTMLElement;
-    fireEvent.click(within(row).getByRole('button', { name: 'Row actions' }));
+    fireEvent.click(within(row).getByRole('button', { name: 'Row actions for Issue 1' }));
     expect(await screen.findByRole('menuitem', { name: 'Delete' })).toBeInTheDocument();
     fireEvent.click(screen.getByRole('menuitem', { name: 'Close issue' }));
 
@@ -351,6 +457,9 @@ describe('DataTablePage', () => {
     await waitFor(() => expect(run).toHaveBeenCalledWith(ALL[0]));
     expect(await screen.findByText('Issue closed')).toBeInTheDocument();
     await waitFor(() => expect(fetch.mock.calls.length).toBeGreaterThan(calls));
+    const page2 = client.getQueryCache().findAll({ queryKey: ['issues', 2] });
+    expect(page2.length).toBeGreaterThan(0);
+    page2.forEach((q) => expect(q.state.isInvalidated).toBe(true));
     // The row click underneath the menu did not open the detail.
     expect(params().get('selected')).toBeNull();
     confirm.mockRestore();
@@ -394,12 +503,33 @@ describe('DataTablePage', () => {
     );
     await screen.findByText('Issue 1');
     const row = screen.getByText('Issue 1').closest('[role="row"]') as HTMLElement;
-    fireEvent.click(within(row).getByRole('button', { name: 'Row actions' }));
+    fireEvent.click(within(row).getByRole('button', { name: 'Row actions for Issue 1' }));
     fireEvent.click(await screen.findByRole('menuitem', { name: 'Close issue' }));
     expect(screen.queryByRole('menuitem', { name: 'Delete' })).not.toBeInTheDocument();
     expect(confirm).toHaveBeenCalledWith('Sure?');
     expect(run).not.toHaveBeenCalled();
     confirm.mockRestore();
+  });
+
+  it('disables a row action while it runs', async () => {
+    let finish: () => void = () => undefined;
+    const run = jest.fn(() => new Promise<void>((resolve) => (finish = resolve)));
+    setup('/issues', { rowActions: [{ id: 'close', label: 'Close issue', run }] });
+    await screen.findByText('Issue 1');
+    const trigger = screen.getByRole('button', { name: 'Row actions for Issue 1' });
+    fireEvent.click(trigger);
+    fireEvent.click(await screen.findByRole('menuitem', { name: 'Close issue' }));
+    await waitFor(() => expect(run).toHaveBeenCalledTimes(1));
+    await waitFor(() =>
+      expect(screen.queryByRole('menuitem', { name: 'Close issue' })).not.toBeInTheDocument()
+    );
+    fireEvent.click(trigger);
+    const item = await screen.findByRole('menuitem', { name: 'Close issue' });
+    expect(item).toHaveAttribute('aria-disabled', 'true');
+    fireEvent.click(item);
+    expect(run).toHaveBeenCalledTimes(1);
+    await act(async () => finish());
+    await screen.findByText('Done.');
   });
 
   it('grid view renders renderCard for each row', async () => {
@@ -410,8 +540,23 @@ describe('DataTablePage', () => {
     await screen.findByText('Issue 1');
     expect(screen.getAllByTestId('card')).toHaveLength(10);
     expect(screen.queryByRole('table')).not.toBeInTheDocument();
-    // Cards open the detail too.
-    fireEvent.click(screen.getByText('Issue 4'));
+    // The card stays normal content; a dedicated control opens the detail.
+    expect(screen.getByText('Issue 4').closest('button')).toBeNull();
+    fireEvent.click(screen.getByRole('button', { name: 'Open details for Issue 4' }));
+    await waitFor(() => expect(params().get('selected')).toBe('ISS-4'));
+    expect(screen.getByRole('button', { name: 'Open details for Issue 4' })).toHaveAttribute(
+      'aria-current',
+      'true'
+    );
+  });
+
+  it('default cards make the title the control and keep the fields as content', async () => {
+    setup('/issues?view=grid', { views: ['table', 'grid'] });
+    await screen.findByText('Issue 1');
+    const title = screen.getByRole('button', { name: 'Issue 4' });
+    const card = title.closest('li') as HTMLElement;
+    expect(within(card).getByText('Points').closest('button')).toBeNull();
+    fireEvent.click(title);
     await waitFor(() => expect(params().get('selected')).toBe('ISS-4'));
   });
 });
