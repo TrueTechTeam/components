@@ -100,7 +100,12 @@ export const SideNavItem = ({
 }: SideNavItemProps & {
   ref?: React.Ref<HTMLElement>;
 }) => {
-  const { collapsed, selectedValue, onSelect } = useSideNavContextStrict();
+  const {
+    collapsed,
+    selectedValue,
+    onSelect,
+    linkComponent: LinkComponent,
+  } = useSideNavContextStrict();
 
   const isSelected = selectedValue === value;
 
@@ -171,15 +176,16 @@ export const SideNavItem = ({
     role: 'menuitem',
   };
 
+  const Anchor = LinkComponent && href && !disabled ? LinkComponent : 'a';
   const element = href ? (
-    <a
+    <Anchor
       ref={ref as React.Ref<HTMLAnchorElement>}
-      href={disabled ? undefined : href}
+      href={disabled ? (undefined as unknown as string) : href}
       {...commonProps}
       {...restProps}
     >
       {content}
-    </a>
+    </Anchor>
   ) : (
     <div ref={ref as React.Ref<HTMLDivElement>} {...commonProps} {...restProps}>
       {content}

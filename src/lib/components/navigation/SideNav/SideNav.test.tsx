@@ -3,6 +3,7 @@ import { SideNav } from './SideNav';
 import { SideNavItem } from './SideNavItem';
 import { SideNavGroup } from './SideNavGroup';
 import { SideNavDivider } from './SideNavDivider';
+import type { SideNavLinkProps } from './SideNavContext';
 import { LabelsProvider } from '../../../contexts/LabelsContext';
 
 describe('SideNav', () => {
@@ -225,5 +226,37 @@ describe('SideNav translated labels', () => {
       </LabelsProvider>
     );
     expect(screen.getByLabelText('Navigation laterale')).toBeInTheDocument();
+  });
+});
+
+describe('SideNav linkComponent', () => {
+  it('renders item links with the custom component', () => {
+    const Custom = ({ children, ...props }: SideNavLinkProps) => (
+      <a {...props} data-custom="yes">
+        {children}
+      </a>
+    );
+    render(
+      <SideNav linkComponent={Custom} selectedValue="home">
+        <SideNavItem value="home" label="Home" href="/home" />
+        <SideNavItem value="none" label="No link" />
+      </SideNav>
+    );
+    const link = screen.getByRole('menuitem', { name: 'Home' });
+    expect(link).toHaveAttribute('data-custom', 'yes');
+    expect(link).toHaveAttribute('href', '/home');
+    expect(link).toHaveAttribute('aria-current', 'page');
+    expect(screen.getByText('No link').closest('[data-custom]')).toBeNull();
+  });
+
+  it('keeps the plain anchor output by default', () => {
+    render(
+      <SideNav>
+        <SideNavItem value="home" label="Home" href="/home" />
+      </SideNav>
+    );
+    const link = screen.getByRole('menuitem', { name: 'Home' });
+    expect(link.tagName).toBe('A');
+    expect(link).toHaveAttribute('href', '/home');
   });
 });
