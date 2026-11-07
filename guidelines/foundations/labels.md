@@ -288,3 +288,4 @@ locale (`navigator.language`) when no locale is provided.
 | `dashboard.kpis`                        | Key metrics                                                     |
 | `dashboard.deltaUp`                     | up                                                              |
 | `dashboard.deltaDown`                   | down                                                            |
+| `details.title`                         | Details                                                         |

@@ -1,0 +1,60 @@
+@use '../../../lib/styles/mixins/component' as *;
+@use '../../../lib/styles/mixins/breakpoints' as *;
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  min-width: 0;
+}
+
+.titleSkeleton {
+  display: block;
+  width: min(20rem, 60vw);
+  height: 1em;
+  background: var(--theme-neutral-200);
+  border-radius: var(--radius-sm);
+  animation: details-pulse 2s ease-in-out infinite;
+
+  @media (prefers-reduced-motion: reduce) {
+    animation: none;
+  }
+}
+
+@keyframes details-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: 0.4;
+  }
+}
+
+.visuallyHidden {
+  @include visually-hidden;
+}
+
+.body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--spacing-lg);
+  align-items: start;
+  min-width: 0;
+
+  // Two columns from the laptop breakpoint up; below it the side column stacks under main.
+  &[data-layout='main-side'] {
+    @include bp('laptop') {
+      grid-template-columns: minmax(0, 2fr) minmax(280px, 1fr);
+    }
+  }
+}
+
+.main,
+.side {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  min-width: 0;
+}
