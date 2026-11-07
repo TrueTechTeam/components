@@ -253,6 +253,7 @@ export const DEFAULT_LABELS = {
   'dashboard.kpis': 'Key metrics',
   'dashboard.deltaUp': 'up',
   'dashboard.deltaDown': 'down',
+  'details.title': 'Details',
 } as const satisfies Record<string, string>;
 
 export type LabelKey = keyof typeof DEFAULT_LABELS;
