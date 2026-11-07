@@ -251,3 +251,4 @@ locale (`navigator.language`) when no locale is provided.
 | `field.empty`                           | Not set                                                         |
 | `field.copy`                            | Copy                                                            |
 | `appShell.skipToContent`                | Skip to main content                                            |
+| `appShell.menu`                         | Navigation menu                                                 |
