@@ -1,4 +1,4 @@
-import React, { useState, type ReactNode } from 'react';
+import React, { useEffect, useState, type ReactNode } from 'react';
 import { Button } from '../../../lib/components/buttons/Button';
 import { Badge } from '../../../lib/components/display/Badge';
 import { Tab, TabList, Tabs } from '../../../lib/components/display/Tabs';
@@ -6,7 +6,7 @@ import { BreadcrumbItem, Breadcrumbs } from '../../../lib/components/navigation/
 import { Menu, MenuItem, MenuList } from '../../../lib/components/overlays/Menu';
 import { useLabels } from '../../../lib/contexts/LabelsContext';
 import { useBreakpoint } from '../../../lib/hooks/useBreakpoint';
-import { useCan } from '../../AppProvider/hooks';
+import { useAuth } from '../../AppProvider/hooks';
 import { param } from '../../params/codecs';
 import { usePageParams } from '../../params/usePageParams';
 import { AppLink } from '../../router/AppLink';
@@ -68,20 +68,19 @@ export function usePageTab(
   return [value, (next) => setParams({ [tabParam]: next })];
 }
 
-/** False when the action has a permission the user lacks. */
-function useVisible(action: PageAction): boolean {
-  // Hooks cannot be conditional, so an action without a permission checks a throwaway subject.
-  const allowed = useCan(action.permission?.action ?? '', action.permission?.subject);
-  return !action.permission || allowed;
+/** Stable DOM id of a header tab, so a template body can be `role="tabpanel"` labelled by it. */
+export function getPageTabId(tabValue: string, tabParam = 'tab'): string {
+  return `pagetab-${tabParam}-${tabValue}`;
 }
 
-function ActionButton({ action }: { action: PageAction }) {
-  const visible = useVisible(action);
-  if (!visible) {
-    return null;
-  }
-  const variant =
-    action.variant === 'primary' ? 'primary' : action.variant === 'danger' ? 'danger' : 'outline';
+/** Actions the user may see: those without a `permission`, or whose `auth.can` check passes. */
+function useVisibleActions(actions: PageAction[]): PageAction[] {
+  const { can } = useAuth();
+  return actions.filter((a) => !a.permission || can(a.permission.action, a.permission.subject));
+}
+
+function ActionButton({ action, asPrimary = false }: { action: PageAction; asPrimary?: boolean }) {
+  const variant = asPrimary ? 'primary' : action.variant === 'danger' ? 'danger' : 'outline';
   if (action.href && !action.disabled) {
     return (
       <AppLink href={action.href} className={styles.linkAction} data-variant={variant}>
@@ -99,11 +98,7 @@ function ActionButton({ action }: { action: PageAction }) {
 }
 
 function OverflowItem({ action, onDone }: { action: PageAction; onDone: () => void }) {
-  const visible = useVisible(action);
   const navigate = useAppNavigate();
-  if (!visible) {
-    return null;
-  }
   return (
     <MenuItem
       itemKey={action.id}
@@ -147,15 +142,27 @@ function OverflowMenu({ actions }: { actions: PageAction[] }) {
 
 function Actions({ actions }: { actions: PageAction[] }) {
   const { down } = useBreakpoint();
-  const primary = actions.find((a) => a.variant === 'primary');
-  const others = actions.filter((a) => a !== primary);
+  const visible = useVisibleActions(actions);
+  const primaries = visible.filter((a) => a.variant === 'primary');
+  const primary = primaries[0];
+  const others = visible.filter((a) => a !== primary);
+  useEffect(() => {
+    if (primaries.length > 1 && process.env.NODE_ENV !== 'production') {
+      console.warn(
+        `PageHeader: only one action may be primary; rendering ${primaries
+          .slice(1)
+          .map((a) => a.id)
+          .join(', ')} as secondary.`
+      );
+    }
+  }, [primaries.length]); // eslint-disable-line react-hooks/exhaustive-deps
   const compact = down('tablet');
   return (
     <div className={styles.actions}>
       {compact
         ? others.length > 0 && <OverflowMenu actions={others} />
         : others.map((a) => <ActionButton key={a.id} action={a} />)}
-      {primary && <ActionButton action={primary} />}
+      {primary && <ActionButton action={primary} asPrimary />}
     </div>
   );
 }
@@ -177,7 +184,13 @@ function HeaderTabs({
     >
       <TabList>
         {tabs.map((tab) => (
-          <Tab key={tab.value} value={tab.value}>
+          <Tab
+            key={tab.value}
+            value={tab.value}
+            id={getPageTabId(tab.value, tabParam)}
+            // The header renders no panels, so there is nothing to control.
+            aria-controls={undefined}
+          >
             {tab.label}
             {tab.badge != null && <span className={styles.tabBadge}>{tab.badge}</span>}
           </Tab>
