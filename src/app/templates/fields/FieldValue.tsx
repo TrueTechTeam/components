@@ -80,8 +80,22 @@ function toDate(value: unknown): Date | null {
   if (value === '') {
     return null;
   }
-  const d = new Date(value);
+  // A date-only string is a calendar day, not an instant: parse it as local midnight so it never
+  // shifts to the previous day west of UTC.
+  const dateOnly = typeof value === 'string' ? /^(\d{4})-(\d{2})-(\d{2})$/.exec(value) : null;
+  const d = dateOnly
+    ? new Date(Number(dateOnly[1]), Number(dateOnly[2]) - 1, Number(dateOnly[3]))
+    : new Date(value);
   return Number.isFinite(d.getTime()) ? d : null;
+}
+
+function toImageSrc(value: unknown): string | null {
+  const src = toText(value)?.trim();
+  if (!src) {
+    return null;
+  }
+  const hasScheme = /^[a-z][a-z0-9+.-]*:/i.test(src);
+  return !hasScheme || /^(https?:|blob:|data:image\/)/i.test(src) ? src : null;
 }
 
 function toHttpUrl(value: unknown): URL | null {
@@ -131,6 +145,10 @@ export function isEmptyFieldValue(kind: FieldKind, value: unknown): boolean {
       return typeof value !== 'boolean';
     case 'url':
       return toHttpUrl(value) === null;
+    case 'image':
+      return toImageSrc(value) === null;
+    case 'phone':
+      return !/\d/.test(toText(value) ?? '');
     case 'list':
     case 'tags':
       return toStringList(value).length === 0;
@@ -289,7 +307,7 @@ export function FieldValue({
       return (
         <img
           className={[styles.image, className].filter(Boolean).join(' ')}
-          src={String(value)}
+          src={toImageSrc(value) as string}
           alt={imageAlt ?? ''}
           width={imageSize}
           height={imageSize}
