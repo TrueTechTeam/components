@@ -252,3 +252,8 @@ locale (`navigator.language`) when no locale is provided.
 | `field.copy`                            | Copy                                                            |
 | `appShell.skipToContent`                | Skip to main content                                            |
 | `appShell.menu`                         | Navigation menu                                                 |
+| `blocks.showAll`                        | Show all ({count})                                              |
+| `blocks.viewAll`                        | View all ({count})                                              |
+| `blocks.addNote`                        | Add note                                                        |
+| `blocks.noteLabel`                      | Add a note                                                      |
+| `blocks.noteAdded`                      | Note added.                                                     |

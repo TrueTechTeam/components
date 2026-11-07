@@ -217,6 +217,11 @@ export const DEFAULT_LABELS = {
   'pageHeader.moreActions': 'More actions',
   'appShell.skipToContent': 'Skip to main content',
   'appShell.menu': 'Navigation menu',
+  'blocks.showAll': 'Show all ({count})',
+  'blocks.viewAll': 'View all ({count})',
+  'blocks.addNote': 'Add note',
+  'blocks.noteLabel': 'Add a note',
+  'blocks.noteAdded': 'Note added.',
 } as const satisfies Record<string, string>;
 
 export type LabelKey = keyof typeof DEFAULT_LABELS;
