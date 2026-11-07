@@ -258,3 +258,20 @@ locale (`navigator.language`) when no locale is provided.
 | `blocks.noteLabel`                      | Add a note                                                      |
 | `blocks.noteAdded`                      | Note added.                                                     |
 | `blocks.relatedRecords`                 | Related records                                                 |
+| `dataTablePage.emptyTitle`              | Nothing here yet                                                |
+| `dataTablePage.emptyDescription`        | Items you add will appear here.                                 |
+| `dataTablePage.noResultsTitle`          | No results                                                      |
+| `dataTablePage.noResultsDescription`    | Nothing matches your search or filters.                         |
+| `dataTablePage.clearAll`                | Clear all                                                       |
+| `dataTablePage.search`                  | Search                                                          |
+| `dataTablePage.views`                   | View                                                            |
+| `dataTablePage.viewTable`               | Table                                                           |
+| `dataTablePage.viewGrid`                | Grid                                                            |
+| `dataTablePage.viewList`                | List                                                            |
+| `dataTablePage.pageSize`                | Rows per page                                                   |
+| `dataTablePage.range`                   | {start}–{end} of {total}                                        |
+| `dataTablePage.rowActions`              | Row actions                                                     |
+| `dataTablePage.actionDone`              | Done.                                                           |
+| `dataTablePage.details`                 | Details                                                         |
+| `dataTablePage.closeDetail`             | Close details                                                   |
+| `dataTablePage.openFullPage`            | Open full page                                                  |
