@@ -3,7 +3,7 @@ import {
   BottomNavigation,
   BottomNavigationItem,
 } from '../../../lib/components/navigation/BottomNavigation';
-import { CollapsibleSidebar } from '../../../lib/components/navigation/CollapsibleSidebar';
+import { SideNav, SideNavItem } from '../../../lib/components/navigation/SideNav';
 import {
   Navbar,
   NavbarActions,
@@ -11,7 +11,6 @@ import {
   NavbarCollapse,
   NavbarToggle,
 } from '../../../lib/components/navigation/Navbar';
-import { Tooltip } from '../../../lib/components/overlays/Tooltip';
 import { useLabels } from '../../../lib/contexts/LabelsContext';
 import { useBreakpoint } from '../../../lib/hooks/useBreakpoint';
 import { useAuth } from '../../AppProvider/hooks';
@@ -63,6 +62,9 @@ function isActive(item: NavItem, pathname: string): boolean {
     return pathname === item.href;
   }
   const base = item.href.replace(/\/+$/, '');
+  if (base === '') {
+    return pathname === '/';
+  }
   return pathname === item.href || pathname === base || pathname.startsWith(`${base}/`);
 }
 
@@ -80,55 +82,59 @@ function initial(label: string): ReactNode {
   return <span aria-hidden="true">{label.charAt(0).toUpperCase()}</span>;
 }
 
-interface NavListProps {
+/** Id of the deepest item that matches the path: the current page. Ancestors are only "active". */
+function findCurrentId(items: NavItem[], pathname: string): string | undefined {
+  for (const item of items) {
+    const inChild = item.children && findCurrentId(item.children, pathname);
+    if (inChild) {
+      return inChild;
+    }
+    if (isActive(item, pathname)) {
+      return item.id;
+    }
+  }
+  return undefined;
+}
+
+interface NavTreeProps {
   items: NavItem[];
   pathname: string;
   collapsed?: boolean;
   level?: number;
 }
 
-function NavList({ items, pathname, collapsed = false, level = 0 }: NavListProps) {
+/** SideNav items for a nav tree; children are indented siblings, hidden in the icon rail. */
+function NavTree({ items, pathname, collapsed = false, level = 0 }: NavTreeProps) {
   return (
-    <ul className={styles.list} data-level={level}>
+    <>
       {items.map((item) => {
         const active = isActive(item, pathname);
-        const link = (
-          <AppLink
-            href={item.href}
-            className={styles.link}
-            aria-current={active ? 'page' : undefined}
-            data-active={active || undefined}
-            data-collapsed={collapsed || undefined}
-            aria-label={collapsed ? item.label : undefined}
-          >
-            <span className={styles.icon}>{item.icon ?? initial(item.label)}</span>
-            {!collapsed && <span className={styles.label}>{item.label}</span>}
-            {!collapsed && item.badge != null && <span className={styles.badge}>{item.badge}</span>}
-          </AppLink>
-        );
         return (
-          <li key={item.id} className={styles.item}>
-            {collapsed ? (
-              <Tooltip content={item.label} position="right">
-                {link}
-              </Tooltip>
-            ) : (
-              link
-            )}
+          <React.Fragment key={item.id}>
+            <SideNavItem
+              value={item.id}
+              label={item.label}
+              href={item.href}
+              icon={item.icon ?? initial(item.label)}
+              badge={item.badge}
+              level={level}
+              className={active ? styles.active : undefined}
+              data-active={active || undefined}
+            />
             {!collapsed && item.children && item.children.length > 0 && (
-              <NavList items={item.children} pathname={pathname} level={level + 1} />
+              <NavTree items={item.children} pathname={pathname} level={level + 1} />
             )}
-          </li>
+          </React.Fragment>
         );
       })}
-    </ul>
+    </>
   );
 }
 
 function BottomNav({ items, pathname }: { items: NavItem[]; pathname: string }) {
   const navigate = useAppNavigate();
   const shown = items.filter((i) => i.mobile !== false).slice(0, MAX_BOTTOM_ITEMS);
-  const activeId = shown.find((i) => isActive(i, pathname))?.id ?? '';
+  const activeId = findCurrentId(shown, pathname) ?? '';
 
   const go = (item: NavItem) => (e: MouseEvent) => {
     if (isInAppLinkClick(e as MouseEvent<HTMLAnchorElement>, { href: item.href })) {
@@ -175,6 +181,7 @@ export function AppShell({
   const [drawerOpen, setDrawerOpen] = useState(false);
   const bottom = compact && mobileNav === 'bottom';
   const drawer = compact && mobileNav === 'drawer';
+  const currentId = findCurrentId(items, pathname) ?? '';
 
   // Close the drawer once a link has navigated.
   useEffect(() => {
@@ -197,21 +204,42 @@ export function AppShell({
         {drawer && <NavbarToggle />}
         {drawer && (
           <NavbarCollapse>
-            <NavList items={items} pathname={pathname} />
+            <SideNav
+              linkComponent={AppLink}
+              selectedValue={currentId}
+              aria-label={t('appShell.menu')}
+              style={{ '--sidenav-width': '100%' } as React.CSSProperties}
+            >
+              <NavTree items={items} pathname={pathname} />
+            </SideNav>
           </NavbarCollapse>
         )}
       </Navbar>
       <div className={styles.body}>
         {!compact && (
-          <CollapsibleSidebar
+          <SideNav
+            linkComponent={AppLink}
+            selectedValue={currentId}
             collapsed={collapsed}
-            onCollapsedChange={setCollapsed}
             expandedWidth={256}
             collapsedWidth={64}
             className={styles.sidebar}
+            footer={
+              <button
+                type="button"
+                className={styles.collapseToggle}
+                onClick={() => setCollapsed(!collapsed)}
+                aria-label={
+                  collapsed ? t('collapsibleSidebar.expand') : t('collapsibleSidebar.collapse')
+                }
+                aria-expanded={!collapsed}
+              >
+                <span aria-hidden="true">{collapsed ? '›' : '‹'}</span>
+              </button>
+            }
           >
-            <NavList items={items} pathname={pathname} collapsed={collapsed} />
-          </CollapsibleSidebar>
+            <NavTree items={items} pathname={pathname} collapsed={collapsed} />
+          </SideNav>
         )}
         <main
           id={MAIN_ID}

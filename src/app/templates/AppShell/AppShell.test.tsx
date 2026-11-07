@@ -122,37 +122,52 @@ describe('AppShell', () => {
     expect(within(screen.getByRole('main')).getByText('Content')).toBeInTheDocument();
   });
 
-  it('marks the active item by pathname: prefix for items with children, exact otherwise', () => {
+  it('marks only the deepest active item as the current page; ancestors are just active', () => {
     setup({}, '/orders/returns');
-    const sidebar = screen.getByRole('navigation', { name: 'Sidebar navigation' });
-    expect(within(sidebar).getByRole('link', { name: 'Orders' })).toHaveAttribute(
+    const sidebar = screen.getByRole('navigation', { name: 'Side navigation' });
+    const orders = within(sidebar).getByRole('menuitem', { name: 'Orders' });
+    expect(orders).not.toHaveAttribute('aria-current');
+    expect(orders).toHaveAttribute('data-active', 'true');
+    expect(within(sidebar).getByRole('menuitem', { name: 'Returns' })).toHaveAttribute(
       'aria-current',
       'page'
     );
-    expect(within(sidebar).getByRole('link', { name: 'Returns' })).toHaveAttribute(
+    expect(within(sidebar).getByRole('menuitem', { name: 'Home' })).not.toHaveAttribute(
+      'aria-current'
+    );
+  });
+
+  it('marks a parent with children as current on its own path (prefix by default)', () => {
+    setup({}, '/orders');
+    const sidebar = screen.getByRole('navigation', { name: 'Side navigation' });
+    expect(within(sidebar).getByRole('menuitem', { name: 'Orders' })).toHaveAttribute(
       'aria-current',
       'page'
     );
-    expect(within(sidebar).getByRole('link', { name: 'Home' })).not.toHaveAttribute('aria-current');
+  });
+
+  it('does not treat a root "/" item as active on every path, even with prefix', () => {
+    setup({ nav: [{ id: 'h', label: 'Home', href: '/', match: 'prefix' }] }, '/orders');
+    expect(screen.getByRole('menuitem', { name: 'Home' })).not.toHaveAttribute('aria-current');
   });
 
   it('matches exactly when match is not set and there are no children', () => {
     setup({}, '/admin/users');
-    const sidebar = screen.getByRole('navigation', { name: 'Sidebar navigation' });
-    expect(within(sidebar).getByRole('link', { name: 'Admin' })).not.toHaveAttribute(
+    const sidebar = screen.getByRole('navigation', { name: 'Side navigation' });
+    expect(within(sidebar).getByRole('menuitem', { name: 'Admin' })).not.toHaveAttribute(
       'aria-current'
     );
   });
 
   it('honours an explicit prefix match', () => {
     setup({ nav: [{ id: 'a', label: 'Admin', href: '/admin', match: 'prefix' }] }, '/admin/users');
-    expect(screen.getByRole('link', { name: 'Admin' })).toHaveAttribute('aria-current', 'page');
+    expect(screen.getByRole('menuitem', { name: 'Admin' })).toHaveAttribute('aria-current', 'page');
   });
 
   it('hides permission-gated items the user cannot access', () => {
     setup({}, '/', (a) => a !== 'manage');
-    expect(screen.queryByRole('link', { name: 'Admin' })).not.toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Home' })).toBeInTheDocument();
+    expect(screen.queryByRole('menuitem', { name: 'Admin' })).not.toBeInTheDocument();
+    expect(screen.getByRole('menuitem', { name: 'Home' })).toBeInTheDocument();
   });
 
   it('persists the collapsed state across remounts', () => {
@@ -167,9 +182,7 @@ describe('AppShell', () => {
   it('below laptop hides the sidebar and shows the drawer toggle that reveals the nav', () => {
     mockViewport(800);
     setup();
-    expect(
-      screen.queryByRole('navigation', { name: 'Sidebar navigation' })
-    ).not.toBeInTheDocument();
+    expect(screen.queryByRole('navigation', { name: 'Side navigation' })).not.toBeInTheDocument();
     const toggle = screen.getByRole('button', { name: 'Open menu' });
     expect(toggle).toHaveAttribute('aria-expanded', 'false');
     fireEvent.click(toggle);
@@ -177,7 +190,7 @@ describe('AppShell', () => {
       'aria-expanded',
       'true'
     );
-    expect(screen.getByRole('link', { name: 'Home' })).toBeInTheDocument();
+    expect(screen.getByRole('menuitem', { name: 'Home' })).toBeInTheDocument();
   });
 
   it('with mobileNav="bottom" shows at most five items for mobile !== false', () => {

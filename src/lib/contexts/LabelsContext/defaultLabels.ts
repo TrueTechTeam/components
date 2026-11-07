@@ -216,6 +216,7 @@ export const DEFAULT_LABELS = {
   'field.copy': 'Copy',
   'pageHeader.moreActions': 'More actions',
   'appShell.skipToContent': 'Skip to main content',
+  'appShell.menu': 'Navigation menu',
 } as const satisfies Record<string, string>;
 
 export type LabelKey = keyof typeof DEFAULT_LABELS;
