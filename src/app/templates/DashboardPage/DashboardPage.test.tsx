@@ -106,6 +106,8 @@ describe('DashboardPage', () => {
     refresh.focus();
     fireEvent.click(refresh);
     await waitFor(() => expect(refresh).toHaveAttribute('aria-disabled', 'true'));
+    expect(refresh).toHaveAttribute('aria-busy', 'true');
+    expect(refresh).not.toBeDisabled();
     fireEvent.click(refresh);
     fireEvent.click(refresh);
     expect(fetcher).toHaveBeenCalledTimes(2);
