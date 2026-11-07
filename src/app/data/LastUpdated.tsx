@@ -7,7 +7,9 @@ import { updatedText } from './updatedText';
 import styles from './LastUpdated.module.scss';
 
 export interface LastUpdatedProps {
-  query: Pick<UseQueryResult, 'dataUpdatedAt' | 'isFetching' | 'refetch'>;
+  query: Pick<UseQueryResult<unknown, unknown>, 'dataUpdatedAt' | 'isFetching'> & {
+    refetch: () => unknown;
+  };
   /** Show the refresh button. @default true */
   refreshable?: boolean;
   className?: string;

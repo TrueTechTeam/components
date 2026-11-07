@@ -242,6 +242,17 @@ export const DEFAULT_LABELS = {
   'dataTablePage.details': 'Details',
   'dataTablePage.closeDetail': 'Close details',
   'dataTablePage.openFullPage': 'Open full page',
+  'dashboard.range': 'Time range',
+  'dashboard.range.24h': '24h',
+  'dashboard.range.7d': '7d',
+  'dashboard.range.30d': '30d',
+  'dashboard.range.90d': '90d',
+  'dashboard.range.ytd': 'YTD',
+  'dashboard.refreshAll': 'Refresh all',
+  'dashboard.asOf': 'As of {time}',
+  'dashboard.kpis': 'Key metrics',
+  'dashboard.deltaUp': 'up',
+  'dashboard.deltaDown': 'down',
 } as const satisfies Record<string, string>;
 
 export type LabelKey = keyof typeof DEFAULT_LABELS;
