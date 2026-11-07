@@ -51,12 +51,12 @@
     background-color: var(--button-bg-disabled);
   }
 
-  &:hover:not(:disabled) {
+  &:hover:not(:disabled, [aria-disabled='true']) {
     background-color: var(--button-bg-hover);
     border-color: var(--button-border-color-hover);
   }
 
-  &:active:not(:disabled) {
+  &:active:not(:disabled, [aria-disabled='true']) {
     background-color: var(--button-bg-active);
     transform: translateY(1px);
   }

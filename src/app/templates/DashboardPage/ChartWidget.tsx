@@ -10,6 +10,11 @@ export interface ChartWidgetProps extends DashboardWidgetProps {
   summary: string;
 }
 
+/** `inert` is a boolean prop only from React 19; set the attribute directly so React 18 gets it too. */
+function setInert(node: HTMLDivElement | null) {
+  node?.setAttribute('inert', '');
+}
+
 /**
  * A `DashboardWidget` holding any chart element. The chart itself is hidden from assistive
  * technology and inert; `summary` is its text alternative (a visually hidden `figcaption`).
@@ -20,7 +25,7 @@ export function ChartWidget({ height = 240, summary, children, ...widget }: Char
     <DashboardWidget {...widget}>
       <Loadable shape="box" height={height}>
         <figure className={styles.figure}>
-          <div className={styles.chart} style={{ height }} aria-hidden="true" inert>
+          <div className={styles.chart} style={{ height }} aria-hidden="true" ref={setInert}>
             {children}
           </div>
           <figcaption className={styles.visuallyHidden}>{summary}</figcaption>

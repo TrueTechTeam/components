@@ -57,20 +57,20 @@ export function KpiWidget({ label, query, value, delta, kind, hint }: KpiWidgetP
     <Section queries={query ? [query] : undefined}>
       <Card padding="md" className={styles.kpi}>
         <p className={styles.kpiLabel}>{label}</p>
-        <p className={styles.kpiValue}>
+        <div className={styles.kpiValue}>
           <Loadable shape="heading" width="60%">
             {() => renderValue(value(), kind)}
           </Loadable>
-        </p>
+        </div>
         {(delta || hint) && (
-          <p className={styles.kpiFoot}>
+          <div className={styles.kpiFoot}>
             {delta && (
               <Loadable shape="text" width="4rem">
                 {() => <Delta delta={delta()} />}
               </Loadable>
             )}
             {hint && <span className={styles.muted}>{hint}</span>}
-          </p>
+          </div>
         )}
       </Card>
     </Section>
