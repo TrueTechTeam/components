@@ -217,4 +217,55 @@ describe('AppShell', () => {
     fireEvent.click(within(bottom).getByRole('link', { name: 'Orders' }));
     expect(router.navigate).toHaveBeenCalledWith('/orders', undefined);
   });
+
+  it('selects the top-level ancestor in the bottom bar on a child route', () => {
+    mockViewport(800);
+    setup({ mobileNav: 'bottom' }, '/orders/returns');
+    const bottom = screen.getByRole('navigation', { name: 'Bottom navigation' });
+    expect(within(bottom).getByRole('link', { name: 'Orders' })).toHaveAttribute(
+      'aria-current',
+      'page'
+    );
+  });
+
+  it.each(['drawer', 'bottom'] as const)(
+    'keeps headerActions visible below laptop with mobileNav=%s',
+    (mobileNav) => {
+      mockViewport(800);
+      setup({ mobileNav, headerActions: <button type="button">Search</button> });
+      expect(screen.getByRole('button', { name: 'Search' })).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: 'Search' }).closest('[aria-hidden="true"]')
+      ).toBeNull();
+      expect(!!screen.queryByRole('button', { name: 'Open menu' })).toBe(mobileNav === 'drawer');
+    }
+  );
+
+  it('marks the visible parent as current in the collapsed rail when the page is a hidden child', () => {
+    window.localStorage.setItem('pref:app:sidebarCollapsed', 'true');
+    setup({}, '/orders/returns');
+    const sidebar = screen.getByRole('navigation', { name: 'Side navigation' });
+    expect(within(sidebar).getByRole('menuitem', { name: 'Orders' })).toHaveAttribute(
+      'aria-current',
+      'true'
+    );
+    expect(within(sidebar).queryByRole('menuitem', { name: 'Returns' })).not.toBeInTheDocument();
+  });
+
+  it('prefers the most specific match among siblings', () => {
+    setup(
+      {
+        nav: [
+          { id: 'a', label: 'Orders', href: '/orders', match: 'prefix' },
+          { id: 'b', label: 'Returns', href: '/orders/returns', match: 'prefix' },
+        ],
+      },
+      '/orders/returns/5'
+    );
+    expect(screen.getByRole('menuitem', { name: 'Returns' })).toHaveAttribute(
+      'aria-current',
+      'page'
+    );
+    expect(screen.getByRole('menuitem', { name: 'Orders' })).not.toHaveAttribute('aria-current');
+  });
 });

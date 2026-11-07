@@ -6,7 +6,6 @@ import {
 import { SideNav, SideNavItem } from '../../../lib/components/navigation/SideNav';
 import {
   Navbar,
-  NavbarActions,
   NavbarBrand,
   NavbarCollapse,
   NavbarToggle,
@@ -83,28 +82,41 @@ function initial(label: string): ReactNode {
 }
 
 /** Id of the deepest item that matches the path: the current page. Ancestors are only "active". */
-function findCurrentId(items: NavItem[], pathname: string): string | undefined {
+function findCurrent(
+  items: NavItem[],
+  pathname: string
+): { id: string; length: number } | undefined {
+  let best: { id: string; length: number } | undefined;
   for (const item of items) {
-    const inChild = item.children && findCurrentId(item.children, pathname);
-    if (inChild) {
-      return inChild;
-    }
-    if (isActive(item, pathname)) {
-      return item.id;
+    const found =
+      (item.children && findCurrent(item.children, pathname)) ||
+      (isActive(item, pathname) ? { id: item.id, length: item.href.length } : undefined);
+    // The most specific (longest) match among siblings wins; the first wins a tie.
+    if (found && (!best || found.length > best.length)) {
+      best = found;
     }
   }
-  return undefined;
+  return best;
+}
+
+function findCurrentId(items: NavItem[], pathname: string): string | undefined {
+  return findCurrent(items, pathname)?.id;
+}
+
+function containsId(item: NavItem, id: string): boolean {
+  return !!item.children?.some((c) => c.id === id || containsId(c, id));
 }
 
 interface NavTreeProps {
   items: NavItem[];
   pathname: string;
+  currentId?: string;
   collapsed?: boolean;
   level?: number;
 }
 
 /** SideNav items for a nav tree; children are indented siblings, hidden in the icon rail. */
-function NavTree({ items, pathname, collapsed = false, level = 0 }: NavTreeProps) {
+function NavTree({ items, pathname, currentId, collapsed = false, level = 0 }: NavTreeProps) {
   return (
     <>
       {items.map((item) => {
@@ -120,9 +132,18 @@ function NavTree({ items, pathname, collapsed = false, level = 0 }: NavTreeProps
               level={level}
               className={active ? styles.active : undefined}
               data-active={active || undefined}
+              // The current page is a hidden child: mark the visible parent in the icon rail.
+              {...(collapsed && currentId && containsId(item, currentId)
+                ? { 'aria-current': 'true' as const }
+                : {})}
             />
             {!collapsed && item.children && item.children.length > 0 && (
-              <NavTree items={item.children} pathname={pathname} level={level + 1} />
+              <NavTree
+                items={item.children}
+                pathname={pathname}
+                currentId={currentId}
+                level={level + 1}
+              />
             )}
           </React.Fragment>
         );
@@ -134,7 +155,10 @@ function NavTree({ items, pathname, collapsed = false, level = 0 }: NavTreeProps
 function BottomNav({ items, pathname }: { items: NavItem[]; pathname: string }) {
   const navigate = useAppNavigate();
   const shown = items.filter((i) => i.mobile !== false).slice(0, MAX_BOTTOM_ITEMS);
-  const activeId = findCurrentId(shown, pathname) ?? '';
+  // Only top-level items render, so a child route selects its top-level ancestor.
+  const currentId = findCurrentId(shown, pathname);
+  const activeId =
+    shown.find((i) => i.id === currentId || (currentId && containsId(i, currentId)))?.id ?? '';
 
   const go = (item: NavItem) => (e: MouseEvent) => {
     if (isInAppLinkClick(e as MouseEvent<HTMLAnchorElement>, { href: item.href })) {
@@ -200,8 +224,11 @@ export function AppShell({
       </a>
       <Navbar collapseBreakpoint={LAPTOP_PX} expanded={drawerOpen} onExpandedChange={setDrawerOpen}>
         <NavbarBrand>{brand}</NavbarBrand>
-        {headerActions && <NavbarActions>{headerActions}</NavbarActions>}
-        {drawer && <NavbarToggle />}
+        {/* Not NavbarActions: the Navbar hides those on compact screens, and these must stay reachable. */}
+        <div className={styles.trailing}>
+          {headerActions}
+          {drawer && <NavbarToggle />}
+        </div>
         {drawer && (
           <NavbarCollapse>
             <SideNav
@@ -210,7 +237,7 @@ export function AppShell({
               aria-label={t('appShell.menu')}
               style={{ '--sidenav-width': '100%' } as React.CSSProperties}
             >
-              <NavTree items={items} pathname={pathname} />
+              <NavTree items={items} pathname={pathname} currentId={currentId} />
             </SideNav>
           </NavbarCollapse>
         )}
@@ -238,7 +265,12 @@ export function AppShell({
               </button>
             }
           >
-            <NavTree items={items} pathname={pathname} collapsed={collapsed} />
+            <NavTree
+              items={items}
+              pathname={pathname}
+              currentId={currentId}
+              collapsed={collapsed}
+            />
           </SideNav>
         )}
         <main
