@@ -66,14 +66,13 @@ function AddNote({ onAdd }: { onAdd: (body: string) => Promise<void> | void }) {
         <Button type="submit" size="sm" disabled={!body} loading={isPending}>
           {t('blocks.addNote')}
         </Button>
-        {feedback && (
-          <span
-            className={feedback.type === 'error' ? styles.error : styles.muted}
-            role={feedback.type === 'error' ? 'alert' : 'status'}
-          >
-            {feedback.message}
-          </span>
-        )}
+        {/* Always mounted so screen readers announce the text when it is filled in. */}
+        <span className={styles.muted} role="status">
+          {feedback?.type === 'success' ? feedback.message : ''}
+        </span>
+        <span className={styles.error} role="alert">
+          {feedback?.type === 'error' ? feedback.message : ''}
+        </span>
       </div>
     </form>
   );

@@ -1,9 +1,10 @@
-import React, { useMemo, useState, type ReactNode } from 'react';
+import React, { useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { Button } from '../../../lib/components/buttons/Button';
 import { Avatar } from '../../../lib/components/display/Avatar';
 import { useLabels } from '../../../lib/contexts/LabelsContext';
 import { useFormatters } from '../../AppProvider';
 import { Loadable } from '../../page/Loadable';
+import { safeImageSrc } from '../shared/safeUrl';
 import { BlockSection, type BlockSectionProps } from './BlockSection';
 import styles from './blocks.module.scss';
 
@@ -41,10 +42,18 @@ export function ActivityTimeline({
   const t = useLabels();
   const { relativeTime } = useFormatters();
   const [expanded, setExpanded] = useState(false);
+  const listRef = useRef<HTMLOListElement>(null);
+  const revealFrom = useRef(0);
   const sorted = useMemo(
     () => [...(items ?? [])].sort((a, b) => new Date(b.at).getTime() - new Date(a.at).getTime()),
     [items]
   );
+  useEffect(() => {
+    if (expanded) {
+      // The button that was clicked is gone; land on the first item it revealed.
+      (listRef.current?.children[revealFrom.current] as HTMLElement | undefined)?.focus();
+    }
+  }, [expanded]);
   const visible = expanded ? sorted : sorted.slice(0, limit);
 
   return (
@@ -52,18 +61,22 @@ export function ActivityTimeline({
       <Loadable shape="text" lines={4}>
         {() => (
           <div className={styles.activity}>
-            <ol className={styles.timeline}>
+            <ol ref={listRef} className={styles.timeline}>
               {visible.map((item) => {
                 const at = new Date(item.at);
                 const valid = Number.isFinite(at.getTime());
                 return (
-                  <li key={item.id} className={styles.timelineItem}>
+                  <li key={item.id} className={styles.timelineItem} tabIndex={-1}>
                     <span className={styles.timelineMark} aria-hidden="true">
                       {item.icon ??
                         (item.actor && (
                           <Avatar
                             size="sm"
-                            src={item.actor.avatarUrl}
+                            src={
+                              item.actor.avatarUrl === undefined
+                                ? undefined
+                                : safeImageSrc(item.actor.avatarUrl)
+                            }
                             alt=""
                             initials={initialsOf(item.actor.name)}
                           />
@@ -85,7 +98,14 @@ export function ActivityTimeline({
               })}
             </ol>
             {!expanded && sorted.length > limit && (
-              <Button variant="ghost" size="sm" onClick={() => setExpanded(true)}>
+              <Button
+                variant="ghost"
+                size="sm"
+                onClick={() => {
+                  revealFrom.current = visible.length;
+                  setExpanded(true);
+                }}
+              >
                 {t('blocks.showAll', { count: sorted.length })}
               </Button>
             )}

@@ -109,6 +109,19 @@
   border-radius: var(--radius-sm);
 }
 
+.thumbFallback {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 4 / 3;
+  padding: var(--spacing-sm);
+  text-align: center;
+  color: var(--theme-text-secondary);
+  background: var(--theme-surface-secondary);
+  border-radius: var(--radius-sm);
+  overflow-wrap: anywhere;
+}
+
 .thumbLink {
   display: block;
   border-radius: var(--radius-sm);
