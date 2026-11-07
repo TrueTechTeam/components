@@ -1,4 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { SideNav } from './SideNav';
 import { SideNavItem } from './SideNavItem';
 import { SideNavGroup } from './SideNavGroup';
@@ -258,5 +259,26 @@ describe('SideNav linkComponent', () => {
     const link = screen.getByRole('menuitem', { name: 'Home' });
     expect(link.tagName).toBe('A');
     expect(link).toHaveAttribute('href', '/home');
+  });
+
+  it('activates a link with Enter (not prevented) but still handles Enter on non-links', async () => {
+    const user = userEvent.setup();
+    const onSelect = jest.fn();
+    const onLinkClick = jest.fn((e: React.MouseEvent) => e.preventDefault());
+    render(
+      <SideNav onSelect={onSelect}>
+        <SideNavItem value="home" label="Home" href="/home" onClick={onLinkClick} />
+        <SideNavItem value="act" label="Action" data-testid="act" />
+      </SideNav>
+    );
+    screen.getByRole('menuitem', { name: 'Home' }).focus();
+    await user.keyboard('{Enter}');
+    expect(onLinkClick).toHaveBeenCalledTimes(1);
+    expect(onSelect).toHaveBeenCalledWith('home');
+
+    onSelect.mockClear();
+    screen.getByTestId('act').focus();
+    await user.keyboard('{Enter}');
+    expect(onSelect).toHaveBeenCalledWith('act');
   });
 });

@@ -124,6 +124,10 @@ export const SideNavItem = ({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
+    if (e.key === 'Enter' && href && !disabled) {
+      // Let the browser activate the link; the resulting click selects the item.
+      return;
+    }
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       if (!disabled) {
