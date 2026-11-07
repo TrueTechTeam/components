@@ -271,6 +271,8 @@ locale (`navigator.language`) when no locale is provided.
 | `dataTablePage.pageSize`                | Rows per page                                                   |
 | `dataTablePage.range`                   | {start}–{end} of {total}                                        |
 | `dataTablePage.rowActions`              | Row actions                                                     |
+| `dataTablePage.rowActionsFor`           | Row actions for {name}                                          |
+| `dataTablePage.openDetails`             | Open details for {name}                                         |
 | `dataTablePage.actionDone`              | Done.                                                           |
 | `dataTablePage.details`                 | Details                                                         |
 | `dataTablePage.closeDetail`             | Close details                                                   |

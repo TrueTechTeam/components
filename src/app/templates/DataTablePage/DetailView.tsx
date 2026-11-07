@@ -14,6 +14,8 @@ export interface DetailViewProps {
   dialogSize: 'lg' | 'full';
   title?: ReactNode;
   fullPageHref?: string;
+  /** Move focus to the panel heading when it opens (not for a deep link on page load). */
+  focusOnOpen?: boolean;
   onClose: () => void;
   children: ReactNode;
 }
@@ -37,6 +39,7 @@ export function DetailView({
   dialogSize,
   title,
   fullPageHref,
+  focusOnOpen = true,
   onClose,
   children,
 }: DetailViewProps) {
@@ -46,9 +49,10 @@ export function DetailView({
   const heading = title ?? t('dataTablePage.details');
 
   useEffect(() => {
-    if (presentation === 'panel') {
+    if (presentation === 'panel' && focusOnOpen) {
       headingRef.current?.focus();
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- focus when the record changes
   }, [id, presentation]);
 
   if (presentation === 'dialog') {
@@ -68,7 +72,13 @@ export function DetailView({
       aria-labelledby={titleId}
       data-component="data-table-page-detail"
       onKeyDown={(event) => {
-        if (event.key === 'Escape' && !event.defaultPrevented) {
+        // Escapes from portalled overlays (Menu, Select, Dialog) bubble here through React;
+        // those close their overlay, not the panel.
+        if (
+          event.key === 'Escape' &&
+          !event.defaultPrevented &&
+          event.currentTarget.contains(event.target as Node)
+        ) {
           event.preventDefault();
           onClose();
         }

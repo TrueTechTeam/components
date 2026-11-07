@@ -86,7 +86,11 @@ export interface DataTablePageProps<T> {
   searchable?: boolean;
   /** Views offered by the toggle; the first is the default. @default ['table'] */
   views?: TableView[];
-  /** Card for the grid and list views. Keep it free of interactive elements when `detail` is set. */
+  /**
+   * Card for the grid and list views. With `detail`, an "Open details" control is stretched over
+   * the card so the whole card opens it; give interactive elements inside the card
+   * `position: relative; z-index: 1` to keep them reachable by pointer.
+   */
   renderCard?: (row: T) => ReactNode;
   rowActions?: Array<RowAction<T>>;
   detail?: {
@@ -108,7 +112,6 @@ export interface DataTablePageProps<T> {
 const DEFAULT_PAGE_SIZES = [10, 25, 50];
 const SEARCH_DEBOUNCE_MS = 300;
 const MAX_SKELETON_ROWS = 10;
-const CONTENT_LOADING: LoadingContextValue = { pending: true, busyAncestor: true };
 
 /** Values that mean "no filter": dropped from the URL. */
 function isInactive(value: FilterValue | undefined, filter: FilterDefinition): boolean {
@@ -127,11 +130,11 @@ function isInactive(value: FilterValue | undefined, filter: FilterDefinition): b
 /** Shows the `Loadable`s inside as loading when `loading`, else follows the Page. */
 function ContentLoading({ loading, children }: { loading: boolean; children: ReactNode }) {
   const inherited = useContext(LoadingContext);
-  return (
-    <LoadingContext.Provider value={loading ? CONTENT_LOADING : inherited}>
-      {children}
-    </LoadingContext.Provider>
+  const value = useMemo<LoadingContextValue>(
+    () => (loading ? { pending: true, busyAncestor: inherited.busyAncestor } : inherited),
+    [loading, inherited]
   );
+  return <LoadingContext.Provider value={value}>{children}</LoadingContext.Provider>;
 }
 
 function SearchBox({ value, onSearch }: { value: string; onSearch: (q: string) => void }) {
@@ -200,7 +203,11 @@ function Filters({
       }}
       size="sm"
     >
-      <FilterPopover width={380} showActiveFilters={false}>
+      {/* Wide enough for number-range inputs, never wider than a phone screen. */}
+      <FilterPopover
+        width="min(380px, calc(100vw - 2 * var(--spacing-md)))"
+        showActiveFilters={false}
+      >
         <div className={styles.filterFields}>
           {filters.map((f) => (
             <FilterField key={f.id} filterId={f.id} showLabel />
@@ -214,11 +221,17 @@ function Filters({
 
 function RowActionsMenu<T>({
   row,
+  name,
   actions,
+  pendingAction,
   onRun,
 }: {
   row: T;
+  /** Names the row in the trigger label. */
+  name: string;
   actions: Array<RowAction<T>>;
+  /** Id of this row's action that is running. */
+  pendingAction?: string;
   onRun: (action: RowAction<T>, row: T) => void;
 }) {
   const t = useLabels();
@@ -235,7 +248,7 @@ function RowActionsMenu<T>({
             icon="more"
             variant="ghost"
             size="sm"
-            aria-label={t('dataTablePage.rowActions')}
+            aria-label={t('dataTablePage.rowActionsFor', { name })}
             aria-haspopup="menu"
           />
         }
@@ -245,6 +258,7 @@ function RowActionsMenu<T>({
             <MenuItem
               key={action.id}
               itemKey={action.id}
+              disabled={pendingAction === action.id}
               className={action.danger ? styles.danger : undefined}
               onClick={() => {
                 setOpen(false);
@@ -299,6 +313,7 @@ export function DataTablePage<T>({
   const { up } = useBreakpoint();
   const queryClient = useQueryClient();
   const rootRef = useRef<HTMLDivElement>(null);
+  const mainRef = useRef<HTMLDivElement>(null);
 
   const [state, setState] = useTableState({
     defaultPageSize: pageSizes[0],
@@ -325,17 +340,30 @@ export function DataTablePage<T>({
   // The content shows its skeleton instead of a wrong empty state while clamping, or while an
   // empty result from the previous search/filters stands in for the next one (it would read as
   // "nothing yet"). Only the content: the toolbar stays enabled so typing keeps focus.
-  const staleEmpty = query.isPlaceholderData && total === 0;
+  const staleEmpty =
+    query.isPlaceholderData && (total === 0 || (query.data?.rows.length ?? 0) === 0);
   const contentLoading = outOfRange || staleEmpty;
+  // The page and size the shown rows were fetched for: the range text stays right while the
+  // previous page stands in for the next one.
+  const settled = useRef({ page: state.page, pageSize: state.pageSize });
+  useEffect(() => {
+    if (!query.isPlaceholderData && query.data) {
+      settled.current = { page: state.page, pageSize: state.pageSize };
+    }
+  });
+  const shownPage = query.isPlaceholderData ? settled.current : state;
 
   // ---- Detail ----
   const mode = detail?.mode ?? 'panel';
   const laptop = up('laptop');
   const close = () => setState({ selected: null });
+  // Deep-linked details don't take focus on load; details the user opens do.
+  const userOpened = useRef(false);
   const openDetail = (key: string) => {
     if (!detail) {
       return;
     }
+    userOpened.current = true;
     if (mode === 'page' && detail.fullPageHref) {
       navigate(detail.fullPageHref(key));
     } else {
@@ -349,9 +377,9 @@ export function DataTablePage<T>({
     previous.current = state.selected;
     if (was !== null && state.selected === null) {
       const triggers = rootRef.current?.querySelectorAll<HTMLElement>('[data-detail-id]') ?? [];
-      Array.from(triggers)
-        .find((el) => el.dataset.detailId === was)
-        ?.focus();
+      const trigger = Array.from(triggers).find((el) => el.dataset.detailId === was);
+      // The record may not be on this page (deep link): fall back to the content region.
+      (trigger ?? mainRef.current)?.focus();
     }
   }, [state.selected]);
 
@@ -359,11 +387,16 @@ export function DataTablePage<T>({
   const visibleActions = rowActions.filter(
     (a) => !a.permission || can(a.permission.action, a.permission.subject)
   );
-  const queryKey = options.queryKey;
+  // Prefix: every page, sort and filter of this collection is stale after an action.
+  const queryKeyPrefix = options.queryKey.slice(0, 1);
   const mutation = useMutation({
     mutationFn: ({ action, row }: { action: RowAction<T>; row: T }) => action.run(row),
-    onSuccess: () => queryClient.invalidateQueries({ queryKey }),
+    onSuccess: () => queryClient.invalidateQueries({ queryKey: queryKeyPrefix }),
   });
+  const pendingFor = (row: T) =>
+    mutation.isPending && mutation.variables && rowKey(mutation.variables.row) === rowKey(row)
+      ? mutation.variables.action.id
+      : undefined;
   const feedback = useMutationFeedback(mutation, {
     success: (_data, { action }) => action.success ?? t('dataTablePage.actionDone'),
     error: (_err, { action }) => action.error ?? t('mutation.error'),
@@ -397,6 +430,20 @@ export function DataTablePage<T>({
   const firstValue = (row: T, field: DataTableColumn<T>) => (
     <FieldValue kind={field.kind} value={fieldValueOf(row, field)} {...fieldOptionsOf(field)} />
   );
+  /** Plain-text name of a row for labels: the first column's text, else its key. */
+  const rowName = (row: T) => {
+    const value = columns[0] ? fieldValueOf(row, columns[0]) : undefined;
+    return typeof value === 'string' || typeof value === 'number' ? String(value) : rowKey(row);
+  };
+  const rowActionsMenu = (row: T) => (
+    <RowActionsMenu
+      row={row}
+      name={rowName(row)}
+      actions={visibleActions}
+      pendingAction={pendingFor(row)}
+      onRun={runAction}
+    />
+  );
 
   const tableColumns = [
     ...columns.map((field, index) => ({
@@ -418,6 +465,7 @@ export function DataTablePage<T>({
             type="button"
             className={styles.rowLink}
             data-detail-id={key}
+            aria-current={state.selected === key || undefined}
             onClick={() => openDetail(key)}
           >
             {value}
@@ -432,9 +480,8 @@ export function DataTablePage<T>({
             header: <span className={styles.visuallyHidden}>{t('dataTablePage.rowActions')}</span>,
             align: 'right' as const,
             width: '3.5rem',
-            render: (_value: unknown, record: Record<string, unknown>) => (
-              <RowActionsMenu row={record as T} actions={visibleActions} onRun={runAction} />
-            ),
+            render: (_value: unknown, record: Record<string, unknown>) =>
+              rowActionsMenu(record as T),
           },
         ]
       : []),
@@ -444,11 +491,26 @@ export function DataTablePage<T>({
     <ul className={styles.cards} data-view={state.view}>
       {rows.map((row) => {
         const key = rowKey(row);
+        const selected = state.selected === key || undefined;
+        const title = firstValue(row, columns[0]);
         const card = renderCard ? (
           renderCard(row)
         ) : (
           <Card padding="md" className={styles.defaultCard}>
-            <span className={styles.cardTitle}>{firstValue(row, columns[0])}</span>
+            {detail ? (
+              // The title is the control; its stretched ::after makes the whole card clickable.
+              <button
+                type="button"
+                className={`${styles.cardTitle} ${styles.cardOpen}`}
+                data-detail-id={key}
+                aria-current={selected}
+                onClick={() => openDetail(key)}
+              >
+                {title}
+              </button>
+            ) : (
+              <span className={styles.cardTitle}>{title}</span>
+            )}
             <dl className={styles.cardFields}>
               {columns.slice(1).map((field) => (
                 <div key={field.key} className={styles.cardField}>
@@ -460,27 +522,23 @@ export function DataTablePage<T>({
           </Card>
         );
         return (
-          <li
-            key={key}
-            className={styles.cardItem}
-            data-selected={state.selected === key || undefined}
-          >
-            {detail ? (
+          <li key={key} className={styles.cardItem} data-selected={selected}>
+            {card}
+            {detail && renderCard && (
+              // A dedicated control stretched over the card; the card stays normal content.
               <button
                 type="button"
-                className={styles.cardButton}
+                className={styles.cardOverlay}
                 data-detail-id={key}
-                aria-current={state.selected === key || undefined}
+                aria-current={selected}
                 onClick={() => openDetail(key)}
               >
-                {card}
+                <span className={styles.visuallyHidden}>
+                  {t('dataTablePage.openDetails', { name: rowName(row) })}
+                </span>
               </button>
-            ) : (
-              card
             )}
-            {visibleActions.length > 0 && (
-              <RowActionsMenu row={row} actions={visibleActions} onRun={runAction} />
-            )}
+            {visibleActions.length > 0 && rowActionsMenu(row)}
           </li>
         );
       })}
@@ -519,7 +577,7 @@ export function DataTablePage<T>({
       );
     }
 
-    const start = (state.page - 1) * state.pageSize + 1;
+    const start = (shownPage.page - 1) * shownPage.pageSize + 1;
     const end = Math.min(data.total, start + data.rows.length - 1);
     return (
       <>
@@ -553,7 +611,7 @@ export function DataTablePage<T>({
           renderCards(data.rows)
         )}
         <div className={styles.footer}>
-          <span className={styles.range}>
+          <span className={styles.range} role="status">
             {t('dataTablePage.range', { start, end, total: data.total })}
           </span>
           <div className={styles.paging}>
@@ -632,7 +690,7 @@ export function DataTablePage<T>({
           </div>
         </div>
         <div className={styles.body} data-detail={detailOpen && inlinePanel ? 'panel' : undefined}>
-          <div className={styles.main}>
+          <div ref={mainRef} className={styles.main} tabIndex={-1}>
             <ContentLoading loading={contentLoading}>
               <Loadable
                 shape="table"
@@ -650,6 +708,7 @@ export function DataTablePage<T>({
               dialogSize={laptop ? 'lg' : 'full'}
               title={detail.title?.(state.selected)}
               fullPageHref={detail.fullPageHref?.(state.selected)}
+              focusOnOpen={userOpened.current}
               onClose={close}
             >
               {detail.render(state.selected, { close })}

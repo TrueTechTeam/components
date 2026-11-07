@@ -161,7 +161,8 @@ export function useTableState(
       }
       // Several setter calls in one event build on the pending URL, so keep the ref in step.
       stateRef.current = { ...current, ...patch, page: page ?? current.page };
-      setParams(next);
+      // Opening a detail adds a history entry, so Back closes it.
+      setParams(next, { replace: !(typeof patch.selected === 'string' && patch.selected !== '') });
     },
     [setParams]
   );
