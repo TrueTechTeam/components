@@ -22,6 +22,7 @@ import {
 } from './PageContext';
 import {
   PageState,
+  HiddenPageTitle,
   PendingFallback,
   sameQueries,
   useRegisterQueries,
@@ -161,7 +162,10 @@ export function Page({
                 pending ? (
                   <PendingFallback />
                 ) : (
-                  <PageMessages error onRetry={reset} headingLevel={2} />
+                  <>
+                    <HiddenPageTitle title={title} />
+                    <PageMessages error onRetry={reset} headingLevel={2} />
+                  </>
                 )
               }
             >
@@ -175,6 +179,7 @@ export function Page({
                 size="md"
                 headingLevel={2}
                 ownsLoading
+                pageTitle={title}
               >
                 {children}
               </PageState>

@@ -4,6 +4,7 @@ import { useLabels } from '../../../lib/contexts/LabelsContext';
 import { LoadingContext } from '../../page/LoadingContext';
 import { Page } from '../../page/Page';
 import type { QueryLike } from '../../page/PageContext';
+import { HiddenPageTitle } from '../../page/PageState';
 import { KeyFacts, type FieldDef } from '../blocks';
 import type { StatusTone } from '../fields';
 import { PageHeader, getPageTabId, usePageTab, type Crumb, type PageAction } from '../PageHeader';
@@ -16,6 +17,8 @@ export interface DetailsTab {
   layout?: 'main-side' | 'single';
   main: ReactNode;
   side?: ReactNode;
+  /** Accessible name of the side column. @default the tab label ("Details" with one tab) */
+  sideLabel?: string;
 }
 
 export interface DetailsPageProps<T> {
@@ -32,7 +35,7 @@ export interface DetailsPageProps<T> {
   tabs: DetailsTab[];
   /** When it returns true for a failed query's error, the not-found state replaces the error. */
   notFound?: (error: unknown) => boolean;
-  /** Stable page id (see `Page`). */
+  /** Stable page id (see `Page`). @default 'details' */
   id?: string;
 }
 
@@ -55,7 +58,6 @@ function Body<T>({
   record,
   tabs,
   facts,
-  tabParam = 'tab',
   title,
   status,
   breadcrumbs,
@@ -64,13 +66,13 @@ function Body<T>({
   record: T | undefined;
   tabs: DetailsTab[];
   facts?: Array<FieldDef<T>>;
-  tabParam?: string;
   title: ReactNode;
   status?: { label: string; tone: StatusTone };
   breadcrumbs?: Crumb[];
   actions?: PageAction[];
 }) {
-  const [active] = usePageTab(tabs, tabParam);
+  const t = useLabels();
+  const [active] = usePageTab(tabs);
   const tab = tabs.find((candidate) => candidate.value === active) ?? tabs[0];
   const multiple = tabs.length > 1;
   const layout = tab?.layout ?? 'main-side';
@@ -83,7 +85,6 @@ function Body<T>({
         breadcrumbs={breadcrumbs}
         actions={actions}
         tabs={multiple ? tabs.map(({ value, label }) => ({ value, label })) : undefined}
-        tabParam={tabParam}
       />
       {facts && facts.length > 0 && <KeyFacts<T> fields={facts} data={record} />}
       {tab && (
@@ -91,10 +92,17 @@ function Body<T>({
           className={styles.body}
           data-layout={layout}
           role={multiple ? 'tabpanel' : undefined}
-          aria-labelledby={multiple ? getPageTabId(tab.value, tabParam) : undefined}
+          aria-labelledby={multiple ? getPageTabId(tab.value) : undefined}
         >
           <div className={styles.main}>{tab.main}</div>
-          {side && <aside className={styles.side}>{side}</aside>}
+          {side && (
+            <aside
+              className={styles.side}
+              aria-label={tab.sideLabel ?? (multiple ? tab.label : t('details.side'))}
+            >
+              {side}
+            </aside>
+          )}
         </div>
       )}
     </div>
@@ -125,17 +133,20 @@ function Content<T>({ query, title, status, ...rest }: DetailsPageProps<T>) {
 export function DetailsPage<T>(props: DetailsPageProps<T>) {
   const t = useLabels();
   const { query, title, notFound, id } = props;
+  // Stable across the load: the title changes from the fallback to the record name.
+  const pageId = id ?? 'details';
   const record = query.data;
   const pageTitle = record === undefined ? t('details.title') : title(record);
   if (query.isError && record === undefined && notFound?.(query.error)) {
     return (
-      <Page title={pageTitle} id={id}>
+      <Page title={pageTitle} id={pageId}>
+        <HiddenPageTitle title={pageTitle} />
         <PageMessages notFound headingLevel={2} />
       </Page>
     );
   }
   return (
-    <Page title={pageTitle} id={id} queries={[query]}>
+    <Page title={pageTitle} id={pageId} queries={[query]}>
       <Content<T> {...props} />
     </Page>
   );

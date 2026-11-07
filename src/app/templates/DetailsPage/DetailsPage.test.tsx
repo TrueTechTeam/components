@@ -56,12 +56,17 @@ function Harness({ fetcher, ...props }: { fetcher: () => Promise<Order> } & Prop
   );
 }
 
-function renderPage(url: string, fetcher: () => Promise<Order>, props: Props = {}) {
+function renderPage(
+  url: string,
+  fetcher: () => Promise<Order>,
+  props: Props = {},
+  analytics?: { track: jest.Mock }
+) {
   window.history.replaceState(null, '', url);
   return render(
     <LabelsProvider locale="en-US">
       <NavigationGuardProvider>
-        <AppProvider queryClient={client} logger={silentLogger} debug={false}>
+        <AppProvider queryClient={client} logger={silentLogger} debug={false} analytics={analytics}>
           <Harness fetcher={fetcher} {...props} />
         </AppProvider>
       </NavigationGuardProvider>
@@ -139,6 +144,7 @@ describe('DetailsPage', () => {
       { notFound }
     );
     expect(await screen.findByText('Page Not Found')).toBeInTheDocument();
+    expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1);
     expect(screen.queryByText('overview main')).not.toBeInTheDocument();
   });
 
@@ -154,6 +160,44 @@ describe('DetailsPage', () => {
       expect(screen.getByRole('button', { name: 'Try Again' })).toBeInTheDocument()
     );
     expect(screen.queryByText('Page Not Found')).not.toBeInTheDocument();
+    expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1);
+  });
+
+  it('has exactly one h1 once loaded', async () => {
+    renderPage('/', async () => ORDER);
+    await screen.findByRole('heading', { level: 1, name: 'Order 1042' });
+    expect(screen.getAllByRole('heading', { level: 1 })).toHaveLength(1);
+  });
+
+  it('tracks a single page_view across the load', async () => {
+    const analytics = { track: jest.fn() };
+    renderPage('/', async () => ORDER, {}, analytics);
+    await screen.findByRole('heading', { level: 1, name: 'Order 1042' });
+    const views = analytics.track.mock.calls.filter(([event]) => event === 'page_view');
+    expect(views).toHaveLength(1);
+  });
+
+  it('names the side column after the tab, or sideLabel', async () => {
+    renderPage('/', async () => ORDER);
+    expect(await screen.findByRole('complementary', { name: 'Overview' })).toBeInTheDocument();
+  });
+
+  it('uses sideLabel and the generic name for a single tab', async () => {
+    renderPage('/', async () => ORDER, {
+      tabs: [{ value: 'a', label: 'A', main: <p>m</p>, side: <p>s</p> }],
+    });
+    expect(await screen.findByRole('complementary', { name: 'Details' })).toBeInTheDocument();
+  });
+
+  it('renders the fact values once loaded', async () => {
+    renderPage('/', async () => ORDER, {
+      facts: [
+        { key: 'total', label: 'Total', kind: 'number' },
+        { key: 'name', label: 'Name', kind: 'text' },
+      ],
+    });
+    expect(await screen.findByText('Order 1042', { selector: 'dd *, dd' })).toBeInTheDocument();
+    expect(screen.getByText('Total').nextElementSibling).toHaveTextContent('120');
   });
 
   it('has no invalid DOM nesting while pending', () => {

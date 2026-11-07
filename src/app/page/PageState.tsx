@@ -45,6 +45,16 @@ interface PageStateProps extends StateProps {
    * queries, whose Loadables follow the Page.
    */
   ownsLoading: boolean;
+  /**
+   * Set by `Page` only: when a full-page state (forbidden, error, empty) replaces the children,
+   * the page title is rendered above it as a visually hidden `h1`, so the page keeps its heading.
+   */
+  pageTitle?: string;
+}
+
+/** The visually hidden page `h1` that accompanies a full-page state. */
+export function HiddenPageTitle({ title }: { title: string }) {
+  return <h1 className={styles.visuallyHidden}>{title}</h1>;
 }
 
 function messageError(error: unknown): Error | string | true {
@@ -74,6 +84,7 @@ export function PageState({
   size,
   headingLevel,
   ownsLoading,
+  pageTitle,
   children,
 }: PageStateProps) {
   const t = useLabels();
@@ -86,7 +97,12 @@ export function PageState({
   );
 
   if (permission && !can(permission.action, permission.subject)) {
-    return <PageMessages forbidden size={size} headingLevel={headingLevel} />;
+    return (
+      <>
+        {pageTitle !== undefined && <HiddenPageTitle title={pageTitle} />}
+        <PageMessages forbidden size={size} headingLevel={headingLevel} />
+      </>
+    );
   }
 
   if (pending && skeleton !== undefined) {
@@ -108,17 +124,26 @@ export function PageState({
   };
   const failedWithoutData = errored.find((query) => query.data === undefined);
   let content: ReactNode = children;
+  const title = pageTitle !== undefined && <HiddenPageTitle title={pageTitle} />;
   if (failedWithoutData) {
     content = (
-      <PageMessages
-        error={showErrorDetails ? messageError(failedWithoutData.error) : true}
-        onRetry={retry}
-        size={size}
-        headingLevel={headingLevel}
-      />
+      <>
+        {title}
+        <PageMessages
+          error={showErrorDetails ? messageError(failedWithoutData.error) : true}
+          onRetry={retry}
+          size={size}
+          headingLevel={headingLevel}
+        />
+      </>
     );
   } else if (!pending && isEmpty?.(queries.map((query) => query.data))) {
-    content = <PageMessages empty emptyConfig={empty} size={size} headingLevel={headingLevel} />;
+    content = (
+      <>
+        {title}
+        <PageMessages empty emptyConfig={empty} size={size} headingLevel={headingLevel} />
+      </>
+    );
   }
   const staleError =
     !failedWithoutData && errored.length > 0 ? (

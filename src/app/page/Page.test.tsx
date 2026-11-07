@@ -372,6 +372,20 @@ describe('Page', () => {
     expect(isEmpty).not.toHaveBeenCalled();
   });
 
+  it('renders one hidden h1 with the title in the forbidden state', () => {
+    render(
+      wrap(
+        <Page title="Orders" permission={{ action: 'view' }}>
+          <h1>Real heading</h1>
+        </Page>,
+        { auth: { user: null, can: () => false } }
+      )
+    );
+    const h1s = screen.getAllByRole('heading', { level: 1 });
+    expect(h1s).toHaveLength(1);
+    expect(h1s[0]).toHaveTextContent('Orders');
+  });
+
   it('shows forbidden when permission check fails', () => {
     const can = jest.fn((action: string) => action !== 'view');
     render(
