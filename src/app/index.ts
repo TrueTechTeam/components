@@ -9,3 +9,4 @@ export * from './router';
 export * from './params';
 export * from './page';
 export * from './data';
+export * from './templates';

@@ -246,3 +246,7 @@ locale (`navigator.language`) when no locale is provided.
 | `debug.noStore`                         | This page has no store                                          |
 | `debug.param`                           | Param                                                           |
 | `debug.value`                           | Value                                                           |
+| `field.yes`                             | Yes                                                             |
+| `field.no`                              | No                                                              |
+| `field.empty`                           | Not set                                                         |
+| `field.copy`                            | Copy                                                            |
