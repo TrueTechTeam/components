@@ -74,6 +74,7 @@ All remaining items are API or scope decisions rather than visual or accessibili
    Plan as one release with deprecation aliases.
 2. A shared hover/active recipe for non-form components (#19).
 3. RTL logical properties (#25).
+4. Extend core `KPI` (ReactNode value, delta slot, loading state) so the app layer's `KpiWidget` can build on it.
 
 ## Screenshot coverage
 

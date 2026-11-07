@@ -12,14 +12,15 @@ export interface ChartWidgetProps extends DashboardWidgetProps {
 
 /**
  * A `DashboardWidget` holding any chart element. The chart itself is hidden from assistive
- * technology; `summary` is its text alternative (a visually hidden `figcaption`).
+ * technology and inert; `summary` is its text alternative (a visually hidden `figcaption`).
+ * Chart children must not contain focusable controls (buttons, links): they would be unreachable.
  */
 export function ChartWidget({ height = 240, summary, children, ...widget }: ChartWidgetProps) {
   return (
     <DashboardWidget {...widget}>
       <Loadable shape="box" height={height}>
         <figure className={styles.figure}>
-          <div className={styles.chart} style={{ height }} aria-hidden="true">
+          <div className={styles.chart} style={{ height }} aria-hidden="true" inert>
             {children}
           </div>
           <figcaption className={styles.visuallyHidden}>{summary}</figcaption>
