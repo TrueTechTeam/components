@@ -289,3 +289,4 @@ locale (`navigator.language`) when no locale is provided.
 | `dashboard.deltaUp`                     | up                                                              |
 | `dashboard.deltaDown`                   | down                                                            |
 | `details.title`                         | Details                                                         |
+| `details.side`                          | Details                                                         |
