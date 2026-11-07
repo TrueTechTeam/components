@@ -86,6 +86,34 @@ describe('DashboardPage', () => {
     expect(screen.getByRole('radio', { name: '7d' })).toHaveAttribute('aria-checked', 'true');
   });
 
+  it('ignores Refresh all clicks while busy and keeps focus', async () => {
+    let release!: () => void;
+    const gate = new Promise<void>((r) => (release = r));
+    const fetcher = jest.fn(async () => {
+      if (fetcher.mock.calls.length > 1) {
+        await gate;
+      }
+      return 1;
+    });
+    function Probe() {
+      useQuery({ queryKey: ['dash', 'slow'], queryFn: fetcher });
+      return null;
+    }
+    renderDashboard('/', { queryKeyPrefix: ['dash'], primary: <Probe /> });
+    const refresh = screen.getByRole('button', { name: 'Refresh all' });
+    await waitFor(() => expect(fetcher).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(refresh).not.toHaveAttribute('aria-disabled'));
+    refresh.focus();
+    fireEvent.click(refresh);
+    await waitFor(() => expect(refresh).toHaveAttribute('aria-disabled', 'true'));
+    fireEvent.click(refresh);
+    fireEvent.click(refresh);
+    expect(fetcher).toHaveBeenCalledTimes(2);
+    expect(refresh).toHaveFocus();
+    release();
+    await waitFor(() => expect(refresh).not.toHaveAttribute('aria-disabled'));
+  });
+
   it('Refresh all invalidates only queries under queryKeyPrefix', async () => {
     const inside = jest.fn(async () => 1);
     const outside = jest.fn(async () => 2);
@@ -150,6 +178,19 @@ describe('KpiWidget', () => {
     expect(delta).toHaveTextContent('up');
     expect(delta).toHaveAttribute('data-tone', 'success');
     expect(screen.getByText('Revenue')).toBeInTheDocument();
+  });
+
+  it('has no invalid DOM nesting while pending', () => {
+    const spy = jest.spyOn(console, 'error').mockImplementation(() => undefined);
+    renderDashboard('/', {
+      kpis: <Revenue fetcher={() => new Promise<number>(() => undefined)} />,
+    });
+    expect(screen.getByText('Revenue')).toBeInTheDocument();
+    const nesting = spy.mock.calls.filter((c) =>
+      /validateDOMNesting|cannot be a descendant|cannot contain/.test(String(c[0]))
+    );
+    spy.mockRestore();
+    expect(nesting).toHaveLength(0);
   });
 
   it('keeps tone independent of direction', () => {
