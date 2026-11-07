@@ -1,4 +1,12 @@
-import React, { useCallback, useEffect, useMemo, useState, type ReactNode } from 'react';
+import React, {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useMemo,
+  useState,
+  type ReactNode,
+} from 'react';
 import { useQueryClient, type QueryKey } from '@tanstack/react-query';
 import { Button } from '../../../lib/components/buttons/Button';
 import {
@@ -19,13 +27,24 @@ export type TimeRange = '24h' | '7d' | '30d' | '90d' | 'ytd';
 const ALL_RANGES: TimeRange[] = ['24h', '7d', '30d', '90d', 'ytd'];
 const DEFAULT_RANGES: TimeRange[] = ['7d', '30d', '90d'];
 
+interface RangeContextValue {
+  range: TimeRange;
+  setRange: (range: TimeRange) => void;
+}
+
+/** The effective range of the enclosing `DashboardPage`, so widgets and the toggle agree. */
+const RangeContext = createContext<RangeContextValue | null>(null);
+
 /**
- * The dashboard time range, bound to the URL (`?range=`). An absent or unknown value is `def`.
- * Widgets call this to scope their queries to the range the header toggle selects.
+ * The dashboard time range, bound to the URL (`?range=`). Inside a `DashboardPage` it is the
+ * page's effective range (the one the toggle shows: unknown or unoffered values fall back to the
+ * page default). Elsewhere an absent or unknown value is `def`. Widgets call this to scope their
+ * queries to the selected range.
  */
 export function useTimeRange(def: TimeRange = '30d'): [TimeRange, (range: TimeRange) => void] {
   const [params, setParams] = usePageParams({ range: param.enum(ALL_RANGES, def) });
-  return [params.range, (range) => setParams({ range })];
+  const shared = useContext(RangeContext);
+  return shared ? [shared.range, shared.setRange] : [params.range, (range) => setParams({ range })];
 }
 
 export interface DashboardPageProps {
@@ -102,8 +121,14 @@ export function DashboardPage({
 }: DashboardPageProps) {
   const t = useLabels();
   const client = useQueryClient();
-  const [selected, setRange] = useTimeRange(defaultRange);
-  const range = ranges.includes(selected) ? selected : defaultRange;
+  // `defaultRange` must be offered; otherwise the first offered range is the default.
+  const fallback = ranges.includes(defaultRange) ? defaultRange : (ranges[0] ?? defaultRange);
+  const [params, setParams] = usePageParams({ range: param.enum(ALL_RANGES, fallback) });
+  const range = ranges.includes(params.range) ? params.range : fallback;
+  const rangeContext = useMemo<RangeContextValue>(
+    () => ({ range, setRange: (next) => setParams({ range: next }) }),
+    [range, setParams]
+  );
   // Callers pass an inline array; key on its content so effects don't re-run every render.
   const prefixKey = JSON.stringify(queryKeyPrefix);
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -120,46 +145,53 @@ export function DashboardPage({
 
   return (
     <Page title={title} id={id}>
-      <div className={styles.root} data-component="dashboard-page">
-        <PageHeader title={title} description={description} actions={actions} />
-        <div className={styles.toolbar}>
-          {ranges.length > 1 && (
-            <ButtonToggleGroup
-              value={range}
-              onChange={(next) => setRange(next as TimeRange)}
-              size="sm"
-              aria-label={t('dashboard.range')}
-            >
-              {ranges.map((r) => (
-                <ButtonToggleGroupItem key={r} value={r}>
-                  {t(`dashboard.range.${r}`)}
-                </ButtonToggleGroupItem>
-              ))}
-            </ButtonToggleGroup>
-          )}
-          {prefix && (
-            <div className={styles.toolbarEnd}>
-              <LastUpdated query={aggregate} refreshable={false} />
-              <Button
-                variant="outline"
+      <RangeContext.Provider value={rangeContext}>
+        <div className={styles.root} data-component="dashboard-page">
+          <PageHeader title={title} description={description} actions={actions} />
+          <div className={styles.toolbar}>
+            {ranges.length > 1 && (
+              <ButtonToggleGroup
+                value={range}
+                onChange={(next) => rangeContext.setRange(next as TimeRange)}
                 size="sm"
-                disabled={fetching}
-                onClick={() => void refreshAll()}
+                aria-label={t('dashboard.range')}
               >
-                {t('dashboard.refreshAll')}
-              </Button>
+                {ranges.map((r) => (
+                  <ButtonToggleGroupItem key={r} value={r}>
+                    {t(`dashboard.range.${r}`)}
+                  </ButtonToggleGroupItem>
+                ))}
+              </ButtonToggleGroup>
+            )}
+            {prefix && (
+              <div className={styles.toolbarEnd}>
+                <LastUpdated query={aggregate} refreshable={false} />
+                <Button
+                  variant="outline"
+                  size="sm"
+                  aria-disabled={fetching || undefined}
+                  aria-busy={fetching || undefined}
+                  onClick={() => {
+                    if (!fetching) {
+                      void refreshAll();
+                    }
+                  }}
+                >
+                  {t('dashboard.refreshAll')}
+                </Button>
+              </div>
+            )}
+          </div>
+          {kpis && (
+            <div role="group" aria-label={t('dashboard.kpis')}>
+              <AdaptiveGrid minItemWidth={200}>{kpis}</AdaptiveGrid>
             </div>
           )}
+          {primary && <div className={styles.stack}>{primary}</div>}
+          {secondary && <AdaptiveGrid minItemWidth={300}>{secondary}</AdaptiveGrid>}
+          {activity && <div className={styles.stack}>{activity}</div>}
         </div>
-        {kpis && (
-          <div role="group" aria-label={t('dashboard.kpis')}>
-            <AdaptiveGrid minItemWidth={200}>{kpis}</AdaptiveGrid>
-          </div>
-        )}
-        {primary && <div className={styles.stack}>{primary}</div>}
-        {secondary && <AdaptiveGrid minItemWidth={300}>{secondary}</AdaptiveGrid>}
-        {activity && <div className={styles.stack}>{activity}</div>}
-      </div>
+      </RangeContext.Provider>
     </Page>
   );
 }

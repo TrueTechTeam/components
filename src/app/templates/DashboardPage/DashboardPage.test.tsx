@@ -74,6 +74,18 @@ describe('DashboardPage', () => {
     expect(screen.getByRole('radio', { name: '30d' })).toHaveAttribute('aria-checked', 'true');
   });
 
+  it('shares the effective range with widgets when the URL value is not offered', () => {
+    renderDashboard('/?range=ytd', { ranges: ['7d', '30d'], primary: <RangeProbe /> });
+    expect(screen.getByText('probe:30d')).toBeInTheDocument();
+    expect(screen.getByRole('radio', { name: '30d' })).toHaveAttribute('aria-checked', 'true');
+  });
+
+  it('falls back to the first offered range when defaultRange is not offered', () => {
+    renderDashboard('/', { ranges: ['7d', '90d'], defaultRange: '30d', primary: <RangeProbe /> });
+    expect(screen.getByText('probe:7d')).toBeInTheDocument();
+    expect(screen.getByRole('radio', { name: '7d' })).toHaveAttribute('aria-checked', 'true');
+  });
+
   it('Refresh all invalidates only queries under queryKeyPrefix', async () => {
     const inside = jest.fn(async () => 1);
     const outside = jest.fn(async () => 2);
@@ -127,11 +139,12 @@ describe('KpiWidget', () => {
     let resolve!: (n: number) => void;
     const fetcher = () => new Promise<number>((r) => (resolve = r));
     const { container } = renderDashboard('/', { kpis: <Revenue fetcher={fetcher} /> });
-    expect(container.querySelector('[data-loadable="card"]')).toBeInTheDocument();
+    expect(screen.getByText('Revenue')).toBeInTheDocument();
+    expect(container.querySelector('[data-loadable]')).toBeInTheDocument();
     expect(screen.queryByText(/12%/)).not.toBeInTheDocument();
     resolve(1500);
     expect(await screen.findByText('$1,500.00')).toBeInTheDocument();
-    expect(container.querySelector('[data-loadable="card"]')).not.toBeInTheDocument();
+    expect(container.querySelector('[data-loadable]')).not.toBeInTheDocument();
     const delta = screen.getByText(/12%/);
     expect(delta).toHaveTextContent('▲');
     expect(delta).toHaveTextContent('up');

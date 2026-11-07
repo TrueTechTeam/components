@@ -48,24 +48,31 @@ function renderValue(raw: ReactNode, kind?: FieldKind): ReactNode {
   return kind && primitive ? <FieldValue kind={kind} value={raw} /> : raw;
 }
 
-/** A KPI tile: label, large value, optional change indicator and hint. Skeleton while loading. */
+/**
+ * A KPI tile: label, large value, optional change indicator and hint. The label and hint render
+ * immediately; only the value and delta skeletonize while loading.
+ */
 export function KpiWidget({ label, query, value, delta, kind, hint }: KpiWidgetProps) {
   return (
     <Section queries={query ? [query] : undefined}>
-      <Loadable shape="card" height="7rem">
-        {() => (
-          <Card padding="md" className={styles.kpi}>
-            <p className={styles.kpiLabel}>{label}</p>
-            <p className={styles.kpiValue}>{renderValue(value(), kind)}</p>
-            {(delta || hint) && (
-              <p className={styles.kpiFoot}>
-                {delta && <Delta delta={delta()} />}
-                {hint && <span className={styles.muted}>{hint}</span>}
-              </p>
+      <Card padding="md" className={styles.kpi}>
+        <p className={styles.kpiLabel}>{label}</p>
+        <p className={styles.kpiValue}>
+          <Loadable shape="heading" width="60%">
+            {() => renderValue(value(), kind)}
+          </Loadable>
+        </p>
+        {(delta || hint) && (
+          <p className={styles.kpiFoot}>
+            {delta && (
+              <Loadable shape="text" width="4rem">
+                {() => <Delta delta={delta()} />}
+              </Loadable>
             )}
-          </Card>
+            {hint && <span className={styles.muted}>{hint}</span>}
+          </p>
         )}
-      </Loadable>
+      </Card>
     </Section>
   );
 }
