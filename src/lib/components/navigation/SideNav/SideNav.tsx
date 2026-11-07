@@ -1,7 +1,11 @@
 import React, { useState, useCallback, useMemo, useId } from 'react';
 import type { BaseComponentProps } from '../../../types';
 import { useLabels } from '../../../contexts/LabelsContext';
-import { SideNavContext, type SideNavContextValue } from './SideNavContext';
+import {
+  SideNavContext,
+  type SideNavContextValue,
+  type SideNavLinkComponent,
+} from './SideNavContext';
 import styles from './SideNav.module.scss';
 
 export interface SideNavProps extends BaseComponentProps {
@@ -53,6 +57,13 @@ export interface SideNavProps extends BaseComponentProps {
    * Callback when selection changes
    */
   onSelect?: (value: string) => void;
+
+  /**
+   * Component used to render item links, for client-side routing or navigation guards. It
+   * receives the anchor props (`href`, `className`, `aria-current`, handlers, children).
+   * Defaults to a plain `<a>`.
+   */
+  linkComponent?: SideNavLinkComponent;
 
   /**
    * Header content
@@ -112,6 +123,7 @@ export const SideNav = ({
   selectedValue: controlledSelectedValue,
   defaultSelectedValue,
   onSelect,
+  linkComponent,
   header,
   footer,
   children,
@@ -184,6 +196,7 @@ export const SideNav = ({
       expandedGroups,
       toggleGroup,
       registerDefaultExpanded,
+      linkComponent,
     }),
     [
       sideNavId,
@@ -194,6 +207,7 @@ export const SideNav = ({
       expandedGroups,
       toggleGroup,
       registerDefaultExpanded,
+      linkComponent,
     ]
   );
 

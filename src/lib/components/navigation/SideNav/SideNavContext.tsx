@@ -1,4 +1,19 @@
-import { createContext, useContext } from 'react';
+import {
+  createContext,
+  useContext,
+  type AnchorHTMLAttributes,
+  type ComponentType,
+  type ReactNode,
+  type Ref,
+} from 'react';
+
+/** Props SideNavItem passes to the element that renders its link. */
+export type SideNavLinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
+  href: string;
+  children: ReactNode;
+  ref?: Ref<HTMLAnchorElement>;
+};
+export type SideNavLinkComponent = ComponentType<SideNavLinkProps>;
 
 export interface SideNavContextValue {
   /**
@@ -40,6 +55,11 @@ export interface SideNavContextValue {
    * Register a group as expanded by default
    */
   registerDefaultExpanded: (groupId: string) => void;
+
+  /**
+   * Component that renders item links (default: a plain anchor)
+   */
+  linkComponent?: SideNavLinkComponent;
 }
 
 export const SideNavContext = createContext<SideNavContextValue | null>(null);
