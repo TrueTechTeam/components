@@ -1,6 +1,6 @@
 ---
 name: ui-components-design
-description: Use when building or changing UI with @true-tech-team/ui-components (React). Covers which component to use, color, spacing, typography, layout, motion, accessibility, forms, data tables, and loading/empty/error states. Read before writing JSX or styles that use this library.
+description: Use when building or changing UI with @true-tech-team/ui-components (React). Covers building pages from an outline and a sample API response with the /app templates, which component to use, color, spacing, typography, layout, motion, accessibility, forms, data tables, and loading/empty/error states. Read before writing JSX or styles that use this library.
 ---
 
 # @true-tech-team/ui-components design guidelines
@@ -18,6 +18,11 @@ For pages that load data, keep state in the URL, check permissions or translate 
 builder entry `@true-tech-team/ui-components/app` (`GlobalProvider` outside, `AppProvider` inside);
 see the "App builder (`/app`)" section of [components/catalog.md](components/catalog.md). Built-in
 text is translatable: see [foundations/labels.md](foundations/labels.md).
+
+To build a page from an outline plus a sample API response or schema, follow
+[app/README.md](app/README.md): fill the page brief ([app/page-brief.md](app/page-brief.md)), pick
+a template (`DataTablePage`, `DetailsPage`, `DashboardPage`) and map every field to a
+`FieldValue` kind. [app/example.md](app/example.md) shows the whole run.
 
 Non-negotiables:
 

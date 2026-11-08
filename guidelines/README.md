@@ -58,6 +58,14 @@ review comments, commit messages and PR descriptions.
 | [patterns/data-display.md](patterns/data-display.md)                       | Tables vs lists vs cards, filtering, pagination, KPIs, alignment               |
 | [patterns/feedback-states.md](patterns/feedback-states.md)                 | Loading, empty, error and success states; notifications; confirmations         |
 | [patterns/page-layout.md](patterns/page-layout.md)                         | App shells, navigation structure, dashboards, responsive behaviour             |
+| [app/README.md](app/README.md)                                             | Building a page from an outline + sample response with the `/app` templates    |
+| [app/page-brief.md](app/page-brief.md)                                     | The brief to fill before building a page                                       |
+| [app/choosing-a-page.md](app/choosing-a-page.md)                           | Data table vs details vs dashboard vs form page, and how to configure each     |
+| [app/field-display.md](app/field-display.md)                               | API field types → `FieldKind`; column vs summary vs detail-only                |
+| [app/hierarchy.md](app/hierarchy.md)                                       | Priority, primary action, above the fold, progressive disclosure, tabs         |
+| [app/states.md](app/states.md)                                             | Required states per template and widget                                        |
+| [app/plumbing.md](app/plumbing.md)                                         | URL vs local vs page state, polling, permissions, feedback, providers, Next.js |
+| [app/example.md](app/example.md)                                           | Worked example: campaigns list and details page, from outline to code          |
 | [contributing/component-checklist.md](contributing/component-checklist.md) | Design and quality bar for creating or updating a component in the library     |
 | [sources.md](sources.md)                                                   | Research citations                                                             |
 

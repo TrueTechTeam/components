@@ -143,6 +143,50 @@ a key change does not return the page to skeletons.
 
 See the Storybook stories under "App Builder / Foundation" for each piece.
 
+### Templates
+
+`/app` also ships page templates. You configure them rather than fork them. Each is built on
+`Page`, `Section` and `Loadable`, so its structure renders while data loads, and its state
+(filters, sort, page, selected record, tab, time range) lives in the URL.
+
+| Template        | For                                                                                                                                        |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `AppShell`      | The app frame: Navbar, collapsible sidebar, `main` with skip link, drawer or bottom navigation on mobile                                   |
+| `PageHeader`    | Title, status, breadcrumbs, actions (one primary; overflow menu on mobile) and URL-bound tabs                                              |
+| `DataTablePage` | Many records: search, filters, server sort, pagination, table/grid/list views, row actions, and a detail panel, dialog or page             |
+| `DetailsPage`   | One record: header, key facts, URL-bound tabs, main and side columns                                                                       |
+| `DashboardPage` | KPIs (`KpiWidget`), charts (`ChartWidget`, any chart library) and widgets (`DashboardWidget`) over a URL-bound time range                  |
+| Blocks          | `PropertyList`, `KeyFacts`, `ActivityTimeline`, `Notes`, `MediaGallery`, `RelatedRecords`, each its own `Section` with loading/empty/error |
+| `FieldValue`    | One value by kind (currency, date, status, url, id, tags…): locale-aware, "—" for empty or invalid values, unsafe URLs blocked             |
+
+```tsx
+import { DataTablePage } from '@true-tech-team/ui-components/app';
+
+<DataTablePage<Campaign>
+  title="Campaigns"
+  columns={[
+    { key: 'name', label: 'Name', kind: 'text', sortable: true },
+    { key: 'status', label: 'Status', kind: 'status', statusTones: { active: 'success' } },
+    { key: 'spend_cents', label: 'Spend', kind: 'currency', get: (c) => c.spend_cents / 100 },
+  ]}
+  rowKey={(c) => c.id}
+  queryOptions={(s) => ({
+    queryKey: [
+      'campaigns',
+      'list',
+      { page: s.page, size: s.pageSize, sort: s.sort, q: s.search, f: s.filters },
+    ],
+    queryFn: () => fetchCampaigns(s), // resolves to { rows, total }
+  })}
+  create={{ label: 'New campaign', href: '/campaigns/new' }}
+  detail={{ render: (id) => <CampaignPreview id={id} />, fullPageHref: (id) => `/campaigns/${id}` }}
+/>;
+```
+
+To have a coding agent build a page from an outline and a sample API response, point it at
+`guidelines/app/README.md`. It fills a page brief, picks the template, maps every field and covers
+every state. `guidelines/app/example.md` shows a full run.
+
 ## Design guidelines & AI coding agents
 
 The package ships research-backed design guidelines (WCAG 2.2 AA, NN/g, Baymard, Material 3,
@@ -157,6 +201,7 @@ node_modules/@true-tech-team/ui-components/
     ├── README.md                # how to apply the rules
     ├── decision-tree.md         # start here
     ├── SKILL.md                 # Claude Code skill wrapper
+    ├── app/                     # building pages from data: page brief, templates, fields, hierarchy, states, plumbing, example
     ├── components/              # choosing.md, catalog.md (includes the app builder, /app)
     ├── foundations/             # tokens, color, typography, spacing-layout, elevation-shape, motion, accessibility, labels
     └── patterns/                # forms, data-display, feedback-states, page-layout

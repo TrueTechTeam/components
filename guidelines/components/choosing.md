@@ -372,3 +372,22 @@ services. Plain presentational screens need only the main entry.
 | Layout that depends on screen size                                | CSS with `@include bp(...)` first; `useBreakpoint` / `useBreakpointValue` only for logic      |
 | Warn before losing edits                                          | `FormBuilder guardUnsaved`; custom form: `useUnsavedChanges`                                  |
 | Translate built-in text                                           | `translate={i18n.t}` on the provider; keys are `ui.<key>` (`foundations/labels.md`)           |
+
+### Page templates
+
+Start from the user's task and the data's shape. The full tree is `APP-1` in
+[../app/choosing-a-page.md](../app/choosing-a-page.md), and the workflow (page brief first) is in
+[../app/README.md](../app/README.md).
+
+| Need                                                            | Use                                                                                                       |
+| --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| The app frame (nav, sidebar, `main`, skip link)                 | `AppShell`, once around all routes (`APP-9`)                                                              |
+| Find, compare and act on many records                           | `DataTablePage` (`APP-2`)                                                                                 |
+| Quick look at one record from the list                          | `DataTablePage detail` `mode: 'panel'` (inline from 1024px, Dialog below); `'dialog'`; `'page'` (`APP-3`) |
+| One record with related content (history, files, child records) | `DetailsPage` with `facts` and `tabs`, composed from blocks (`APP-4`)                                     |
+| Monitor numbers over a time range                               | `DashboardPage` with `KpiWidget`, `ChartWidget`, `DashboardWidget`, `useTimeRange` (`APP-5`)              |
+| Create or edit a record                                         | `Page` + `PageHeader` + `FormBuilder guardUnsaved` (`APP-6`)                                              |
+| A custom page that still looks like the others                  | `Page` + `PageHeader` (+ `usePageTab`) + `Section`s and blocks (`APP-8`)                                  |
+| Show one field value (date, money, status, link, id…)           | `FieldValue` with a `FieldKind` (`FIELD-2`)                                                               |
+| Label/value pairs · headline facts                              | `PropertyList` · `KeyFacts` (`HIER-6`)                                                                    |
+| Events · comments · files · child records                       | `ActivityTimeline` · `Notes` · `MediaGallery` · `RelatedRecords` (`FIELD-8`)                              |
