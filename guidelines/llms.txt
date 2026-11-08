@@ -31,6 +31,17 @@
 - [Feedback & states](guidelines/patterns/feedback-states.md): loading, empty, error, success, toasts
 - [Page layout](guidelines/patterns/page-layout.md): app shell, page types, dashboards, responsive
 
+## Building pages from data (`/app` templates)
+
+- [Workflow](guidelines/app/README.md): outline + sample API response → page brief → template → code
+- [Page brief](guidelines/app/page-brief.md): the brief to fill before building, with an empty template
+- [Choosing a page](guidelines/app/choosing-a-page.md): DataTablePage, DetailsPage, DashboardPage, form, settings, AppShell (APP-*)
+- [Field display](guidelines/app/field-display.md): JSON/schema types → FieldValue kinds, placement, column budget (FIELD-*)
+- [Hierarchy](guidelines/app/hierarchy.md): top-left priority, one primary action, progressive disclosure, tabs (HIER-*)
+- [States](guidelines/app/states.md): structure-first loading, nothing yet vs no results, errors, forbidden, not found (APP-STATE-*)
+- [Plumbing](guidelines/app/plumbing.md): URL vs local vs page state, polling, keepPreviousData, permissions, feedback, Next.js (APP-PLUMB-*)
+- [Worked example](guidelines/app/example.md): marketing campaigns list + details page
+
 ## Optional
 
 - [Contributor checklist](guidelines/contributing/component-checklist.md): quality bar for library components
