@@ -184,11 +184,17 @@ export function DashboardPage({
           </div>
           {kpis && (
             <div role="group" aria-label={t('dashboard.kpis')}>
-              <AdaptiveGrid minItemWidth={200}>{kpis}</AdaptiveGrid>
+              <AdaptiveGrid minItemWidth={160} fillMode="auto-fit" justifyItems="stretch">
+                {kpis}
+              </AdaptiveGrid>
             </div>
           )}
           {primary && <div className={styles.stack}>{primary}</div>}
-          {secondary && <AdaptiveGrid minItemWidth={300}>{secondary}</AdaptiveGrid>}
+          {secondary && (
+            <AdaptiveGrid minItemWidth={300} fillMode="auto-fit" justifyItems="stretch">
+              {secondary}
+            </AdaptiveGrid>
+          )}
           {activity && <div className={styles.stack}>{activity}</div>}
         </div>
       </RangeContext.Provider>
