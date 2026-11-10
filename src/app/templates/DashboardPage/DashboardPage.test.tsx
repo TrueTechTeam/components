@@ -134,6 +134,23 @@ describe('DashboardPage', () => {
     expect(outside).toHaveBeenCalledTimes(1);
   });
 
+  it('stretches KPI and secondary widgets to fill their grid columns', () => {
+    const { container } = renderDashboard('/', {
+      kpis: <Revenue fetcher={async () => 1} />,
+      secondary: (
+        <DashboardWidget title="Healthy">
+          <p>fine</p>
+        </DashboardWidget>
+      ),
+    });
+    const grids = Array.from(container.querySelectorAll<HTMLElement>('[data-fill-mode]'));
+    expect(grids).toHaveLength(2);
+    for (const grid of grids) {
+      expect(grid).toHaveAttribute('data-fill-mode', 'auto-fit');
+      expect(grid.style.getPropertyValue('--grid-justify-items')).toBe('stretch');
+    }
+  });
+
   it('a failing widget shows its own error while siblings render', async () => {
     function Failing() {
       const query = useQuery({
