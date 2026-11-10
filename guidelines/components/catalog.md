@@ -202,7 +202,9 @@ navigation guards silently stop working. In development, `AppProvider` warns whe
 | `useAuth`, `useCan`, `Can`                                                      | Permission checks; hide or disable what the user cannot do                                                                                                                                                                           |
 | `useFlag`, `Feature`                                                            | Feature flags                                                                                                                                                                                                                        |
 | `useAppTranslation`, `useFormatters`, `useAppConfig`                            | App `t()`, locale-bound formatters, the raw provider config                                                                                                                                                                          |
-| `DebugPanel`                                                                    | Query, store, param and log inspector, mounted by `Page` when `debug` is on (default outside production)                                                                                                                             |
+
+`Page` mounts a debug panel (queries, page store, URL params, logs) when `AppProvider` `debug` is
+on (the default outside production). It is not exported; turn it off with `debug={false}`.
 
 While its queries are pending, a `Page` or `Section` still renders its children (headings, static
 text, layout) inside a disabled, `aria-busy` region; wrap only the data-dependent parts in
