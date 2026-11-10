@@ -39,6 +39,14 @@ describe('FieldValue', () => {
     expect(screen.getByText('Jan 5, 2026')).toBeInTheDocument();
   });
 
+  it('treats an impossible calendar day as invalid instead of rolling it over', () => {
+    expect(isEmptyFieldValue('date', '2026-13-45')).toBe(true);
+    expect(isEmptyFieldValue('date', '2026-02-30')).toBe(true);
+    expect(isEmptyFieldValue('date', '2028-02-29')).toBe(false);
+    renderField({ kind: 'date', value: '2026-13-45' });
+    expect(screen.getByText('Not set')).toBeInTheDocument();
+  });
+
   it('formats number and fileSize', () => {
     renderField({ kind: 'number', value: 12345 });
     expect(screen.getByText('12,345')).toBeInTheDocument();
