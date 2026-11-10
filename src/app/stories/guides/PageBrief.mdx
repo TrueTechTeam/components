@@ -1,0 +1,22 @@
+import { Markdown, Meta } from '@storybook/addon-docs/blocks';
+import brief from '../../../../guidelines/app/page-brief.md?raw';
+import example from '../../../../guidelines/app/example.md?raw';
+import { guideOptions, section, unfence, withoutTitle } from './guideMarkdown';
+
+<Meta title="App Builder/Guides/Page Brief" />
+
+# Page brief
+
+Rendered from
+[guidelines/app/page-brief.md](https://github.com/TrueTechTeam/components/blob/master/guidelines/app/page-brief.md).
+
+<Markdown options={guideOptions}>{withoutTitle(brief)}</Markdown>
+
+## A filled brief
+
+From the worked example in [guidelines/app/example.md](https://github.com/TrueTechTeam/components/blob/master/guidelines/app/example.md)
+(a marketing "campaigns" list and details page).
+
+<Markdown options={guideOptions}>
+  {unfence(section(example, '## 2. The filled brief', '## 3. The code'))}
+</Markdown>

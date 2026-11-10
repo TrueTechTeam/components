@@ -1,0 +1,70 @@
+import { Markdown, Meta } from '@storybook/addon-docs/blocks';
+import readme from '../../../../guidelines/app/README.md?raw';
+import choosing from '../../../../guidelines/app/choosing-a-page.md?raw';
+import { guideOptions, section } from './guideMarkdown';
+
+<Meta title="App Builder/Guides/Overview" />
+
+# Building pages from data
+
+The `/app` templates turn **what a page needs to do** plus **a sample API response or schema**
+into a working page: `DataTablePage` for many records, `DetailsPage` for one record,
+`DashboardPage` for numbers over time, all inside one `AppShell`.
+
+```ts
+import { DataTablePage, DetailsPage, DashboardPage } from '@true-tech-team/ui-components/app';
+```
+
+The guidance below is rendered from `guidelines/app/` (the same files ship in the npm package
+under `guidelines/app/`), so it never drifts from what coding agents read. Rule IDs (`APP-*`,
+`FIELD-*`, `HIER-*`, `APP-STATE-*`, `APP-PLUMB-*`) are meant to be cited in briefs, code comments
+and PRs.
+
+## See the templates
+
+<Markdown options={guideOptions}>{`
+| Template                                                               | Use for                                                                       |
+| ---------------------------------------------------------------------- | ----------------------------------------------------------------------------- |
+| [AppShell](?path=/docs/app-builder-templates-appshell--docs)           | The app frame, once per app: Navbar, sidebar, skip link, mobile navigation    |
+| [DataTablePage](?path=/docs/app-builder-templates-datatablepage--docs) | Many records: search, filters, sort, pagination, views, row actions, detail   |
+| [DetailsPage](?path=/docs/app-builder-templates-detailspage--docs)     | One record: key facts, URL-bound tabs, main and side columns                  |
+| [DashboardPage](?path=/docs/app-builder-templates-dashboardpage--docs) | KPIs, charts and activity over a URL-bound time range                         |
+| [PageHeader](?path=/docs/app-builder-templates-pageheader--docs)       | Title, status, breadcrumbs, actions and tabs on a custom page                 |
+| [Blocks](?path=/docs/app-builder-templates-blocks--docs)               | PropertyList, KeyFacts, ActivityTimeline, Notes, MediaGallery, RelatedRecords |
+| [FieldValue](?path=/docs/app-builder-templates-fieldvalue--docs)       | One value rendered by \`FieldKind\`, the same everywhere                        |
+`}</Markdown>
+
+Before writing code, fill a [page brief](?path=/docs/app-builder-guides-page-brief--docs).
+
+## Choose the template (APP-1)
+
+<Markdown options={guideOptions}>{section(choosing, '## APP-1', '## APP-2')}</Markdown>
+
+## Workflow
+
+<Markdown options={guideOptions}>{section(readme, '## Workflow', '## Template exports')}</Markdown>
+
+## Template exports
+
+<Markdown options={guideOptions}>
+  {section(readme, '## Template exports', '## Done checklist')}
+</Markdown>
+
+## Done checklist
+
+<Markdown options={guideOptions}>{section(readme, '## Done checklist')}</Markdown>
+
+## All guideline files
+
+<Markdown options={guideOptions}>{`
+| File                                                                                                           | Rules          | Covers                                                             |
+| -------------------------------------------------------------------------------------------------------------- | -------------- | ------------------------------------------------------------------ |
+| [README.md](https://github.com/TrueTechTeam/components/blob/master/guidelines/app/README.md)                   | -              | Workflow, template exports, done checklist                         |
+| [page-brief.md](https://github.com/TrueTechTeam/components/blob/master/guidelines/app/page-brief.md)           | -              | The brief to fill before writing page code                         |
+| [choosing-a-page.md](https://github.com/TrueTechTeam/components/blob/master/guidelines/app/choosing-a-page.md) | \`APP-1\`–\`9\`    | Which template, and how to configure it                            |
+| [field-display.md](https://github.com/TrueTechTeam/components/blob/master/guidelines/app/field-display.md)     | \`FIELD-1\`–\`11\` | \`FieldKind\` mapping, placement, column budget, status tones        |
+| [hierarchy.md](https://github.com/TrueTechTeam/components/blob/master/guidelines/app/hierarchy.md)             | \`HIER-1\`–\`7\`   | Priority, one primary action, tabs, progressive disclosure         |
+| [states.md](https://github.com/TrueTechTeam/components/blob/master/guidelines/app/states.md)                   | \`APP-STATE-*\`  | Structure-first loading, the state matrix, empty, error, not found |
+| [plumbing.md](https://github.com/TrueTechTeam/components/blob/master/guidelines/app/plumbing.md)               | \`APP-PLUMB-*\`  | URL state, polling, query keys, permissions, feedback, providers   |
+| [example.md](https://github.com/TrueTechTeam/components/blob/master/guidelines/app/example.md)                 | -              | A whole run from outline to code for a marketing "campaigns" list  |
+`}</Markdown>

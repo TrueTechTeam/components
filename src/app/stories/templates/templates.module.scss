@@ -1,0 +1,275 @@
+@use '../../../lib/styles/mixins/component' as *;
+
+// Story-only styles for the App Builder template stories (asset cards, inline SVG charts, the
+// FieldValue reference table). Not part of the library build.
+
+// ---- Asset card (DataTablePage grid view) ----
+.assetCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  height: 100%;
+}
+
+.assetHead {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-height: var(--target-size-min);
+
+  // Room for the row actions menu pinned top-right.
+  padding-inline-end: var(--spacing-xl);
+}
+
+.assetName {
+  color: var(--theme-text-primary);
+  font-weight: var(--font-weight-semibold);
+  line-height: var(--line-height-tight);
+  overflow-wrap: anywhere;
+}
+
+.assetClient {
+  color: var(--theme-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.assetThumb {
+  display: block;
+  width: 100%;
+  aspect-ratio: 16 / 11;
+  object-fit: cover;
+  border-radius: var(--radius-md);
+  background: var(--theme-surface-secondary);
+}
+
+.assetMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-xs) var(--spacing-sm);
+  color: var(--theme-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+// ---- Line chart ----
+.lineChart {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  grid-template-rows: minmax(0, 1fr) auto;
+  gap: var(--spacing-xs) var(--spacing-sm);
+  box-sizing: border-box;
+  height: 100%;
+  padding-block-start: var(--spacing-sm);
+  color: var(--theme-text-secondary);
+  font-size: var(--font-size-xs);
+  font-variant-numeric: tabular-nums;
+}
+
+.yAxis {
+  position: relative;
+  min-width: 2.25rem;
+}
+
+.yTick {
+  position: absolute;
+  inset-inline-end: 0;
+  transform: translateY(-50%);
+  line-height: 1;
+}
+
+.plot {
+  position: relative;
+  min-width: 0;
+}
+
+.gridLine {
+  position: absolute;
+  inset-inline: 0;
+  border-top: 1px solid var(--theme-border-primary);
+  opacity: 0.7;
+
+  &[data-baseline] {
+    opacity: 1;
+  }
+}
+
+.plotSvg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.line {
+  fill: none;
+  stroke: var(--theme-primary);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.area {
+  fill: var(--theme-primary);
+  fill-opacity: 0.12;
+  stroke: none;
+}
+
+.endDot {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border: 2px solid var(--theme-surface-primary);
+  border-radius: 50%;
+  background: var(--theme-primary);
+  transform: translate(-50%, -50%);
+}
+
+.endLabel {
+  position: absolute;
+  padding: 1px 6px;
+  border-radius: var(--radius-sm);
+  background: var(--theme-surface-primary);
+  color: var(--theme-text-primary);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  white-space: nowrap;
+  transform: translate(-100%, -140%);
+}
+
+.xAxis {
+  display: flex;
+  grid-column: 2;
+  justify-content: space-between;
+}
+
+// ---- Horizontal bars ----
+.bars {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--font-size-sm);
+}
+
+.barRow {
+  display: grid;
+  grid-template-columns: 5.5rem minmax(0, 1fr) 4.5rem;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.barLabel {
+  color: var(--theme-text-primary);
+}
+
+.barTrack {
+  height: 12px;
+}
+
+.bar {
+  height: 100%;
+  min-width: 4px;
+  border-radius: 0 4px 4px 0;
+  background: var(--theme-primary);
+}
+
+.barValue {
+  color: var(--theme-text-secondary);
+  text-align: end;
+  font-variant-numeric: tabular-nums;
+}
+
+// ---- Prose inside details stories ----
+.prose {
+  max-width: var(--content-width-prose);
+  margin: 0;
+  color: var(--theme-text-primary);
+  line-height: var(--line-height-relaxed);
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  min-width: 0;
+}
+
+// ---- FieldValue reference table ----
+.kindTable {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-sm);
+
+  th,
+  td {
+    padding: var(--spacing-sm) var(--spacing-md);
+    border-bottom: 1px solid var(--theme-border-primary);
+    text-align: start;
+    vertical-align: middle;
+  }
+
+  thead th {
+    color: var(--theme-text-secondary);
+    font-weight: var(--font-weight-semibold);
+    white-space: nowrap;
+  }
+
+  tbody th {
+    font-weight: var(--font-weight-medium);
+    white-space: nowrap;
+  }
+
+  code {
+    color: var(--theme-text-secondary);
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-xs);
+    white-space: nowrap;
+  }
+}
+
+.tableScroll {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.inputCell {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+// ---- AppShell header actions ----
+.headerActions {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-sm);
+  color: var(--theme-text-primary);
+  font-weight: var(--font-weight-bold);
+}
+
+.brandMark {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: var(--radius-md);
+  background: var(--theme-primary);
+  color: var(--theme-text-on-primary);
+  font-size: var(--font-size-sm);
+}
+
+.visuallyHidden {
+  @include visually-hidden;
+}
