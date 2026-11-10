@@ -84,9 +84,13 @@ function toDate(value: unknown): Date | null {
   // A date-only string is a calendar day, not an instant: parse it as local midnight so it never
   // shifts to the previous day west of UTC.
   const dateOnly = typeof value === 'string' ? /^(\d{4})-(\d{2})-(\d{2})$/.exec(value) : null;
-  const d = dateOnly
-    ? new Date(Number(dateOnly[1]), Number(dateOnly[2]) - 1, Number(dateOnly[3]))
-    : new Date(value);
+  if (dateOnly) {
+    const [year, month, day] = [Number(dateOnly[1]), Number(dateOnly[2]) - 1, Number(dateOnly[3])];
+    const d = new Date(year, month, day);
+    // `Date` rolls impossible days over (2026-02-30 → Mar 2); those are invalid, not another day.
+    return d.getMonth() === month && d.getDate() === day ? d : null;
+  }
+  const d = new Date(value);
   return Number.isFinite(d.getTime()) ? d : null;
 }
 
