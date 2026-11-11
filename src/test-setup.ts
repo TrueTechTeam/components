@@ -1,7 +1,13 @@
 import '@testing-library/jest-dom';
+import { configure } from '@testing-library/react';
 
 // DOM-only mocks are skipped in `@jest-environment node` specs (server-rendering tests).
 const hasDom = typeof window !== 'undefined';
+
+// `findBy*`/`waitFor` give up after 1s by default, which loaded CI runners can exceed.
+if (hasDom) {
+  configure({ asyncUtilTimeout: 3000 });
+}
 
 // Mock matchMedia
 if (hasDom) {
