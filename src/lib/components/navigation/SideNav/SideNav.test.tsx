@@ -250,6 +250,24 @@ describe('SideNav linkComponent', () => {
     expect(screen.getByText('No link').closest('[data-custom]')).toBeNull();
   });
 
+  it('renders a disabled link as a plain anchor without href', () => {
+    const Custom = ({ children, ...props }: SideNavLinkProps) => (
+      <a {...props} data-custom="yes">
+        {children}
+      </a>
+    );
+    render(
+      <SideNav linkComponent={Custom}>
+        <SideNavItem value="home" label="Home" href="/home" disabled />
+      </SideNav>
+    );
+    const link = screen.getByRole('menuitem', { name: 'Home' });
+    expect(link.tagName).toBe('A');
+    expect(link).not.toHaveAttribute('href');
+    expect(link).not.toHaveAttribute('data-custom');
+    expect(link).toHaveAttribute('aria-disabled', 'true');
+  });
+
   it('keeps the plain anchor output by default', () => {
     render(
       <SideNav>

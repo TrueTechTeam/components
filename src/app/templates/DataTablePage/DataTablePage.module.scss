@@ -184,6 +184,12 @@
   dd {
     margin: 0;
     text-align: end;
+
+    // Above the title's stretched ::after, so email/url links and copy buttons stay clickable.
+    :is(a, button, input, select, textarea, [tabindex]) {
+      position: relative;
+      z-index: 1;
+    }
   }
 }
 
