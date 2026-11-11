@@ -79,7 +79,12 @@ export interface DataTablePageProps<T> {
   /** Rendered with `FieldValue`, aligned by `fieldAlign`. */
   columns: Array<DataTableColumn<T>>;
   rowKey: (row: T) => string;
-  /** Query for the current state; called with `placeholderData: keepPreviousData`. */
+  /**
+   * Query for the current state; called with `placeholderData: keepPreviousData`. The first
+   * `queryKey` element must identify the collection (e.g. `['issues', state.page, ...]`): after a
+   * row action every query whose key starts with it is invalidated, so all pages, sorts and
+   * filters refetch. Don't share it with unrelated queries, and don't start with the state.
+   */
   queryOptions: (state: TableState) => UseQueryOptions<DataTableQueryResult<T>>;
   filters?: FilterDefinition[];
   /** @default true */

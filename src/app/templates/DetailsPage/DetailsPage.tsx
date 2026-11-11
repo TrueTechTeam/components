@@ -37,6 +37,12 @@ export interface DetailsPageProps<T> {
   notFound?: (error: unknown) => boolean;
   /** Stable page id (see `Page`). @default 'details' */
   id?: string;
+  /**
+   * Name sent with the `page_view` event. Pass it: the event fires on mount, before the record
+   * loads, so without it every details page is tracked under the generic fallback title.
+   * @default the fallback title ("Details")
+   */
+  analyticsName?: string;
 }
 
 /** The heading text. A `span`, not a Loadable, so nothing block-level lands inside the `h1`. */
@@ -129,24 +135,26 @@ function Content<T>({ query, title, status, ...rest }: DetailsPageProps<T>) {
  * tabs and a body of `main` plus an optional `side` column that stacks under it below the laptop
  * breakpoint. The structure renders while the record loads; only the title and facts skeletonize.
  * A failed query shows the not-found state when `notFound(error)` is true, else the error state.
+ * Pass `analyticsName` to name the `page_view` event (the record title is not known yet when it
+ * fires).
  */
 export function DetailsPage<T>(props: DetailsPageProps<T>) {
   const t = useLabels();
-  const { query, title, notFound, id } = props;
+  const { query, title, notFound, id, analyticsName } = props;
   // Stable across the load: the title changes from the fallback to the record name.
   const pageId = id ?? 'details';
   const record = query.data;
   const pageTitle = record === undefined ? t('details.title') : title(record);
   if (query.isError && record === undefined && notFound?.(query.error)) {
     return (
-      <Page title={pageTitle} id={pageId}>
+      <Page title={pageTitle} id={pageId} analyticsName={analyticsName}>
         <HiddenPageTitle title={pageTitle} />
         <PageMessages notFound headingLevel={2} />
       </Page>
     );
   }
   return (
-    <Page title={pageTitle} id={pageId} queries={[query]}>
+    <Page title={pageTitle} id={pageId} analyticsName={analyticsName} queries={[query]}>
       <Content<T> {...props} />
     </Page>
   );

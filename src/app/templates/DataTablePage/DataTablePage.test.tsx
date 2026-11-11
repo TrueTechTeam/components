@@ -425,6 +425,27 @@ describe('DataTablePage', () => {
     expect(screen.queryByRole('complementary')).not.toBeInTheDocument();
   });
 
+  it('keeps a link in a default card field clickable without opening the detail', async () => {
+    setup('/issues?view=grid', {
+      views: ['table', 'grid'],
+      columns: [
+        ...columns,
+        {
+          key: 'id',
+          label: 'Link',
+          kind: 'url',
+          get: (row) => `https://${row.id.toLowerCase()}.example.com/`,
+        },
+      ],
+    });
+    await screen.findByText('Issue 1');
+    const link = screen.getByRole('link', { name: 'iss-1.example.com' });
+    // The link sits in the field, outside the stretched open-details control.
+    expect(screen.getByRole('button', { name: 'Issue 1' })).not.toContainElement(link);
+    fireEvent.click(link);
+    expect(params().get('selected')).toBeNull();
+  });
+
   it('runs a row action with confirm and shows a success toast, then refetches', async () => {
     const run = jest.fn().mockResolvedValue(undefined);
     const confirm = mockConfirm(true);

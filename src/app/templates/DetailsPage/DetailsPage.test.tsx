@@ -177,6 +177,14 @@ describe('DetailsPage', () => {
     expect(views).toHaveLength(1);
   });
 
+  it('names the page_view with analyticsName', async () => {
+    const analytics = { track: jest.fn() };
+    renderPage('/', async () => ORDER, { analyticsName: 'order_details' }, analytics);
+    await screen.findByRole('heading', { level: 1, name: 'Order 1042' });
+    const views = analytics.track.mock.calls.filter(([event]) => event === 'page_view');
+    expect(views).toEqual([['page_view', { page: 'order_details' }]]);
+  });
+
   it('names the side column after the tab, or sideLabel', async () => {
     renderPage('/', async () => ORDER);
     expect(await screen.findByRole('complementary', { name: 'Overview' })).toBeInTheDocument();

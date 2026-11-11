@@ -180,21 +180,28 @@ export const SideNavItem = ({
     role: 'menuitem',
   };
 
-  const Anchor = LinkComponent && href && !disabled ? LinkComponent : 'a';
-  const element = href ? (
-    <Anchor
-      ref={ref as React.Ref<HTMLAnchorElement>}
-      href={disabled ? (undefined as unknown as string) : href}
-      {...commonProps}
-      {...restProps}
-    >
-      {content}
-    </Anchor>
-  ) : (
-    <div ref={ref as React.Ref<HTMLDivElement>} {...commonProps} {...restProps}>
-      {content}
-    </div>
-  );
+  const anchorRef = ref as React.Ref<HTMLAnchorElement>;
+  let element: React.ReactElement;
+  if (!href) {
+    element = (
+      <div ref={ref as React.Ref<HTMLDivElement>} {...commonProps} {...restProps}>
+        {content}
+      </div>
+    );
+  } else if (LinkComponent && !disabled) {
+    element = (
+      <LinkComponent ref={anchorRef} href={href} {...commonProps} {...restProps}>
+        {content}
+      </LinkComponent>
+    );
+  } else {
+    // A disabled link renders a plain anchor without href, so it cannot navigate.
+    element = (
+      <a ref={anchorRef} href={disabled ? undefined : href} {...commonProps} {...restProps}>
+        {content}
+      </a>
+    );
+  }
 
   // Wrap with tooltip when collapsed
   if (collapsed) {

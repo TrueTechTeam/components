@@ -7,6 +7,7 @@ import { Menu, MenuItem, MenuList } from '../../../lib/components/overlays/Menu'
 import { useLabels } from '../../../lib/contexts/LabelsContext';
 import { useBreakpoint } from '../../../lib/hooks/useBreakpoint';
 import { useAuth } from '../../AppProvider/hooks';
+import { isDevelopment } from '../../AppProvider/logger';
 import { param } from '../../params/codecs';
 import { usePageParams } from '../../params/usePageParams';
 import { AppLink } from '../../router/AppLink';
@@ -147,7 +148,7 @@ function Actions({ actions }: { actions: PageAction[] }) {
   const primary = primaries[0];
   const others = visible.filter((a) => a !== primary);
   useEffect(() => {
-    if (primaries.length > 1 && process.env.NODE_ENV !== 'production') {
+    if (primaries.length > 1 && isDevelopment()) {
       console.warn(
         `PageHeader: only one action may be primary; rendering ${primaries
           .slice(1)
