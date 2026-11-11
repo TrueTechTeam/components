@@ -3,6 +3,8 @@ import type { Config } from 'jest';
 const config: Config = {
   displayName: 'ui-components',
   testEnvironment: 'jsdom',
+  // Multi-step interaction tests can exceed the 5s default when CI runs suites in parallel.
+  testTimeout: 15000,
   testPathIgnorePatterns: ['/node_modules/', '/.claude/', '\\.template\\.'],
   transform: {
     '^.+\\.[tj]sx?$': [

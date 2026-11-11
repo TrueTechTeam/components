@@ -89,6 +89,13 @@ function mockViewport(width: number) {
 
 const originalMatchMedia = window.matchMedia;
 let client: QueryClient;
+/** A `window.confirm` spy, restored after each test even when the test fails. */
+let confirmSpy: jest.SpyInstance | undefined;
+
+function mockConfirm(answer: boolean) {
+  confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(answer);
+  return confirmSpy;
+}
 
 beforeEach(() => {
   mockViewport(1280);
@@ -98,6 +105,8 @@ beforeEach(() => {
 });
 
 afterEach(() => {
+  confirmSpy?.mockRestore();
+  confirmSpy = undefined;
   Object.defineProperty(window, 'matchMedia', { writable: true, value: originalMatchMedia });
   client.clear();
   window.history.replaceState(null, '', '/');
@@ -418,7 +427,7 @@ describe('DataTablePage', () => {
 
   it('runs a row action with confirm and shows a success toast, then refetches', async () => {
     const run = jest.fn().mockResolvedValue(undefined);
-    const confirm = jest.spyOn(window, 'confirm').mockReturnValue(true);
+    const confirm = mockConfirm(true);
     const hidden = jest.fn();
     const { fetch } = setup('/issues', {
       rowActions: [
@@ -462,12 +471,11 @@ describe('DataTablePage', () => {
     page2.forEach((q) => expect(q.state.isInvalidated).toBe(true));
     // The row click underneath the menu did not open the detail.
     expect(params().get('selected')).toBeNull();
-    confirm.mockRestore();
   });
 
   it('hides permission-gated row actions and skips a declined confirm', async () => {
     const run = jest.fn().mockResolvedValue(undefined);
-    const confirm = jest.spyOn(window, 'confirm').mockReturnValue(false);
+    const confirm = mockConfirm(false);
     window.history.replaceState(null, '', '/issues');
     const fetch = createServer();
     render(
@@ -508,7 +516,6 @@ describe('DataTablePage', () => {
     expect(screen.queryByRole('menuitem', { name: 'Delete' })).not.toBeInTheDocument();
     expect(confirm).toHaveBeenCalledWith('Sure?');
     expect(run).not.toHaveBeenCalled();
-    confirm.mockRestore();
   });
 
   it('disables a row action while it runs', async () => {
