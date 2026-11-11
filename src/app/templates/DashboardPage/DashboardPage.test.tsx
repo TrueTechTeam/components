@@ -212,6 +212,24 @@ describe('KpiWidget', () => {
     expect(nesting).toHaveLength(0);
   });
 
+  it('keeps its label and tile while showing a compact error when its query fails', async () => {
+    const { container } = renderDashboard('/', {
+      kpis: <Revenue fetcher={() => Promise.reject(new Error('boom'))} />,
+    });
+    const error = await screen.findByRole('heading', { level: 3 });
+    const tile = container.querySelector('[data-component="card"]');
+    expect(tile).not.toBeNull();
+    expect(tile).toContainElement(error);
+    expect(within(tile as HTMLElement).getByText('Revenue')).toBeInTheDocument();
+    // The message sits below the label inside the tile, not in place of it.
+    expect(
+      within(tile as HTMLElement)
+        .getByText('Revenue')
+        .compareDocumentPosition(error) & Node.DOCUMENT_POSITION_FOLLOWING
+    ).toBeTruthy();
+    expect(screen.queryByRole('heading', { level: 2 })).not.toBeInTheDocument();
+  });
+
   it('keeps tone independent of direction', () => {
     const { container } = render(
       <LabelsProvider locale="en-US">

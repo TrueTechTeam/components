@@ -90,6 +90,12 @@
   height: 100%;
 }
 
+.kpiBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
 .kpiLabel {
   margin: 0;
   color: var(--theme-text-secondary);

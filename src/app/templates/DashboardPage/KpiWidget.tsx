@@ -50,29 +50,33 @@ function renderValue(raw: ReactNode, kind?: FieldKind): ReactNode {
 
 /**
  * A KPI tile: label, large value, optional change indicator and hint. The label and hint render
- * immediately; only the value and delta skeletonize while loading.
+ * immediately; only the value and delta skeletonize while loading. A failing query shows a compact
+ * error inside the tile, below the label, so the KPI row keeps its shape.
  */
 export function KpiWidget({ label, query, value, delta, kind, hint }: KpiWidgetProps) {
   return (
-    <Section queries={query ? [query] : undefined}>
-      <Card padding="md" className={styles.kpi}>
-        <p className={styles.kpiLabel}>{label}</p>
-        <div className={styles.kpiValue}>
-          <Loadable shape="heading" width="60%">
-            {() => renderValue(value(), kind)}
-          </Loadable>
-        </div>
-        {(delta || hint) && (
-          <div className={styles.kpiFoot}>
-            {delta && (
-              <Loadable shape="text" width="4rem">
-                {() => <Delta delta={delta()} />}
-              </Loadable>
-            )}
-            {hint && <span className={styles.muted}>{hint}</span>}
+    <Card padding="md" className={styles.kpi}>
+      <p className={styles.kpiLabel}>{label}</p>
+      {/* The KPI group sits under the page's h1 without a heading of its own: errors use h3. */}
+      <Section headingLevel={3} queries={query ? [query] : undefined}>
+        <div className={styles.kpiBody}>
+          <div className={styles.kpiValue}>
+            <Loadable shape="heading" width="60%">
+              {() => renderValue(value(), kind)}
+            </Loadable>
           </div>
-        )}
-      </Card>
-    </Section>
+          {(delta || hint) && (
+            <div className={styles.kpiFoot}>
+              {delta && (
+                <Loadable shape="text" width="4rem">
+                  {() => <Delta delta={delta()} />}
+                </Loadable>
+              )}
+              {hint && <span className={styles.muted}>{hint}</span>}
+            </div>
+          )}
+        </div>
+      </Section>
+    </Card>
   );
 }
