@@ -25,6 +25,10 @@
   flex-direction: column;
   width: 100%;
   overflow: auto;
+
+  // Contain absolutely positioned descendants (visually hidden labels in wide tables) so they
+  // scroll with the table instead of widening the page.
+  position: relative;
   border-radius: var(--radius-md, 8px);
   border: 1px solid var(--table-border-color);
   background: var(--table-row-bg);
