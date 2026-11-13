@@ -187,3 +187,8 @@
     outline-offset: var(--focus-ring-offset);
   }
 }
+
+.previewBar {
+  display: flex;
+  justify-content: flex-end;
+}

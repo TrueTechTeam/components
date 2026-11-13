@@ -1,9 +1,6 @@
 import React, { useMemo } from 'react';
 import { Accordion } from '../../../lib/components/display/Accordion';
-import {
-  ButtonToggleGroup,
-  ButtonToggleGroupItem,
-} from '../../../lib/components/buttons/ButtonToggleGroup';
+import { Toggle } from '../../../lib/components/inputs/Toggle';
 import type { ThemeMode } from '../../../lib/types/theme.types';
 import type { BuilderAction, BuilderState } from '../builderState';
 import { generateTheme } from '../generateTheme';
@@ -78,14 +75,17 @@ export function Editor({ state, dispatch, banner }: EditorProps) {
           ))}
         </div>
         <div className={styles.right}>
-          <ButtonToggleGroup
-            aria-label="Preview mode"
-            value={previewMode}
-            onChange={(mode) => dispatch({ type: 'setPreviewMode', mode: mode as ThemeMode })}
-          >
-            <ButtonToggleGroupItem value="light">Light</ButtonToggleGroupItem>
-            <ButtonToggleGroupItem value="dark">Dark</ButtonToggleGroupItem>
-          </ButtonToggleGroup>
+          <div className={styles.previewBar}>
+            <Toggle
+              label="Dark preview"
+              labelPlacement="start"
+              size="sm"
+              checked={previewMode === 'dark'}
+              onChange={(dark) =>
+                dispatch({ type: 'setPreviewMode', mode: (dark ? 'dark' : 'light') as ThemeMode })
+              }
+            />
+          </div>
           <div className={styles.preview}>
             <PreviewFrame config={config} mode={previewMode} />
           </div>

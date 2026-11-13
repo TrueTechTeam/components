@@ -45,6 +45,19 @@ describe('Theme Builder editor', () => {
     expect(headers[1]).toHaveAttribute('aria-expanded', 'false');
   });
 
+  it('switches the preview between light and dark with a compact switch', async () => {
+    const user = userEvent.setup();
+    renderEditor();
+    expect(screen.queryByRole('radiogroup', { name: 'Preview mode' })).not.toBeInTheDocument();
+    const toggle = screen.getByRole('checkbox', { name: 'Dark preview' });
+    expect(toggle).not.toBeChecked();
+    const rowText = () => screen.getByText('backgroundPrimary').closest('li, tr, div')?.textContent;
+    const light = rowText();
+    await user.click(toggle);
+    expect(toggle).toBeChecked();
+    expect(rowText()).not.toBe(light);
+  });
+
   it('toggles a section open', async () => {
     const user = userEvent.setup();
     renderEditor();
