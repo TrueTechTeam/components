@@ -6,6 +6,7 @@ import React, { useState, useCallback, useMemo, useRef } from 'react';
 import { ResizablePanelsContext, type ResizablePanelsContextValue } from './ResizablePanelsContext';
 import type { BaseComponentProps } from '../../../types/component.types';
 import styles from './ResizablePanels.module.scss';
+import { useLabels } from '../../../contexts/LabelsContext';
 
 export interface ResizablePanelsProps extends BaseComponentProps {
   /**
@@ -61,6 +62,7 @@ export const ResizablePanels: React.FC<ResizablePanelsProps> = ({
   'aria-label': ariaLabel,
   style,
 }) => {
+  const t = useLabels();
   // Count panels from children
   const panelCount = useMemo(() => {
     let count = 0;
@@ -175,7 +177,7 @@ export const ResizablePanels: React.FC<ResizablePanelsProps> = ({
         data-direction={direction}
         data-resizing={activeHandle >= 0 || undefined}
         role="group"
-        aria-label={ariaLabel || 'Resizable panels'}
+        aria-label={ariaLabel || t('resizablePanels.label')}
       >
         {children}
       </div>

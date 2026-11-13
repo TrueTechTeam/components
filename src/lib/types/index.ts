@@ -9,6 +9,8 @@ export type {
   ThemeShadows,
   Theme,
   ThemeOverride,
+  ThemeColorOverrides,
+  ThemeShadeKey,
   ThemeConfig,
   ThemeMode,
 } from './theme.types';

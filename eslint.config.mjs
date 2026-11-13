@@ -197,6 +197,29 @@ export default tseslint.config(
     },
   },
   {
+    // Package boundary: the main entry must not pull in the optional `/app` layer or its peer
+    // dependency (TanStack Query). `/app` may import core, never the reverse.
+    files: ['src/lib/**/*.{ts,tsx}', 'src/index.ts'],
+    rules: {
+      'no-restricted-imports': [
+        'error',
+        {
+          patterns: [
+            {
+              group: ['@tanstack/*'],
+              message: 'Core must not import TanStack Query; it is an optional peer of /app only.',
+            },
+            {
+              // Any relative path with an `app` segment (e.g. `./app`, `../../app/page`).
+              regex: '^([.]{1,2}/)+(.*/)?app(/.*)?$',
+              message: 'Core must not import the /app entry (src/app); /app imports core instead.',
+            },
+          ],
+        },
+      ],
+    },
+  },
+  {
     files: [
       '**/*.spec.ts',
       '**/*.spec.tsx',

@@ -2,6 +2,7 @@ import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import { Chip } from './Chip';
+import { LabelsProvider } from '../../../contexts/LabelsContext';
 
 describe('Chip', () => {
   // 1. Rendering tests
@@ -329,5 +330,24 @@ describe('Chip', () => {
       expect(ref.current).toBeInstanceOf(HTMLDivElement);
       expect(ref.current).toHaveTextContent('Test');
     });
+  });
+});
+
+describe('Chip translated labels', () => {
+  it('translates the remove button label, but an explicit prop wins', () => {
+    const { rerender } = render(
+      <LabelsProvider labels={{ 'chip.remove': 'Entfernen' }}>
+        <Chip onRemove={() => {}}>Tag</Chip>
+      </LabelsProvider>
+    );
+    expect(screen.getByLabelText('Entfernen')).toBeInTheDocument();
+    rerender(
+      <LabelsProvider labels={{ 'chip.remove': 'Entfernen' }}>
+        <Chip onRemove={() => {}} removeButtonAriaLabel="Weg">
+          Tag
+        </Chip>
+      </LabelsProvider>
+    );
+    expect(screen.getByLabelText('Weg')).toBeInTheDocument();
   });
 });

@@ -8,6 +8,7 @@ import { SortableListContext, type SortableListContextValue } from './SortableLi
 import { SortableItem, type SortableItemRenderProps } from './SortableItem';
 import type { BaseComponentProps, ComponentSize } from '../../../types/component.types';
 import styles from './SortableList.module.scss';
+import { useLabels } from '../../../contexts/LabelsContext';
 
 /**
  * Item type for SortableList
@@ -94,6 +95,7 @@ function SortableListInner<T extends SortableListItem>({
   'aria-label': ariaLabel,
   style,
 }: SortableListProps<T>) {
+  const t = useLabels();
   const { active } = useDndContext();
 
   // Handle item move
@@ -150,7 +152,7 @@ function SortableListInner<T extends SortableListItem>({
         data-direction={direction}
         data-disabled={disabled || undefined}
         role="list"
-        aria-label={ariaLabel || 'Sortable list'}
+        aria-label={ariaLabel || t('sortableList.label')}
       >
         {items.map((item, index) => (
           <SortableItem key={item.id} id={item.id} index={index} disabled={disabled} data={item}>

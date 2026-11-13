@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, renderHook, waitFor } from '@testing-library/react';
+import { render, screen, renderHook, waitFor, fireEvent } from '@testing-library/react';
 import { GlobalProvider } from './GlobalProvider';
 import { useTheme } from '../../contexts/ThemeContext';
 import type { ThemeConfig } from '../../types';
@@ -470,6 +470,117 @@ describe('GlobalProvider', () => {
       const root = document.documentElement;
       expect(root.style.getPropertyValue('--theme-background-primary')).toBe('#123456');
       expect(root.style.getPropertyValue('--theme-background-secondary')).toBe('#654321');
+    });
+  });
+
+  describe('theme override variables', () => {
+    const rootStyle = () => document.documentElement.style;
+
+    function ToggleButton() {
+      const { toggleMode } = useTheme();
+      return <button onClick={toggleMode}>toggle</button>;
+    }
+
+    it('applies non-color fields to the document root', () => {
+      render(
+        <GlobalProvider
+          themeConfig={{ theme: { borderRadius: { md: '3px' }, spacing: { unit: 6 } } }}
+        >
+          <div />
+        </GlobalProvider>
+      );
+      expect(rootStyle().getPropertyValue('--radius-md')).toBe('3px');
+      expect(rootStyle().getPropertyValue('--spacing-unit')).toBe('6px');
+    });
+
+    it('switches per-mode colors when the mode toggles', () => {
+      render(
+        <GlobalProvider
+          themeConfig={{
+            mode: 'light',
+            theme: {
+              modes: {
+                light: { colors: { primary: '#111111' } },
+                dark: { colors: { primary: '#eeeeee' } },
+              },
+            },
+          }}
+        >
+          <ToggleButton />
+        </GlobalProvider>
+      );
+      expect(rootStyle().getPropertyValue('--theme-primary')).toBe('#111111');
+      fireEvent.click(screen.getByText('toggle'));
+      expect(rootStyle().getPropertyValue('--theme-primary')).toBe('#eeeeee');
+    });
+
+    it('removes variables from a previous config when themeConfig changes', () => {
+      const { rerender } = render(
+        <GlobalProvider themeConfig={{ theme: { borderRadius: { md: '3px' } } }}>
+          <div />
+        </GlobalProvider>
+      );
+      rerender(
+        <GlobalProvider themeConfig={{ theme: { colors: { primary: '#123456' } } }}>
+          <div />
+        </GlobalProvider>
+      );
+      expect(rootStyle().getPropertyValue('--radius-md')).toBe('');
+      expect(rootStyle().getPropertyValue('--theme-primary')).toBe('#123456');
+    });
+
+    it('removes all variables on unmount', () => {
+      const { unmount } = render(
+        <GlobalProvider themeConfig={{ theme: { colors: { primary: '#123456' } } }}>
+          <div />
+        </GlobalProvider>
+      );
+      expect(rootStyle().getPropertyValue('--theme-primary')).toBe('#123456');
+      unmount();
+      expect(rootStyle().getPropertyValue('--theme-primary')).toBe('');
+    });
+
+    it('picks up a changed themeConfig.mode', () => {
+      const { rerender } = render(
+        <GlobalProvider themeConfig={{ mode: 'light' }}>
+          <div />
+        </GlobalProvider>
+      );
+      expect(document.documentElement.getAttribute('data-theme')).toBe('light');
+      rerender(
+        <GlobalProvider themeConfig={{ mode: 'dark' }}>
+          <div />
+        </GlobalProvider>
+      );
+      expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+    });
+
+    it('keeps a toggled mode when rerendered with an equal fresh themeConfig', () => {
+      const { rerender } = render(
+        <GlobalProvider themeConfig={{ mode: 'light' }}>
+          <ToggleButton />
+        </GlobalProvider>
+      );
+      fireEvent.click(screen.getByText('toggle'));
+      rerender(
+        <GlobalProvider themeConfig={{ mode: 'light' }}>
+          <ToggleButton />
+        </GlobalProvider>
+      );
+      expect(document.documentElement.getAttribute('data-theme')).toBe('dark');
+    });
+
+    it('does not apply overrides when injectGlobalStyles is false', () => {
+      render(
+        <GlobalProvider
+          injectGlobalStyles={false}
+          themeConfig={{ theme: { colors: { primary: '#123456' }, borderRadius: { md: '3px' } } }}
+        >
+          <div />
+        </GlobalProvider>
+      );
+      expect(rootStyle().getPropertyValue('--theme-primary')).toBe('');
+      expect(rootStyle().getPropertyValue('--radius-md')).toBe('');
     });
   });
 });

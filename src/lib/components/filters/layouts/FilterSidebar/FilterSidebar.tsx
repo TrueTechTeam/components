@@ -10,6 +10,7 @@ import { useFilterContext } from '../../FilterContext';
 import { ActiveFilters } from '../../core/ActiveFilters';
 import type { FilterSidebarProps } from '../../types';
 import styles from './FilterSidebar.module.scss';
+import { useLabels } from '../../../../contexts/LabelsContext';
 
 /**
  * FilterSidebar provides a vertical sidebar layout for filter controls.
@@ -40,17 +41,24 @@ export const FilterSidebar = ({
   showActiveFilters = true,
   activeFiltersPosition = 'top',
   showApplyButton = false,
-  applyButtonLabel = 'Apply',
+  applyButtonLabel: applyButtonLabelProp,
   showClearButton = true,
-  clearButtonLabel = 'Clear',
+  clearButtonLabel: clearButtonLabelProp,
   showResetButton = false,
-  resetButtonLabel = 'Reset',
+  resetButtonLabel: resetButtonLabelProp,
   children,
   className,
   ...restProps
 }: FilterSidebarProps & {
   ref?: React.Ref<HTMLDivElement>;
 }) => {
+  const t = useLabels();
+  const applyButtonLabel =
+    applyButtonLabelProp === undefined ? t('filters.apply') : applyButtonLabelProp;
+  const clearButtonLabel =
+    clearButtonLabelProp === undefined ? t('filters.clear') : clearButtonLabelProp;
+  const resetButtonLabel =
+    resetButtonLabelProp === undefined ? t('filters.reset') : resetButtonLabelProp;
   const ctx = useFilterContext();
   const [internalCollapsed, setInternalCollapsed] = useState(defaultCollapsed);
 
@@ -98,7 +106,7 @@ export const FilterSidebar = ({
               type="button"
               className={styles.collapseButton}
               onClick={handleToggleCollapse}
-              aria-label={isCollapsed ? 'Expand filters' : 'Collapse filters'}
+              aria-label={isCollapsed ? t('filterSidebar.expand') : t('filterSidebar.collapse')}
             >
               <Icon name={position === 'left' ? 'chevron-left' : 'chevron-right'} size="1.25em" />
             </button>

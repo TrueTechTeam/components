@@ -4,6 +4,7 @@
 
 import type { FilterDefinition, FilterOption, FilterType, FilterValue } from '../../filters';
 import { isSameDay } from '../../../utils/dateUtils';
+import { translateDefault, type LabelTranslator } from '../../../contexts/LabelsContext';
 import type { DataTableColumnConfig } from './DataTable.types';
 
 const MAX_AUTO_SELECT_OPTIONS = 20;
@@ -54,7 +55,8 @@ export function getDefaultFilterValue(filter: FilterDefinition): FilterValue {
 
 function inferFilterFromColumn<T extends Record<string, unknown>>(
   column: DataTableColumnConfig<T>,
-  data: T[]
+  data: T[],
+  t: LabelTranslator
 ): FilterDefinition {
   const id = String(column.key);
   const override = column.filterable === true ? {} : (column.filterable ?? {});
@@ -88,8 +90,8 @@ function inferFilterFromColumn<T extends Record<string, unknown>>(
   let options: FilterOption[] | undefined = override.options;
   if (!options && typeof sample === 'boolean') {
     options = [
-      { value: 'true', label: 'Yes' },
-      { value: 'false', label: 'No' },
+      { value: 'true', label: t('filters.yes') },
+      { value: 'false', label: t('filters.no') },
     ];
   } else if (!options && (type === 'select' || type === 'multi-select' || type === 'list-select')) {
     const unique = Array.from(new Set(rawValues.map(String))).sort();
@@ -123,11 +125,12 @@ function inferFilterFromColumn<T extends Record<string, unknown>>(
  */
 export function deriveFiltersFromColumns<T extends Record<string, unknown>>(
   columns: Array<DataTableColumnConfig<T>>,
-  data: T[]
+  data: T[],
+  t: LabelTranslator = translateDefault
 ): FilterDefinition[] {
   return columns
     .filter((column) => column.filterable)
-    .map((column) => inferFilterFromColumn(column, data));
+    .map((column) => inferFilterFromColumn(column, data, t));
 }
 
 function rowMatchesFilter<T extends Record<string, unknown>>(

@@ -187,12 +187,29 @@ export interface Theme {
 }
 
 /**
+ * Numbered primary/secondary shade keys (e.g. `primary500`)
+ */
+export type ThemeShadeKey =
+  `${'primary' | 'secondary'}${50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900}`;
+
+export type ThemeColorOverrides = Partial<ThemeColorTokens> &
+  Partial<Record<ThemeShadeKey, string>>;
+
+/**
  * Partial theme override for customization
  */
 export type ThemeOverride = Partial<{
-  colors: Partial<ThemeColorTokens>;
+  /** Applied in both modes */
+  colors: ThemeColorOverrides;
+  /** Per-mode colors; win over `colors` */
+  modes: Partial<Record<ThemeMode, { colors?: ThemeColorOverrides }>>;
   spacing: Partial<ThemeSpacing>;
-  typography: Partial<ThemeTypography>;
+  typography: Partial<{
+    fontFamily: Partial<ThemeTypography['fontFamily']>;
+    fontSize: Partial<ThemeTypography['fontSize']>;
+    fontWeight: Partial<ThemeTypography['fontWeight']>;
+    lineHeight: Partial<ThemeTypography['lineHeight']>;
+  }>;
   borderRadius: Partial<ThemeBorderRadius>;
   shadows: Partial<ThemeShadows>;
 }>;

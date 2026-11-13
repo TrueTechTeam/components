@@ -245,3 +245,153 @@ export const getBrightness = (rgb: RGB): number => {
 export const isLightColor = (rgb: RGB): boolean => {
   return getBrightness(rgb) > 128;
 };
+
+/**
+ * OKLCH color space (Björn Ottosson's OKLab, polar form).
+ * l: 0..1, c: >= 0, h: 0..360 (0 when achromatic)
+ */
+export interface OKLCH {
+  l: number;
+  c: number;
+  h: number;
+}
+
+const ACHROMATIC_CHROMA = 0.0001;
+const GAMUT_EPSILON = 1e-6;
+
+const srgbToLinear = (channel: number): number => {
+  const v = channel / 255;
+  return v <= 0.04045 ? v / 12.92 : Math.pow((v + 0.055) / 1.055, 2.4);
+};
+
+const linearToSrgb = (value: number): number => {
+  const v = value <= 0.0031308 ? value * 12.92 : 1.055 * Math.pow(value, 1 / 2.4) - 0.055;
+  return v * 255;
+};
+
+/**
+ * Normalise a hue angle to [0, 360)
+ */
+export const rotateHue = (h: number, degrees: number): number => {
+  return (((h + degrees) % 360) + 360) % 360;
+};
+
+const rgbToOklch = (rgb: RGB): OKLCH => {
+  const r = srgbToLinear(rgb.r);
+  const g = srgbToLinear(rgb.g);
+  const b = srgbToLinear(rgb.b);
+
+  const l = Math.cbrt(0.4122214708 * r + 0.5363325363 * g + 0.0514459929 * b);
+  const m = Math.cbrt(0.2119034982 * r + 0.6806995451 * g + 0.1073969566 * b);
+  const s = Math.cbrt(0.0883024619 * r + 0.2817188376 * g + 0.6299787005 * b);
+
+  const L = 0.2104542553 * l + 0.793617785 * m - 0.0040720468 * s;
+  const A = 1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s;
+  const B = 0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s;
+
+  const c = Math.sqrt(A * A + B * B);
+  if (c < ACHROMATIC_CHROMA) {
+    return { l: L, c, h: 0 };
+  }
+  return { l: L, c, h: rotateHue((Math.atan2(B, A) * 180) / Math.PI, 0) };
+};
+
+const oklchToLinearRgb = ({ l: L, c, h }: OKLCH): [number, number, number] => {
+  const hr = (h * Math.PI) / 180;
+  const A = c * Math.cos(hr);
+  const B = c * Math.sin(hr);
+
+  const l = Math.pow(L + 0.3963377774 * A + 0.2158037573 * B, 3);
+  const m = Math.pow(L - 0.1055613458 * A - 0.0638541728 * B, 3);
+  const s = Math.pow(L - 0.0894841775 * A - 1.291485548 * B, 3);
+
+  return [
+    4.0767416621 * l - 3.3077115913 * m + 0.2309699292 * s,
+    -1.2684380046 * l + 2.6097574011 * m - 0.3413193965 * s,
+    -0.0041960863 * l - 0.7034186147 * m + 1.707614701 * s,
+  ];
+};
+
+const inGamut = (channels: [number, number, number]): boolean =>
+  channels.every((v) => v >= -GAMUT_EPSILON && v <= 1 + GAMUT_EPSILON);
+
+export const hexToOklch = (hex: string): OKLCH | null => {
+  const rgb = hexToRgb(hex);
+  return rgb ? rgbToOklch(rgb) : null;
+};
+
+const finiteOrZero = (value: number): number => (Number.isFinite(value) ? value : 0);
+
+/**
+ * Convert OKLCH to HEX, reducing chroma (keeping lightness and hue) until the color fits sRGB.
+ * Non-finite components (NaN, ±Infinity) are treated as 0.
+ */
+export const oklchToHex = (color: OKLCH): string => {
+  const l = clamp(finiteOrZero(color.l), 0, 1);
+  const h = finiteOrZero(color.h);
+  let c = Math.max(0, finiteOrZero(color.c));
+
+  let linear = oklchToLinearRgb({ l, c, h });
+  if (!inGamut(linear)) {
+    let lo = 0;
+    let hi = c;
+    for (let i = 0; i < 24; i++) {
+      const mid = (lo + hi) / 2;
+      if (inGamut(oklchToLinearRgb({ l, c: mid, h }))) {
+        lo = mid;
+      } else {
+        hi = mid;
+      }
+    }
+    c = lo;
+    linear = oklchToLinearRgb({ l, c, h });
+  }
+
+  const [r, g, b] = linear.map((v) => Math.round(clamp(linearToSrgb(clamp(v, 0, 1)), 0, 255)));
+  return rgbToHex({ r, g, b });
+};
+
+/**
+ * Parse hex, rgb(), hsl() or oklch(L C H) / oklch(L% C H) into OKLCH
+ */
+export const parseColorToOklch = (input: string): OKLCH | null => {
+  const color = input.trim();
+
+  const match = color.match(
+    /^oklch\(\s*(\d*\.?\d+)(%?)\s+(\d*\.?\d+)\s+(\d*\.?\d+)(?:deg)?\s*(?:\/[^)]*)?\)$/i
+  );
+  if (match) {
+    const lightness = parseFloat(match[1]) / (match[2] ? 100 : 1);
+    return {
+      l: clamp(lightness, 0, 1),
+      c: Math.max(0, parseFloat(match[3])),
+      h: rotateHue(parseFloat(match[4]), 0),
+    };
+  }
+
+  const rgb = parseColorToRgb(color);
+  return rgb ? rgbToOklch(rgb) : null;
+};
+
+/**
+ * WCAG 2.x relative luminance (0..1) of any color `parseColorToRgb` accepts (hex, rgb(), hsl();
+ * a bare hex without `#` also works). Returns `NaN` when the color cannot be parsed.
+ */
+export const getRelativeLuminance = (color: string): number => {
+  const value = color.trim();
+  const rgb = hexToRgb(value) ?? parseColorToRgb(value);
+  if (!rgb) {
+    return NaN;
+  }
+  return 0.2126 * srgbToLinear(rgb.r) + 0.7152 * srgbToLinear(rgb.g) + 0.0722 * srgbToLinear(rgb.b);
+};
+
+/**
+ * WCAG 2.x contrast ratio (1..21) between two colors in any format `getRelativeLuminance`
+ * accepts. Returns `NaN` when either color cannot be parsed.
+ */
+export const getContrastRatio = (a: string, b: string): number => {
+  const la = getRelativeLuminance(a);
+  const lb = getRelativeLuminance(b);
+  return (Math.max(la, lb) + 0.05) / (Math.min(la, lb) + 0.05);
+};

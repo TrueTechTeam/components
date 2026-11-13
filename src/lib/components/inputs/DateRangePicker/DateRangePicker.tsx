@@ -3,8 +3,6 @@ import { IconButton } from '../../buttons/IconButton';
 import { Input } from '../Input';
 import {
   getCalendarDays,
-  getMonthName,
-  getDayName,
   formatDate,
   isSameDay,
   isToday,
@@ -16,6 +14,8 @@ import {
   getDaysDifference,
   startOfDay,
 } from '../../../utils/dateUtils';
+import { useLabels, useLocale, type LabelVars } from '../../../contexts/LabelsContext';
+import { getLocalizedMonthName, getLocalizedDayName } from '../../../utils/calendarNames';
 import { Popover } from '../../overlays/Popover';
 import styles from './DateRangePicker.module.scss';
 import Button from '../../buttons/Button';
@@ -143,30 +143,30 @@ export interface DateRangePickerProps extends Omit<BaseComponentProps, 'children
   placeholder?: string;
 }
 
-const DEFAULT_PRESETS: DateRangePreset[] = [
+const getDefaultPresets = (t: (key: string, vars?: LabelVars) => string): DateRangePreset[] => [
   {
-    label: 'Today',
+    label: t('dateRangePicker.today'),
     getValue: () => ({
       startDate: startOfDay(new Date()),
       endDate: startOfDay(new Date()),
     }),
   },
   {
-    label: 'Last 7 Days',
+    label: t('dateRangePicker.last7Days'),
     getValue: () => ({
       startDate: addDays(startOfDay(new Date()), -6),
       endDate: startOfDay(new Date()),
     }),
   },
   {
-    label: 'Last 30 Days',
+    label: t('dateRangePicker.last30Days'),
     getValue: () => ({
       startDate: addDays(startOfDay(new Date()), -29),
       endDate: startOfDay(new Date()),
     }),
   },
   {
-    label: 'This Month',
+    label: t('dateRangePicker.thisMonth'),
     getValue: () => {
       const now = new Date();
       return {
@@ -176,7 +176,7 @@ const DEFAULT_PRESETS: DateRangePreset[] = [
     },
   },
   {
-    label: 'Last Month',
+    label: t('dateRangePicker.lastMonth'),
     getValue: () => {
       const now = new Date();
       return {
@@ -224,7 +224,7 @@ export const DateRangePicker = ({
   showCalendar = true,
   showClearButton = true,
   showPresets = true,
-  presets = DEFAULT_PRESETS,
+  presets,
   label,
   helperText,
   errorMessage,
@@ -241,6 +241,9 @@ export const DateRangePicker = ({
   ref?: React.Ref<HTMLInputElement>;
 }) => {
   const id = useId();
+  const t = useLabels();
+  const locale = useLocale();
+  const resolvedPresets = presets ?? getDefaultPresets(t);
 
   // State
   const [internalStartDate, setInternalStartDate] = useState<Date | null>(defaultStartDate);
@@ -480,13 +483,13 @@ export const DateRangePicker = ({
               size="sm"
               icon="chevron-left"
               onClick={() => setViewDate((prev) => addMonths(prev, -1))}
-              aria-label="Previous month"
+              aria-label={t('datePicker.previousMonth')}
               type="button"
               className={styles.navButton}
             />
           )}
           <div className={styles.monthLabel}>
-            {getMonthName(month)} {year}
+            {getLocalizedMonthName(month, locale, 'long')} {year}
           </div>
           {position === 'right' && (
             <IconButton
@@ -494,7 +497,7 @@ export const DateRangePicker = ({
               size="sm"
               icon="chevron-right"
               onClick={() => setViewDate((prev) => addMonths(prev, 1))}
-              aria-label="Next month"
+              aria-label={t('datePicker.nextMonth')}
               type="button"
               className={styles.navButton}
             />
@@ -505,7 +508,7 @@ export const DateRangePicker = ({
         <div className={styles.dayHeaders}>
           {Array.from({ length: 7 }, (_, i) => (
             <div key={i} className={styles.dayHeader}>
-              {getDayName(i)}
+              {getLocalizedDayName(i, locale)}
             </div>
           ))}
         </div>
@@ -583,7 +586,7 @@ export const DateRangePicker = ({
                 disabled={disabled}
                 placeholder={placeholder}
                 onFocus={() => setIsPopoverOpen(true)}
-                aria-label={ariaLabel || label || 'Date range picker'}
+                aria-label={ariaLabel || label || t('dateRangePicker.label')}
                 error={error}
                 startIcon={<CalendarIcon />}
                 showClearButton={showClearButton}
@@ -601,7 +604,7 @@ export const DateRangePicker = ({
             {/* Presets */}
             {showPresets && (
               <div className={styles.presets}>
-                {presets.map((preset) => (
+                {resolvedPresets.map((preset) => (
                   <Button
                     key={preset.label}
                     variant="ghost"
@@ -634,7 +637,7 @@ export const DateRangePicker = ({
           onBlur={onBlur}
           disabled={disabled}
           placeholder={placeholder}
-          aria-label={ariaLabel || label || 'Date range picker'}
+          aria-label={ariaLabel || label || t('dateRangePicker.label')}
           error={error}
           startIcon={<CalendarIcon />}
           showClearButton={showClearButton}

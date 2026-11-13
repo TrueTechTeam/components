@@ -1,5 +1,10 @@
 import React from 'react';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
+import { Dialog } from '../../overlays/Dialog';
+import {
+  useNavigationGuard,
+  type NavigationGuardApi,
+} from '../../../contexts/NavigationGuardContext';
 import { FormBuilder, useFormContext } from './FormBuilder';
 import type { FormFieldConfig } from './types';
 
@@ -1100,5 +1105,156 @@ describe('validateOn prop', () => {
 
     const { container } = render(<FormBuilder fields={fields} validateOn="submit" />);
     expect(container.querySelector('form')).toBeInTheDocument();
+  });
+});
+
+describe('guardUnsaved', () => {
+  const guardFields: FormFieldConfig[] = [{ name: 'name', type: 'input', label: 'Name' }];
+  let api: NavigationGuardApi;
+  const Probe = () => {
+    api = useNavigationGuard();
+    return null;
+  };
+  let confirmSpy: jest.SpyInstance;
+  beforeEach(() => {
+    confirmSpy = jest.spyOn(window, 'confirm').mockReturnValue(false);
+  });
+  afterEach(() => confirmSpy.mockRestore());
+
+  const type = (value: string) =>
+    fireEvent.change(screen.getByRole('textbox'), { target: { value } });
+
+  it('blocks Dialog close while dirty; cancel keeps it open; clean closes without asking', () => {
+    const onClose = jest.fn();
+    render(
+      <Dialog isOpen onClose={onClose} title="Edit">
+        <FormBuilder fields={guardFields} guardUnsaved />
+      </Dialog>
+    );
+    fireEvent.click(screen.getByTestId('dialog-close-button'));
+    expect(confirmSpy).not.toHaveBeenCalled();
+    expect(onClose).toHaveBeenCalledTimes(1);
+
+    type('abc');
+    fireEvent.click(screen.getByTestId('dialog-close-button'));
+    expect(confirmSpy).toHaveBeenCalledWith('You have unsaved changes. Leave anyway?');
+    expect(onClose).toHaveBeenCalledTimes(1);
+  });
+
+  it('does not guard without guardUnsaved, and uses guardMessage', () => {
+    const { unmount } = render(
+      <>
+        <Probe />
+        <FormBuilder fields={guardFields} />
+      </>
+    );
+    type('abc');
+    expect(api.isBlocked()).toBe(false);
+    unmount();
+
+    render(
+      <>
+        <Probe />
+        <FormBuilder fields={guardFields} guardUnsaved guardMessage="Discard edits?" />
+      </>
+    );
+    type('abc');
+    expect(api.isBlocked()).toBe(true);
+    api.confirmNavigation();
+    expect(confirmSpy).toHaveBeenCalledWith('Discard edits?');
+  });
+
+  it('stops blocking after a successful submit', async () => {
+    let resolveSubmit: () => void = () => {};
+    const onSubmit = jest.fn(
+      () =>
+        new Promise<void>((resolve) => {
+          resolveSubmit = resolve;
+        })
+    );
+    render(
+      <>
+        <Probe />
+        <FormBuilder fields={guardFields} guardUnsaved onSubmit={onSubmit} />
+      </>
+    );
+    type('abc');
+    fireEvent.click(screen.getByText('Submit'));
+    await waitFor(() => expect(onSubmit).toHaveBeenCalledWith({ name: 'abc' }));
+    // A submit in flight does not block, so the save can navigate or close a dialog.
+    expect(api.isBlocked()).toBe(false);
+
+    await act(async () => resolveSubmit());
+    await waitFor(() => expect(api.isBlocked()).toBe(false));
+    type('abcd');
+    expect(api.isBlocked()).toBe(true);
+  });
+
+  it('keeps blocking when submit rejects', async () => {
+    const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    const onSubmit = jest.fn().mockRejectedValue(new Error('nope'));
+    render(
+      <>
+        <Probe />
+        <FormBuilder fields={guardFields} guardUnsaved onSubmit={onSubmit} />
+      </>
+    );
+    type('abc');
+    fireEvent.click(screen.getByText('Submit'));
+    await waitFor(() => expect(errorSpy).toHaveBeenCalled());
+    await waitFor(() => expect(api.isBlocked()).toBe(true));
+    errorSpy.mockRestore();
+  });
+
+  it('does not prompt when onSubmit navigates after saving; a failed save blocks afterwards', async () => {
+    const errorSpy = jest.spyOn(console, 'error').mockImplementation(() => {});
+    let navigated: boolean | undefined;
+    let fail = false;
+    const onSubmit = jest.fn(async () => {
+      await Promise.resolve();
+      if (fail) {
+        throw new Error('nope');
+      }
+      navigated = api.confirmNavigation();
+    });
+    render(
+      <>
+        <Probe />
+        <FormBuilder fields={guardFields} guardUnsaved onSubmit={onSubmit} />
+      </>
+    );
+    type('abc');
+    fireEvent.click(screen.getByText('Submit'));
+    await waitFor(() => expect(navigated).toBe(true));
+    expect(confirmSpy).not.toHaveBeenCalled();
+
+    fail = true;
+    type('abcd');
+    fireEvent.click(screen.getByText('Submit'));
+    await waitFor(() => expect(errorSpy).toHaveBeenCalled());
+    await waitFor(() => expect(api.isBlocked()).toBe(true));
+    api.confirmNavigation();
+    expect(confirmSpy).toHaveBeenCalledTimes(1);
+    errorSpy.mockRestore();
+  });
+
+  it('leaves isDirty and Reset unchanged for unguarded forms after a submit', async () => {
+    const onSubmit = jest.fn().mockResolvedValue(undefined);
+    render(
+      <FormBuilder
+        fields={guardFields}
+        defaultValues={{ name: 'start' }}
+        onSubmit={onSubmit}
+        showResetButton
+      />
+    );
+    type('changed');
+    fireEvent.click(screen.getByText('Submit'));
+    await waitFor(() => expect(onSubmit).toHaveBeenCalled());
+
+    const reset = screen.getByText('Reset');
+    await waitFor(() => expect(reset).not.toBeDisabled());
+    fireEvent.click(reset);
+    expect(screen.getByRole('textbox')).toHaveValue('start');
   });
 });

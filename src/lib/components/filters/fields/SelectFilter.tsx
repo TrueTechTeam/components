@@ -7,6 +7,7 @@ import { Select } from '../../inputs/Select';
 import { useFilter } from '../hooks/useFilter';
 import type { BaseComponentProps, ComponentSize } from '../../../types';
 import type { SelectFilterConfig } from '../types';
+import { useLabels } from '../../../contexts/LabelsContext';
 
 export interface SelectFilterProps extends BaseComponentProps {
   /** Filter ID from FilterDefinition */
@@ -39,6 +40,7 @@ export const SelectFilter = ({
 }: SelectFilterProps & {
   ref?: React.Ref<HTMLDivElement>;
 }) => {
+  const t = useLabels();
   const { filter, value, setValue, isEnabled, options, error } = useFilter<string>({ filterId });
 
   if (!filter) {
@@ -48,7 +50,8 @@ export const SelectFilter = ({
 
   const config = filter.config as SelectFilterConfig | undefined;
   const label = labelOverride ?? filter.label;
-  const placeholder = placeholderOverride ?? filter.placeholder ?? `Select ${label}`;
+  const placeholder =
+    placeholderOverride ?? filter.placeholder ?? t('filters.selectPlaceholder', { label });
 
   const handleChange = (newValue: string) => {
     setValue(newValue);

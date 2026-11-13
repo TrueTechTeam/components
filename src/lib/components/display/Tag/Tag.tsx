@@ -2,6 +2,7 @@ import React from 'react';
 import { IconButton } from '../../buttons/IconButton';
 import styles from './Tag.module.scss';
 import type { BaseComponentProps } from '../../../types/component.types';
+import { useLabels } from '../../../contexts/LabelsContext';
 
 /**
  * Props for the Tag component
@@ -80,6 +81,7 @@ export const Tag = ({
 }: TagProps & {
   ref?: React.Ref<HTMLElement>;
 }) => {
+  const t = useLabels();
   // Determine if tag should be a button (if onClick is provided)
   const isButton = !!onClick;
   const Component = isButton ? 'button' : 'span';
@@ -124,7 +126,7 @@ export const Tag = ({
           size="xs"
           icon="close"
           onClick={handleRemove}
-          aria-label={`Remove ${children}`}
+          aria-label={t('tag.remove', { name: String(children) })}
           type="button"
           disabled={disabled}
           className={styles.removeButton}

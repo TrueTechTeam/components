@@ -1,8 +1,11 @@
 import { render, screen, fireEvent } from '@testing-library/react';
+import userEvent from '@testing-library/user-event';
 import { SideNav } from './SideNav';
 import { SideNavItem } from './SideNavItem';
 import { SideNavGroup } from './SideNavGroup';
 import { SideNavDivider } from './SideNavDivider';
+import type { SideNavLinkProps } from './SideNavContext';
+import { LabelsProvider } from '../../../contexts/LabelsContext';
 
 describe('SideNav', () => {
   describe('rendering', () => {
@@ -211,5 +214,89 @@ describe('SideNav', () => {
       fireEvent.keyDown(item, { key: ' ' });
       expect(handleSelect).toHaveBeenCalledWith('home');
     });
+  });
+});
+
+describe('SideNav translated labels', () => {
+  it('translates the default navigation label', () => {
+    render(
+      <LabelsProvider labels={{ 'sideNav.label': 'Navigation laterale' }}>
+        <SideNav>
+          <SideNavItem value="home" icon="home" label="Home" />
+        </SideNav>
+      </LabelsProvider>
+    );
+    expect(screen.getByLabelText('Navigation laterale')).toBeInTheDocument();
+  });
+});
+
+describe('SideNav linkComponent', () => {
+  it('renders item links with the custom component', () => {
+    const Custom = ({ children, ...props }: SideNavLinkProps) => (
+      <a {...props} data-custom="yes">
+        {children}
+      </a>
+    );
+    render(
+      <SideNav linkComponent={Custom} selectedValue="home">
+        <SideNavItem value="home" label="Home" href="/home" />
+        <SideNavItem value="none" label="No link" />
+      </SideNav>
+    );
+    const link = screen.getByRole('menuitem', { name: 'Home' });
+    expect(link).toHaveAttribute('data-custom', 'yes');
+    expect(link).toHaveAttribute('href', '/home');
+    expect(link).toHaveAttribute('aria-current', 'page');
+    expect(screen.getByText('No link').closest('[data-custom]')).toBeNull();
+  });
+
+  it('renders a disabled link as a plain anchor without href', () => {
+    const Custom = ({ children, ...props }: SideNavLinkProps) => (
+      <a {...props} data-custom="yes">
+        {children}
+      </a>
+    );
+    render(
+      <SideNav linkComponent={Custom}>
+        <SideNavItem value="home" label="Home" href="/home" disabled />
+      </SideNav>
+    );
+    const link = screen.getByRole('menuitem', { name: 'Home' });
+    expect(link.tagName).toBe('A');
+    expect(link).not.toHaveAttribute('href');
+    expect(link).not.toHaveAttribute('data-custom');
+    expect(link).toHaveAttribute('aria-disabled', 'true');
+  });
+
+  it('keeps the plain anchor output by default', () => {
+    render(
+      <SideNav>
+        <SideNavItem value="home" label="Home" href="/home" />
+      </SideNav>
+    );
+    const link = screen.getByRole('menuitem', { name: 'Home' });
+    expect(link.tagName).toBe('A');
+    expect(link).toHaveAttribute('href', '/home');
+  });
+
+  it('activates a link with Enter (not prevented) but still handles Enter on non-links', async () => {
+    const user = userEvent.setup();
+    const onSelect = jest.fn();
+    const onLinkClick = jest.fn((e: React.MouseEvent) => e.preventDefault());
+    render(
+      <SideNav onSelect={onSelect}>
+        <SideNavItem value="home" label="Home" href="/home" onClick={onLinkClick} />
+        <SideNavItem value="act" label="Action" data-testid="act" />
+      </SideNav>
+    );
+    screen.getByRole('menuitem', { name: 'Home' }).focus();
+    await user.keyboard('{Enter}');
+    expect(onLinkClick).toHaveBeenCalledTimes(1);
+    expect(onSelect).toHaveBeenCalledWith('home');
+
+    onSelect.mockClear();
+    screen.getByTestId('act').focus();
+    await user.keyboard('{Enter}');
+    expect(onSelect).toHaveBeenCalledWith('act');
   });
 });

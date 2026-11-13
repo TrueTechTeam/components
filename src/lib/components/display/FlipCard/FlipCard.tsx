@@ -9,6 +9,7 @@ import React, {
 } from 'react';
 import styles from './FlipCard.module.scss';
 import type { BaseComponentProps } from '../../../types/component.types';
+import { useLabels } from '../../../contexts/LabelsContext';
 
 /**
  * Direction of the flip animation
@@ -166,7 +167,7 @@ export const FlipCard = ({
   height,
   width,
   perspective = 1000,
-  flipButtonAriaLabel = 'Flip card',
+  flipButtonAriaLabel,
   className,
   style,
   'data-testid': testId,
@@ -175,6 +176,7 @@ export const FlipCard = ({
 }: FlipCardProps & {
   ref?: React.Ref<HTMLDivElement>;
 }) => {
+  const t = useLabels();
   // Controlled vs uncontrolled state
   const isControlled = controlledIsFlipped !== undefined;
   const [uncontrolledIsFlipped, setUncontrolledIsFlipped] = useState(defaultFlipped);
@@ -296,7 +298,7 @@ export const FlipCard = ({
       role={isInteractive ? 'button' : undefined}
       tabIndex={isInteractive && !disabled ? 0 : undefined}
       aria-pressed={isInteractive ? isFlipped : undefined}
-      aria-label={ariaLabel || flipButtonAriaLabel}
+      aria-label={ariaLabel || (flipButtonAriaLabel ?? t('flipCard.flip'))}
       aria-disabled={disabled || undefined}
       data-testid={testId}
       style={cssVariables}

@@ -5,8 +5,6 @@ import { Select } from '../Select';
 import { Input } from '../Input';
 import {
   getCalendarDays,
-  getMonthName,
-  getDayName,
   formatDate,
   parseDate,
   isSameDay,
@@ -15,6 +13,8 @@ import {
   addMonths,
   startOfDay,
 } from '../../../utils/dateUtils';
+import { useLabels, useLocale } from '../../../contexts/LabelsContext';
+import { getLocalizedMonthOption, getLocalizedDayName } from '../../../utils/calendarNames';
 import { Popover } from '../../overlays/Popover';
 import styles from './DatePicker.module.scss';
 import type { IconName } from '../../display/Icon/icons';
@@ -143,6 +143,8 @@ export const DatePicker = ({
   ref?: React.Ref<HTMLInputElement>;
 }) => {
   const id = useId();
+  const t = useLabels();
+  const locale = useLocale();
 
   // State
   const [internalValue, setInternalValue] = useState<Date | null>(defaultValue);
@@ -294,7 +296,7 @@ export const DatePicker = ({
                 onBlur={onBlur}
                 disabled={disabled}
                 placeholder={placeholder}
-                aria-label={ariaLabel || label || 'Date picker'}
+                aria-label={ariaLabel || label || t('datePicker.label')}
                 error={error}
                 startIcon={startIcon}
                 showClearButton={showClearButton}
@@ -318,7 +320,7 @@ export const DatePicker = ({
                 size="sm"
                 icon="chevron-left"
                 onClick={handlePrevMonth}
-                aria-label="Previous month"
+                aria-label={t('datePicker.previousMonth')}
                 className={styles.navButton}
               />
 
@@ -326,7 +328,7 @@ export const DatePicker = ({
                 <Select
                   options={Array.from({ length: 12 }, (_, i) => ({
                     value: i.toString(),
-                    label: getMonthName(i, true),
+                    label: getLocalizedMonthOption(i, locale),
                   }))}
                   value={viewDate.getMonth().toString()}
                   onChange={(value) =>
@@ -359,7 +361,7 @@ export const DatePicker = ({
                 size="sm"
                 icon="chevron-right"
                 onClick={handleNextMonth}
-                aria-label="Next month"
+                aria-label={t('datePicker.nextMonth')}
                 className={styles.navButton}
               />
             </div>
@@ -368,7 +370,7 @@ export const DatePicker = ({
             <div className={styles.dayHeaders}>
               {Array.from({ length: 7 }, (_, i) => (
                 <div key={i} className={styles.dayHeader}>
-                  {getDayName(i)}
+                  {getLocalizedDayName(i, locale)}
                 </div>
               ))}
             </div>
@@ -415,7 +417,7 @@ export const DatePicker = ({
           onBlur={onBlur}
           disabled={disabled}
           placeholder={placeholder}
-          aria-label={ariaLabel || label || 'Date picker'}
+          aria-label={ariaLabel || label || t('datePicker.label')}
           error={error}
           startIcon={startIcon}
           showClearButton={showClearButton}

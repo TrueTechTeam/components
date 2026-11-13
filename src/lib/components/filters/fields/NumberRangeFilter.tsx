@@ -9,6 +9,7 @@ import { useFilter } from '../hooks/useFilter';
 import type { BaseComponentProps, ComponentSize } from '../../../types';
 import type { NumberRangeFilterConfig, NumberRangeValue } from '../types';
 import styles from './NumberRangeFilter.module.scss';
+import { useLabels } from '../../../contexts/LabelsContext';
 
 export interface NumberRangeFilterProps extends BaseComponentProps {
   /** Filter ID from FilterDefinition */
@@ -38,6 +39,7 @@ export const NumberRangeFilter = ({
 }: NumberRangeFilterProps & {
   ref?: React.Ref<HTMLDivElement>;
 }) => {
+  const t = useLabels();
   const { filter, value, setValue, isEnabled, error } = useFilter<NumberRangeValue>({ filterId });
 
   const handleSliderChange = useCallback(
@@ -111,7 +113,9 @@ export const NumberRangeFilter = ({
         <div className={styles.inputsContainer}>
           <div className={styles.inputWrapper}>
             {config?.showLabels && (
-              <span className={styles.inputLabel}>{config?.minLabel ?? 'Min'}</span>
+              <span className={styles.inputLabel}>
+                {config?.minLabel ?? t('numberRangeFilter.min')}
+              </span>
             )}
             <NumberInput
               value={currentMin}
@@ -125,7 +129,9 @@ export const NumberRangeFilter = ({
           <span className={styles.separator}>-</span>
           <div className={styles.inputWrapper}>
             {config?.showLabels && (
-              <span className={styles.inputLabel}>{config?.maxLabel ?? 'Max'}</span>
+              <span className={styles.inputLabel}>
+                {config?.maxLabel ?? t('numberRangeFilter.max')}
+              </span>
             )}
             <NumberInput
               value={currentMax}

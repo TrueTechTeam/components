@@ -54,6 +54,8 @@ export type {
 
 // Media Query
 export { useMediaQuery } from './useMediaQuery';
+export { useBreakpoint, useBreakpointValue } from './useBreakpoint';
+export type { UseBreakpointReturn } from './useBreakpoint';
 export type { UseMediaQueryOptions, UseMediaQueryReturn } from './useMediaQuery';
 
 // Previous Value
@@ -69,3 +71,6 @@ export type { UseTimeoutOptions, UseTimeoutReturn } from './useTimeout';
 
 export { useInterval } from './useInterval';
 export type { UseIntervalOptions, UseIntervalReturn } from './useInterval';
+
+export { useUnsavedChanges } from './useUnsavedChanges';
+export type { UseUnsavedChangesOptions } from './useUnsavedChanges';

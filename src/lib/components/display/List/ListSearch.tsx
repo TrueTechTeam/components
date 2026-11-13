@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, type ChangeEvent } from 'react';
+import { useLabels } from '../../../contexts/LabelsContext';
 import styles from './List.module.scss';
 
 export interface ListSearchProps {
@@ -37,11 +38,13 @@ export interface ListSearchProps {
 export function ListSearch({
   value,
   onChange,
-  placeholder = 'Search...',
+  placeholder,
   isFiltering: _isFiltering = false,
   autoFocus = false,
   onClear,
 }: ListSearchProps) {
+  const t = useLabels();
+  const resolvedPlaceholder = placeholder ?? t('list.searchPlaceholder');
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -75,8 +78,8 @@ export function ListSearch({
         value={value}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
-        placeholder={placeholder}
-        aria-label={placeholder}
+        placeholder={resolvedPlaceholder}
+        aria-label={resolvedPlaceholder}
       />
     </div>
   );

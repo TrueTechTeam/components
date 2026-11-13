@@ -1,6 +1,7 @@
 import React from 'react';
 import styles from './StatusIndicator.module.scss';
 import type { BaseComponentProps } from '../../../types/component.types';
+import { useLabels } from '../../../contexts/LabelsContext';
 
 /**
  * Props for the StatusIndicator component
@@ -80,6 +81,7 @@ export const StatusIndicator = ({
 }: StatusIndicatorProps & {
   ref?: React.Ref<HTMLSpanElement>;
 }) => {
+  const t = useLabels();
   // Merge className with component styles
   const componentClasses = [styles.statusIndicator, className].filter(Boolean).join(' ');
 
@@ -92,7 +94,7 @@ export const StatusIndicator = ({
       data-size={size}
       data-pulse={pulse || undefined}
       data-with-text={withText || undefined}
-      aria-label={`Status: ${status}`}
+      aria-label={t('statusIndicator.label', { status: t(`statusIndicator.${status}`) })}
       {...restProps}
     >
       <span className={styles.dot} aria-hidden="true" />

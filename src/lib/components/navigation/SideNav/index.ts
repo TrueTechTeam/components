@@ -12,4 +12,4 @@ export { SideNavDivider } from './SideNavDivider';
 export type { SideNavDividerProps } from './SideNavDivider';
 
 export { SideNavContext, useSideNavContext, useSideNavContextStrict } from './SideNavContext';
-export type { SideNavContextValue } from './SideNavContext';
+export type { SideNavContextValue, SideNavLinkComponent, SideNavLinkProps } from './SideNavContext';

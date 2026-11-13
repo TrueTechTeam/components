@@ -14,6 +14,7 @@ import {
 } from '../../../utils/colorUtils';
 import { Popover } from '../../overlays/Popover';
 import styles from './ColorPicker.module.scss';
+import { useLabels } from '../../../contexts/LabelsContext';
 
 export type ColorFormat = 'hex' | 'rgb' | 'hsl';
 
@@ -181,6 +182,7 @@ export const ColorPicker = ({
 }: ColorPickerProps & {
   ref?: React.Ref<HTMLInputElement>;
 }) => {
+  const t = useLabels();
   const id = useId();
 
   // Format color based on format prop
@@ -539,7 +541,7 @@ export const ColorPicker = ({
                 variant="outline"
                 onClick={() => setIsPopoverOpen(!isPopoverOpen)}
                 disabled={disabled}
-                aria-label="Open color picker"
+                aria-label={t('colorPicker.open')}
                 type="button"
                 className={styles.swatchButton}
               >
@@ -671,7 +673,7 @@ export const ColorPicker = ({
               {/* Alpha Slider */}
               {showAlpha && (
                 <div className={styles.sliderSection}>
-                  <div className={styles.sliderLabel}>Alpha</div>
+                  <div className={styles.sliderLabel}>{t('colorPicker.alpha')}</div>
 
                   <div className={styles.sliderRow}>
                     <label className={styles.sliderName}>A</label>
@@ -692,7 +694,7 @@ export const ColorPicker = ({
               {/* Preset colors */}
               {showPresets && (
                 <div className={styles.presetsSection}>
-                  <div className={styles.sliderLabel}>Presets</div>
+                  <div className={styles.sliderLabel}>{t('colorPicker.presets')}</div>
                   <div className={styles.presets}>
                     {presetColors.map((color) => (
                       <Button
@@ -700,7 +702,7 @@ export const ColorPicker = ({
                         variant="ghost"
                         onClick={() => handlePresetClick(color)}
                         disabled={disabled}
-                        aria-label={`Select color ${color}`}
+                        aria-label={t('colorPicker.selectColor', { color })}
                         type="button"
                         className={styles.presetColor}
                         style={{ backgroundColor: color }}
@@ -728,7 +730,7 @@ export const ColorPicker = ({
             maxLength={inputMaxLength}
             showCounter={false}
             error={error}
-            aria-label={ariaLabel || label || 'Color value'}
+            aria-label={ariaLabel || label || t('colorPicker.value')}
           />
         )}
       </div>

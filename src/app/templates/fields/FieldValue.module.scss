@@ -1,0 +1,40 @@
+@use '../../../lib/styles/mixins/component' as *;
+
+.numeric {
+  font-variant-numeric: tabular-nums;
+}
+
+.empty {
+  color: var(--theme-text-secondary);
+}
+
+.hidden {
+  @include visually-hidden;
+}
+
+.longText {
+  overflow-wrap: anywhere;
+}
+
+.mono {
+  font-family: var(--font-family-mono);
+  font-size: 0.9em;
+}
+
+.id {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+}
+
+.image {
+  display: block;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+}
+
+.tags {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-xs);
+}

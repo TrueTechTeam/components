@@ -5,6 +5,7 @@ import { NavbarNav } from './NavbarNav';
 import { NavbarActions } from './NavbarActions';
 import { NavbarToggle } from './NavbarToggle';
 import { NavbarCollapse } from './NavbarCollapse';
+import { LabelsProvider } from '../../../contexts/LabelsContext';
 
 describe('Navbar', () => {
   describe('rendering', () => {
@@ -191,5 +192,20 @@ describe('Navbar', () => {
 
       expect(screen.getByTestId('navbar')).toHaveAttribute('aria-label', 'Site navigation');
     });
+  });
+});
+
+describe('Navbar translated labels', () => {
+  it('translates the navigation label and menu toggle', () => {
+    render(
+      <LabelsProvider labels={{ 'navbar.label': 'Hauptmenue', 'navbar.openMenu': 'Menue oeffnen' }}>
+        <Navbar>
+          <NavbarBrand>Brand</NavbarBrand>
+          <NavbarToggle />
+        </Navbar>
+      </LabelsProvider>
+    );
+    expect(screen.getByLabelText('Hauptmenue')).toBeInTheDocument();
+    expect(screen.getByLabelText('Menue oeffnen')).toBeInTheDocument();
   });
 });

@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Carousel } from './Carousel';
+import { LabelsProvider } from '../../../contexts/LabelsContext';
 
 describe('Carousel', () => {
   describe('rendering', () => {
@@ -82,5 +83,31 @@ describe('Carousel', () => {
       );
       expect(ref.current).toBeInstanceOf(HTMLDivElement);
     });
+  });
+});
+
+describe('Carousel translated labels', () => {
+  it('translates navigation labels and slide descriptions', () => {
+    render(
+      <LabelsProvider
+        labels={{
+          'carousel.label': 'Karussell',
+          'carousel.next': 'Weiter',
+          'carousel.previous': 'Zurueck',
+          'carousel.slideOf': 'Folie {n} von {total}',
+          'carousel.goToSlide': 'Zu Folie {n}',
+        }}
+      >
+        <Carousel>
+          <div>Slide 1</div>
+          <div>Slide 2</div>
+        </Carousel>
+      </LabelsProvider>
+    );
+    expect(screen.getByRole('region', { name: 'Karussell' })).toBeInTheDocument();
+    expect(screen.getAllByLabelText('Weiter').length).toBeGreaterThan(0);
+    expect(screen.getAllByLabelText('Zurueck').length).toBeGreaterThan(0);
+    expect(screen.getByLabelText('Folie 1 von 2')).toBeInTheDocument();
+    expect(screen.getByLabelText('Zu Folie 2')).toBeInTheDocument();
   });
 });

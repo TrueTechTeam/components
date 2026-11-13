@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Pill } from './Pill';
+import { LabelsProvider } from '../../../contexts/LabelsContext';
 
 describe('Pill', () => {
   // 1. Rendering tests
@@ -325,5 +326,16 @@ describe('Pill', () => {
       expect(ref.current).toBeInstanceOf(HTMLButtonElement);
       expect(ref.current).toHaveTextContent('Test');
     });
+  });
+});
+
+describe('Pill translated labels', () => {
+  it('translates the remove button label', () => {
+    render(
+      <LabelsProvider labels={{ 'pill.remove': 'Supprimer' }}>
+        <Pill onRemove={() => {}}>P</Pill>
+      </LabelsProvider>
+    );
+    expect(screen.getByLabelText('Supprimer')).toBeInTheDocument();
   });
 });

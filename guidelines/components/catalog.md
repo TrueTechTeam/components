@@ -66,10 +66,10 @@ Storybook docs.
 
 ## Forms
 
-| Component                         | Use when                                                                                                                                                         |
-| --------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `FormBuilder`                     | Config-driven forms with consistent layout and validation (`layout`: vertical / horizontal / grid). Hooks: `useFormState`, `useFormValidation`, `useFormContext` |
-| `validators`, `combineValidators` | Reusable validation rules for Input/FormBuilder                                                                                                                  |
+| Component                         | Use when                                                                                                                                                                                                                   |
+| --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `FormBuilder`                     | Config-driven forms with consistent layout and validation (`layout`: vertical / horizontal / grid; `guardUnsaved` warns before leaving with unsaved changes). Hooks: `useFormState`, `useFormValidation`, `useFormContext` |
+| `validators`, `combineValidators` | Reusable validation rules for Input/FormBuilder                                                                                                                                                                            |
 
 ## Overlays & feedback
 
@@ -167,9 +167,116 @@ Storybook docs.
 | `DragHandle`                  | Visible grab affordance (always provide one) |
 | `DragOverlay`                 | Custom drag preview                          |
 
+## App builder (`/app`)
+
+A separate entry for wiring pages to data, the URL, permissions and app services. Import from
+`@true-tech-team/ui-components/app` (needs `@tanstack/react-query`; the main entry does not).
+
+```ts
+import { AppProvider, Page, Section, usePageParams } from '@true-tech-team/ui-components/app';
+```
+
+Provider order is `GlobalProvider` outside, `AppProvider` inside. With the order reversed, `AppLink`
+navigation guards silently stop working. In development, `AppProvider` warns when no `GlobalProvider` is above it.
+`AppProvider` renders its own Dialog, Alert and Toast providers inside the app contexts, so toasts
+(including `useMutationFeedback`), `useAlert` and `useDialog` content get the app `translate` and
+`locale` and can use `/app` hooks. Configure them with its `toastConfig`, `alertConfig` and
+`dialogConfig` props.
+
+| Export                                                                          | Purpose / use when                                                                                                                                                                                                                   |
+| ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `AppProvider`                                                                   | Once at the root, inside `GlobalProvider`. Props: `router`, `queryClient`, `translate`, `locale`, `logger`, `analytics`, `auth`, `flags`, `breakpoints`, `titleTemplate`, `debug`                                                    |
+| `Page`                                                                          | A routed page: sets the title, sends `page_view`, shows forbidden / loading / error+retry / empty states from `queries`, keeps loaded content on refetch errors (inline alert), error boundary, page store. Render the `h1` yourself |
+| `Section`                                                                       | A region of a page with its own states and error boundary, so one failure does not take down siblings                                                                                                                                |
+| `Loadable`                                                                      | Marks a data-dependent piece of a `Page`/`Section` and its skeleton `shape` (`text`, `heading`, `box`, `card`, `avatar`, `table`) while the owner's queries are pending. Function children run only once loaded                      |
+| `ErrorBoundary`                                                                 | Catch render errors in a custom region (Page and Section already include one)                                                                                                                                                        |
+| `usePage`, `usePageMeta`                                                        | Read the enclosing page id and title; set title and description in custom layouts                                                                                                                                                    |
+| `usePageStore`                                                                  | `[state, dispatch]` of the Page `reducer`, for UI state shared across the page                                                                                                                                                       |
+| `usePageParams(schema)`, `param`                                                | Typed URL search params (`param.string/number/boolean/enum/array`); shareable filters, sort, page                                                                                                                                    |
+| `usePreference(key, default, { storage })`                                      | One remembered setting: in the URL (default) or `localStorage` (`'local'`)                                                                                                                                                           |
+| `useMutationFeedback`, `createOptimisticHandlers`                               | Toast or inline success/error for a mutation; optimistic cache update with rollback                                                                                                                                                  |
+| `LastUpdated`                                                                   | "Updated 3 minutes ago" with a refresh button for a query                                                                                                                                                                            |
+| `AppLink`, `useAppNavigate`                                                     | In-app navigation that respects unsaved-changes guards. Use instead of the router's own Link or push when a form can be dirty                                                                                                        |
+| `useBrowserRouter`, `createNextRouter`, `createReactRouter`, `useRouterAdapter` | Router adapters: History API (default), Next.js App Router, React Router. Built from your router's own hooks, so the library imports neither                                                                                         |
+| `useLogger`, `useLogBuffer`, `useTrack`                                         | Scoped logging and analytics events                                                                                                                                                                                                  |
+| `useAuth`, `useCan`, `Can`                                                      | Permission checks; hide or disable what the user cannot do                                                                                                                                                                           |
+| `useFlag`, `Feature`                                                            | Feature flags                                                                                                                                                                                                                        |
+| `useAppTranslation`, `useFormatters`, `useAppConfig`                            | App `t()`, locale-bound formatters, the raw provider config                                                                                                                                                                          |
+
+`Page` mounts a debug panel (queries, page store, URL params, logs) when `AppProvider` `debug` is
+on (the default outside production). It is not exported; turn it off with `debug={false}`.
+
+While its queries are pending, a `Page` or `Section` still renders its children (headings, static
+text, layout) inside a disabled, `aria-busy` region; wrap only the data-dependent parts in
+`Loadable` so they show a skeleton in the same shape. The `skeleton` prop replaces the whole body
+instead.
+
+- Children render during loading: read query data through `Loadable` function children
+  (`{() => <Rows rows={orders.data} />}`) or guard it with `?.`. A child that throws before its
+  data exists is retried when loading finishes; a crash after that shows the error state.
+- Only native controls (`button`, `input`, `select`, `textarea`) are disabled while pending. A
+  Section's controls stay disabled while its parent Page is pending, even if the Section's own
+  data has loaded.
+- For paginated or filtered queries use `placeholderData: keepPreviousData`, so changing the key
+  keeps the current rows instead of returning to skeletons and dropping focus.
+
+`Page` ids default to a slug of the title; pass `id` when the title is dynamic or translated, so
+stored preferences and analytics keep a stable key. `Page` and `Section` show generic error text
+for failed queries; `showErrorDetails` opts in to showing the query error's message.
+
+Next.js notes: `AppProvider` needs no `<Suspense>`, but components that read URL params
+(`usePageParams`, `usePreference`) need a `<Suspense>` boundary above them. Next.js cannot block
+navigation, so unsaved-changes guards cover `AppLink`, `useAppNavigate`, Dialog close and page
+unload, but not the browser Back button or your own `router.push`.
+
+### Page templates (`/app`)
+
+Ready-made pages built from `Page`, `Section`, `Loadable` and the components above. Configure
+them; don't fork them. To go from an outline plus a sample API response to a page, follow
+[../app/README.md](../app/README.md) (page brief, `APP-*`, `FIELD-*`, `HIER-*`, `APP-STATE-*`,
+`APP-PLUMB-*`).
+
+| Export                                                                   | Purpose / use when                                                                                                                                                                                                                                                                                                                                                                                                       | Avoid when                                                  |
+| ------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------- |
+| `AppShell` (`NavItem`)                                                   | The app frame, once around all routes: skip link, Navbar (`brand`, `headerActions`), collapsible sidebar from 1024px (remembered in this browser), `main`, mobile `mobileNav` `'drawer'` or `'bottom'`. `NavItem.permission` hides items                                                                                                                                                                                 | Inside individual pages                                     |
+| `PageHeader` (`PageAction`, `Crumb`, `PageHeaderTab`)                    | Page `h1`, `status`, breadcrumbs (3+ levels), `actions` (one primary, rightmost; others overflow below tablet; `permission` hides), `description`, URL-bound `tabs` (`tabParam`)                                                                                                                                                                                                                                         | Inside a template (they render one)                         |
+| `usePageTab(tabs, tabParam?)`, `getPageTabId(value, tabParam?)`          | Read and set the selected header tab (`?tab=`); the tab's DOM id, so a custom body can be a `tabpanel` labelled by it                                                                                                                                                                                                                                                                                                    | -                                                           |
+| `FieldValue` (`FieldKind`, `FieldOptions`, `StatusTone`)                 | Render one value by kind (`text`, `longText`, `number`, `currency`, `percent`, `date`, `datetime`, `relative`, `boolean`, `status`, `email`, `url`, `phone`, `id`, `image`, `fileSize`, `list`, `tags`). Empty or invalid → "—" + hidden "Not set"; unsafe URL schemes render as empty                                                                                                                                   | Values that need custom markup                              |
+| `fieldAlign(kind)`, `isEmptyFieldValue(kind, value)`                     | Column alignment for a kind (`'end'` for numeric kinds); whether a value has anything to show                                                                                                                                                                                                                                                                                                                            | -                                                           |
+| `DataTablePage` (`DataTableColumn`, `RowAction`, `DataTableQueryResult`) | Many records: header with `create`, search, `filters`, server sort (`columns[].sortable`, `defaultSort`), `pageSizes`, `views` (table, grid, list), `rowActions` with toasts, `detail` (`mode` `'panel'` / `'dialog'` / `'page'`, `fullPageHref`). All state in the URL. Nothing yet vs no results built in. `queryOptions(state).queryKey[0]` must identify the collection: row actions invalidate every query under it | One record, or a few static rows (`Table`)                  |
+| `useTableState` (`TableState`, `TableSort`, `TableView`)                 | The URL-bound collection state `DataTablePage` uses (`page`, `size`, `sort`, `q`, `f`, `view`, `selected`), for a custom collection page                                                                                                                                                                                                                                                                                 | -                                                           |
+| `DetailsPage` (`DetailsTab`)                                             | One record: `query`, `title`, `status`, `breadcrumbs`, `actions`, `facts` (3–6), URL-bound `tabs` with `main` + `side` (`layout`, `sideLabel`), `notFound(error)`, `analyticsName` (the `page_view` name; it fires before the record title is known)                                                                                                                                                                     | Editing (form page), many records                           |
+| `DashboardPage` (`TimeRange`)                                            | Monitoring: URL-bound range toggle (`ranges`, `defaultRange`), "Refresh all" (`queryKeyPrefix`), slots `kpis`, `primary`, `secondary`, `activity`                                                                                                                                                                                                                                                                        | Lists of records                                            |
+| `useTimeRange(def?)`                                                     | The dashboard's effective range, for widget query keys                                                                                                                                                                                                                                                                                                                                                                   | -                                                           |
+| `KpiWidget` (`KpiDelta`)                                                 | One KPI tile: `label`, `query`, `value()`, `kind`, `delta()` (`value`, `direction`, `good`), `hint`                                                                                                                                                                                                                                                                                                                      | More than 5–6 in a row                                      |
+| `ChartWidget`, `DashboardWidget`                                         | A dashboard card that is its own `Section` (`title`, `query`, `asOf`, `action`, `size`). `ChartWidget` takes any chart element plus a text `summary`; the chart is hidden from AT and inert                                                                                                                                                                                                                              | Charts with focusable controls (use `DashboardWidget`)      |
+| `PropertyList` (`FieldDef`)                                              | Label/value pairs of one record (`fields`, `data` or `query`, `columns` 1 or 2, `span`)                                                                                                                                                                                                                                                                                                                                  | Comparing records (table)                                   |
+| `KeyFacts`                                                               | A strip of 3–6 headline facts of one record                                                                                                                                                                                                                                                                                                                                                                              | More than 6 facts                                           |
+| `ActivityTimeline` (`ActivityItem`)                                      | Newest-first events with relative times and "Show all" (`limit`)                                                                                                                                                                                                                                                                                                                                                         | Editable content (`Notes`)                                  |
+| `Notes` (`NoteItem`)                                                     | Comments with an add form (`onAdd`, `canAdd`)                                                                                                                                                                                                                                                                                                                                                                            | -                                                           |
+| `MediaGallery` (`MediaItem`)                                             | Images and attachments with names and sizes                                                                                                                                                                                                                                                                                                                                                                              | A main visual collection (`DataTablePage views={['grid']}`) |
+| `RelatedRecords`                                                         | Up to 5 child records in a compact table, `rowHref`, "View all (N)" (`total`, `viewAllHref`)                                                                                                                                                                                                                                                                                                                             | The full child list (its own `DataTablePage`)               |
+
+Every block takes the `Section` props (`title`, `headingLevel`, `empty`, `permission`, …) plus
+`query`, and shows its own loading, empty and error states. `FieldDef<T>` is `{ key, label, kind,
+get?, span?, ...FieldOptions }`; `key` is a top-level key of the record, and `get` reads nested or
+converted values.
+
+### Core additions used with `/app` (main entry)
+
+| Export                                                                                                                    | Purpose / use when                                                                                                                                 |
+| ------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `formatDateTime`, `formatRelativeTime`, `formatNumber`, `formatCurrency`, `formatPercent`, `formatFileSize`, `formatList` | Locale-aware formatting that never throws. Take a trailing `locale`; in `/app` use `useFormatters()`                                               |
+| `useBreakpoint`, `useBreakpointValue`, `BreakpointsProvider`                                                              | Current named breakpoint (`phone`/`tablet`/`laptop`/`desktop`), `up()`/`down()`, per-breakpoint values. SCSS: `@include bp(name)`, `bp-down(name)` |
+| `useUnsavedChanges(isDirty)`                                                                                              | Guard a custom form; `FormBuilder guardUnsaved` does it for config forms                                                                           |
+| `LabelsProvider`, `useLabels`, `useLocale`, `DEFAULT_LABELS`                                                              | Translatable built-in text (see `foundations/labels.md`). `GlobalProvider` and `AppProvider` take `labels`, `translate`, `locale`                  |
+
 ## Hooks (non-visual)
 
 `useDialog`, `useAlert`, `useToast`, `useAsyncToast`, `usePageMessages` (feedback) ·
 `useUrlState` (shareable view state) · `useLocalStorage` (persist preferences) · `useMediaQuery`
 (responsive logic; prefer CSS when possible) · `useResizeObserver`, `useIntersectionObserver` ·
-`useClipboard` (copy, with a confirmation toast) · `useTimeout`, `useInterval`, `usePrevious`.
+`useClipboard` (copy, with a confirmation toast) · `useTimeout`, `useInterval`, `usePrevious` ·
+`useUnsavedChanges` (warn on page unload, guarded navigation and Dialog close while a form is
+dirty; `useNavigationGuard` / `NavigationGuardProvider` expose the registry that router adapters
+call before navigating).

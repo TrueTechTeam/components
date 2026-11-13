@@ -60,7 +60,9 @@ export interface UseToastReturn {
   loading: (message: string, options?: Partial<ToastData>) => string;
 
   /**
-   * Update an existing toast
+   * Update an existing toast. Updating a `loading` toast to another variant restarts its timer:
+   * without a `duration` in the update it now auto-dismisses after the provider's
+   * `defaultDuration` (it used to stay until dismissed).
    */
   update: (id: string, data: Partial<ToastData>) => void;
 

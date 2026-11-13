@@ -1,0 +1,264 @@
+@use '../../../lib/styles/mixins/component' as *;
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  min-width: 0;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-sm);
+  min-width: 0;
+}
+
+.search {
+  flex: 1 1 14rem;
+  max-width: 24rem;
+  min-width: 0;
+}
+
+.toolbarEnd {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-inline-start: auto;
+}
+
+.filterFields {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+// Content + optional inline detail column (T1: laptop and up, chosen in JS).
+.body {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: var(--spacing-lg);
+  align-items: start;
+
+  &[data-detail='panel'] {
+    grid-template-columns: minmax(0, 1fr) minmax(320px, 40%);
+  }
+}
+
+.main {
+  display: flex;
+  outline: none;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  min-width: 0;
+}
+
+.rowLink {
+  @include button-reset;
+
+  color: var(--theme-primary);
+  text-align: start;
+  text-decoration: underline;
+  text-underline-offset: 0.15em;
+  cursor: pointer;
+  min-height: var(--target-size-min);
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+.rowActions {
+  display: inline-flex;
+}
+
+.danger {
+  color: var(--theme-error);
+}
+
+.visuallyHidden {
+  @include visually-hidden;
+}
+
+// Grid and list views
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 16rem), 1fr));
+  gap: var(--spacing-md);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+
+  &[data-view='list'] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+.cardItem {
+  position: relative;
+  min-width: 0;
+  border-radius: var(--radius-md);
+
+  &[data-selected] {
+    @include focus-ring(var(--theme-primary));
+  }
+
+  > .rowActions {
+    z-index: 1;
+    position: absolute;
+    inset-block-start: var(--spacing-xs);
+    inset-inline-end: var(--spacing-xs);
+  }
+}
+
+.cardOverlay,
+.cardOpen::after {
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-md);
+}
+
+// Stretched over the whole card, below the row actions menu.
+.cardOverlay {
+  @include button-reset;
+
+  cursor: pointer;
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+// Default card: the title is the control; its ::after covers the card.
+.cardOpen {
+  @include button-reset;
+
+  text-align: start;
+  cursor: pointer;
+
+  &::after {
+    content: '';
+  }
+
+  &:focus-visible {
+    outline: none;
+  }
+
+  &:focus-visible::after {
+    @include focus-ring;
+  }
+}
+
+.defaultCard {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  height: 100%;
+}
+
+.cardTitle {
+  font-weight: var(--font-weight-semibold);
+  color: var(--theme-text-primary);
+  padding-inline-end: var(--spacing-xl);
+  overflow-wrap: anywhere;
+}
+
+.cardFields {
+  display: grid;
+  gap: var(--spacing-xs);
+  margin: 0;
+}
+
+.cardField {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+  font-size: var(--font-size-sm);
+
+  dt {
+    color: var(--theme-text-secondary);
+  }
+
+  dd {
+    margin: 0;
+    text-align: end;
+
+    // Above the title's stretched ::after, so email/url links and copy buttons stay clickable.
+    :is(a, button, input, select, textarea, [tabindex]) {
+      position: relative;
+      z-index: 1;
+    }
+  }
+}
+
+.footer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+}
+
+.range {
+  color: var(--theme-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.paging {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+.pageSize {
+  width: 5.5rem;
+}
+
+// Detail side panel
+.detail {
+  position: sticky;
+  inset-block-start: var(--spacing-md);
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-sm);
+  min-width: 0;
+  max-height: calc(100vh - 2 * var(--spacing-md));
+  overflow: auto;
+  padding: var(--spacing-md);
+  border: 1px solid var(--theme-border-primary);
+  border-radius: var(--radius-lg);
+  background: var(--theme-surface-primary);
+  color: var(--theme-text-primary);
+}
+
+.detailHeader {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+}
+
+.detailTitle {
+  margin: 0;
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  overflow-wrap: anywhere;
+
+  &:focus-visible {
+    @include focus-ring;
+  }
+}
+
+.fullPageLink {
+  align-self: flex-start;
+}
+
+.detailBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  min-width: 0;
+}

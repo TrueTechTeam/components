@@ -172,6 +172,12 @@ export interface PageMessagesProps extends BaseComponentProps {
   size?: ExtendedComponentSize;
 
   /**
+   * Heading level of the state title, so it fits the surrounding document outline (GEN-3)
+   * @default 2
+   */
+  headingLevel?: 2 | 3 | 4 | 5 | 6;
+
+  /**
    * Callback when retry action is triggered (for error/timeout states)
    */
   onRetry?: () => void;

@@ -1,4 +1,4 @@
-import React, { useEffect, type ReactNode } from 'react';
+import React, { type ReactNode } from 'react';
 import { ThemeProvider } from '../../contexts/ThemeContext';
 import {
   PageMessagesProvider,
@@ -7,6 +7,12 @@ import {
 import { DialogProvider, type DialogProviderProps } from '../../components/overlays/Dialog';
 import { AlertProvider, type AlertProviderProps } from '../../components/overlays/Alert';
 import { ToastProvider, type ToastProviderProps } from '../../components/overlays/Toast';
+import { LabelsProvider, type LabelsProviderProps } from '../../contexts/LabelsContext';
+import {
+  BreakpointsProvider,
+  type BreakpointsProviderProps,
+} from '../../contexts/BreakpointsContext';
+import { NavigationGuardProvider } from '../../contexts/NavigationGuardContext';
 import type { ThemeConfig } from '../../types';
 import '../../styles/index.scss';
 
@@ -25,6 +31,26 @@ export interface GlobalProviderProps {
    * Whether to inject global styles (default: true)
    */
   injectGlobalStyles?: boolean;
+
+  /**
+   * Overrides for the library's built-in text (flat `component.key` to string)
+   */
+  labels?: LabelsProviderProps['labels'];
+
+  /**
+   * App translate function, called with `ui.<key>` for built-in text
+   */
+  translate?: LabelsProviderProps['translate'];
+
+  /**
+   * BCP 47 locale (e.g. `fr-FR`) for month and weekday names in date pickers
+   */
+  locale?: LabelsProviderProps['locale'];
+
+  /**
+   * Override named breakpoint min-widths in px (phone, tablet, laptop, desktop)
+   */
+  breakpoints?: BreakpointsProviderProps['breakpoints'];
 
   /**
    * PageMessages default configuration
@@ -93,31 +119,26 @@ export function GlobalProvider({
   dialogConfig,
   alertConfig,
   toastConfig,
+  labels,
+  translate,
+  locale,
+  breakpoints,
 }: GlobalProviderProps) {
-  // Apply theme overrides if provided
-  useEffect(() => {
-    if (themeConfig?.theme && injectGlobalStyles) {
-      const { colors } = themeConfig.theme;
-      if (colors) {
-        Object.entries(colors).forEach(([key, value]) => {
-          if (value) {
-            const cssVarName = `--theme-${key.replace(/([A-Z])/g, '-$1').toLowerCase()}`;
-            document.documentElement.style.setProperty(cssVarName, value);
-          }
-        });
-      }
-    }
-  }, [themeConfig, injectGlobalStyles]);
-
   return (
-    <ThemeProvider themeConfig={themeConfig}>
-      <PageMessagesProvider {...pageMessagesConfig}>
-        <DialogProvider {...dialogConfig}>
-          <AlertProvider {...alertConfig}>
-            <ToastProvider {...toastConfig}>{children}</ToastProvider>
-          </AlertProvider>
-        </DialogProvider>
-      </PageMessagesProvider>
+    <ThemeProvider themeConfig={themeConfig} applyOverrides={injectGlobalStyles}>
+      <BreakpointsProvider breakpoints={breakpoints}>
+        <LabelsProvider labels={labels} translate={translate} locale={locale}>
+          <NavigationGuardProvider>
+            <PageMessagesProvider {...pageMessagesConfig}>
+              <DialogProvider {...dialogConfig}>
+                <AlertProvider {...alertConfig}>
+                  <ToastProvider {...toastConfig}>{children}</ToastProvider>
+                </AlertProvider>
+              </DialogProvider>
+            </PageMessagesProvider>
+          </NavigationGuardProvider>
+        </LabelsProvider>
+      </BreakpointsProvider>
     </ThemeProvider>
   );
 }

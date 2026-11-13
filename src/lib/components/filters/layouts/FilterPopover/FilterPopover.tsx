@@ -11,6 +11,7 @@ import { useFilterContext } from '../../FilterContext';
 import { ActiveFilters } from '../../core/ActiveFilters';
 import type { FilterPopoverProps } from '../../types';
 import styles from './FilterPopover.module.scss';
+import { useLabels } from '../../../../contexts/LabelsContext';
 
 /**
  * FilterPopover provides a trigger-based dropdown for filter controls.
@@ -30,7 +31,7 @@ import styles from './FilterPopover.module.scss';
 export const FilterPopover = ({
   ref,
   trigger,
-  triggerLabel = 'Filters',
+  triggerLabel: triggerLabelProp,
   showTriggerBadge = true,
   position,
   width = 320,
@@ -43,17 +44,25 @@ export const FilterPopover = ({
   showActiveFilters = false,
   activeFiltersPosition = 'top',
   showApplyButton = true,
-  applyButtonLabel = 'Apply',
+  applyButtonLabel: applyButtonLabelProp,
   showClearButton = true,
-  clearButtonLabel = 'Clear',
+  clearButtonLabel: clearButtonLabelProp,
   showResetButton = false,
-  resetButtonLabel = 'Reset',
+  resetButtonLabel: resetButtonLabelProp,
   children,
   className,
   ...restProps
 }: FilterPopoverProps & {
   ref?: React.Ref<HTMLDivElement>;
 }) => {
+  const t = useLabels();
+  const triggerLabel = triggerLabelProp === undefined ? t('filters.title') : triggerLabelProp;
+  const applyButtonLabel =
+    applyButtonLabelProp === undefined ? t('filters.apply') : applyButtonLabelProp;
+  const clearButtonLabel =
+    clearButtonLabelProp === undefined ? t('filters.clear') : clearButtonLabelProp;
+  const resetButtonLabel =
+    resetButtonLabelProp === undefined ? t('filters.reset') : resetButtonLabelProp;
   const ctx = useFilterContext();
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
 

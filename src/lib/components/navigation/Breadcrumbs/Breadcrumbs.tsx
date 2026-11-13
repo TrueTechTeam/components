@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import type { BaseComponentProps, ComponentSize } from '../../../types';
 import { Icon, type IconName } from '../../display/Icon';
+import { useLabels } from '../../../contexts/LabelsContext';
 import { BreadcrumbItem, type BreadcrumbItemProps } from './BreadcrumbItem';
 import { BreadcrumbSeparator } from './BreadcrumbSeparator';
 import styles from './Breadcrumbs.module.scss';
@@ -127,6 +128,7 @@ export const Breadcrumbs = ({
 }: BreadcrumbsProps & {
   ref?: React.Ref<HTMLElement>;
 }) => {
+  const t = useLabels();
   // Convert items to rendered elements
   const renderedItems = useMemo(() => {
     if (items) {
@@ -187,7 +189,7 @@ export const Breadcrumbs = ({
       data-component="breadcrumbs"
       data-size={size}
       data-testid={testId}
-      aria-label={ariaLabel || 'Breadcrumb'}
+      aria-label={ariaLabel || t('breadcrumbs.label')}
       style={style}
       {...restProps}
     >

@@ -32,8 +32,30 @@ Q: What are you doing?
 ├─ Showing a collection of records ............... → patterns/data-display.md
 ├─ Showing loading / empty / error / success ..... → patterns/feedback-states.md
 ├─ Building a page shell, nav, or dashboard ...... → patterns/page-layout.md
+├─ Building a page from data (outline + sample response or schema)
+│                                                  → app/ (start at app/README.md), see below
+├─ Wiring page data, URL state, permissions or app services
+│                                                  → app builder (`/app`), see components/catalog.md
 └─ Creating or modifying a library component ..... → contributing/component-checklist.md
 ```
+
+### Building a page from data (full rules in [app/README.md](app/README.md))
+
+```
+Q: You have an outline of what the page does and a sample response or schema?
+├─ 1. Fill the page brief .............................. app/page-brief.md
+├─ 2. Pick the template from task + data shape .......... app/choosing-a-page.md   APP-1
+│   ├─ Many records: find, compare, act → DataTablePage                        APP-2, APP-3
+│   ├─ One record with related content → DetailsPage                           APP-4
+│   ├─ Numbers over time → DashboardPage                                       APP-5
+│   └─ Create or edit → Page + PageHeader + FormBuilder guardUnsaved            APP-6
+├─ 3. Map each field to a FieldKind and a placement ..... app/field-display.md    FIELD-2, FIELD-6
+├─ 4. Order and disclose (one primary, ≤ 7 columns) ..... app/hierarchy.md        HIER-2, HIER-4
+├─ 5. Cover every state (structure-first loading) ....... app/states.md           APP-STATE-2
+└─ 6. URL state, polling, permissions, feedback ......... app/plumbing.md         APP-PLUMB-1
+```
+
+A worked example (marketing campaigns, from outline to code) is in [app/example.md](app/example.md).
 
 ## 2. Which component? (quick router - full trees in [components/choosing.md](components/choosing.md))
 

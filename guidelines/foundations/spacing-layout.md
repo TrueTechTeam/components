@@ -72,14 +72,16 @@ Pick one density per screen region and apply it consistently. Compact density MU
 
 ## LAYOUT-2 - Responsive breakpoints
 
-Design mobile-first and add layout at wider widths. The library's existing breakpoints:
+Design mobile-first and add layout at wider widths. Use the named breakpoints in SCSS
+(`@include bp(laptop)` / `bp-down(laptop)` from `styles/mixins/breakpoints`) and in React
+(`useBreakpoint()`, `useBreakpointValue()`):
 
 | Name    | Min width | Typical change                                           |
 | ------- | --------- | -------------------------------------------------------- |
-| mobile  | 0         | Single column. Bottom navigation. Full-width buttons OK. |
-| tablet  | 481px     | Two-column grids                                         |
-| desktop | 769px     | Side navigation visible. Multi-column layouts            |
-| wide    | 1280px    | Content stops growing (`--content-width-page`)           |
+| phone   | 0         | Single column. Bottom navigation. Full-width buttons OK. |
+| tablet  | 600px     | Two-column grids                                         |
+| laptop  | 1024px    | Side navigation visible. Multi-column layouts            |
+| desktop | 1440px    | Content stops growing (`--content-width-page`)           |
 
 - MUST work at **320px** wide without horizontal scrolling, and at 200% and 400% zoom (WCAG
   1.4.10 Reflow). Tables are exempt and may scroll horizontally inside their container.
@@ -88,15 +90,15 @@ Design mobile-first and add layout at wider widths. The library's existing break
 
 ## LAYOUT-3 - Layout components
 
-| Need                                                 | Component            | Key props                                                 |
-| ---------------------------------------------------- | -------------------- | --------------------------------------------------------- |
-| Responsive grid of equal-width items (cards, tiles)  | `AdaptiveGrid`       | `minItemWidth` (≈ 240–320 for cards), `gap`, `maxColumns` |
-| Items of varying height (gallery, notes)             | `MasonryLayout`      | column width                                              |
-| Row on desktop, column on mobile                     | `ResponsiveStack`    | breakpoint (default 768)                                  |
-| Persistent split view (list + detail, nav + content) | `Panes` / `Pane`     | sizes, gap                                                |
-| User-resizable split                                 | `ResizablePanels`    | min/max sizes                                             |
-| Scrollable region with styled scrollbar              | `ScrollArea`         | -                                                         |
-| Collapsible app sidebar                              | `CollapsibleSidebar` | `position`                                                |
+| Need                                                 | Component            | Key props                                                                |
+| ---------------------------------------------------- | -------------------- | ------------------------------------------------------------------------ |
+| Responsive grid of equal-width items (cards, tiles)  | `AdaptiveGrid`       | `minItemWidth` (≈ 240–320 for cards), `gap`, `maxColumns`                |
+| Items of varying height (gallery, notes)             | `MasonryLayout`      | column width                                                             |
+| Row on desktop, column on mobile                     | `ResponsiveStack`    | breakpoint (default 768, a legacy default; prefer the named breakpoints) |
+| Persistent split view (list + detail, nav + content) | `Panes` / `Pane`     | sizes, gap                                                               |
+| User-resizable split                                 | `ResizablePanels`    | min/max sizes                                                            |
+| Scrollable region with styled scrollbar              | `ScrollArea`         | -                                                                        |
+| Collapsible app sidebar                              | `CollapsibleSidebar` | `position`                                                               |
 
 Gaps passed as numbers to layout components SHOULD be 4px-grid values that match the tokens (8,
 16, 24, 32).
