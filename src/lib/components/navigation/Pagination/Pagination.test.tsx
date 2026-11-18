@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import Pagination from './Pagination';
+import { LabelsProvider } from '../../../contexts/LabelsContext';
 
 describe('Pagination', () => {
   it('renders page buttons and current page', () => {
@@ -46,5 +47,24 @@ describe('Pagination', () => {
     const first = screen.getByLabelText(/first/i);
     expect(prev).toBeDisabled();
     expect(first).toBeDisabled();
+  });
+});
+
+describe('Pagination translated labels', () => {
+  it('translates the control labels and page numbers', () => {
+    render(
+      <LabelsProvider
+        labels={{
+          'pagination.label': 'Seiten',
+          'pagination.next': 'Naechste Seite',
+          'pagination.page': 'Seite {n}',
+        }}
+      >
+        <Pagination totalPages={5} currentPage={2} onPageChange={() => {}} />
+      </LabelsProvider>
+    );
+    expect(screen.getByLabelText('Seiten')).toBeInTheDocument();
+    expect(screen.getByLabelText('Naechste Seite')).toBeInTheDocument();
+    expect(screen.getByLabelText('Seite 3')).toBeInTheDocument();
   });
 });

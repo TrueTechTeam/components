@@ -8,6 +8,7 @@ export {
   isDarkMode,
   getThemeMode,
 } from './theme-utils';
+export { themeOverrideToCssVars } from './themeVars';
 
 export { getElementBounds, getViewportSize, getScrollPosition, isElementInViewport } from './dom';
 export type { ElementBounds, ViewportSize, ScrollPosition } from './dom';
@@ -20,3 +21,14 @@ export type {
   PopoverSize,
   PopoverWidth,
 } from './positioning';
+
+export {
+  formatDateTime,
+  formatRelativeTime,
+  formatNumber,
+  formatCurrency,
+  formatPercent,
+  formatFileSize,
+  formatList,
+  resolveLocale,
+} from './format';

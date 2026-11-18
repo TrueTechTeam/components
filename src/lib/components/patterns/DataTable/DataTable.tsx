@@ -22,6 +22,7 @@ import {
 } from './DataTable.utils';
 import type { DataTableProps, DataTableColumnConfig } from './DataTable.types';
 import styles from './DataTable.module.scss';
+import { useLabels } from '../../../contexts/LabelsContext';
 
 interface DataTableContentProps<T extends Record<string, unknown>>
   extends Omit<
@@ -49,7 +50,7 @@ function DataTableContent<T extends Record<string, unknown>>({
   filterLayoutProps,
   showActiveFilters = true,
   searchable = false,
-  searchPlaceholder = 'Search...',
+  searchPlaceholder: searchPlaceholderProp,
   searchFields,
   searchFn,
   searchQuery: controlledSearchQuery,
@@ -86,6 +87,9 @@ function DataTableContent<T extends Record<string, unknown>>({
   'data-testid': testId,
   'aria-label': ariaLabel,
 }: DataTableContentProps<T>) {
+  const t = useLabels();
+  const searchPlaceholder =
+    searchPlaceholderProp === undefined ? t('table.searchPlaceholder') : searchPlaceholderProp;
   const filterCtx = useFilterContextStrict();
   const hasFilters = effectiveFilters.length > 0;
   const filterIds = useMemo(() => effectiveFilters.map((filter) => filter.id), [effectiveFilters]);
@@ -321,15 +325,16 @@ function DataTableInner<T extends Record<string, any>>({
   size = 'md',
   ...rest
 }: DataTableProps<T> & { ref?: React.Ref<HTMLDivElement> }) {
+  const t = useLabels();
   const effectiveFilters = useMemo<FilterDefinition[]>(() => {
     if (filters) {
       return filters;
     }
     if (columns) {
-      return deriveFiltersFromColumns(columns as Array<DataTableColumnConfig<T>>, data);
+      return deriveFiltersFromColumns(columns as Array<DataTableColumnConfig<T>>, data, t);
     }
     return [];
-  }, [filters, columns, data]);
+  }, [filters, columns, data, t]);
 
   // FilterProvider doesn't backfill defaults for filter ids missing from a controlled
   // `values` object, which crashes range-type filters. Fill them in here so callers can

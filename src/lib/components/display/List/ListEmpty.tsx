@@ -1,5 +1,6 @@
 import React, { type ReactNode } from 'react';
 import { Icon } from '../Icon';
+import { useLabels } from '../../../contexts/LabelsContext';
 import styles from './List.module.scss';
 
 export interface ListEmptyProps {
@@ -26,11 +27,12 @@ export interface ListEmptyProps {
 }
 
 export function ListEmpty({
-  content = 'No items to display',
+  content,
   renderEmpty,
   isNoResults = false,
   searchQuery,
 }: ListEmptyProps) {
+  const t = useLabels();
   // Use custom render if provided
   if (renderEmpty) {
     return <div className={styles.emptyState}>{renderEmpty()}</div>;
@@ -39,7 +41,13 @@ export function ListEmpty({
   return (
     <div className={styles.emptyState}>
       <Icon name={isNoResults ? 'search' : 'inbox'} size="lg" style={{ opacity: 0.5 }} />
-      <span>{isNoResults && searchQuery ? `No results found for "${searchQuery}"` : content}</span>
+      <span>
+        {isNoResults && searchQuery
+          ? t('list.noResults', { query: searchQuery })
+          : content === undefined
+            ? t('list.empty')
+            : content}
+      </span>
     </div>
   );
 }

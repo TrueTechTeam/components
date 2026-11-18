@@ -1,7 +1,8 @@
 import React from 'react';
 import { usePageMessagesConfig } from '../../../contexts/PageMessagesContext';
 import { PageMessageContent } from './PageMessageContent';
-import { DEFAULT_CONFIGS } from './defaultConfigs';
+import { useLabels } from '../../../contexts/LabelsContext';
+import { getDefaultConfigs } from './defaultConfigs';
 import {
   getActiveState,
   type PageMessagesProps,
@@ -98,6 +99,7 @@ export const PageMessages = ({
     timeoutConfig,
     emptyConfig,
     size = 'md',
+    headingLevel = 2,
     fullScreen = false,
     centerVertically = true,
     minHeight,
@@ -105,8 +107,15 @@ export const PageMessages = ({
     style,
     'data-testid': testId,
     'aria-label': ariaLabel,
+    // Action callbacks are read by usePageMessagesConfig(props); keep them off the DOM element.
+    onRetry: _onRetry,
+    onGoBack: _onGoBack,
+    onGoHome: _onGoHome,
+    onLogin: _onLogin,
     ...restProps
   } = props;
+
+  const t = useLabels();
 
   // Get context configuration
   const contextConfig = usePageMessagesConfig(props);
@@ -128,32 +137,33 @@ export const PageMessages = ({
   }
 
   // Build the state config map with merged configurations
+  const defaultConfigs = getDefaultConfigs(t);
   const stateConfigMap: Record<PageMessageState, PageMessageStateConfig | LoadingStateConfig> = {
-    loading: mergeConfig(DEFAULT_CONFIGS.loading, contextConfig.defaults.loading, loadingConfig),
-    error: mergeConfig(DEFAULT_CONFIGS.error, contextConfig.defaults.error, errorConfig),
+    loading: mergeConfig(defaultConfigs.loading, contextConfig.defaults.loading, loadingConfig),
+    error: mergeConfig(defaultConfigs.error, contextConfig.defaults.error, errorConfig),
     forbidden: mergeConfig(
-      DEFAULT_CONFIGS.forbidden,
+      defaultConfigs.forbidden,
       contextConfig.defaults.forbidden,
       forbiddenConfig
     ),
     'not-found': mergeConfig(
-      DEFAULT_CONFIGS.notFound,
+      defaultConfigs.notFound,
       contextConfig.defaults.notFound,
       notFoundConfig
     ),
     unauthorized: mergeConfig(
-      DEFAULT_CONFIGS.unauthorized,
+      defaultConfigs.unauthorized,
       contextConfig.defaults.unauthorized,
       unauthorizedConfig
     ),
     maintenance: mergeConfig(
-      DEFAULT_CONFIGS.maintenance,
+      defaultConfigs.maintenance,
       contextConfig.defaults.maintenance,
       maintenanceConfig
     ),
-    offline: mergeConfig(DEFAULT_CONFIGS.offline, contextConfig.defaults.offline, offlineConfig),
-    timeout: mergeConfig(DEFAULT_CONFIGS.timeout, contextConfig.defaults.timeout, timeoutConfig),
-    empty: mergeConfig(DEFAULT_CONFIGS.empty, contextConfig.defaults.empty, emptyConfig),
+    offline: mergeConfig(defaultConfigs.offline, contextConfig.defaults.offline, offlineConfig),
+    timeout: mergeConfig(defaultConfigs.timeout, contextConfig.defaults.timeout, timeoutConfig),
+    empty: mergeConfig(defaultConfigs.empty, contextConfig.defaults.empty, emptyConfig),
   };
 
   const activeConfig = stateConfigMap[activeState];
@@ -194,6 +204,7 @@ export const PageMessages = ({
         state={activeState}
         config={activeConfig}
         size={resolvedSize}
+        headingLevel={headingLevel}
         errorMessage={errorMessage}
         actions={contextConfig.actions}
       />

@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { CollapsibleSidebar } from './CollapsibleSidebar';
+import { LabelsProvider } from '../../../contexts/LabelsContext';
 
 jest.mock('../../../hooks', () => ({ useResizeObserver: jest.fn() }));
 const { useResizeObserver } = require('../../../hooks');
@@ -72,5 +73,24 @@ describe('CollapsibleSidebar', () => {
     );
 
     expect(document.querySelector('[data-component="collapsible-sidebar"]')).toBeNull();
+  });
+});
+
+describe('CollapsibleSidebar translated labels', () => {
+  it('translates the sidebar and toggle labels', () => {
+    render(
+      <LabelsProvider
+        labels={{
+          'collapsibleSidebar.label': 'Seitenleiste',
+          'collapsibleSidebar.collapse': 'Einklappen',
+        }}
+      >
+        <CollapsibleSidebar>
+          <div>Content</div>
+        </CollapsibleSidebar>
+      </LabelsProvider>
+    );
+    expect(screen.getByLabelText('Seitenleiste')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Einklappen' })).toBeInTheDocument();
   });
 });

@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { FlipCard } from './FlipCard';
+import { LabelsProvider } from '../../../contexts/LabelsContext';
 
 describe('FlipCard', () => {
   describe('rendering', () => {
@@ -168,5 +169,27 @@ describe('FlipCard', () => {
       render(<FlipCard ref={ref} front="Front" back="Back" />);
       expect(ref.current).toBeInstanceOf(HTMLDivElement);
     });
+  });
+});
+
+describe('FlipCard translated labels', () => {
+  it('translates the flip label', () => {
+    render(
+      <LabelsProvider labels={{ 'flipCard.flip': 'Karte drehen' }}>
+        <FlipCard front="Front" back="Back" />
+      </LabelsProvider>
+    );
+    expect(screen.getByLabelText('Karte drehen')).toBeInTheDocument();
+  });
+});
+
+describe('FlipCard label semantics', () => {
+  it('keeps an explicit empty flipButtonAriaLabel', () => {
+    render(
+      <LabelsProvider labels={{ 'flipCard.flip': 'Karte drehen' }}>
+        <FlipCard front="Front" back="Back" flipButtonAriaLabel="" />
+      </LabelsProvider>
+    );
+    expect(screen.queryByLabelText('Karte drehen')).not.toBeInTheDocument();
   });
 });

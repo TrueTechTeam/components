@@ -24,6 +24,10 @@ Order of precedence: loading → error → empty → content. `PageMessages` han
   flicker.
 - Skeletons MUST match the real layout closely (same heights and columns) to avoid layout shift.
   Don't skeleton the whole page when only one widget is loading.
+- Structure first: render the page's title, static text, layout and actions immediately and
+  skeleton only the data-dependent parts. In `/app`, `Page`/`Section` keep rendering their
+  children while pending (controls disabled, region `aria-busy`); wrap each data-dependent piece in
+  `Loadable` with the matching `shape`. Data already in the cache shows no skeleton at all.
 - Keep already-loaded content visible during a refresh (stale-while-revalidate). Show a subtle
   inline spinner or a `LoadingOverlay mode="container"` over just the stale region.
 - Button-initiated actions: `loading` on that Button, not a page overlay.

@@ -1,11 +1,11 @@
 import type { PageMessagesDefaults } from '../../../contexts/PageMessagesContext';
 
 /**
- * Built-in default configurations for all page message states
+ * Built-in default configurations for all page message states (text resolved through labels)
  */
-export const DEFAULT_CONFIGS: Required<PageMessagesDefaults> = {
+export const getDefaultConfigs = (t: (key: string) => string): Required<PageMessagesDefaults> => ({
   loading: {
-    title: 'Loading...',
+    title: t('pageMessages.loading.title'),
     showText: true,
     spinnerProps: {
       spinnerStyle: 'circular',
@@ -13,43 +13,43 @@ export const DEFAULT_CONFIGS: Required<PageMessagesDefaults> = {
     },
   },
   error: {
-    title: 'Something went wrong',
-    description: 'An unexpected error occurred. Please try again.',
+    title: t('pageMessages.error.title'),
+    description: t('pageMessages.error.description'),
     icon: 'error',
   },
   forbidden: {
-    title: 'Access Denied',
-    description: "You don't have permission to access this page.",
+    title: t('pageMessages.forbidden.title'),
+    description: t('pageMessages.forbidden.description'),
     icon: 'shield-off',
   },
   notFound: {
-    title: 'Page Not Found',
-    description: "The page you're looking for doesn't exist or has been moved.",
+    title: t('pageMessages.notFound.title'),
+    description: t('pageMessages.notFound.description'),
     icon: 'search',
   },
   unauthorized: {
-    title: 'Authentication Required',
-    description: 'Please log in to access this page.',
+    title: t('pageMessages.unauthorized.title'),
+    description: t('pageMessages.unauthorized.description'),
     icon: 'lock',
   },
   maintenance: {
-    title: 'Under Maintenance',
-    description: "We're performing scheduled maintenance. Please check back soon.",
+    title: t('pageMessages.maintenance.title'),
+    description: t('pageMessages.maintenance.description'),
     icon: 'settings',
   },
   offline: {
-    title: "You're Offline",
-    description: 'Please check your internet connection and try again.',
+    title: t('pageMessages.offline.title'),
+    description: t('pageMessages.offline.description'),
     icon: 'wifi-off',
   },
   timeout: {
-    title: 'Request Timed Out',
-    description: 'The server took too long to respond. Please try again.',
+    title: t('pageMessages.timeout.title'),
+    description: t('pageMessages.timeout.description'),
     icon: 'clock',
   },
   empty: {
-    title: 'No Data',
-    description: "There's nothing here yet.",
+    title: t('pageMessages.empty.title'),
+    description: t('pageMessages.empty.description'),
     icon: 'inbox',
   },
-};
+});

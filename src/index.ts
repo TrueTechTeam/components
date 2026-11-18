@@ -19,6 +19,12 @@ export type {
   PageMessagesGlobalActions,
 } from './lib/contexts';
 
+export { LabelsProvider, useLabels, useLocale, interpolate, DEFAULT_LABELS } from './lib/contexts';
+export type { LabelsProviderProps, LabelVars, TranslateFn, LabelKey } from './lib/contexts';
+
+export { BreakpointsProvider, useBreakpoints, DEFAULT_BREAKPOINTS } from './lib/contexts';
+export type { BreakpointName, Breakpoints, BreakpointsProviderProps } from './lib/contexts';
+
 // Hooks
 export { useTheme as useThemeHook } from './lib/hooks';
 export { useDialog } from './lib/hooks';
@@ -29,6 +35,15 @@ export { useToast } from './lib/hooks';
 export type { UseToastOptions, UseToastReturn } from './lib/hooks';
 export { useAsyncToast } from './lib/hooks';
 export type { UseAsyncToastReturn, AsyncToastConfig } from './lib/hooks';
+
+export { NavigationGuardProvider, useNavigationGuard } from './lib/contexts';
+export type {
+  NavigationGuard,
+  NavigationGuardApi,
+  NavigationGuardProviderProps,
+} from './lib/contexts';
+export { useUnsavedChanges } from './lib/hooks';
+export type { UseUnsavedChangesOptions } from './lib/hooks';
 
 export { useResizeObserver } from './lib/hooks';
 export type { UseResizeObserverOptions, UseResizeObserverReturn } from './lib/hooks';
@@ -51,6 +66,8 @@ export type {
 
 // Media Query Hook
 export { useMediaQuery } from './lib/hooks';
+export { useBreakpoint, useBreakpointValue } from './lib/hooks';
+export type { UseBreakpointReturn } from './lib/hooks';
 export type { UseMediaQueryOptions, UseMediaQueryReturn } from './lib/hooks';
 
 // Previous Value Hook
@@ -79,6 +96,8 @@ export type {
   ThemeShadows,
   Theme,
   ThemeOverride,
+  ThemeColorOverrides,
+  ThemeShadeKey,
   ThemeConfig,
   ThemeMode,
   // Component types
@@ -105,6 +124,15 @@ export {
   gridSpacing,
   isDarkMode,
   getThemeMode,
+  themeOverrideToCssVars,
+  formatDateTime,
+  formatRelativeTime,
+  formatNumber,
+  formatCurrency,
+  formatPercent,
+  formatFileSize,
+  formatList,
+  resolveLocale,
 } from './lib/utils';
 
 // Validation Utils
@@ -124,8 +152,14 @@ export {
   isValidHex,
   getBrightness,
   isLightColor,
+  hexToOklch,
+  oklchToHex,
+  parseColorToOklch,
+  rotateHue,
+  getRelativeLuminance,
+  getContrastRatio,
 } from './lib/utils/colorUtils';
-export type { RGB, HSL, RGBA, HSLA } from './lib/utils/colorUtils';
+export type { RGB, HSL, RGBA, HSLA, OKLCH } from './lib/utils/colorUtils';
 
 // Date Utils
 export {

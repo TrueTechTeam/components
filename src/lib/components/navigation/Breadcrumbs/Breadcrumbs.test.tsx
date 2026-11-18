@@ -2,6 +2,7 @@ import { render, screen, renderHook } from '@testing-library/react';
 import { Breadcrumbs } from './Breadcrumbs';
 import { BreadcrumbItem } from './BreadcrumbItem';
 import { useBreadcrumbsFromPath } from './useBreadcrumbsFromPath';
+import { LabelsProvider } from '../../../contexts/LabelsContext';
 
 describe('Breadcrumbs', () => {
   describe('rendering', () => {
@@ -207,5 +208,21 @@ describe('useBreadcrumbsFromPath', () => {
     );
 
     expect(result.current[0].label).toBe('Products');
+  });
+});
+
+describe('Breadcrumbs translated labels', () => {
+  it('translates the default navigation label', () => {
+    render(
+      <LabelsProvider labels={{ 'breadcrumbs.label': 'Fil Ariane' }}>
+        <Breadcrumbs
+          items={[
+            { label: 'Home', href: '/' },
+            { label: 'Page', current: true },
+          ]}
+        />
+      </LabelsProvider>
+    );
+    expect(screen.getByLabelText('Fil Ariane')).toBeInTheDocument();
   });
 });

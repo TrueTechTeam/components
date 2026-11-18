@@ -1,0 +1,9 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist/out-tsc",
+    "types": ["vite/client", "node"]
+  },
+  "exclude": ["**/*.test.ts", "**/*.test.tsx", "**/*.stories.tsx"],
+  "include": ["src/storybook/**/*.ts", "src/storybook/**/*.tsx", "src/globals.d.ts"]
+}

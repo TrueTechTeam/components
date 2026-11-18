@@ -2,6 +2,7 @@ import React from 'react';
 import styles from './Pill.module.scss';
 import type { BaseComponentProps } from '../../../types/component.types';
 import { Icon } from '../Icon';
+import { useLabels } from '../../../contexts/LabelsContext';
 
 /**
  * Props for the Pill component
@@ -106,6 +107,7 @@ export const Pill = ({
 }: PillProps & {
   ref?: React.Ref<HTMLElement>;
 }) => {
+  const t = useLabels();
   // Determine if component should be clickable
   const isClickable = !!onClick;
 
@@ -142,7 +144,7 @@ export const Pill = ({
           className={styles.pillRemove}
           onClick={handleRemoveClick}
           disabled={disabled}
-          aria-label="Remove"
+          aria-label={t('pill.remove')}
           tabIndex={-1}
         >
           <Icon name="close" size="1em" aria-hidden="true" />

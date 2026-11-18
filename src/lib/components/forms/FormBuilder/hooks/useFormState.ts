@@ -8,6 +8,7 @@ import type {
   UseFormStateOptions,
   FormContext,
 } from '../types';
+import { useLabels } from '../../../../contexts/LabelsContext';
 import { validateField as validateFieldUtil } from './useFormValidation';
 
 /**
@@ -22,6 +23,8 @@ export const useFormState = (options: UseFormStateOptions = {}): FormContext => 
     onChange,
     onValidate,
   } = options;
+
+  const t = useLabels();
 
   // State
   const [values, setValues] = useState<FormValues>(initialValues);
@@ -90,7 +93,7 @@ export const useFormState = (options: UseFormStateOptions = {}): FormContext => 
         return null;
       }
 
-      const error = validateFieldUtil(values[name], fieldConfig.validation, values);
+      const error = validateFieldUtil(values[name], fieldConfig.validation, values, t);
 
       setErrors((prev) => {
         const newErrors = { ...prev };
@@ -104,7 +107,7 @@ export const useFormState = (options: UseFormStateOptions = {}): FormContext => 
 
       return error;
     },
-    [values]
+    [values, t]
   );
 
   // Validate all fields
@@ -113,7 +116,7 @@ export const useFormState = (options: UseFormStateOptions = {}): FormContext => 
 
     fieldsRef.current.forEach((fieldConfig, name) => {
       if (fieldConfig.validation) {
-        const error = validateFieldUtil(values[name], fieldConfig.validation, values);
+        const error = validateFieldUtil(values[name], fieldConfig.validation, values, t);
         if (error) {
           newErrors[name] = error;
         }
@@ -124,7 +127,7 @@ export const useFormState = (options: UseFormStateOptions = {}): FormContext => 
     onValidate?.(newErrors);
 
     return newErrors;
-  }, [values, onValidate]);
+  }, [values, onValidate, t]);
 
   // Set field value
   const setFieldValue = useCallback(

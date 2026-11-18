@@ -7,6 +7,7 @@ import { DndProvider, type DragEndEvent } from '../DndProvider';
 import { SortableGridItem, type SortableGridItemRenderProps } from './SortableGridItem';
 import type { BaseComponentProps, ComponentSize } from '../../../types/component.types';
 import styles from './SortableGrid.module.scss';
+import { useLabels } from '../../../contexts/LabelsContext';
 
 /**
  * Item type for SortableGrid
@@ -99,6 +100,7 @@ export function SortableGrid<T extends SortableGridItemData>({
   'aria-label': ariaLabel,
   style,
 }: SortableGridProps<T>) {
+  const t = useLabels();
   // Handle drag end
   const handleDragEnd = useCallback(
     (event: DragEndEvent) => {
@@ -149,7 +151,7 @@ export function SortableGrid<T extends SortableGridItemData>({
         data-testid={dataTestId}
         data-disabled={disabled || undefined}
         role="grid"
-        aria-label={ariaLabel || 'Sortable grid'}
+        aria-label={ariaLabel || t('sortableGrid.label')}
       >
         {items.map((item, index) => (
           <SortableGridItem

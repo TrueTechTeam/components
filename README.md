@@ -56,6 +56,137 @@ function MyComponent() {
 }
 ```
 
+## App builder
+
+`@true-tech-team/ui-components/app` is an optional layer for pages that load data, keep state in
+the URL, check permissions or need app services: `AppProvider`, `Page`, `Section`, URL param and
+preference hooks, mutation feedback, router adapters, auth, flags, logging and a debug panel. It
+is built on TanStack Query, which is an optional peer dependency (the main entry never imports it).
+
+```bash
+npm install @tanstack/react-query
+```
+
+Nest the providers with `GlobalProvider` **outside** and `AppProvider` **inside**. With the order
+reversed, `AppLink` navigation guards silently stop working. In development, `AppProvider` warns when it finds no
+`GlobalProvider` above it. `AppProvider` renders its own Dialog, Alert and Toast providers inside
+the app contexts, so toasts (including `useMutationFeedback`), `useAlert` and `useDialog` content
+get your `translate` and `locale` and can use `/app` hooks; configure them with its `toastConfig`,
+`alertConfig` and `dialogConfig` props.
+
+```tsx
+import { GlobalProvider } from '@true-tech-team/ui-components';
+import { AppProvider } from '@true-tech-team/ui-components/app';
+
+<GlobalProvider>
+  <AppProvider router={useAppRouter} translate={i18n.t} locale={i18n.language}>
+    <Routes />
+  </AppProvider>
+</GlobalProvider>;
+```
+
+Without `router`, `AppProvider` uses the browser History API. For a framework, build an adapter
+once at module scope from your router's own hooks (the library imports neither framework).
+
+**Next.js App Router**
+
+```tsx
+'use client';
+import Link from 'next/link';
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { createNextRouter } from '@true-tech-team/ui-components/app';
+
+export const useAppRouter = createNextRouter({ useRouter, usePathname, useSearchParams, Link });
+```
+
+`AppProvider` needs no `<Suspense>`, but components that read URL params (`usePageParams`,
+`usePreference`) need a `<Suspense>` boundary above them, per Next.js's rules for
+`useSearchParams`. **Limitation:** Next.js cannot block navigation, so unsaved-changes guards
+(`FormBuilder guardUnsaved`, `useUnsavedChanges`) protect `AppLink`, `useAppNavigate`, Dialog
+close and tab close or reload, but not the browser Back button or your own `router.push` calls.
+
+**React Router**
+
+```tsx
+import { Link, useBlocker, useLocation, useNavigate } from 'react-router';
+import { createReactRouter } from '@true-tech-team/ui-components/app';
+
+export const useAppRouter = createReactRouter({ useNavigate, useLocation, Link, useBlocker });
+```
+
+`useBlocker` (data routers only) is optional; with it, Back and Forward also ask the guards.
+
+**Translation.** Pass your translate function and locale to the provider. Built-in text is
+requested as `ui.<key>` (for example `ui.pageMessages.retry`); return nothing for keys you have
+not translated and the English default is used. See `guidelines/foundations/labels.md`.
+
+```tsx
+<AppProvider translate={i18n.t} locale="fr-FR">
+```
+
+A loading, error, empty and forbidden state, a page title and `page_view` tracking come with
+`Page`; a failed background refetch keeps the loaded content and shows an inline alert with Retry.
+While loading, the page structure renders right away (controls disabled) and each `Loadable`
+shows a skeleton shaped like its content; its function children run only once the data is there.
+Because children render during loading, read query data through `Loadable` function children or
+guard it with `?.`. For paginated or filtered queries pass `placeholderData: keepPreviousData` so
+a key change does not return the page to skeletons.
+
+```tsx
+<Page title="Orders" queries={[orders]} isEmpty={([rows]) => rows.length === 0}>
+  <h1>Orders</h1>
+  <Loadable shape="table" rows={8}>
+    {() => <OrdersTable rows={orders.data} />}
+  </Loadable>
+</Page>
+```
+
+See the Storybook stories under "App Builder / Foundation" for each piece.
+
+### Templates
+
+`/app` also ships page templates. You configure them rather than fork them. Each is built on
+`Page`, `Section` and `Loadable`, so its structure renders while data loads, and its state
+(filters, sort, page, selected record, tab, time range) lives in the URL.
+
+| Template        | For                                                                                                                                        |
+| --------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| `AppShell`      | The app frame: Navbar, collapsible sidebar, `main` with skip link, drawer or bottom navigation on mobile                                   |
+| `PageHeader`    | Title, status, breadcrumbs, actions (one primary; overflow menu on mobile) and URL-bound tabs                                              |
+| `DataTablePage` | Many records: search, filters, server sort, pagination, table/grid/list views, row actions, and a detail panel, dialog or page             |
+| `DetailsPage`   | One record: header, key facts, URL-bound tabs, main and side columns                                                                       |
+| `DashboardPage` | KPIs (`KpiWidget`), charts (`ChartWidget`, any chart library) and widgets (`DashboardWidget`) over a URL-bound time range                  |
+| Blocks          | `PropertyList`, `KeyFacts`, `ActivityTimeline`, `Notes`, `MediaGallery`, `RelatedRecords`, each its own `Section` with loading/empty/error |
+| `FieldValue`    | One value by kind (currency, date, status, url, id, tags…): locale-aware, "—" for empty or invalid values, unsafe URLs blocked             |
+
+```tsx
+import { DataTablePage } from '@true-tech-team/ui-components/app';
+
+<DataTablePage<Campaign>
+  title="Campaigns"
+  columns={[
+    { key: 'name', label: 'Name', kind: 'text', sortable: true },
+    { key: 'status', label: 'Status', kind: 'status', statusTones: { active: 'success' } },
+    { key: 'spend_cents', label: 'Spend', kind: 'currency', get: (c) => c.spend_cents / 100 },
+  ]}
+  rowKey={(c) => c.id}
+  queryOptions={(s) => ({
+    queryKey: [
+      'campaigns',
+      'list',
+      { page: s.page, size: s.pageSize, sort: s.sort, q: s.search, f: s.filters },
+    ],
+    queryFn: () => fetchCampaigns(s), // resolves to { rows, total }
+  })}
+  create={{ label: 'New campaign', href: '/campaigns/new' }}
+  detail={{ render: (id) => <CampaignPreview id={id} />, fullPageHref: (id) => `/campaigns/${id}` }}
+/>;
+```
+
+To have a coding agent build a page from an outline and a sample API response, point it at
+`guidelines/app/README.md`. It fills a page brief, picks the template, maps every field and covers
+every state. `guidelines/app/example.md` shows a full run.
+
 ## Design guidelines & AI coding agents
 
 The package ships research-backed design guidelines (WCAG 2.2 AA, NN/g, Baymard, Material 3,
@@ -70,8 +201,9 @@ node_modules/@true-tech-team/ui-components/
     ├── README.md                # how to apply the rules
     ├── decision-tree.md         # start here
     ├── SKILL.md                 # Claude Code skill wrapper
-    ├── components/              # choosing.md, catalog.md
-    ├── foundations/             # tokens, color, typography, spacing-layout, elevation-shape, motion, accessibility
+    ├── app/                     # building pages from data: page brief, templates, fields, hierarchy, states, plumbing, example
+    ├── components/              # choosing.md, catalog.md (includes the app builder, /app)
+    ├── foundations/             # tokens, color, typography, spacing-layout, elevation-shape, motion, accessibility, labels
     └── patterns/                # forms, data-display, feedback-states, page-layout
 ```
 
@@ -808,6 +940,25 @@ function App() {
 }
 ```
 
+### Generate a theme with the Theme Builder
+
+Open **Theme Builder** (the first item in Storybook), pick a mood and colors or edit tokens
+directly, check the contrast report, and download `theme.json`. Then pass it to the provider:
+
+```tsx
+import { GlobalProvider } from '@true-tech-team/ui-components';
+import '@true-tech-team/ui-components/index.css';
+import theme from './theme.json';
+
+<GlobalProvider themeConfig={theme}>
+  <YourApp />
+</GlobalProvider>;
+```
+
+`themeConfig.theme` accepts `colors`, per-mode `modes.light|dark.colors`, `spacing`,
+`typography`, `borderRadius` and `shadows`. See `guidelines/foundations/tokens.md` for the
+variable mapping.
+
 ### Toggle Theme
 
 ```tsx
@@ -894,6 +1045,15 @@ const rgb = hexToRgb('#ff0000'); // { r: 255, g: 0, b: 0 }
 const hsl = rgbToHsl(255, 0, 0); // { h: 0, s: 100, l: 50 }
 const isLight = isLightColor('#ffffff'); // true
 ```
+
+OKLCH, contrast and theme helpers (used by the Theme Builder):
+
+- `hexToOklch` / `oklchToHex` - convert between hex and OKLCH (`oklchToHex` gamut-maps to sRGB)
+- `parseColorToOklch` - parse hex, `rgb()`, `hsl()` or `oklch()` into OKLCH (null if invalid)
+- `rotateHue` - rotate a hue angle and normalise it to [0, 360)
+- `getRelativeLuminance` / `getContrastRatio` - WCAG 2.x luminance and contrast for hex,
+  `rgb()` or `hsl()` colors (`NaN` for unparseable input)
+- `themeOverrideToCssVars` - turn a `ThemeOverride` into the CSS variables `GlobalProvider` sets
 
 ### Date Utils
 

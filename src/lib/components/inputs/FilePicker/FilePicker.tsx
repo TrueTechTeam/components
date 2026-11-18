@@ -3,6 +3,7 @@ import { IconButton } from '../../buttons/IconButton';
 import styles from './FilePicker.module.scss';
 import type { BaseComponentProps } from '../../../types/component.types';
 import Button from '../../buttons/Button';
+import { useLabels } from '../../../contexts/LabelsContext';
 
 export interface FileError {
   file: File;
@@ -167,8 +168,8 @@ export const FilePicker = ({
   dragAndDrop = true,
   showPreview = true,
   showFileList = true,
-  buttonText = 'Choose Files',
-  dropzoneText = 'or drag and drop files here',
+  buttonText: buttonTextProp,
+  dropzoneText: dropzoneTextProp,
   icon,
   className,
   'data-testid': dataTestId,
@@ -178,6 +179,9 @@ export const FilePicker = ({
 }: FilePickerProps & {
   ref?: React.Ref<HTMLInputElement>;
 }) => {
+  const t = useLabels();
+  const buttonText = buttonTextProp === undefined ? t('filePicker.choose') : buttonTextProp;
+  const dropzoneText = dropzoneTextProp === undefined ? t('filePicker.dropzone') : dropzoneTextProp;
   // State
   const [selectedFiles, setSelectedFiles] = useState<File[]>([]);
   const [isDragging, setIsDragging] = useState(false);
@@ -196,7 +200,7 @@ export const FilePicker = ({
           errors.push({
             file,
             error: 'count',
-            message: `Maximum ${maxFiles} file(s) allowed`,
+            message: t('filePicker.maxFiles', { count: maxFiles }),
           });
           continue;
         }
@@ -206,14 +210,14 @@ export const FilePicker = ({
           errors.push({
             file,
             error: 'size',
-            message: `File size exceeds ${formatFileSize(maxSize)}`,
+            message: t('filePicker.maxSize', { size: formatFileSize(maxSize) }),
           });
           continue;
         }
 
         // Check file type
         if (accept) {
-          const acceptedTypes = accept.split(',').map((t) => t.trim());
+          const acceptedTypes = accept.split(',').map((part) => part.trim());
           const isAccepted = acceptedTypes.some((type) => {
             if (type.startsWith('.')) {
               return file.name.toLowerCase().endsWith(type.toLowerCase());
@@ -229,7 +233,7 @@ export const FilePicker = ({
             errors.push({
               file,
               error: 'type',
-              message: `File type not accepted. Accepted types: ${accept}`,
+              message: t('filePicker.invalidType', { accept }),
             });
             continue;
           }
@@ -240,7 +244,7 @@ export const FilePicker = ({
 
       return { valid, errors };
     },
-    [accept, maxFiles, maxSize, selectedFiles.length]
+    [accept, maxFiles, maxSize, selectedFiles.length, t]
   );
 
   // Handle file selection
@@ -393,7 +397,7 @@ export const FilePicker = ({
         onBlur={onBlur}
         disabled={disabled}
         className={styles.hiddenInput}
-        aria-label={ariaLabel || label || 'File picker'}
+        aria-label={ariaLabel || label || t('filePicker.label')}
       />
 
       {/* Dropzone */}
@@ -409,7 +413,7 @@ export const FilePicker = ({
         data-dragging={isDragging || undefined}
         role="button"
         tabIndex={disabled ? -1 : 0}
-        aria-label="Upload files"
+        aria-label={t('filePicker.upload')}
       >
         <div className={styles.dropzoneContent}>
           {icon && <div className={styles.icon}>{icon}</div>}
@@ -447,7 +451,7 @@ export const FilePicker = ({
                 icon="close"
                 onClick={() => handleRemoveFile(index)}
                 disabled={disabled}
-                aria-label={`Remove ${file.name}`}
+                aria-label={t('tag.remove', { name: file.name })}
                 type="button"
                 className={styles.removeButton}
               />

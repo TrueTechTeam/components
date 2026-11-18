@@ -4,6 +4,7 @@
 
 import React, { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { FilterContext } from '../../FilterContext';
+import { useLabels, type LabelVars } from '../../../../contexts/LabelsContext';
 import type {
   FilterProviderProps,
   FilterContextValue,
@@ -102,6 +103,7 @@ function isValueEmpty(value: FilterValue, filter: FilterDefinition): boolean {
 function getDisplayValue(
   value: FilterValue,
   filter: FilterDefinition,
+  t: (key: string, vars?: LabelVars) => string,
   options?: FilterOption[]
 ): string {
   if (filter.renderValue) {
@@ -124,11 +126,11 @@ function getDisplayValue(
         const option = options?.find((o) => o.value === values[0]);
         return option ? String(option.label) : values[0];
       }
-      return `${values.length} selected`;
+      return t('filters.selectedCount', { count: values.length });
     }
     case 'checkbox':
     case 'toggle':
-      return value ? 'Yes' : 'No';
+      return value ? t('filters.yes') : t('filters.no');
     case 'date':
       return value instanceof Date ? value.toLocaleDateString() : '';
     case 'date-range': {
@@ -156,7 +158,7 @@ function getDisplayValue(
       return '';
     }
     case 'rating':
-      return `${value} stars`;
+      return t('rating.stars', { n: String(value) });
     default:
       return String(value ?? '');
   }
@@ -243,6 +245,7 @@ interface OptionsManagerProps {
 }
 
 function useOptionsManager({ filters, values: _values }: OptionsManagerProps) {
+  const t = useLabels();
   const optionsStateRef = useRef<Map<string, FilterOptionsState>>(new Map());
   const [, forceUpdate] = useState({});
 
@@ -272,7 +275,7 @@ function useOptionsManager({ filters, values: _values }: OptionsManagerProps) {
         return {
           options: [],
           loading: false,
-          error: 'Filter not found',
+          error: t('filters.notFound'),
           hasMore: false,
           loadMore: () => {},
         };
@@ -306,7 +309,7 @@ function useOptionsManager({ filters, values: _values }: OptionsManagerProps) {
         loadMore: () => {},
       };
     },
-    [filters]
+    [filters, t]
   );
 
   const reloadFilterOptions = useCallback((filterId: string) => {
@@ -337,6 +340,8 @@ export const FilterProvider: React.FC<FilterProviderProps> = ({
   size = 'md',
   children,
 }) => {
+  const t = useLabels();
+
   // Initialize default values for all filters
   const initialValues = useMemo(() => {
     const initial: Record<string, FilterValue> = {};
@@ -607,11 +612,11 @@ export const FilterProvider: React.FC<FilterProviderProps> = ({
       return {
         value,
         label: filter.shortLabel || filter.label,
-        displayValue: getDisplayValue(value, filter, optionsState.options),
+        displayValue: getDisplayValue(value, filter, t, optionsState.options),
         isEmpty: isValueEmpty(value, filter),
       };
     },
-    [filters, displayValues, getFilterOptions]
+    [filters, displayValues, getFilterOptions, t]
   );
 
   const isFilterActive = useCallback(

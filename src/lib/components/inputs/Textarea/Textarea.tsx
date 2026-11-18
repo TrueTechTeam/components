@@ -1,6 +1,7 @@
 import React, { useState, useId, useCallback, useEffect, useRef } from 'react';
 import type { ValidationResult, ValidationTiming } from '../Input/Input';
 import styles from './Textarea.module.scss';
+import { useLabels } from '../../../contexts/LabelsContext';
 
 export interface TextareaProps
   extends Omit<React.TextareaHTMLAttributes<HTMLTextAreaElement>, 'size'> {
@@ -137,6 +138,7 @@ export const Textarea = ({
 }: TextareaProps & {
   ref?: React.Ref<HTMLTextAreaElement>;
 }) => {
+  const t = useLabels();
   const autoId = useId();
   const id = providedId || autoId;
   const textareaRef = useRef<HTMLTextAreaElement>(null);
@@ -194,10 +196,10 @@ export const Textarea = ({
         pattern: validationRegex,
       };
 
-      setValidationError(isValid ? null : 'Invalid input');
+      setValidationError(isValid ? null : t('textarea.invalid'));
       onValidate?.(result);
     },
-    [validationRegex, onValidate]
+    [validationRegex, onValidate, t]
   );
 
   const handleChange = useCallback(

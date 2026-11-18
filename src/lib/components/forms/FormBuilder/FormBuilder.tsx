@@ -6,6 +6,7 @@ import React, {
   isValidElement,
   Children,
   cloneElement,
+  useRef,
 } from 'react';
 import type { ComponentVariant, ComponentSize, BaseComponentProps } from '../../../types';
 import type { FormFieldConfig, FormContext as FormContextType, UseFormStateOptions } from './types';
@@ -29,6 +30,8 @@ import { FilePicker } from '../../inputs/FilePicker';
 import { ColorPicker } from '../../inputs/ColorPicker';
 import { DatePicker } from '../../inputs/DatePicker';
 import { DateRangePicker } from '../../inputs/DateRangePicker';
+import { useLabels } from '../../../contexts/LabelsContext';
+import { useUnsavedChanges } from '../../../hooks/useUnsavedChanges';
 
 /**
  * Form context
@@ -136,6 +139,19 @@ export interface FormBuilderProps extends Omit<BaseComponentProps, 'children'> {
    * Loading state (disables form)
    */
   loading?: boolean;
+
+  /**
+   * Warn before the user leaves (page unload, guarded navigation, closing a parent Dialog)
+   * while the form has unsaved changes. Not blocking while a submit is in flight, so `onSubmit`
+   * can navigate or close the Dialog after saving
+   * @default false
+   */
+  guardUnsaved?: boolean;
+
+  /**
+   * Confirmation message for the unsaved-changes guard (defaults to the `unsavedChanges.confirm` label)
+   */
+  guardMessage?: string;
 
   /**
    * Disabled state
@@ -319,15 +335,17 @@ export const FormBuilder = ({
   onValidate,
   validateOn = 'blur',
   showSubmitButton = true,
-  submitButtonText = 'Submit',
+  submitButtonText: submitButtonTextProp,
   submitButtonVariant,
   showResetButton = false,
-  resetButtonText = 'Reset',
+  resetButtonText: resetButtonTextProp,
   layout = 'vertical',
   columns = 2,
   gap,
   loading = false,
   disabled = false,
+  guardUnsaved = false,
+  guardMessage,
   className,
   'data-testid': dataTestId,
   style,
@@ -335,17 +353,38 @@ export const FormBuilder = ({
 }: FormBuilderProps & {
   ref?: React.Ref<HTMLFormElement>;
 }) => {
+  const t = useLabels();
+  const submitButtonText =
+    submitButtonTextProp === undefined ? t('formBuilder.submit') : submitButtonTextProp;
+  const resetButtonText =
+    resetButtonTextProp === undefined ? t('formBuilder.reset') : resetButtonTextProp;
+  // Unsaved-changes baseline: starts at defaultValues and moves to the submitted values after a
+  // successful submit. Kept apart from useFormState's baseline so isDirty/Reset are unaffected.
+  const savedValuesRef = useRef<Record<string, any>>(defaultValues);
+  const submitAndMarkSaved = async (values: Record<string, any>) => {
+    await onSubmit?.(values);
+    savedValuesRef.current = values;
+  };
+
   // Initialize form state
   const formOptions: UseFormStateOptions = {
     initialValues: defaultValues,
     fields,
     validateOn,
-    onSubmit,
+    onSubmit: guardUnsaved ? submitAndMarkSaved : onSubmit,
     onChange,
     onValidate,
   };
 
   const formContext = useFormState(formOptions);
+  // Not blocking while a submit is in flight, so onSubmit can navigate or close a dialog after
+  // saving. A failed submit ends the flight with the values still unsaved, so it blocks again.
+  const hasUnsavedChanges =
+    !formContext.isSubmitting &&
+    Object.keys(formContext.values).some(
+      (key) => formContext.values[key] !== savedValuesRef.current[key]
+    );
+  useUnsavedChanges(hasUnsavedChanges, { enabled: guardUnsaved, message: guardMessage });
 
   // Handle form submit
   const handleSubmit = useCallback(

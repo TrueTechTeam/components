@@ -1,6 +1,7 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Stepper } from './Stepper';
 import { Step } from './Step';
+import { LabelsProvider } from '../../../contexts/LabelsContext';
 
 describe('Stepper', () => {
   describe('rendering', () => {
@@ -202,5 +203,18 @@ describe('Stepper', () => {
       fireEvent.keyDown(button, { key: 'Enter' });
       expect(handleChange).toHaveBeenCalledWith(0);
     });
+  });
+});
+
+describe('Stepper translated labels', () => {
+  it('translates the default progress label', () => {
+    render(
+      <LabelsProvider labels={{ 'stepper.label': 'Fortschritt' }}>
+        <Stepper currentStep={0}>
+          <Step title="One" />
+        </Stepper>
+      </LabelsProvider>
+    );
+    expect(screen.getByLabelText('Fortschritt')).toBeInTheDocument();
   });
 });

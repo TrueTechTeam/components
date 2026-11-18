@@ -2,6 +2,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import { Alert } from './Alert';
 import { Icon } from '../../display/Icon';
 import type { AlertVariant } from './AlertPresets';
+import { LabelsProvider } from '../../../contexts/LabelsContext';
 
 const variants: AlertVariant[] = ['info', 'success', 'warning', 'error', 'confirm'];
 
@@ -80,5 +81,26 @@ describe('Alert', () => {
   it('should use custom data-testid', () => {
     render(<Alert isOpen title="TestId" data-testid="custom-alert" />);
     expect(screen.getByTestId('custom-alert')).toBeInTheDocument();
+  });
+});
+
+describe('Alert translated labels', () => {
+  it('translates the built-in cancel and confirm buttons', () => {
+    render(
+      <LabelsProvider labels={{ 'alert.cancel': 'Annuler', 'alert.confirm': 'Valider' }}>
+        <Alert isOpen variant="confirm" title="Sure?" />
+      </LabelsProvider>
+    );
+    expect(screen.getByTestId('alert-cancel-button')).toHaveTextContent('Annuler');
+    expect(screen.getByTestId('alert-confirm-button')).toHaveTextContent('Valider');
+  });
+
+  it('translates the default OK button', () => {
+    render(
+      <LabelsProvider labels={{ 'alert.ok': 'Compris' }}>
+        <Alert isOpen title="Info" />
+      </LabelsProvider>
+    );
+    expect(screen.getByTestId('alert-confirm-button')).toHaveTextContent('Compris');
   });
 });

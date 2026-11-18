@@ -3,6 +3,7 @@ import { Select, type SelectOption } from '../Select/Select';
 import { Input } from '../Input';
 import styles from './PhoneInput.module.scss';
 import type { InputBaseProps } from '../../../types/component.types';
+import { useLabels } from '../../../contexts/LabelsContext';
 
 /**
  * Country data for phone input
@@ -171,7 +172,7 @@ export const PhoneInput = ({
   required = false,
   disabled = false,
   showCountrySearch = true,
-  countrySearchPlaceholder = 'Search countries...',
+  countrySearchPlaceholder: countrySearchPlaceholderProp,
   countries = DEFAULT_COUNTRIES,
   autoFormat = true,
   className,
@@ -182,6 +183,11 @@ export const PhoneInput = ({
 }: PhoneInputProps & {
   ref?: React.Ref<HTMLInputElement>;
 }) => {
+  const t = useLabels();
+  const countrySearchPlaceholder =
+    countrySearchPlaceholderProp === undefined
+      ? t('phoneInput.searchCountries')
+      : countrySearchPlaceholderProp;
   // Find default country from list
   const defaultCountryData = countries.find((c) => c.code === defaultCountry) || countries[0];
 
@@ -255,7 +261,7 @@ export const PhoneInput = ({
   // Placeholder text based on country format
   const placeholder = selectedCountry.format
     ? selectedCountry.format.replace(/#/g, '0')
-    : 'Enter phone number';
+    : t('phoneInput.placeholder');
 
   // Container classes
   const containerClasses = [
@@ -287,7 +293,7 @@ export const PhoneInput = ({
           disabled={disabled}
           required={required}
           placeholder={placeholder}
-          aria-label={ariaLabel || label || 'Phone number'}
+          aria-label={ariaLabel || label || t('phoneInput.label')}
           error={error}
           helperText={helperText}
           errorMessage={errorMessage}
@@ -300,7 +306,7 @@ export const PhoneInput = ({
                 disabled={disabled}
                 searchable={showCountrySearch}
                 searchPlaceholder={countrySearchPlaceholder}
-                aria-label="Select country"
+                aria-label={t('phoneInput.selectCountry')}
                 className={styles.countrySelect}
               />
             </div>

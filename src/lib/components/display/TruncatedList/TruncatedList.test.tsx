@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { TruncatedList } from './TruncatedList';
+import { LabelsProvider } from '../../../contexts/LabelsContext';
 
 describe('TruncatedList', () => {
   describe('rendering', () => {
@@ -133,5 +134,31 @@ describe('TruncatedList', () => {
       expect(screen.getByText('Only Item')).toBeInTheDocument();
       expect(screen.queryByText(/more/)).not.toBeInTheDocument();
     });
+  });
+});
+
+describe('TruncatedList translated labels', () => {
+  it('translates the default more indicator', () => {
+    render(
+      <LabelsProvider labels={{ 'truncatedList.more': '{count} de plus' }}>
+        <TruncatedList
+          items={['a', 'b', 'c', 'd', 'e']}
+          maxVisible={3}
+          renderItem={(item) => <span>{item}</span>}
+        />
+      </LabelsProvider>
+    );
+    expect(screen.getByText('2 de plus')).toBeInTheDocument();
+  });
+
+  it('keeps the English default', () => {
+    render(
+      <TruncatedList
+        items={['a', 'b', 'c', 'd', 'e']}
+        maxVisible={3}
+        renderItem={(item) => <span>{item}</span>}
+      />
+    );
+    expect(screen.getByText('+2 more')).toBeInTheDocument();
   });
 });

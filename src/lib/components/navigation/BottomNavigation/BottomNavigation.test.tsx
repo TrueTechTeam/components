@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { BottomNavigation, BottomNavigationItem } from './index';
+import { LabelsProvider } from '../../../contexts/LabelsContext';
 
 describe('BottomNavigation', () => {
   it('renders items and handles selection (uncontrolled)', () => {
@@ -54,5 +55,18 @@ describe('BottomNavigation', () => {
 
     expect(onChange).not.toHaveBeenCalled();
     expect(handleClick).not.toHaveBeenCalled();
+  });
+});
+
+describe('BottomNavigation translated labels', () => {
+  it('translates the default navigation label', () => {
+    render(
+      <LabelsProvider labels={{ 'bottomNavigation.label': 'Navigation du bas' }}>
+        <BottomNavigation>
+          <BottomNavigationItem value="home" label="Home" icon="home" />
+        </BottomNavigation>
+      </LabelsProvider>
+    );
+    expect(screen.getByLabelText('Navigation du bas')).toBeInTheDocument();
   });
 });

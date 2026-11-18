@@ -11,6 +11,7 @@ import { useFilterContext } from '../../FilterContext';
 import { ActiveFilters } from '../../core/ActiveFilters';
 import type { FilterModalProps } from '../../types';
 import styles from './FilterModal.module.scss';
+import { useLabels } from '../../../../contexts/LabelsContext';
 
 /**
  * FilterModal provides a full modal dialog for complex filter interfaces.
@@ -34,7 +35,7 @@ import styles from './FilterModal.module.scss';
  */
 export const FilterModal = ({
   ref,
-  title = 'Filters',
+  title: titleProp,
   size = 'md',
   isOpen: controlledOpen,
   defaultOpen = false,
@@ -45,17 +46,25 @@ export const FilterModal = ({
   showActiveFilters = true,
   activeFiltersPosition = 'top',
   showApplyButton = true,
-  applyButtonLabel = 'Apply Filters',
+  applyButtonLabel: applyButtonLabelProp,
   showClearButton = true,
-  clearButtonLabel = 'Clear All',
+  clearButtonLabel: clearButtonLabelProp,
   showResetButton = false,
-  resetButtonLabel = 'Reset',
+  resetButtonLabel: resetButtonLabelProp,
   children,
   className,
   ...restProps
 }: FilterModalProps & {
   ref?: React.Ref<HTMLDivElement>;
 }) => {
+  const t = useLabels();
+  const title = titleProp === undefined ? t('filters.title') : titleProp;
+  const applyButtonLabel =
+    applyButtonLabelProp === undefined ? t('filterModal.apply') : applyButtonLabelProp;
+  const clearButtonLabel =
+    clearButtonLabelProp === undefined ? t('filterModal.clearAll') : clearButtonLabelProp;
+  const resetButtonLabel =
+    resetButtonLabelProp === undefined ? t('filters.reset') : resetButtonLabelProp;
   const ctx = useFilterContext();
   const [internalOpen, setInternalOpen] = useState(defaultOpen);
 
@@ -106,7 +115,7 @@ export const FilterModal = ({
       startIcon={<Icon name="filter" size="1em" />}
       onClick={handleOpen}
     >
-      Filters
+      {t('filters.title')}
       {activeCount > 0 && (
         <Badge variant="primary" size="sm" className={styles.triggerBadge}>
           {activeCount}
@@ -168,7 +177,7 @@ export const FilterModal = ({
             </div>
             <div className={styles.footerRight}>
               <Button variant="outline" size="sm" onClick={handleClose}>
-                Cancel
+                {t('filterModal.cancel')}
               </Button>
               {showClearButton && activeCount > 0 && (
                 <Button variant="outline" size="sm" onClick={handleClear}>

@@ -2,6 +2,7 @@ import React, { useMemo } from 'react';
 import { Tooltip } from '../../overlays/Tooltip';
 import type { PopoverPosition } from '../../../utils/positioning';
 import type { BaseComponentProps } from '../../../types';
+import { useLabels } from '../../../contexts/LabelsContext';
 import styles from './TruncatedList.module.scss';
 
 /**
@@ -135,6 +136,7 @@ function TruncatedListInner<T>({
   'aria-label': ariaLabel,
   ...restProps
 }: TruncatedListProps<T> & { ref?: React.Ref<HTMLDivElement> }) {
+  const t = useLabels();
   const visibleItems = useMemo(() => items.slice(0, maxVisible), [items, maxVisible]);
   const hiddenItems = useMemo(() => items.slice(maxVisible), [items, maxVisible]);
   const hiddenCount = hiddenItems.length;
@@ -148,7 +150,9 @@ function TruncatedListInner<T>({
     ...style,
   } as React.CSSProperties;
 
-  const defaultMoreIndicator = <span className={styles.moreIndicator}>+{hiddenCount} more</span>;
+  const defaultMoreIndicator = (
+    <span className={styles.moreIndicator}>{t('truncatedList.more', { count: hiddenCount })}</span>
+  );
 
   const moreElement = renderMore ? renderMore(hiddenCount, hiddenItems) : defaultMoreIndicator;
 

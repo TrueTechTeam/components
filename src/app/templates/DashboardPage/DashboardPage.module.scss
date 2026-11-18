@@ -1,0 +1,136 @@
+@use '../../../lib/styles/mixins/component' as *;
+
+.root {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  min-width: 0;
+}
+
+.toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+}
+
+.toolbarEnd {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin-inline-start: auto;
+}
+
+.stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-lg);
+  min-width: 0;
+}
+
+.muted {
+  color: var(--theme-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.visuallyHidden {
+  @include visually-hidden;
+}
+
+// DashboardWidget
+.widget {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+  min-width: 0;
+}
+
+.widgetLg {
+  min-height: 24rem;
+}
+
+.widgetHeader {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-sm);
+}
+
+.widgetTitle {
+  margin: 0;
+  color: var(--theme-text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+}
+
+.widgetMeta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-sm);
+}
+
+// ChartWidget
+.figure {
+  margin: 0;
+}
+
+.chart {
+  min-width: 0;
+}
+
+// KpiWidget
+.kpi {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+  height: 100%;
+}
+
+.kpiBody {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-xs);
+}
+
+.kpiLabel {
+  margin: 0;
+  color: var(--theme-text-secondary);
+  font-size: var(--font-size-sm);
+}
+
+.kpiValue {
+  margin: 0;
+  color: var(--theme-text-primary);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.1;
+}
+
+.kpiFoot {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--spacing-sm);
+  margin: 0;
+}
+
+.delta {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+
+  &[data-tone='success'] {
+    color: var(--theme-success-text);
+  }
+
+  &[data-tone='danger'] {
+    color: var(--theme-error-text);
+  }
+
+  &[data-tone='neutral'] {
+    color: var(--theme-text-secondary);
+  }
+}

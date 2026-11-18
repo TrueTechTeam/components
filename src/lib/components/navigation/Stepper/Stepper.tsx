@@ -1,5 +1,6 @@
 import React, { useMemo, useId, useCallback } from 'react';
 import type { BaseComponentProps, ComponentSize } from '../../../types';
+import { useLabels } from '../../../contexts/LabelsContext';
 import {
   StepperContext,
   type StepperContextValue,
@@ -111,6 +112,7 @@ export const Stepper = ({
 }: StepperProps & {
   ref?: React.Ref<HTMLDivElement>;
 }) => {
+  const t = useLabels();
   const stepperId = useId();
 
   // Provide a no-op registerStep for backwards compatibility
@@ -175,7 +177,7 @@ export const Stepper = ({
       data-variant={variant}
       data-size={size}
       data-testid={testId}
-      aria-label={ariaLabel || 'Progress steps'}
+      aria-label={ariaLabel || t('stepper.label')}
       role="group"
       style={style}
       {...restProps}

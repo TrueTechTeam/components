@@ -3,7 +3,7 @@
 > React + TypeScript component library (SCSS modules, CSS custom-property theming, light/dark).
 > Import components from '@true-tech-team/ui-components', import
 > '@true-tech-team/ui-components/index.css' once at the app root, and wrap the app in
-> <GlobalProvider>. All components are client-only. Design guidelines for coding agents ship in
+> <GlobalProvider>. The app-builder layer (Page, Section, URL params, mutations, router adapters) is a separate entry, '@true-tech-team/ui-components/app', and needs @tanstack/react-query. All components are client-only. Design guidelines for coding agents ship in
 > ./guidelines/ inside this package.
 
 ## Start here
@@ -11,7 +11,7 @@
 - [Guidelines index](guidelines/README.md): how to apply the rules, rule vocabulary, precedence
 - [Design decision tree](guidelines/decision-tree.md): routes any UI task to the right rule
 - [Choosing components](guidelines/components/choosing.md): actions, inputs, feedback, overlays, navigation, labels, loading
-- [Component catalog](guidelines/components/catalog.md): every export with use-when / avoid-when
+- [Component catalog](guidelines/components/catalog.md): every export with use-when / avoid-when, including the app builder (`/app`)
 
 ## Foundations
 
@@ -22,6 +22,7 @@
 - [Elevation & shape](guidelines/foundations/elevation-shape.md): surfaces, shadows, radius, z-index
 - [Motion](guidelines/foundations/motion.md): durations, easing, reduced motion
 - [Accessibility](guidelines/foundations/accessibility.md): WCAG 2.2 AA requirements
+- [Labels](guidelines/foundations/labels.md): translatable built-in text, `ui.` prefix, key table
 
 ## Patterns
 
@@ -29,6 +30,17 @@
 - [Data display](guidelines/patterns/data-display.md): tables, lists, cards, filters, KPIs
 - [Feedback & states](guidelines/patterns/feedback-states.md): loading, empty, error, success, toasts
 - [Page layout](guidelines/patterns/page-layout.md): app shell, page types, dashboards, responsive
+
+## Building pages from data (`/app` templates)
+
+- [Workflow](guidelines/app/README.md): outline + sample API response → page brief → template → code
+- [Page brief](guidelines/app/page-brief.md): the brief to fill before building, with an empty template
+- [Choosing a page](guidelines/app/choosing-a-page.md): DataTablePage, DetailsPage, DashboardPage, form, settings, AppShell (APP-*)
+- [Field display](guidelines/app/field-display.md): JSON/schema types → FieldValue kinds, placement, column budget (FIELD-*)
+- [Hierarchy](guidelines/app/hierarchy.md): top-left priority, one primary action, progressive disclosure, tabs (HIER-*)
+- [States](guidelines/app/states.md): structure-first loading, nothing yet vs no results, errors, forbidden, not found (APP-STATE-*)
+- [Plumbing](guidelines/app/plumbing.md): URL vs local vs page state, polling, keepPreviousData, permissions, feedback, Next.js (APP-PLUMB-*)
+- [Worked example](guidelines/app/example.md): marketing campaigns list + details page
 
 ## Optional
 

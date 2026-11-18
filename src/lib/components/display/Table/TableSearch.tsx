@@ -1,4 +1,5 @@
 import React, { useRef, useEffect, type ChangeEvent } from 'react';
+import { useLabels } from '../../../contexts/LabelsContext';
 import styles from './Table.module.scss';
 
 export interface TableSearchProps {
@@ -37,11 +38,13 @@ export interface TableSearchProps {
 export function TableSearch({
   value,
   onChange,
-  placeholder = 'Search...',
+  placeholder,
   isFiltering = false,
   autoFocus = false,
   onClear,
 }: TableSearchProps) {
+  const t = useLabels();
+  const resolvedPlaceholder = placeholder ?? t('table.searchPlaceholder');
   const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
@@ -91,15 +94,15 @@ export function TableSearch({
         value={value}
         onChange={handleChange}
         onKeyDown={handleKeyDown}
-        placeholder={placeholder}
-        aria-label={placeholder}
+        placeholder={resolvedPlaceholder}
+        aria-label={resolvedPlaceholder}
       />
       {value && (
         <button
           type="button"
           className={styles.clearButton}
           onClick={handleClear}
-          aria-label="Clear search"
+          aria-label={t('table.clearSearch')}
         >
           <svg
             width="14"

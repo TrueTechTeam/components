@@ -7,6 +7,7 @@ import { DatePicker } from '../../inputs/DatePicker';
 import { useFilter } from '../hooks/useFilter';
 import type { BaseComponentProps, ComponentSize } from '../../../types';
 import type { DateFilterConfig } from '../types';
+import { useLabels } from '../../../contexts/LabelsContext';
 
 export interface DateFilterProps extends BaseComponentProps {
   /** Filter ID from FilterDefinition */
@@ -39,6 +40,7 @@ export const DateFilter = ({
 }: DateFilterProps & {
   ref?: React.Ref<HTMLDivElement>;
 }) => {
+  const t = useLabels();
   const { filter, value, setValue, isEnabled, error } = useFilter<Date | null>({ filterId });
 
   if (!filter) {
@@ -48,7 +50,7 @@ export const DateFilter = ({
 
   const config = filter.config as DateFilterConfig | undefined;
   const label = labelOverride ?? filter.label;
-  const placeholder = placeholderOverride ?? filter.placeholder ?? 'Select date';
+  const placeholder = placeholderOverride ?? filter.placeholder ?? t('dateFilter.placeholder');
 
   const handleChange = (date: Date | null) => {
     setValue(date);

@@ -88,6 +88,16 @@ const Container = (props: React.ComponentProps<typeof DocsContainer>) => {
   return <DocsContainer {...props} theme={theme === 'light' ? lightDocsTheme : darkDocsTheme} />;
 };
 
+/**
+ * Per-story opt-out of the global decorators via `parameters.globalDecorators`:
+ * 'all' (default) - centering wrapper + GlobalProvider
+ * 'provider'      - GlobalProvider only (no centering wrapper)
+ * 'none'          - neither; the story brings its own provider
+ */
+type GlobalDecorators = 'all' | 'provider' | 'none';
+const getGlobalDecorators = (parameters: Record<string, unknown>): GlobalDecorators =>
+  (parameters.globalDecorators as GlobalDecorators | undefined) ?? 'all';
+
 const preview: Preview = {
   parameters: {
     controls: {
@@ -106,6 +116,7 @@ const preview: Preview = {
     options: {
       storySort: {
         order: [
+          'Theme Builder',
           'Buttons',
           'Display',
           'Inputs',
@@ -115,6 +126,8 @@ const preview: Preview = {
           'Forms',
           'Filters',
           'DnD',
+          'App Builder',
+          ['Foundation', 'Templates', 'Guides'],
           'Patterns',
           'Hooks',
           'Providers',
@@ -124,23 +137,30 @@ const preview: Preview = {
     },
   },
   decorators: [
-    (Story) => (
-      <div
-        style={{
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          minWidth: '400px',
-        }}
-      >
+    (Story, context) =>
+      getGlobalDecorators(context.parameters) === 'all' ? (
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            minWidth: '400px',
+          }}
+        >
+          <Story />
+        </div>
+      ) : (
         <Story />
-      </div>
-    ),
+      ),
     (Story, context) => {
       const theme = context.globals.theme || 'dark';
+      const useProvider = getGlobalDecorators(context.parameters) !== 'none';
 
       // Apply theme to the iframe's document root and sync with parent for docs pages
       useEffect(() => {
+        if (!useProvider) {
+          return;
+        }
         const root = document.documentElement;
         root.setAttribute('data-theme', theme);
 
@@ -152,7 +172,11 @@ const preview: Preview = {
         } catch {
           // Cross-origin restrictions may prevent this
         }
-      }, [theme]);
+      }, [theme, useProvider]);
+
+      if (!useProvider) {
+        return Story();
+      }
 
       return GlobalProvider({
         children: Story(),

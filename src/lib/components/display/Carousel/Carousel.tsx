@@ -3,6 +3,7 @@ import styles from './Carousel.module.scss';
 import type { BaseComponentProps } from '../../../types/component.types';
 import { Icon, type IconName } from '../Icon';
 import { IconButton } from '../../buttons/IconButton';
+import { useLabels } from '../../../contexts/LabelsContext';
 
 /**
  * Props for the Carousel component
@@ -170,6 +171,7 @@ export const Carousel = ({
 }: CarouselProps & {
   ref?: React.Ref<HTMLDivElement>;
 }) => {
+  const t = useLabels();
   const slides = Children.toArray(children);
   const slideCount = slides.length;
   const maxIndex = Math.max(0, slideCount - slidesToShow);
@@ -334,8 +336,8 @@ export const Carousel = ({
       onKeyDown={handleKeyDown}
       tabIndex={0}
       role="region"
-      aria-roledescription="carousel"
-      aria-label={ariaLabel || 'Carousel'}
+      aria-roledescription={t('carousel.roleDescription')}
+      aria-label={ariaLabel || t('carousel.label')}
       data-testid={testId}
       style={cssVariables}
       {...restProps}
@@ -346,7 +348,7 @@ export const Carousel = ({
           icon={typeof prevIcon === 'string' ? (prevIcon as IconName) : 'chevron-left'}
           onClick={goToPrev}
           disabled={!canGoPrev}
-          aria-label="Previous slide"
+          aria-label={t('carousel.previous')}
           variant="outline"
         />
       )}
@@ -364,8 +366,8 @@ export const Carousel = ({
               key={index}
               className={styles.slide}
               role="group"
-              aria-roledescription="slide"
-              aria-label={`Slide ${index + 1} of ${slideCount}`}
+              aria-roledescription={t('carousel.slideRoleDescription')}
+              aria-label={t('carousel.slideOf', { n: index + 1, total: slideCount })}
               aria-hidden={index < currentIndex || index >= currentIndex + slidesToShow}
             >
               {slide}
@@ -380,7 +382,7 @@ export const Carousel = ({
               className={`${styles.arrow} ${styles.arrowPrev}`}
               onClick={goToPrev}
               disabled={!canGoPrev}
-              aria-label="Previous slide"
+              aria-label={t('carousel.previous')}
               type="button"
             >
               {renderIcon(prevIcon)}
@@ -389,7 +391,7 @@ export const Carousel = ({
               className={`${styles.arrow} ${styles.arrowNext}`}
               onClick={goToNext}
               disabled={!canGoNext}
-              aria-label="Next slide"
+              aria-label={t('carousel.next')}
               type="button"
             >
               {renderIcon(nextIcon)}
@@ -404,14 +406,14 @@ export const Carousel = ({
           icon={typeof nextIcon === 'string' ? (nextIcon as IconName) : 'chevron-right'}
           onClick={goToNext}
           disabled={!canGoNext}
-          aria-label="Next slide"
+          aria-label={t('carousel.next')}
           variant="outline"
         />
       )}
 
       {/* Navigation Dots */}
       {showDots && slideCount > slidesToShow && (
-        <div className={styles.dots} role="tablist" aria-label="Carousel navigation">
+        <div className={styles.dots} role="tablist" aria-label={t('carousel.navigation')}>
           {dots.map((dotIndex) => {
             const slideIndex = dotIndex * slidesToScroll;
             const isActive =
@@ -424,7 +426,7 @@ export const Carousel = ({
                 onClick={() => goToSlide(slideIndex)}
                 role="tab"
                 aria-selected={isActive}
-                aria-label={`Go to slide ${slideIndex + 1}`}
+                aria-label={t('carousel.goToSlide', { n: slideIndex + 1 })}
                 data-active={isActive || undefined}
                 type="button"
               />

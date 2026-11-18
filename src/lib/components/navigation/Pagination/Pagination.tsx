@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import type { BaseComponentProps, ComponentSize } from '../../../types';
 import { Icon } from '../../display/Icon';
+import { useLabels } from '../../../contexts/LabelsContext';
 import styles from './Pagination.module.scss';
 
 export type PaginationVariant = 'default' | 'outlined' | 'minimal';
@@ -197,6 +198,7 @@ export const Pagination = ({
 }: PaginationProps & {
   ref?: React.Ref<HTMLElement>;
 }) => {
+  const t = useLabels();
   const range = usePaginationRange(totalPages, currentPage, siblingCount, boundaryCount);
 
   const isFirstPage = currentPage === 1;
@@ -210,7 +212,7 @@ export const Pagination = ({
   };
 
   const getPageLabel = (page: number) => {
-    return labels.page ? labels.page(page) : `Page ${page}`;
+    return labels.page ? labels.page(page) : t('pagination.page', { n: page });
   };
 
   const componentClasses = [styles.pagination, className].filter(Boolean).join(' ');
@@ -229,7 +231,7 @@ export const Pagination = ({
       data-shape={shape}
       data-disabled={disabled || undefined}
       data-testid={testId}
-      aria-label={ariaLabel || 'Pagination'}
+      aria-label={ariaLabel || t('pagination.label')}
       style={style}
       {...restProps}
     >
@@ -240,7 +242,7 @@ export const Pagination = ({
           className={styles.button}
           onClick={() => handlePageClick(1)}
           disabled={disabled || isFirstPage}
-          aria-label={labels.first || 'Go to first page'}
+          aria-label={labels.first || t('pagination.first')}
           data-type="first"
         >
           <Icon name="chevrons-left" />
@@ -254,7 +256,7 @@ export const Pagination = ({
           className={styles.button}
           onClick={() => handlePageClick(currentPage - 1)}
           disabled={disabled || isFirstPage}
-          aria-label={labels.prev || 'Go to previous page'}
+          aria-label={labels.prev || t('pagination.previous')}
           data-type="prev"
         >
           <Icon name="chevron-left" />
@@ -299,7 +301,7 @@ export const Pagination = ({
           className={styles.button}
           onClick={() => handlePageClick(currentPage + 1)}
           disabled={disabled || isLastPage}
-          aria-label={labels.next || 'Go to next page'}
+          aria-label={labels.next || t('pagination.next')}
           data-type="next"
         >
           <Icon name="chevron-right" />
@@ -313,7 +315,7 @@ export const Pagination = ({
           className={styles.button}
           onClick={() => handlePageClick(totalPages)}
           disabled={disabled || isLastPage}
-          aria-label={labels.last || 'Go to last page'}
+          aria-label={labels.last || t('pagination.last')}
           data-type="last"
         >
           <Icon name="chevrons-right" />

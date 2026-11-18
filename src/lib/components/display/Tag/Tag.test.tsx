@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { Tag } from './Tag';
+import { LabelsProvider } from '../../../contexts/LabelsContext';
 
 describe('Tag', () => {
   // 1. Rendering tests
@@ -244,5 +245,18 @@ describe('Tag', () => {
       expect(ref.current).toBeInstanceOf(HTMLButtonElement);
       expect(ref.current).toHaveTextContent('Test');
     });
+  });
+});
+
+describe('Tag translated labels', () => {
+  it('translates the remove button label with the tag name', () => {
+    render(
+      <LabelsProvider labels={{ 'tag.remove': '{name} entfernen' }}>
+        <Tag removable onRemove={() => {}}>
+          Alpha
+        </Tag>
+      </LabelsProvider>
+    );
+    expect(screen.getByLabelText('Alpha entfernen')).toBeInTheDocument();
   });
 });

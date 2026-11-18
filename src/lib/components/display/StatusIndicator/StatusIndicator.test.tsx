@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { StatusIndicator } from './StatusIndicator';
+import { LabelsProvider } from '../../../contexts/LabelsContext';
 
 describe('StatusIndicator', () => {
   // 1. Rendering tests
@@ -203,5 +204,21 @@ describe('StatusIndicator', () => {
       expect(ref.current).toBeInstanceOf(HTMLSpanElement);
       expect(ref.current).toHaveAttribute('data-testid', 'indicator');
     });
+  });
+});
+
+describe('StatusIndicator translated labels', () => {
+  it('translates the status label and status name', () => {
+    render(
+      <LabelsProvider
+        labels={{
+          'statusIndicator.label': 'Statut : {status}',
+          'statusIndicator.online': 'en ligne',
+        }}
+      >
+        <StatusIndicator status="online" />
+      </LabelsProvider>
+    );
+    expect(screen.getByLabelText('Statut : en ligne')).toBeInTheDocument();
   });
 });

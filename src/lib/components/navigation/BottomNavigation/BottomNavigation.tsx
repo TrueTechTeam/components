@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useMemo } from 'react';
 import type { BaseComponentProps } from '../../../types';
+import { useLabels } from '../../../contexts/LabelsContext';
 import {
   BottomNavigationContext,
   type BottomNavigationContextValue,
@@ -77,6 +78,7 @@ export const BottomNavigation = ({
 }: BottomNavigationProps & {
   ref?: React.Ref<HTMLElement>;
 }) => {
+  const t = useLabels();
   const isControlled = controlledValue !== undefined;
   const [internalValue, setInternalValue] = useState<string | null>(defaultValue ?? null);
 
@@ -112,7 +114,7 @@ export const BottomNavigation = ({
       data-show-labels={showLabels || undefined}
       data-show-selected-label={showSelectedLabel || undefined}
       data-testid={testId}
-      aria-label={ariaLabel || 'Bottom navigation'}
+      aria-label={ariaLabel || t('bottomNavigation.label')}
       style={style}
       {...restProps}
     >

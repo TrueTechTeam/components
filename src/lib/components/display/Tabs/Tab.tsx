@@ -24,6 +24,16 @@ export interface TabProps extends Omit<BaseComponentProps, 'children'> {
   disabled?: boolean;
 
   /**
+   * Overrides the generated element id (e.g. so an external panel can reference it)
+   */
+  id?: string;
+
+  /**
+   * Overrides the generated `aria-controls`; pass `undefined` when no panel is rendered
+   */
+  'aria-controls'?: string;
+
+  /**
    * Tab label content
    */
   children: React.ReactNode;

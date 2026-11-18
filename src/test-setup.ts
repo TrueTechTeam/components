@@ -1,19 +1,30 @@
 import '@testing-library/jest-dom';
+import { configure } from '@testing-library/react';
+
+// DOM-only mocks are skipped in `@jest-environment node` specs (server-rendering tests).
+const hasDom = typeof window !== 'undefined';
+
+// `findBy*`/`waitFor` give up after 1s by default, which loaded CI runners can exceed.
+if (hasDom) {
+  configure({ asyncUtilTimeout: 3000 });
+}
 
 // Mock matchMedia
-Object.defineProperty(window, 'matchMedia', {
-  writable: true,
-  value: jest.fn().mockImplementation((query) => ({
-    matches: false,
-    media: query,
-    onchange: null,
-    addListener: jest.fn(),
-    removeListener: jest.fn(),
-    addEventListener: jest.fn(),
-    removeEventListener: jest.fn(),
-    dispatchEvent: jest.fn(),
-  })),
-});
+if (hasDom) {
+  Object.defineProperty(window, 'matchMedia', {
+    writable: true,
+    value: jest.fn().mockImplementation((query) => ({
+      matches: false,
+      media: query,
+      onchange: null,
+      addListener: jest.fn(),
+      removeListener: jest.fn(),
+      addEventListener: jest.fn(),
+      removeEventListener: jest.fn(),
+      dispatchEvent: jest.fn(),
+    })),
+  });
+}
 
 // Provide a minimal ResizeObserver implementation for tests
 /* eslint-disable @typescript-eslint/no-empty-function */
@@ -28,7 +39,7 @@ class MockResizeObserver {
 global.ResizeObserver = global.ResizeObserver || MockResizeObserver;
 
 // Provide a minimal canvas getContext implementation to avoid jsdom errors
-if (!HTMLCanvasElement.prototype.getContext) {
+if (hasDom && !HTMLCanvasElement.prototype.getContext) {
   HTMLCanvasElement.prototype.getContext = jest.fn().mockImplementation(() => ({
     fillRect: jest.fn(),
     getImageData: jest.fn().mockReturnValue({ data: [] }),
@@ -41,7 +52,9 @@ if (!HTMLCanvasElement.prototype.getContext) {
 }
 
 // Mock scrollIntoView for MenuItem component
-Element.prototype.scrollIntoView = jest.fn();
+if (hasDom) {
+  Element.prototype.scrollIntoView = jest.fn();
+}
 
 // Provide a minimal IntersectionObserver implementation for tests
 /* eslint-disable @typescript-eslint/no-empty-function */

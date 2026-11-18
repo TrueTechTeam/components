@@ -40,6 +40,17 @@ src/lib/
 ├── utils/               # Theme utils, color utils, date utils, validation
 ├── types/               # TypeScript type definitions
 └── assets/              # Icons and static assets
+
+src/app/                 # App builder, published as the `/app` entry (needs @tanstack/react-query)
+├── AppProvider/         # AppProvider, logger, auth/flags/analytics/format hooks
+├── router/              # Router adapters (browser, Next.js, React Router), AppLink, useAppNavigate
+├── params/              # usePageParams, usePreference, param codecs
+├── page/                # Page, Section, ErrorBoundary, usePageStore, usePageMeta
+├── data/                # useMutationFeedback, createOptimisticHandlers, LastUpdated
+├── debug/               # DebugPanel
+└── stories/             # Storybook stories (App Builder/Foundation)
+
+src/storybook/           # Storybook-only apps (ThemeBuilder); not part of the published package
 ```
 
 ## Design Guidelines (read before any UI or style change)
@@ -225,6 +236,10 @@ chore(deps): bump vite to 7.3.6
 Commit messages matter here beyond style — semantic-release parses them to decide the next
 version number and to write the changelog (`feat` → minor, `fix` → patch, `BREAKING CHANGE:` in
 the body or `!` after the type → major). A vague message produces a vague changelog entry.
+
+Never write a bare `#` followed by hex digits or numbers in a commit message (colors, counts):
+the release-notes parser reads it as an issue reference and adds a bogus "closes #…" link to the
+changelog. Write colors without the `#` (`00777e`, not `#00777e`).
 
 ## Pull Requests
 

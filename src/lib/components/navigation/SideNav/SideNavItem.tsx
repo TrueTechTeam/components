@@ -100,7 +100,12 @@ export const SideNavItem = ({
 }: SideNavItemProps & {
   ref?: React.Ref<HTMLElement>;
 }) => {
-  const { collapsed, selectedValue, onSelect } = useSideNavContextStrict();
+  const {
+    collapsed,
+    selectedValue,
+    onSelect,
+    linkComponent: LinkComponent,
+  } = useSideNavContextStrict();
 
   const isSelected = selectedValue === value;
 
@@ -119,6 +124,10 @@ export const SideNavItem = ({
   };
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLElement>) => {
+    if (e.key === 'Enter' && href && !disabled) {
+      // Let the browser activate the link; the resulting click selects the item.
+      return;
+    }
     if (e.key === 'Enter' || e.key === ' ') {
       e.preventDefault();
       if (!disabled) {
@@ -171,20 +180,28 @@ export const SideNavItem = ({
     role: 'menuitem',
   };
 
-  const element = href ? (
-    <a
-      ref={ref as React.Ref<HTMLAnchorElement>}
-      href={disabled ? undefined : href}
-      {...commonProps}
-      {...restProps}
-    >
-      {content}
-    </a>
-  ) : (
-    <div ref={ref as React.Ref<HTMLDivElement>} {...commonProps} {...restProps}>
-      {content}
-    </div>
-  );
+  const anchorRef = ref as React.Ref<HTMLAnchorElement>;
+  let element: React.ReactElement;
+  if (!href) {
+    element = (
+      <div ref={ref as React.Ref<HTMLDivElement>} {...commonProps} {...restProps}>
+        {content}
+      </div>
+    );
+  } else if (LinkComponent && !disabled) {
+    element = (
+      <LinkComponent ref={anchorRef} href={href} {...commonProps} {...restProps}>
+        {content}
+      </LinkComponent>
+    );
+  } else {
+    // A disabled link renders a plain anchor without href, so it cannot navigate.
+    element = (
+      <a ref={anchorRef} href={disabled ? undefined : href} {...commonProps} {...restProps}>
+        {content}
+      </a>
+    );
+  }
 
   // Wrap with tooltip when collapsed
   if (collapsed) {

@@ -63,3 +63,6 @@ vite.config.*.timestamp*
 .eslintcache
 
 .stylelintcache
+
+# Brainstorming companion
+.superpowers/

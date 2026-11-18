@@ -8,6 +8,7 @@ import { IconButton } from '../../buttons/IconButton';
 import { Spinner } from '../../display/Spinner';
 import type { IconName } from '../../display/Icon/icons';
 import type { BaseComponentProps } from '../../../types';
+import { useLabels } from '../../../contexts/LabelsContext';
 import styles from './Toast.module.scss';
 
 /**
@@ -171,6 +172,7 @@ export const Toast = ({
   pausedAt?: number;
   remainingDuration?: number;
 }) => {
+  const t = useLabels();
   const [isPaused, setIsPaused] = useState(false);
   const [progress, setProgress] = useState(100);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
@@ -181,6 +183,16 @@ export const Toast = ({
   const handleDismiss = useCallback(() => {
     onDismiss?.();
   }, [onDismiss]);
+
+  // Reset the remaining time to the full duration when the duration or variant changes, so a
+  // loading toast (mounted with duration 0) that settles into success/error counts its full
+  // duration instead of the stale 0. This only resets the ref; the timer effect below restarts
+  // the timeout because `duration`/`variant` are its dependencies too. `createdAt` (changed by the
+  // provider when a loading toast settles) is listed so the reset also runs if an update keeps the
+  // same duration and variant; it does not by itself restart a running timer.
+  useEffect(() => {
+    remainingTimeRef.current = duration;
+  }, [duration, variant, _createdAt]);
 
   // Auto-dismiss timer
   useEffect(() => {
@@ -342,7 +354,7 @@ export const Toast = ({
             variant="ghost"
             size="xs"
             onClick={handleDismiss}
-            aria-label="Dismiss toast"
+            aria-label={t('toast.dismiss')}
             className={styles.toastDismiss}
           />
         )}

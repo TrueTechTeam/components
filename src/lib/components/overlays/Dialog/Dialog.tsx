@@ -2,11 +2,17 @@
  * Dialog component - Modal dialog for user interactions
  */
 
-import React, { useState, useCallback, useEffect, useRef, type ReactNode } from 'react';
+import React, { useState, useCallback, useEffect, useMemo, useRef, type ReactNode } from 'react';
 import { Portal } from '../Portal';
 import { useEscapeKey, useFocusTrap } from '../../../hooks';
 import { IconButton } from '../../buttons/IconButton';
 import type { BaseComponentProps } from '../../../types';
+import { useLabels } from '../../../contexts/LabelsContext';
+import {
+  NavigationGuardContext,
+  createNavigationGuardRegistry,
+  useNavigationGuard,
+} from '../../../contexts/NavigationGuardContext';
 import styles from './Dialog.module.scss';
 
 /**
@@ -237,6 +243,7 @@ export const DialogHeader: React.FC<DialogHeaderProps> = ({
   style,
   ...restProps
 }) => {
+  const t = useLabels();
   const classes = [styles.dialogHeader, className].filter(Boolean).join(' ');
 
   return (
@@ -254,7 +261,7 @@ export const DialogHeader: React.FC<DialogHeaderProps> = ({
           variant="ghost"
           size="sm"
           onClick={onClose}
-          aria-label="Close dialog"
+          aria-label={t('dialog.close')}
           data-testid="dialog-close-button"
         />
       )}
@@ -402,10 +409,17 @@ export const Dialog = ({
     [controlledIsOpen, onOpenChange, onClose]
   );
 
+  // Guard scope: guards registered by children (e.g. dirty forms) can veto closing
+  const parentGuard = useNavigationGuard();
+  const guardScope = useMemo(() => createNavigationGuardRegistry(parentGuard), [parentGuard]);
+
   // Handle close
   const handleClose = useCallback(() => {
+    if (!guardScope.confirmNavigation()) {
+      return;
+    }
     handleOpenChange(false);
-  }, [handleOpenChange]);
+  }, [handleOpenChange, guardScope]);
 
   // Handle backdrop click
   const handleBackdropClick = useCallback(
@@ -516,39 +530,41 @@ export const Dialog = ({
   ) : null;
 
   return (
-    <Portal zIndex={zIndex}>
-      <div
-        className={backdropClasses}
-        data-component="dialog-backdrop"
-        data-state={animationState}
-        data-blur={blurBackdrop || undefined}
-        onClick={handleBackdropClick}
-        style={cssVariables}
-      >
+    <NavigationGuardContext.Provider value={guardScope}>
+      <Portal zIndex={zIndex}>
         <div
-          ref={setRefs}
-          className={contentClasses}
-          data-component="dialog"
-          data-size={size}
+          className={backdropClasses}
+          data-component="dialog-backdrop"
           data-state={animationState}
-          data-testid={testId || 'dialog'}
-          role={role}
-          aria-modal={modal}
-          aria-labelledby={title ? titleId : undefined}
-          aria-describedby={children ? bodyId : undefined}
-          style={customStyle}
-          {...restProps}
+          data-blur={blurBackdrop || undefined}
+          onClick={handleBackdropClick}
+          style={cssVariables}
         >
-          {headerContent}
-          {children && (
-            <DialogBody>
-              <div id={bodyId}>{children}</div>
-            </DialogBody>
-          )}
-          {footerContent}
+          <div
+            ref={setRefs}
+            className={contentClasses}
+            data-component="dialog"
+            data-size={size}
+            data-state={animationState}
+            data-testid={testId || 'dialog'}
+            role={role}
+            aria-modal={modal}
+            aria-labelledby={title ? titleId : undefined}
+            aria-describedby={children ? bodyId : undefined}
+            style={customStyle}
+            {...restProps}
+          >
+            {headerContent}
+            {children && (
+              <DialogBody>
+                <div id={bodyId}>{children}</div>
+              </DialogBody>
+            )}
+            {footerContent}
+          </div>
         </div>
-      </div>
-    </Portal>
+      </Portal>
+    </NavigationGuardContext.Provider>
   );
 };
 

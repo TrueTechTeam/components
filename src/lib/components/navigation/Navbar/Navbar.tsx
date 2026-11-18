@@ -1,5 +1,6 @@
 import React, { useState, useCallback, useMemo, useId, useEffect } from 'react';
 import type { BaseComponentProps, ComponentSize } from '../../../types';
+import { useLabels } from '../../../contexts/LabelsContext';
 import {
   NavbarContext,
   type NavbarContextValue,
@@ -112,6 +113,7 @@ export const Navbar = ({
 }: NavbarProps & {
   ref?: React.Ref<HTMLElement>;
 }) => {
+  const t = useLabels();
   const navbarId = useId();
   const isControlled = controlledExpanded !== undefined;
   const [internalExpanded, setInternalExpanded] = useState(defaultExpanded);
@@ -183,7 +185,7 @@ export const Navbar = ({
       data-expanded={isExpanded || undefined}
       data-mobile={isMobile || undefined}
       data-testid={testId}
-      aria-label={ariaLabel || 'Main navigation'}
+      aria-label={ariaLabel || t('navbar.label')}
       style={style}
       {...restProps}
     >

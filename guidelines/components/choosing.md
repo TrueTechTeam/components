@@ -276,7 +276,7 @@ nav order stable, and never reorder items based on usage.
 
 ### CHOOSE-NAV-2 - BottomNavigation
 
-Use 3–5 items, each with an icon **and** a text label. Use it only on narrow viewports (≤ 768px).
+Use 3–5 items, each with an icon **and** a text label. Use it only below the `laptop` breakpoint (< 1024px, PAGE-4).
 Hide it on desktop and show SideNav or Navbar there instead.
 
 ### CHOOSE-NAV-3 - Tabs
@@ -349,3 +349,45 @@ See [../patterns/data-display.md](../patterns/data-display.md) (DATA-_) and
 
 Source: NN/g response-time limits (0.1s / 1s / 10s) and progress-indicator guidance.
 `LoadingOverlay mode="fullscreen"` only for app boot or a blocking global operation.
+
+---
+
+## App builder (`/app`)
+
+Use `/app` when a screen loads data, keeps state in the URL, checks permissions or needs app
+services. Plain presentational screens need only the main entry.
+
+| Need                                                              | Use                                                                                           |
+| ----------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| A routed screen that loads data                                   | `Page` with `queries`; it provides loading, error+retry, empty and forbidden states (STATE-1) |
+| A region that can fail on its own                                 | `Section` with its own `queries`                                                              |
+| Skeleton for the data-dependent part of a Page or Section         | `Loadable` with a `shape` (text, heading, box, card, avatar, table); the structure stays      |
+| Filters, sort, tab or page number that survive reload and sharing | `usePageParams`                                                                               |
+| A remembered setting (density, view)                              | `usePreference` (URL by default, `storage: 'local'` for this browser only)                    |
+| Feedback after a save                                             | `useMutationFeedback`: toast by default, `via: 'inline'` inside a form                        |
+| Instant UI on add/toggle/delete                                   | `createOptimisticHandlers` in `useMutation`                                                   |
+| Link or navigate while a form may be dirty                        | `AppLink` / `useAppNavigate`, never a bare `<a>` or `router.push`                             |
+| Hide or disable an action by permission                           | `Can` / `useCan`; whole page: `Page permission`                                               |
+| Format dates, numbers, money                                      | `useFormatters()` (or the `format*` functions with a `locale`)                                |
+| Layout that depends on screen size                                | CSS with `@include bp(...)` first; `useBreakpoint` / `useBreakpointValue` only for logic      |
+| Warn before losing edits                                          | `FormBuilder guardUnsaved`; custom form: `useUnsavedChanges`                                  |
+| Translate built-in text                                           | `translate={i18n.t}` on the provider; keys are `ui.<key>` (`foundations/labels.md`)           |
+
+### Page templates
+
+Start from the user's task and the data's shape. The full tree is `APP-1` in
+[../app/choosing-a-page.md](../app/choosing-a-page.md), and the workflow (page brief first) is in
+[../app/README.md](../app/README.md).
+
+| Need                                                            | Use                                                                                                       |
+| --------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------- |
+| The app frame (nav, sidebar, `main`, skip link)                 | `AppShell`, once around all routes (`APP-9`)                                                              |
+| Find, compare and act on many records                           | `DataTablePage` (`APP-2`)                                                                                 |
+| Quick look at one record from the list                          | `DataTablePage detail` `mode: 'panel'` (inline from 1024px, Dialog below); `'dialog'`; `'page'` (`APP-3`) |
+| One record with related content (history, files, child records) | `DetailsPage` with `facts` and `tabs`, composed from blocks (`APP-4`)                                     |
+| Monitor numbers over a time range                               | `DashboardPage` with `KpiWidget`, `ChartWidget`, `DashboardWidget`, `useTimeRange` (`APP-5`)              |
+| Create or edit a record                                         | `Page` + `PageHeader` + `FormBuilder guardUnsaved` (`APP-6`)                                              |
+| A custom page that still looks like the others                  | `Page` + `PageHeader` (+ `usePageTab`) + `Section`s and blocks (`APP-8`)                                  |
+| Show one field value (date, money, status, link, id…)           | `FieldValue` with a `FieldKind` (`FIELD-2`)                                                               |
+| Label/value pairs · headline facts                              | `PropertyList` · `KeyFacts` (`HIER-6`)                                                                    |
+| Events · comments · files · child records                       | `ActivityTimeline` · `Notes` · `MediaGallery` · `RelatedRecords` (`FIELD-8`)                              |

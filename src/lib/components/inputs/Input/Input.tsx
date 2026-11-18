@@ -4,6 +4,7 @@ import { Icon } from '../../display/Icon';
 import { IconButton } from '../../buttons/IconButton';
 import type { IconName } from '../../display/Icon/icons';
 import styles from './Input.module.scss';
+import { useLabels } from '../../../contexts/LabelsContext';
 
 /**
  * Validation timing options
@@ -283,6 +284,7 @@ export const Input = ({
 }: InputProps & {
   ref?: React.Ref<HTMLInputElement>;
 }) => {
+  const t = useLabels();
   // Generate unique ID if not provided
   const generatedId = useId();
   const inputId = providedId || generatedId;
@@ -591,7 +593,7 @@ export const Input = ({
         <label htmlFor={inputId} className={styles.inputLabel} data-required={required}>
           {label}
           {required && (
-            <span className={styles.requiredIndicator} aria-label="required">
+            <span className={styles.requiredIndicator} aria-label={t('input.required')}>
               *
             </span>
           )}
@@ -647,7 +649,7 @@ export const Input = ({
                 variant="ghost"
                 className={styles.inputActionButton}
                 onClick={handleClear}
-                aria-label="Clear input"
+                aria-label={t('input.clear')}
               />
             )}
             {showPasswordToggleBtn && (
@@ -657,7 +659,7 @@ export const Input = ({
                 variant="ghost"
                 className={styles.inputActionButton}
                 onClick={togglePasswordVisibility}
-                aria-label={showPassword ? 'Hide password' : 'Show password'}
+                aria-label={showPassword ? t('input.hidePassword') : t('input.showPassword')}
               />
             )}
           </div>
