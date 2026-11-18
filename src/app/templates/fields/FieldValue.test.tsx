@@ -5,9 +5,6 @@ import { NavigationGuardProvider } from '../../../lib/contexts/NavigationGuardCo
 import { AppProvider } from '../../AppProvider';
 import { FieldValue, fieldAlign, isEmptyFieldValue, type FieldValueProps } from './FieldValue';
 
-// Pinned west of UTC so a UTC-midnight parse of a date-only string would render the previous day.
-process.env.TZ = 'America/Los_Angeles';
-
 const silentLogger = { debug: jest.fn(), info: jest.fn(), warn: jest.fn(), error: jest.fn() };
 
 function renderField(props: FieldValueProps) {

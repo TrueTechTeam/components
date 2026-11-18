@@ -1,5 +1,11 @@
 import type { Config } from 'jest';
 
+// One time zone for every run, so date tests behave the same on a developer machine and on CI
+// (UTC). West of UTC on purpose: a date-only string parsed as UTC midnight would show the
+// previous day here, which FieldValue's tests rely on catching. Set before workers start so they
+// inherit it; assigning process.env.TZ inside a test file only changes Jest's sandboxed copy.
+process.env.TZ = 'America/Los_Angeles';
+
 const config: Config = {
   displayName: 'ui-components',
   testEnvironment: 'jsdom',
