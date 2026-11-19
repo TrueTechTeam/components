@@ -1,3 +1,9 @@
+# [1.4.0](https://github.com/TrueTechTeam/components/compare/v1.3.0...v1.4.0) (2026-11-19)
+
+### Features
+
+- **app:** add theme builder, app builder foundation and page templates ([#2](https://github.com/TrueTechTeam/components/issues/2)) ([3b21494](https://github.com/TrueTechTeam/components/commit/3b21494d59d4cf1040ab9abca7c6a6f63e9a60a9)), closes [#rrggbb](https://github.com/TrueTechTeam/components/issues/rrggbb)
+
 # [1.3.0](https://github.com/TrueTechTeam/components/compare/v1.2.1...v1.3.0) (2026-11-02)
 
 ### Features
